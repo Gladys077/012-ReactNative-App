@@ -9,9 +9,10 @@ SplashScreen.preventAutoHideAsync(); //evita que el splash screen (pantalla de c
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts ({ //aquí desestructuramos una variable 'fontsLoaded' y otra "error" por si hubiera errores en la carga 
-    "WorkSans-Black": require('../assets/fonts/WorkSans-Black.ttf'), 
-    "WorkSans-Light": require('../assets/fonts/WorkSans-Light.ttf'), 
-    "WorkSans-Medium": require('../assets/fonts/WorkSans-Medium.ttf')
+    "Roboto-Regular": require('../assets/fonts/Roboto-Regular.ttf'),
+    "Roboto-Bold": require('../assets/fonts/Roboto-Bold.ttf'),
+    "Roboto-Medium": require('../assets/fonts/Roboto-Medium.ttf'),
+    "Roboto-Black": require('../assets/fonts/Roboto-Black.ttf'),
   })
   
 
@@ -28,10 +29,7 @@ const RootLayout = () => {
           {/* <StatusBar style="dark" /> */}
             <Slot />
         </GestureHandlerRootView>
-
-    
   );
-  
 }
 
 export default RootLayout
