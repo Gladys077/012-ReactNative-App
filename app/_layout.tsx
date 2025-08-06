@@ -3,6 +3,8 @@ import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { StatusBar } from 'expo-status-bar';
+import { AuthProvider } from '../context/AuthContext';
 import "./global.css";
 
 SplashScreen.preventAutoHideAsync(); //evita que el splash screen (pantalla de carga inicial) desaparezca automáticamente
@@ -25,10 +27,12 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   
   return (
+      <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          {/* <StatusBar style="dark" /> */}
+          <StatusBar style="dark" />
             <Slot />
         </GestureHandlerRootView>
+      </AuthProvider>
   );
 }
 

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "navigation-app",
-    "slug": "navigation-app",
+    "name": "reactnative-app",
+    "slug": "reactnative-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "navigationapp",
+    "scheme": "reactnativeapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

@@ -1,0 +1,13 @@
+export type AppRoute =
+  | '/login'
+  | '/registro'
+  | '/rol'
+  | '/comprador/nuevoPedido'
+  | '/comprador/tabs/homeRol'
+  | '/comprador/tabs/historial'
+  | '/comprador/tabs/pendientes'
+  | '/comprador/tabs/ajustes'
+  | '/vendedor/tabs/homeRol'
+  | '/vendedor/tabs/historial'
+  | '/vendedor/tabs/ajustes'
+  | '/vendedor/tabs/creditos'

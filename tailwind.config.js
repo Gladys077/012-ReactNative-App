@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    "./App.tsx",
     "./app/**/*.{js,jsx,ts,tsx}",
     "./components/**/*.{js,jsx,ts,tsx}",
     "./presentation/**/*.{js,jsx,ts,tsx}",
@@ -8,20 +9,32 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      colors: {
-        primary: "#49129C",
-        secondary: {
-          DEFAULT: "#B40086",
-          100: "#C51297",
-          200: "#831266",
-        },
-        terciary: "#EF2967",
-      },
-
       fontFamily: {
-        "work-black": ["WorkSans-Black", "sans-serif"],
-        "work-light": ["WorkSans-Light", "sans-serif"],
-        "work-medium": ["WorkSans-Medium", "sans-serif"],
+        "Roboto-Regular": ["Roboto-Regular", "sans-serif"],
+        "Roboto-Bold": ["Roboto-Bold", "sans-serif"],
+        "Roboto-Medium": ["Roboto-Medium", "sans-serif"],
+        "Roboto-Black": ["Roboto-Black", "sans-serif"],
+      },
+      colors: {
+        // Páginas compartidas
+        "primary-common": "#5a32ea",
+
+        // Por rol
+        "primary-buyer": "#3b49f8",
+        "primary-seller": "#ea580c",
+
+        // Botones secundarios
+        "btn-secondary-background": "#dadbdc",
+        "btn-secondary-text": "#374151",
+        "btn-secondary-border": "#a7a7a7",
+
+        // Textos
+        "text-base": "#374151",
+        "text-on-color": "#ffffff",
+
+        // Fondo de headers
+        "header-bg-light": "#ffffff",
+        "header-bg-dark": "#292b2f",
       },
     },
   },

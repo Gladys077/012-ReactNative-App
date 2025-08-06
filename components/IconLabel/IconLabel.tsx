@@ -30,7 +30,7 @@ const variantStyles = {
   },
   pendientes: {
     container: ["p-2", "items-center"],
-    icon: ["h-8", "w-auto", "fill-neutral-800"],
+    icon: ["h-8", "w-8", "fill-neutral-800"],
     label: ["text-xs", "text-neutral-800"],
     activeIcon: [],
     activeLabel: [],
