@@ -2,6 +2,10 @@ import type { ComponentType } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
+import { Colors, getColorByRole } from "@/constants/Colors";
+import { getIconPixelSize, getIconSizeClass } from "@/constants/Tokens";
+// 👆 getIconPixelSize es nuevo: devuelve número (24, 32, etc.)
+
 type Variant = "footer" | "menuVendedor" | "pendientes";
 type Role = "buyer" | "seller" | "common";
 
@@ -15,64 +19,62 @@ interface IconLabelProps {
   onPress?: () => void;
 }
 
-const getRoleStrokeColor = (role: Role = "common") => {
-  switch (role) {
-    case "buyer":
-      return "stroke-primary-buyer";
-    case "seller":
-      return "stroke-primary-seller";
-    default:
-      return "stroke-primary-common";
-  }
-};
-const getRoleFillColor = (role: Role = "common") => {
-  switch (role) {
-    case "buyer":
-      return "fill-primary-buyer";
-    case "seller":
-      return "fill-primary-seller";
-    default:
-      return "fill-primary-common";
-  }
+const getVariantStyles = (variant: Variant) => {
+  const baseStyles = {
+    footer: {
+      container: "min-w-12 min-h-12 items-center justify-center",
+      iconWrapper: getIconSizeClass("md"), // 24px
+      iconSize: getIconPixelSize("md"),
+      labelBase: "text-xs text-gray-500",
+      defaultColor: Colors.light.textMuted,
+    },
+    menuVendedor: {
+      container: "p-3 items-center bg-white rounded-xl",
+      iconWrapper: getIconSizeClass("md"), // 24px
+      iconSize: getIconPixelSize("md"),
+      labelBase: "text-sm text-gray-500",
+      defaultColor: Colors.light.textMuted,
+    },
+    pendientes: {
+      container: "p-2 items-center",
+      iconWrapper: getIconSizeClass("lg"), // 32px
+      iconSize: getIconPixelSize("lg"),
+      labelBase: "text-sm text-gray-700",
+      defaultColor: Colors.light.textDefault,
+    },
+  };
+
+  return baseStyles[variant];
 };
 
-/* --- TIPADO para las variantes: todas las funciones aceptan role?: Role --- */
-type VariantStyle = {
-  container: string[];
-  icon: string[];
-  label: string[];
-  activeIcon: (role?: Role) => string[];
-  activeLabel: (role?: Role) => string[];
-};
+// 🔹 Componente badge que se auto-posiciona
+const Badge = ({ iconSize, count }: { iconSize: number; count: number }) => {
+  if (count <= 0) return null;
 
-const variantStyles: Record<Variant, VariantStyle> = {
-  footer: {
-    container: ["min-w-12", "min-h-12", "items-center", "justify-center"],
-    icon: ["w-6", "h-6", "stroke-muted", "fill-none"], // outline gris medio
-    label: ["text-xs", "text-text-muted"],
-    activeIcon: (role?: Role) => [getRoleStrokeColor(role)],
-    activeLabel: (role?: Role) => [
-      // convertimos stroke-primary-x -> text-primary-x
-      `text-${getRoleStrokeColor(role ?? "common").replace("stroke-", "")}`,
-      "font-medium",
-    ],
-  },
-  menuVendedor: {
-    container: ["p-3", "items-center", "bg-header-bg-light", "rounded-xl"],
-    icon: ["w-6", "h-6", "fill-current", "text-text-muted"], // fill gris medio inicial
-    label: ["text-sm", "text-text-muted"],
-    // ahora aceptan role? aunque lo ignoren
-    activeIcon: (_role?: Role) => ["fill-primary-seller"], // naranja vendedor
-    activeLabel: (_role?: Role) => ["text-primary-seller"],
-  },
-  pendientes: {
-    container: ["p-2", "items-center"],
-    icon: ["w-8", "h-8", "stroke-text-default", "fill-none"], // outline gris oscuro, 32px
-    label: ["text-sm", "text-text-default"],
-    // aceptan role? para mantener firma uniforme; aquí usamos seller por defecto si se requiere
-    activeIcon: (_role?: Role) => ["stroke-primary-seller"],
-    activeLabel: (_role?: Role) => ["text-text-default", "font-medium"],
-  },
+  const offset = iconSize / 3; // distancia desde el borde del icono
+
+  return (
+    <View
+      style={{
+        position: "absolute",
+        top: -offset,
+        right: -offset,
+        backgroundColor: Colors.light.textError,
+        borderRadius: 9999,
+        minWidth: 8,
+        height: 16,
+        paddingHorizontal: 4,
+        borderWidth: 1,
+        borderColor: Colors.light.textOnColor,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Text style={{ color: "#fff", fontSize: 10, fontWeight: "bold", lineHeight: 12 }}>
+        {count}
+      </Text>
+    </View>
+  );
 };
 
 export const IconLabel = ({
@@ -84,25 +86,49 @@ export const IconLabel = ({
   role = "common",
   onPress,
 }: IconLabelProps) => {
-  const styles = variantStyles[variant];
+  const styles = getVariantStyles(variant);
   const showBadge = badgeCount > 0 && variant !== "footer";
 
-  const containerClass = styles.container.join(" ");
-  const iconClass = [...styles.icon, ...(active ? styles.activeIcon(role) : [])].join(" ");
-  const labelClass = ["mt-1", "text-center", "font-sans", ...styles.label, ...(active ? styles.activeLabel(role) : [])].join(" ");
+  const getIconColor = () => {
+    if (!active) return styles.defaultColor;
+    if (variant === "footer") return getColorByRole(role, "light");
+    return Colors.light.primarySeller;
+  };
+
+  const getLabelColor = () => {
+    if (!active) return styles.defaultColor;
+    
+    if (variant === "footer") return getColorByRole(role, "light");
+
+    if (variant === "pendientes") {
+    return styles.defaultColor; // mantiene el color original
+  }
+
+    return Colors.light.primarySeller;
+  };
+
+  const labelClasses = [
+    "mt-1 text-center font-roboto",
+    styles.labelBase,
+    active && "font-medium",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" className={containerClass}>
-      <View className="relative items-center justify-center">
-        {/* Si tu icon acepta props fill/stroke también puedes pasarlos aquí */}
-        <Icon className={iconClass} />
-        {showBadge && (
-          <View className="absolute -top-1 -right-1 bg-text-error rounded-full min-w-[8px] h-4 px-1 border border-text-on-color items-center justify-center">
-            <Text className="text-text-on-color text-[10px] font-bold leading-none">{badgeCount}</Text>
-          </View>
-        )}
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      className={styles.container}
+    >
+      <View style={{ position: "relative", width: styles.iconSize, height: styles.iconSize }}>
+        <Icon width={styles.iconSize} height={styles.iconSize} color={getIconColor()} />
+        {showBadge && <Badge iconSize={styles.iconSize} count={badgeCount} />}
       </View>
-      <Text className={labelClass}>{label}</Text>
+
+      <Text className={labelClasses} style={{ color: getLabelColor() }}>
+        {label}
+      </Text>
     </Pressable>
   );
 };

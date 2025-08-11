@@ -2,8 +2,9 @@ import * as React from "react";
 import type { SvgProps } from "react-native-svg";
 import Svg, { ClipPath, Defs, G, Path } from "react-native-svg";
 const SvgPendientesMenuVendedor = (props: SvgProps) => (
-  <Svg width={24} height={24} 
-    fill="none" 
+  <Svg 
+  width={24} height={24} 
+    fill="currentColor" 
     stroke="currentColor"
     strokeWidth={1} viewBox="0 0 20 20" {...props}>
     <G clipPath="url(#PendientesMenuVendedor_svg__a)">

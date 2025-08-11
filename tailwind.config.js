@@ -7,7 +7,7 @@ module.exports = {
     "./presentation/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
-  darkMode: "class", // el modo oscuro se va a activar usando una clase dark en algún elemento padre (ej. al final del cód.)
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -39,65 +39,44 @@ module.exports = {
         xl: 24,
       },
       colors: {
-        // Colores principales
-        "primary-common": "#5a32ea",
-        "primary-buyer": "#3b49f8",
-        "primary-seller": "#ea580c",
+        // Evitamos prefijos como "fill-" "stroke-" que NativeWind puede ignorar
 
-        // Botones secundarios
-        "btn-secondary-background": "#dadbdc",
-        "btn-secondary-text": "#374151",
-        "btn-secondary-text-dark": "#ECEDEE",
-        "btn-secondary-border": "#a7a7a7",
+        // Marca (solo nombres semánticos)
+        "brand-buyer": "#2563eb", // blue-600
+        "brand-seller": "#ea580c", // orange-600
+        "brand-common": "#7c3aed", // violet-600
 
-        "fill-default": "#374151",
-        "fill-btn-secondary-text": "#374151",
-        "fill-text-muted": "#6B7280", // Gris medio
-        "fill-primary-seller": "#EA580C", // Naranja vendedor
+        // Superficies específicas de la app
+        "surface-card": "#ffffff",
+        "surface-muted": "#f3f4f6",
 
-        // Btns Google
-        "btn-google-background": "#ffffff",
-        "btn-google-background-dark": "#292b2f",
-        "btn-google-text": "#1f1f1f",
-        "btn-google-text-dark": "#e1e1e1",
-        "btn-google-border": "#dadce0",
-        "btn-google-border-dark": "#555",
+        // Contenido específico
+        "content-primary": "#111827",
+        "content-secondary": "#6b7280",
 
-        // Textos
-        "text-default": "#374151", // texto principal
-        "text-muted": "#6B7280", // Gris medio
-        "text-error": "#EF4444", // Rojo para errores o * obligatorios
-        "text-default-dark": "#ECEDEE",
-        "text-on-color": "#ffffff",
-        "text-primary-seller": "#EA580C", // Naranja vendedor
-
-        // Headers
-        "header-bg-light": "#ffffff",
-        "header-bg-dark": "#292b2f",
-
-        // Strokes (bordes)
-        "stroke-muted": "#6B7280", // Gris medio
-        "stroke-default": "#374151", // color texto principal
-        "stroke-primary-buyer": "#3B49F8", // Azul comprador
-        "stroke-primary-seller": "#EA580C", // Naranja vendedor
-        "stroke-primary-common": "#5a32ea", // violeta common (como primary-common)
-
-        "stroke-btn-secondary-text": "#374151",
-        "stroke-text-default": "#374151",
-        "stroke-text-muted": "#6B7280", // Gris medio
-
-        // Otros tokens
-        "border-default": "#ccc",
-        "bg-muted": "#e5e7e8",
-        "bg-error": "#EF4444", // fondo badge - fondo error
+        // Sistema específico (no cubierto por Tailwind default)
+        "google-bg": "#ffffff",
+        "google-bg-dark": "#292b2f",
+        "google-text": "#1f1f1f",
+        "google-text-dark": "#e1e1e1",
+        "google-border": "#dadce0",
+        "google-border-dark": "#555",
       },
     },
   },
   plugins: [],
 };
 
-/*Ejemplo del modo dark:
-<View className="dark:bg-black bg-white">
-  <Text className="dark:text-white text-black">Hola</Text>
-</View>
+/*
+ESTRATEGIA PRO:
+
+1. ✅ USAR: brand-seller, brand-buyer (nombres semánticos)
+2. ❌ EVITAR: fill-brand-seller, stroke-brand-buyer (prefijos que NativeWind puede ignorar)
+3. ✅ APLICAR: Usar helpers de JS para generar "text-brand-seller" dinámicamente
+4. ✅ FALLBACK: Usar colores directos via style cuando Tailwind falle
+
+EJEMPLO DE USO:
+- className={`text-brand-seller`} ✅ Funciona
+- className={getTailwindClass('seller', 'text')} ✅ Dinámico y funciona  
+- style={{ color: getDirectColor('seller') }} ✅ Garantizado que funciona
 */
