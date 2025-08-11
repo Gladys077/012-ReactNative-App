@@ -1,89 +1,45 @@
+import { Ajustes, Carrito, CheckCircle, ConComprobante, EnCaminoOutline, EnPreparacion, Historial, Home, ListoParaEnviar, Monedas, PendientesMenuVendedor, SinComprobante } from "@/components/icons";
 import React, { useState } from "react";
-import { ScrollView, View } from "react-native";
-import { Ajustes, Historial, Home, PendientesMenuVendedor } from "../icons";
+import { ScrollView, Switch, Text, View } from "react-native";
 import { IconLabel } from "./IconLabel";
 
-
-const IconLabelTest = () => {
-  const [activeFooter, setActiveFooter] = useState("home");
-  const [activeMenu, setActiveMenu] = useState("historial");
+export default function IconLabelTest() {
+  const [dark, setDark] = useState(false);
 
   return (
-    <ScrollView className="flex-1 bg-white p-4">
-      {/* Footer Variante */}
-      <View className="flex-row justify-around mb-6">
-        <IconLabel
-          icon={Home}
-          label="Inicio"
-          variant="footer"
-          active={activeFooter === "home"}
-          onPress={() => setActiveFooter("home")}
-        />
-        <IconLabel
-          icon={PendientesMenuVendedor}
-          label="Pendientes"
-          variant="footer"
-          active={activeFooter === "pendientes"}
-          onPress={() => setActiveFooter("pendientes")}
-        />
-        <IconLabel
-          icon={Historial}
-          label="Historial"
-          variant="footer"
-          active={activeFooter === "historial"}
-          onPress={() => setActiveFooter("historial")}
-        />
-  <IconLabel
-          icon={Ajustes}
-          label="Ajustes"
-          variant="footer"
-          active={activeFooter === "ajustes"}
-          onPress={() => setActiveFooter("ajustes")}
-        />
+    // si pones la clase 'dark' en este contenedor, las clases dark:... deberían activarse
+    <ScrollView contentContainerStyle={{ padding: 16 }} className={dark ? "dark" : ""}>
+      <View className="flex-row items-center justify-between mb-4">
+        <View className="flex-row items-center">
+          <Text className="mr-2 text-text-default">Dark mode</Text>
+          <Switch value={dark} onValueChange={setDark} />
+        </View>
       </View>
 
-      {/* Menu Vendedor Variante */}
-      <View className="flex-row justify-around mb-6">
-        <IconLabel
-          icon={Historial}
-          label="Historial"
-          variant="menuVendedor"
-          active={activeMenu === "historial"}
-          onPress={() => setActiveMenu("historial")}
-        />
-        <IconLabel
-          icon={PendientesMenuVendedor}
-          label="Pendientes"
-          variant="menuVendedor"
-          active={activeMenu === "pendientes"}
-          onPress={() => setActiveMenu("pendientes")}
-        />
+      <View className="flex-row gap-4 mb-8">
+        <IconLabel icon={Home} label="Inicio" variant="footer" active={true} />
+        <IconLabel icon={Historial} label="Historial" variant="footer" active={true}  />
+        <IconLabel icon={Monedas} label="Monedas" variant="footer" active={true}   />
+        <IconLabel icon={PendientesMenuVendedor} label="Pendiente" variant="footer" active={true}  />
+        <IconLabel icon={Ajustes} label="Ajustes" variant="footer" active={true}  />
       </View>
 
-      {/* Pendientes Variante (con badge) */}
-      <View className="flex-row justify-around">
-        <IconLabel
-          icon={PendientesMenuVendedor}
-          label="1 respuesta"
-          variant="pendientes"
-          badgeCount={1}
-        />
-        <IconLabel
-          icon={PendientesMenuVendedor}
-          label="5 respuestas"
-          variant="pendientes"
-          badgeCount={5}
-        />
-        <IconLabel
-          icon={PendientesMenuVendedor}
-          label="sin respuestas"
-          variant="pendientes"
-          badgeCount={0}
-        />
+      <View className="flex-row gap-4 mb-8">
+        <IconLabel icon={Carrito} label="Monedas" variant="menuVendedor"  active={true} />
+        <IconLabel icon={PendientesMenuVendedor} label="Inicio" variant="menuVendedor" badgeCount={3} />
+        <IconLabel icon={CheckCircle} label="Inicio" variant="menuVendedor" badgeCount={3} />
+      </View>
+
+      <View className="flex-column gap-4">
+        <IconLabel icon={SinComprobante} label="Pendiente" variant="pendientes" />
+
+        <IconLabel icon={ConComprobante} label="Pendiente Activo" variant="pendientes" />
+        <IconLabel icon={EnPreparacion} label="Pendiente Activo" variant="pendientes" />
+
+        <IconLabel icon={ListoParaEnviar} label="Pendiente Activo" variant="pendientes" />
+        <IconLabel icon={EnCaminoOutline} label="Pendiente Activo" variant="pendientes" /> 
+        
       </View>
     </ScrollView>
   );
-};
-
-export default IconLabelTest;
-
+}

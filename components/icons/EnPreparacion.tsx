@@ -1,11 +1,10 @@
 import * as React from "react";
-import Svg, { Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 const SvgEnPreparacion = (props: SvgProps) => (
   <Svg
-    xmlSpace="preserve"
-    width={24}
-    height={24}
+    width={36}
+    height={36}
     viewBox="0 0 124.89 124.89"
     {...props}
   >

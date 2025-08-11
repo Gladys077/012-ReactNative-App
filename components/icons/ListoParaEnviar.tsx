@@ -1,13 +1,12 @@
 import * as React from "react";
-import Svg, { Path, Circle } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { Circle, Path } from "react-native-svg";
 const SvgListoParaEnviar = (props: SvgProps) => (
   <Svg
-    xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
     viewBox="0 0 360 360"
-    width={24}
-    height={24}
+    width={36}
+    height={36}
     {...props}
   >
     <Path d="M241.854 234.511a64.2 64.2 0 0 1 13.133-1.354 64 64 0 0 1 16.32 2.107V29.241a6.993 6.993 0 0 0-6.992-6.991h-58.709v17.399h36.248zM71.854 316.331V39.649h36.25V22.25H49.393a6.99 6.99 0 0 0-6.99 6.991v302.497a6.99 6.99 0 0 0 6.99 6.991h156.486c-5.479-6.498-9.701-14.087-12.271-22.398zM121.107 45.13h71.494a3.005 3.005 0 0 0 3.004-3.004V12.374a3.005 3.005 0 0 0-3.004-3.004h-11.31c-1.788-5.439-6.9-9.37-12.938-9.37h-23c-6.037 0-11.149 3.931-12.938 9.37h-11.309a3.003 3.003 0 0 0-3.004 3.004v29.752a3.006 3.006 0 0 0 3.005 3.004" />

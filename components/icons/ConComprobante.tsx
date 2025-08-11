@@ -1,12 +1,13 @@
 import * as React from "react";
-import Svg, { Rect, Text, Circle, Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { Circle, Path, Rect, Text } from "react-native-svg";
 const SvgConComprobante = (props: SvgProps) => (
   <Svg
-    width={24}
-    height={24}
+    width={36}
+    height={36}
     fill="currentColor"
-    viewBox="0 0 100 100"
+    viewBox="10 10 90 80" 
+    preserveAspectRatio="xMidYMid meet" 
     {...props}
   >
     <Rect
@@ -16,7 +17,7 @@ const SvgConComprobante = (props: SvgProps) => (
       y={10}
       fill="none"
       stroke="#000"
-      strokeWidth={3}
+      strokeWidth={5}
       rx={6}
       ry={6}
     />

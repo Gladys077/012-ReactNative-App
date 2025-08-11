@@ -1,27 +1,36 @@
 import * as React from "react";
-import Svg, { Rect, Text, Circle, Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { Circle, Path, Rect, Text, TSpan } from "react-native-svg";
 const SvgSinComprobante = (props: SvgProps) => (
-  <Svg width={24} height={24} fill="none" viewBox="0 0 100 100" {...props}>
+  <Svg 
+    width={36} 
+    height={36} 
+    fill="none" 
+    viewBox="10 10 90 80" 
+    preserveAspectRatio="xMidYMid meet" 
+    {...props}
+  >
     <Rect
       width={55}
       height={70}
       x={10}
       y={10}
       stroke="#000"
-      strokeWidth={3}
+      strokeWidth={5}
       rx={6}
       ry={6}
     />
     <Text
       x={30}
       y={36}
-      fill="#000"
+      fill="currentColor"
       fontFamily="Arial, sans-serif"
       fontSize={24}
+      textAnchor="start"
     >
-      {"$"}
+      <TSpan>{"$"}</TSpan>
     </Text>
+
     <Rect width={34} height={4} x={20} y={45} fill="#000" rx={2} />
     <Rect width={30} height={4} x={20} y={55} fill="#000" rx={2} />
     <Rect width={27} height={4} x={20} y={65} fill="#000" rx={2} />
