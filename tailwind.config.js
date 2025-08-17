@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { Spacing, BorderRadius, FontSizes } = require("./constants/Tokens");
+
 module.exports = {
   content: [
     "./App.tsx",
@@ -16,67 +18,60 @@ module.exports = {
         "Roboto-Medium": ["Roboto-Medium", "sans-serif"],
         "Roboto-Black": ["Roboto-Black", "sans-serif"],
       },
-      spacing: {
-        xs: 2,
-        sm: 4,
-        md: 8,
-        lg: 12,
-        xl: 16,
-        xxl: 24,
-        9: 36,
-      },
-      borderRadius: {
-        default: 8,
-        sm: 4,
-        xl: 20,
-        full: 999,
-      },
-      fontSize: {
-        sm: 12,
-        base: 14,
-        btn: 16,
-        lg: 18,
-        xl: 24,
-      },
+      spacing: Spacing,
+      borderRadius: BorderRadius,
+      fontSize: FontSizes,
       colors: {
-        // Evitamos prefijos como "fill-" "stroke-" que NativeWind puede ignorar
-
         // Marca (solo nombres semánticos)
-        "brand-buyer": "#2563eb", // blue-600
-        "brand-seller": "#ea580c", // orange-600
-        "brand-common": "#7c3aed", // violet-600
+        "brand-buyer": "#3b49f8", // blue-600 #2563eb
+        "brand-seller": "#ea580c", // orange-600 #ea580c
+        "brand-common": "#5a32ea", // violet-600 #7c3aed
 
-        // Superficies específicas de la app
-        "surface-card": "#ffffff",
-        "surface-muted": "#f3f4f6",
-
-        // Contenido específico
-        "content-primary": "#111827",
-        "content-secondary": "#6b7280",
+        "brand-buyer-dark": "#5C6CFF", // blue-500
+        "brand-seller-dark": "#FF7A3C", // orange-500
+        "brand-common-dark": "#7C5EFF", // violet-500
 
         // Sistema específico (no cubierto por Tailwind default)
         "google-bg": "#ffffff",
-        "google-bg-dark": "#292b2f",
-        "google-text": "#1f1f1f",
-        "google-text-dark": "#e1e1e1",
-        "google-border": "#dadce0",
-        "google-border-dark": "#555",
+        "google-text": "#374151",
+        "google-border": "#dddddd",
+
+        "google-bg-dark": "#202124",
+        "google-text-dark": "#505050",
+        "google-border-dark": "#444444",
+
+        // Botones secundarios
+        "btn-secondary-bg": "#dadbdc",
+        "btn-secondary-border": "#cccccc",
+
+        "btn-secondary-bg-dark": "#3A3B3D",
+        "btn-secondary-border-dark": "#666666",
+        "btn-secondary-text-dark": "#FF7A3C",
+
+        // Superficies
+        "surface-card": "#ffffff",
+        "surface-muted": "#f3f4f6",
+
+        // Textos
+        "text-default": "gray-700",
+        "text-muted": "gray-500",
+        "text-error": "red-500",
+        "text-on-color": "#ffffff",
+        "text-secondary": "yellow-500",
       },
     },
   },
   plugins: [],
 };
 
-/*
-ESTRATEGIA PRO:
+/* EJEMPLOS DE USO:
+1- className={`text-brand-seller`}                --> Funciona
+2- className={getTailwindClass('seller', 'text')} --> Dinámico y funciona  
+3- style={{ color: getColorByRole('buyer') }}     --> Garantizado que funciona
 
-1. ✅ USAR: brand-seller, brand-buyer (nombres semánticos)
-2. ❌ EVITAR: fill-brand-seller, stroke-brand-buyer (prefijos que NativeWind puede ignorar)
-3. ✅ APLICAR: Usar helpers de JS para generar "text-brand-seller" dinámicamente
-4. ✅ FALLBACK: Usar colores directos via style cuando Tailwind falle
+*En componentes:
+<View className="bg-btn-secondary-bg border border-btn-secondary-border">
+  <Text className="text-btn-secondary-text">Secundario</Text>
+</View>
 
-EJEMPLO DE USO:
-- className={`text-brand-seller`} ✅ Funciona
-- className={getTailwindClass('seller', 'text')} ✅ Dinámico y funciona  
-- style={{ color: getDirectColor('seller') }} ✅ Garantizado que funciona
 */

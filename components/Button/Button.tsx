@@ -1,10 +1,11 @@
 import { ComponentType, ReactNode } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SvgProps } from 'react-native-svg';
+import { BorderRadius } from '../../constants/Tokens';
 
 interface ButtonProps {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'google';
+  variant?: 'primary' | 'secondary' ;
   section?: 'common' | 'buyer' | 'seller';
   height?: 'sm' | 'md' | 'lg' | number;
   width?: 'auto' | 'half' | 'full';
@@ -14,7 +15,7 @@ interface ButtonProps {
   iconPosition?: 'left' | 'right';
 }
 
-export const Button = ({
+const Button = ({
   children,
   variant = 'primary',
   section = 'seller',
@@ -27,68 +28,88 @@ export const Button = ({
 }: ButtonProps) => {
   const Icon = icon;
 
-  const variantClasses = {
-    primary: 'text-text-on-color',
-    secondary:
-      'bg-btn-secondary-background text-btn-secondary-text border border-btn-secondary-border dark:bg-[#444] dark:text-btn-secondary-text-dark dark:border-[#666]',
-    google:
-      'bg-btn-google-background text-btn-google-text border border-btn-google-border shadow-md ' +
-      'dark:bg-btn-google-background-dark dark:text-btn-google-text-dark dark:border-btn-google-border-dark',
-  };
+// Colores de fondo por sección (solo btns primary)
+const sectionBg = {
+  common: 'bg-brand-common',
+  buyer: 'bg-brand-buyer',
+  seller: 'bg-brand-seller',
+};
 
-  const sectionClasses = {
-    common: 'bg-primary-common',
-    buyer: 'bg-primary-buyer',
-    seller: 'bg-primary-seller',
-  };
+const variants = {
+  primary: {
+    container: `${sectionBg[section]} shadow-md`,
+    text: 'text-white font-medium',
+    iconColor: '#ffffff', 
 
+  },
+  secondary: {
+    container:
+      'bg-btn-secondary-bg border border-btn-secondary-border shadow-md ' +
+      'dark:bg-btn-secondary-bg-dark dark:border-btn-secondary-border-dark',
+    text:
+      'text-btn-secondary-text font-medium ' +
+      'dark:text-text-secondary',
+    iconColor: 'currentColor',      
+  },
+};
+
+const styles = variants[variant] ?? variants.primary;
+
+//Alturas
   const heightClasses = {
-    sm: 'h-9', // 36px exacto
-    md: 'h-10', // 40px
-    lg: 'h-12', // 48px
+    sm: 'h-10', // 40px
+    md: 'h-12', // 48px
+    lg: 'h-14', // 56px
   };
-
+// Anchos
   const widthClasses = {
     auto: 'w-auto',
     half: 'w-1/2',
     full: 'w-full',
   };
 
+  // Base: solo estilos comunes (aplican siempre)
   const baseClass = [
-    'rounded', // borderRadius: 8px
-    'font-semibold', // peso 600
-    'text-btn', // 16px
-    'px-4', // padding horizontal
-    'shadow-md', // para primarios/secundarios
-    variantClasses[variant],
-    variant === 'primary' && sectionClasses[section],
-    heightClasses[height as 'sm' | 'md' | 'lg'] ?? '',
+    'px-4',
+    'shadow-md',
+    heightClasses[height as 'sm' | 'md' | 'lg'] ?? 
+      (typeof height === 'number' ? `h-[${height}px]` : ''),
     widthClasses[width],
     disabled && 'opacity-50',
   ]
     .filter(Boolean)
     .join(' ');
 
+  // Contenedor del botón
   const contentClass = [
+    'flex-1',
     'flex-row',
     iconPosition === 'right' ? 'flex-row-reverse' : '',
-    'items-center justify-center gap-2',
+    'items-center',
+    'justify-center',
+    'gap-2',
   ].join(' ');
 
   return (
-    <Pressable className={baseClass} onPress={onPress} disabled={disabled}>
+    <Pressable onPress={onPress} disabled={disabled}>
       {({ pressed }) => (
         <View
-          className={contentClass}
+          className={`${baseClass} ${styles.container}`}
           style={{
+            borderRadius: BorderRadius.pillBtn,
             transform: [{ scale: pressed ? 0.95 : 1 }],
             opacity: pressed ? 0.9 : 1,
           }}
         >
-          {Icon && <Icon height={20} />}
-          <Text className="font-semibold text-btn">{children}</Text>
+          <View className={contentClass}>
+            {Icon && (
+              <Icon height={20} fill={styles.iconColor} stroke={styles.iconColor} />
+            )}
+            <Text className={styles.text}>{children}</Text>
+          </View>
         </View>
       )}
     </Pressable>
   );
 };
+export default Button;

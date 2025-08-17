@@ -24,17 +24,19 @@ export const Spacing = {
 
 export const BorderRadius = {
   sm: 4,
-  default: 8,  
   md: 8,
+  lg: 12,
   xl: 20,
   full: 999,
+  pillBtn: 24, // para btns estilo Material 3
+  inputAuth: 16, // inputs en login/registro/perfil
 };
 
 export const FontSizes = {
   xs: 10,
   sm: 12,
   base: 14,
-  btn: 16,   // Específico para botones
+  btn: 14,   // Específico para botones
   lg: 18,
   xl: 24,
   xxl: 32,
@@ -54,6 +56,13 @@ export const shadows = {
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
+  },
+  lg: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 8,
   },
 };
 

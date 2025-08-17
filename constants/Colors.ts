@@ -1,53 +1,53 @@
 export const Colors = {
   light: {
-    // Textos y contenido
-    textDefault: 'gray-700', 
-    textMuted: 'gray-500',    
-    textError: 'red-500',   
+    // Textos
+    textDefault: 'gray-700',
+    textMuted: 'gray-500',
+    textError: 'red-500',
     textOnColor: '#ffffff',
+    textSecondary: '#ffd700', // amarillo ejemplo
 
-    // Botones secundarios  
-    btnSecondaryBackground: '#dadbdc',
-    btnSecondaryText: '#374151',
-    btnSecondaryBorder: '#a7a7a7',
+    // Botones secundarios
+    textSecondaryBg: '#dadbdc',
+    textSecondaryBorder: '#a7a7a7',
 
-    // Color por rol
-    primaryCommon: 'violet-600', 
-    primaryBuyer: 'blue-600', 
-    primarySeller: 'orange-600', 
+    // Primarios por rol
+    primaryCommon: 'violet-600',
+    primaryBuyer: 'blue-600',
+    primarySeller: 'orange-600',
 
     // Superficies
     headerBg: '#ffffff',
-    cardBg: '#ffffff',           
-    backgroundMuted: 'gray-100', 
+    cardBg: '#ffffff',
+    backgroundMuted: 'gray-100',
   },
   dark: {
-    // Textos y contenido
+    // Textos
     textDefault: '#ECEDEE',
-    textMuted: 'gray-400', 
-    textError: 'red-400', 
+    textMuted: 'gray-400',
+    textError: 'red-400',
     textOnColor: '#ffffff',
+    textSecondary: '#ffd700', // mismo amarillo si quieres mantener
 
     // Botones secundarios
-    btnSecondaryBackground: '#dadbdc',
-    btnSecondaryText: '#374151',
-    btnSecondaryBorder: '#a7a7a7',
+    textSecondaryBg: '#636363',
+    textSecondaryBorder: '#a7a7a7',
 
-    // Color por rol
-    primaryCommon: 'violet-500', 
-    primaryBuyer: 'blue-500',   
-    primarySeller: 'orange-500', 
+    // Primarios por rol
+    primaryCommon: 'violet-500',
+    primaryBuyer: 'blue-500',
+    primarySeller: 'orange-500',
 
     // Superficies
     headerBg: '#292b2f',
-    cardBg: 'gray-700', 
-    backgroundMuted: 'gray-800', 
-  }
+    cardBg: 'gray-700',
+    backgroundMuted: 'gray-800',
+  },
 };
 
-// ✅ HELPERS  para usar con NativeWind (decide q color usar para c/role y para c/theme)
+// Helpers
 export const getColorByRole = (
-  role: 'buyer' | 'seller' | 'common', 
+  role: 'buyer' | 'seller' | 'common',
   theme: 'light' | 'dark' = 'light'
 ): string => {
   const themeColors = Colors[theme];
@@ -61,15 +61,24 @@ export const getColorByRole = (
   }
 };
 
+// Texto de botón secundario
+export const getSecondaryTextColor = (theme: 'light' | 'dark' = 'light'): string => {
+  return Colors[theme].textSecondary;
+};
+
+export const getSecondaryBgColor = (theme: 'light' | 'dark' = 'light'): string => {
+  return Colors[theme].textSecondaryBg;
+};
+
 // ✅ Helper para obtener colores Tailwind equivalentes
 export const getTailwindColorByRole = (role: 'buyer' | 'seller' | 'common'): string => {
   switch (role) {
     case 'buyer':
-      return 'blue-600';
+      return 'brand-buyer';
     case 'seller': 
-      return 'orange-600';
+      return 'brand-seller';
     default:
-      return 'violet-600';
+      return 'brand-common';
   }
 };
 
@@ -88,7 +97,7 @@ MODO DE USO MEJORADO:
 <Text className={getTailwindClass('seller', 'text')}>Vendedor</Text>
 Resultado: className="text-orange-600"
 
-✅ Para casos donde necesitas color directo (SVG, etc):
+✅ Para casos donde necesitamoss color directo (SVG, etc):
 <Icon color={getColorByRole('seller', 'light')} />
 Resultado: color="#ea580c"
 

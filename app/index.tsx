@@ -1,10 +1,11 @@
 // import { Redirect } from "expo-router";
 
-import IconLabelTest from "../components/IconLabel/IconLabelTest";
+import { ButtonTest } from "../components/Button/ButtonTest";
+
 
 const App = () => {
   // return <Redirect href="/login" />;
-  return <IconLabelTest />;
+  return <ButtonTest />;
  
 }
 
