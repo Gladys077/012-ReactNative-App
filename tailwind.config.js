@@ -44,9 +44,8 @@ module.exports = {
         "btn-secondary-bg": "#dadbdc",
         "btn-secondary-border": "#cccccc",
 
-        "btn-secondary-bg-dark": "#3A3B3D",
+        "btn-secondary-bg-dark": "#555555",
         "btn-secondary-border-dark": "#666666",
-        "btn-secondary-text-dark": "#FF7A3C",
 
         // Superficies
         "surface-card": "#ffffff",
@@ -57,7 +56,6 @@ module.exports = {
         "text-muted": "gray-500",
         "text-error": "red-500",
         "text-on-color": "#ffffff",
-        "text-secondary": "yellow-500",
       },
     },
   },

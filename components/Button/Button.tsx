@@ -1,5 +1,5 @@
 import { ComponentType, ReactNode } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, Text, useColorScheme, View } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 import { BorderRadius } from '../../constants/Tokens';
 
@@ -26,6 +26,8 @@ const Button = ({
   icon,
   iconPosition = 'left',
 }: ButtonProps) => {
+    const scheme = useColorScheme();
+
   const Icon = icon;
 
 // Colores de fondo por sección (solo btns primary)
@@ -47,9 +49,9 @@ const variants = {
       'bg-btn-secondary-bg border border-btn-secondary-border shadow-md ' +
       'dark:bg-btn-secondary-bg-dark dark:border-btn-secondary-border-dark',
     text:
-      'text-btn-secondary-text font-medium ' +
-      'dark:text-text-secondary',
-    iconColor: 'currentColor',      
+      'text-black font-medium ' +
+      'dark:text-white',
+      iconColor: scheme === "dark" ? "#ffffff" : "#000000",
   },
 };
 
@@ -113,3 +115,45 @@ const styles = variants[variant] ?? variants.primary;
   );
 };
 export default Button;
+
+/* Modo de uso:
+ <View className="mb-8">
+        <Text className="text-lg font-semibold mb-4 text-gray-700">
+          🎯 Con Iconos
+        </Text>
+        
+        <View className="space-y-3">
+          <Button 
+            section="seller" 
+            icon={Home}
+            iconPosition="left"
+          >
+            Icon Left
+          </Button>
+          
+          <Button 
+            section="buyer" 
+            icon={Historial}
+            iconPosition="right"
+          >
+            Icon Right
+          </Button>
+          
+          <Button 
+            variant="secondary" 
+            icon={PendientesMenuVendedor}
+          >
+            Secondary + Icon
+          </Button>
+          
+          <ButtonGoogle onLogin={function (): void {
+            throw new Error('Function not implemented.');
+          } }>          
+            Google + Icon
+          </ButtonGoogle>
+        </View>
+      </View>
+
+
+
+ */

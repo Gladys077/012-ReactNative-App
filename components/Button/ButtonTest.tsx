@@ -22,7 +22,7 @@ export const ButtonTest = () => {
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-100 p-4">
+    <ScrollView className="flex-1 bg-gray-300 p-4">
       {/* Header */}
       <Text className="text-2xl font-bold text-center mb-6 text-gray-800">
         Button Component Test
@@ -138,9 +138,7 @@ export const ButtonTest = () => {
           
           <ButtonGoogle onLogin={function (): void {
             throw new Error('Function not implemented.');
-          } }>
-            {/* <Home width={24} height={24} /> */}
-          
+          } }>          
             Google + Icon
           </ButtonGoogle>
         </View>
