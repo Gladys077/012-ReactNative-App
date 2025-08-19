@@ -24,7 +24,7 @@ const itemsVendedor: FooterItem[] = [
 ];
 
 // simulación de usuario
-const mockUser = { role: "comprador" }; // Cambiar a "vendedor" para probar otro rol
+const mockUser = { role: "vendedor" }; // Cambiar a "vendedor" para probar otro rol
 
 export default function FooterTest() {
   const [activeLabel, setActiveLabel] = useState("Inicio");
