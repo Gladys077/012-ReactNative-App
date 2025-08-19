@@ -23,13 +23,13 @@ module.exports = {
       fontSize: FontSizes,
       colors: {
         // Marca (solo nombres semánticos)
-        "brand-buyer": "#3b49f8", // blue-600 #2563eb
-        "brand-seller": "#ea580c", // orange-600 #ea580c
-        "brand-common": "#5a32ea", // violet-600 #7c3aed
+        "brand-common": "#5a32ea", // violet
+        "brand-buyer": "#2563eb", // blue
+        "brand-seller": "#ea580c", // orange
 
-        "brand-buyer-dark": "#5C6CFF", // blue-500
-        "brand-seller-dark": "#FF7A3C", // orange-500
-        "brand-common-dark": "#7C5EFF", // violet-500
+        "brand-common-dark": "#8b5cf6", // violet
+        "brand-buyer-dark": "#3b82f6", // blue
+        "brand-seller-dark": "#c43e00", // orange
 
         // Sistema específico (no cubierto por Tailwind default)
         "google-bg": "#ffffff",
@@ -42,20 +42,28 @@ module.exports = {
 
         // Botones secundarios
         "btn-secondary-bg": "#dadbdc",
-        "btn-secondary-border": "#cccccc",
+        "btn-secondary-border": "#a7a7a7",
 
-        "btn-secondary-bg-dark": "#555555",
-        "btn-secondary-border-dark": "#666666",
+        "btn-secondary-bg-dark": "#636363",
+        "btn-secondary-border-dark": "#a7a7a7",
 
         // Superficies
-        "surface-card": "#ffffff",
-        "surface-muted": "#f3f4f6",
+        "header-bg": "#ffffff",
+        "card-bg": "#ffffff",
+        "background-muted": "#f3f4f6", // gray-100
 
         // Textos
-        "text-default": "gray-700",
-        "text-muted": "gray-500",
-        "text-error": "red-500",
+        "text-default": "#374151", // gray-700
+        "text-muted": "#6b7280", // gray-500
+        "text-error": "#ef4444", // red-500
         "text-on-color": "#ffffff",
+        "text-secondary": "#ffd700", // amarillo ejemplo
+
+        "text-default-dark": "#ECEDEE",
+        "text-muted-dark": "#9ca3af", // gray-400
+        "text-error-dark": "#f87171", // red-400
+        "text-on-color-dark": "#ffffff",
+        "text-secondary-dark": "#ffd700",
       },
     },
   },

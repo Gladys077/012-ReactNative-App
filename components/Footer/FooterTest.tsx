@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { IconLabel } from "../IconLabel/IconLabel";
-import { Ajustes, Historial, Home, Monedas, PendientesMenuVendedor } from "../icons";
+import { Ajustes, Historial, Home, Monedas, Pendientes } from "../icons";
 
 interface FooterItem {
   icon: React.ComponentType<any>;
@@ -12,7 +12,7 @@ interface FooterItem {
 const itemsComprador: FooterItem[] = [
   { icon: Home, label: "Inicio", route: "/homeRol" },
   { icon: Historial, label: "Historial", route: "/comprador/historial" },
-  { icon: PendientesMenuVendedor, label: "Pendientes", route: "/comprador/pendientes" },
+  { icon: Pendientes, label: "Pendientes", route: "/comprador/pendientes" },
   { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustes" },
 ];
 
@@ -24,7 +24,7 @@ const itemsVendedor: FooterItem[] = [
 ];
 
 // simulación de usuario
-const mockUser = { role: "vendedor" }; // Cambiar a "vendedor" para probar otro rol
+const mockUser = { role: "comprador" }; // Cambiar a "vendedor" para probar otro rol
 
 export default function FooterTest() {
   const [activeLabel, setActiveLabel] = useState("Inicio");

@@ -1,10 +1,10 @@
+import * as Haptics from "expo-haptics";
 import type { ComponentType } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View, useColorScheme } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
 import { Colors, getColorByRole } from "@/constants/Colors";
 import { getIconPixelSize, getIconSizeClass } from "@/constants/Tokens";
-// 👆 getIconPixelSize es nuevo: devuelve número (24, 32, etc.)
 
 type Variant = "footer" | "menuVendedor" | "pendientes";
 type Role = "buyer" | "seller" | "common";
@@ -19,36 +19,36 @@ interface IconLabelProps {
   onPress?: () => void;
 }
 
-const getVariantStyles = (variant: Variant) => {
+const getVariantStyles = (variant: Variant, isDark: boolean) => {
   const baseStyles = {
     footer: {
       container: "min-w-12 min-h-12 items-center justify-center",
       iconWrapper: getIconSizeClass("md"), // 24px
       iconSize: getIconPixelSize("md"),
-      labelBase: "text-xs text-gray-500",
-      defaultColor: Colors.light.textMuted,
+      labelBase: `text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`,
+      defaultColor: isDark ? Colors.dark.textMuted : Colors.light.textMuted,
     },
     menuVendedor: {
-      container: "p-3 items-center bg-white rounded-xl",
+      container: `p-3 items-center ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl`,
       iconWrapper: getIconSizeClass("md"), // 24px
       iconSize: getIconPixelSize("md"),
-      labelBase: "text-sm text-gray-500",
-      defaultColor: Colors.light.textMuted,
+      labelBase: `text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`,
+      defaultColor: isDark ? Colors.dark.textMuted : Colors.light.textMuted,
     },
     pendientes: {
       container: "p-2 items-center",
       iconWrapper: getIconSizeClass("lg"), // 32px
       iconSize: getIconPixelSize("lg"),
-      labelBase: "text-sm text-gray-700",
-      defaultColor: Colors.light.textDefault,
+      labelBase: `text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`,
+      defaultColor: isDark ? Colors.dark.textDefault : Colors.light.textDefault,
     },
   };
 
   return baseStyles[variant];
 };
 
-// 🔹 Componente badge que se auto-posiciona
-const Badge = ({ iconSize, count }: { iconSize: number; count: number }) => {
+// Componente badge que se auto-posiciona
+const Badge = ({ iconSize, count, isDark }: { iconSize: number; count: number; isDark: boolean }) => {
   if (count <= 0) return null;
 
   const offset = iconSize / 3; // distancia desde el borde del icono
@@ -59,18 +59,23 @@ const Badge = ({ iconSize, count }: { iconSize: number; count: number }) => {
         position: "absolute",
         top: -offset,
         right: -offset,
-        backgroundColor: Colors.light.textError,
+        backgroundColor: isDark ? Colors.dark.textError : Colors.light.textError,
         borderRadius: 9999,
         minWidth: 8,
         height: 16,
         paddingHorizontal: 4,
         borderWidth: 1,
-        borderColor: Colors.light.textOnColor,
+        borderColor: isDark ? Colors.dark.textOnColor : Colors.light.textOnColor,
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "#fff", fontSize: 10, fontWeight: "bold", lineHeight: 12 }}>
+      <Text style={{ 
+        color: "#fff", 
+        fontSize: 10, 
+        fontWeight: "bold", 
+        lineHeight: 12 
+      }}>
         {count}
       </Text>
     </View>
@@ -86,25 +91,55 @@ export const IconLabel = ({
   role = "common",
   onPress,
 }: IconLabelProps) => {
-  const styles = getVariantStyles(variant);
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const styles = getVariantStyles(variant, isDark);
   const showBadge = badgeCount > 0 && variant !== "footer";
+  
+  const handlePress = async () => {
+    // Feedback háptico diferenciado por variant
+    switch (variant) {
+      case "footer":
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        break;
+      case "menuVendedor":
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        break;
+      case "pendientes":
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        break;
+    }
+    onPress?.();
+  };
 
   const getIconColor = () => {
     if (!active) return styles.defaultColor;
-    if (variant === "footer") return getColorByRole(role, "light");
-    return Colors.light.primarySeller;
+    
+    if (variant === "footer") {
+      return getColorByRole(role, isDark ? "dark" : "light");
+    }
+    
+    if (variant === "menuVendedor") {
+      // Siempre naranja, pero ajustado por modo
+      return isDark ? Colors.dark.brandSeller : Colors.light.brandSeller;
+    }
+    
+    return isDark ? Colors.dark.brandSeller : Colors.light.brandSeller;
   };
 
   const getLabelColor = () => {
     if (!active) return styles.defaultColor;
     
-    if (variant === "footer") return getColorByRole(role, "light");
+    if (variant === "footer") {
+      return getColorByRole(role, isDark ? "dark" : "light");
+    }
 
     if (variant === "pendientes") {
-    return styles.defaultColor; // mantiene el color original
-  }
+      return styles.defaultColor; // mantiene el color original
+    }
 
-    return Colors.light.primarySeller;
+    // menuVendedor
+    return isDark ? Colors.dark.brandSeller : Colors.light.brandSeller;
   };
 
   const labelClasses = [
@@ -117,13 +152,33 @@ export const IconLabel = ({
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={handlePress}
       accessibilityRole="button"
       className={styles.container}
+      android_ripple={{ 
+        color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' 
+      }}
+      style={({ pressed }) => [
+        { opacity: pressed ? 0.7 : 1 }
+      ]}
     >
-      <View style={{ position: "relative", width: styles.iconSize, height: styles.iconSize }}>
-        <Icon width={styles.iconSize} height={styles.iconSize} color={getIconColor()} />
-        {showBadge && <Badge iconSize={styles.iconSize} count={badgeCount} />}
+      <View style={{ 
+        position: "relative", 
+        width: styles.iconSize, 
+        height: styles.iconSize 
+      }}>
+        <Icon 
+          width={styles.iconSize} 
+          height={styles.iconSize} 
+          color={getIconColor()} 
+        />
+        {showBadge && (
+          <Badge 
+            iconSize={styles.iconSize} 
+            count={badgeCount} 
+            isDark={isDark}
+          />
+        )}
       </View>
 
       <Text className={labelClasses} style={{ color: getLabelColor() }}>

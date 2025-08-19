@@ -8,7 +8,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "generate:icons": "node scripts/generate-icons-index.js",
+    "convertir:svgs": "node scripts/convertir-svgs.js",
+    "svgs:all": "npm run convertir:svgs && npm run generate:icons"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -37,15 +40,17 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
+    "react-native-svg": "15.11.2",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5",
-    "react-native-svg": "15.11.2"
+    "react-native-webview": "13.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/node": "^24.3.0",
     "@types/react": "~19.0.10",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
+    "ts-node": "^10.9.2",
     "tsconfig": "^7.0.0",
     "typescript": "~5.8.3"
   },

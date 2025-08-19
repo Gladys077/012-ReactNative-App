@@ -47,6 +47,7 @@ export { default as LupaCheckList } from './LupaCheckList';
 export { default as Mail } from './Mail';
 export { default as MasBlanca } from './MasBlanca';
 export { default as Monedas } from './Monedas';
+export { default as Pendientes } from './Pendientes';
 export { default as PendientesMenuVendedor } from './PendientesMenuVendedor';
 export { default as Reloj } from './Reloj';
 export { default as Remove } from './Remove';
