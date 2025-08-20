@@ -14,6 +14,7 @@ interface AuthState{
     isAuthenticated: boolean;
     login: (userData: User, token: string) => void;
     logout: () => void;
+    switchRole: (newRole: 'buyer' | 'seller') => void;
 }
 
 interface User {
@@ -33,9 +34,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    // Simular que verificamos si hay token
+    // Simular verificación de token
     setTimeout(() => {
-      // Ejemplo: arrancamos como deslogueado
       setStatus(AuthStatus.unauthenticated);
     }, 1500);
   }, []);
@@ -52,6 +52,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setStatus(AuthStatus.unauthenticated);
   };
 
+  // Nuevo: switchRole
+  const switchRole = (newRole: 'buyer' | 'seller') => {
+    if (!user) return;
+    setUser({ ...user, role: newRole });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -62,10 +68,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         isAuthenticated: status === AuthStatus.authenticated,
         login,
         logout,
+        switchRole, 
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 
