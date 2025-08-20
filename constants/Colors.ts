@@ -19,7 +19,8 @@ export const Colors = {
     // Superficies
     headerBg: '#ffffff',
     cardBg: '#ffffff',
-    backgroundMuted: '#f3f4f6', // gray-100
+    background: '#f3f4f6', // gray-100
+    border: '#E5E7EB',
   },
   dark: {
     // Textos
@@ -41,7 +42,8 @@ export const Colors = {
     // Superficies
     headerBg: '#292b2f',
     cardBg: '#374151',          // gray-700
-    backgroundMuted: '#1f2937', // gray-800
+    background: '#1f2937', // gray-800
+    border: '#374151', // gray-700
   },
 };
 

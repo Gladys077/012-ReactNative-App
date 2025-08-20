@@ -1,8 +1,9 @@
-import { useAuthContext } from "@/context/AuthContext"; // <- esto importa el contexto
+import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import { ComponentType, useState } from "react";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
+import { useTheme } from "../../context/ThemeContext";
 import { IconLabel } from "../IconLabel/IconLabel";
 import { Ajustes, Historial, Home, Monedas, PendientesMenuVendedor } from "../icons";
 
@@ -27,16 +28,24 @@ const itemsSeller: FooterItem[] = [
 ];
 
 export default function Footer() {
+  const { colors } = useTheme();
   const router = useRouter();
-  const { user } = useAuthContext(); // obtiene el usuario y su rol
+  const { user } = useAuthContext();
   const [activeLabel, setActiveLabel] = useState("Inicio");
 
-  if (!user) return null; // si no hay usuario, no mostrar el footer
+  if (!user) return null;
 
   const items = user.role === "buyer" ? itemsBuyer : itemsSeller;
 
   return (
-    <View className="flex-row justify-around items-center border-t border-neutral-200 bg-white py-2 absolute bottom-0 left-0 right-0 h-16 z-50">
+    <SafeAreaView
+      edges={['bottom']}
+      className="flex-row justify-around items-center border-t py-2 absolute bottom-0 left-0 right-0 h-16 z-50"
+      style={{
+        backgroundColor: colors.background,
+        borderTopColor: colors.border,
+      }}
+    >
       {items.map((item) => (
         <IconLabel
           key={item.label}
@@ -50,8 +59,6 @@ export default function Footer() {
           }}
         />
       ))}
-    </View>
+    </SafeAreaView>
   );
 }
-
-//Lo único que falta es que el login guarde bien el user con su role (ver con LIO)

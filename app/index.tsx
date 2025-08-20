@@ -8,7 +8,9 @@ import FooterTest from "../components/Footer/FooterTest";
 
 const App = () => {
   // return <Redirect href="/login" />;
-  return <FooterTest />;
+  return (
+    <FooterTest />
+);
  
 }
 

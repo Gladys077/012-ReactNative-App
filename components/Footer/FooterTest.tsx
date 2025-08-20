@@ -1,5 +1,6 @@
+import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
-import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import type { Role } from "../IconLabel/IconLabel";
 import { IconLabel } from "../IconLabel/IconLabel";
 import { Ajustes, Historial, Home, Monedas, Pendientes } from "../icons";
@@ -25,15 +26,23 @@ const itemsSeller: FooterItem[] = [
 ];
 
 // simulación de usuario
-const user: { role: Role } = { role: "buyer" }; // Cambiar a "seller" o "buyer" según el tipo Role
+const user: { role: Role } = { role: "seller" };
 
 export default function FooterTest() {
+  const { colors } = useTheme();
   const [activeLabel, setActiveLabel] = useState("Inicio");
 
   const items = user.role === "buyer" ? itemsBuyer : itemsSeller;
 
   return (
-    <View className="flex-row justify-around items-center border-t border-neutral-200 bg-white py-2 absolute bottom-0 left-0 right-0 h-16 z-50">
+    <SafeAreaView
+      edges={["bottom"]}
+      className="flex-row justify-around items-center border-t bottom-0 absolute left-0 right-0 py-2 z-50"
+      style={{
+        backgroundColor: colors.background,
+        borderTopColor: colors.border,
+      }}
+    >
       {items.map((item) => (
         <IconLabel
           key={item.label}
@@ -44,6 +53,6 @@ export default function FooterTest() {
           onPress={() => setActiveLabel(item.label)}
         />
       ))}
-    </View>
+    </SafeAreaView>
   );
 }
