@@ -46,8 +46,9 @@ export const Colors = {
 };
 
 // Helpers
+//getColorByRole devuelve el color direct en HEX para usar en style={{color: ...}} o en props de SVGs
 export const getColorByRole = (
-  role: 'buyer' | 'seller' | 'common',
+  role: 'buyer' | 'seller',
   theme: 'light' | 'dark' = 'light'
 ): string => {
   const themeColors = Colors[theme];
@@ -71,7 +72,8 @@ export const getSecondaryBgColor = (theme: 'light' | 'dark' = 'light'): string =
 };
 
 // Helper para obtener colores Tailwind equivalentes
-export const getTailwindColorByRole = (role: 'buyer' | 'seller' | 'common', isDark: boolean = false): string => {
+// devuelve la clase Tailwind para usar en className
+export const getTailwindColorByRole = (role: 'buyer' | 'seller' , isDark: boolean = false): string => {
   const suffix = isDark ? '-dark' : '';
   switch (role) {
     case 'buyer':
@@ -85,7 +87,7 @@ export const getTailwindColorByRole = (role: 'buyer' | 'seller' | 'common', isDa
 
 //Helper para clases Tailwind dinámicas
 export const getTailwindClass = (
-  role: 'buyer' | 'seller' | 'common',
+  role: 'buyer' | 'seller',
   property: 'text' | 'bg' | 'border' = 'text',
   isDark: boolean = false
 ): string => {

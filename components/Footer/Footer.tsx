@@ -12,14 +12,14 @@ interface FooterItem {
   route: string;
 }
 
-const itemsComprador: FooterItem[] = [
+const itemsBuyer: FooterItem[] = [
   { icon: Home, label: "Inicio", route: "/homeRol" },
   { icon: Historial, label: "Historial", route: "/comprador/historial" },
   { icon: PendientesMenuVendedor, label: "Pendientes", route: "/comprador/pendientes" },
   { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustes" },
 ];
 
-const itemsVendedor: FooterItem[] = [
+const itemsSeller: FooterItem[] = [
   { icon: Home, label: "Inicio", route: "/homeRol" },
   { icon: Historial, label: "Historial", route: "/vendedor/historial" },
   { icon: Monedas, label: "Créditos", route: "/vendedor/creditos" },
@@ -28,12 +28,12 @@ const itemsVendedor: FooterItem[] = [
 
 export default function Footer() {
   const router = useRouter();
-  const { user } = useAuthContext(); // <- obtenés el usuario y su rol
+  const { user } = useAuthContext(); // obtiene el usuario y su rol
   const [activeLabel, setActiveLabel] = useState("Inicio");
 
   if (!user) return null; // si no hay usuario, no mostrar el footer
 
-  const items = user.role === "comprador" ? itemsComprador : itemsVendedor;
+  const items = user.role === "buyer" ? itemsBuyer : itemsSeller;
 
   return (
     <View className="flex-row justify-around items-center border-t border-neutral-200 bg-white py-2 absolute bottom-0 left-0 right-0 h-16 z-50">
@@ -42,6 +42,7 @@ export default function Footer() {
           key={item.label}
           icon={item.icon}
           label={item.label}
+          role={user.role} 
           active={item.label === activeLabel}
           onPress={() => {
             setActiveLabel(item.label);

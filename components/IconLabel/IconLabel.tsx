@@ -7,7 +7,7 @@ import { Colors, getColorByRole } from "@/constants/Colors";
 import { getIconPixelSize, getIconSizeClass } from "@/constants/Tokens";
 
 type Variant = "footer" | "menuVendedor" | "pendientes";
-type Role = "buyer" | "seller" | "common";
+export type Role = "buyer" | "seller";
 
 interface IconLabelProps {
   icon: ComponentType<SvgProps>;
@@ -88,7 +88,7 @@ export const IconLabel = ({
   variant = "footer",
   active = false,
   badgeCount = 0,
-  role = "common",
+  role = "buyer",
   onPress,
 }: IconLabelProps) => {
   const colorScheme = useColorScheme();

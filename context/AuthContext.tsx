@@ -19,7 +19,7 @@ interface AuthState{
 interface User {
     name: string;
     email: string;
-    role: 'comprador' | 'vendedor'; //para ser usado por los headers/footers
+    role: 'buyer' | 'seller'; //para ser usado por los headers/footers
 }
 
 export const AuthContext = createContext({} as AuthState); //aquí guardo toda la info como si fuere un estado global
