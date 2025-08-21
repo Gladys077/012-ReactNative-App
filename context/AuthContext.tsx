@@ -21,6 +21,8 @@ interface User {
     name: string;
     email: string;
     role: 'buyer' | 'seller'; //para ser usado por los headers/footers
+    credits?: number;         // para seller
+    commerceName?: string;    // para seller
 }
 
 export const AuthContext = createContext({} as AuthState); //aquí guardo toda la info como si fuere un estado global

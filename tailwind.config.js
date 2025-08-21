@@ -31,7 +31,7 @@ module.exports = {
         "brand-buyer-dark": "#3b82f6", // blue
         "brand-seller-dark": "#c43e00", // orange
 
-        // Sistema específico (no cubierto por Tailwind default)
+        // Btn Google
         "google-bg": "#ffffff",
         "google-text": "#374151",
         "google-border": "#dddddd",
@@ -48,9 +48,17 @@ module.exports = {
         "btn-secondary-border-dark": "#a7a7a7",
 
         // Superficies
+        background: "#f3f4f6",
+        "background-dark": "#1f2937",
+
+        border: "#E5E7EB",
+        "border-dark": "#374151",
+
         "header-bg": "#ffffff",
+        "header-bg-dark": "#292b2f",
+
         "card-bg": "#ffffff",
-        "background-muted": "#f3f4f6", // gray-100
+        "card-bg-dark": "#374151",
 
         // Textos
         "text-default": "#374151", // gray-700
@@ -71,13 +79,15 @@ module.exports = {
 };
 
 /* EJEMPLOS DE USO:
-1- className={`text-brand-seller`}                --> Funciona
-2- className={getTailwindClass('seller', 'text')} --> Dinámico y funciona  
-3- style={{ color: getColorByRole('buyer') }}     --> Garantizado que funciona
-
-*En componentes:
-<View className="bg-btn-secondary-bg border border-btn-secondary-border">
-  <Text className="text-btn-secondary-text">Secundario</Text>
+1) Con Tailwind directo
+<View className="bg-background dark:bg-background-dark border border-border dark:border-border-dark">
+  <Text className="text-text-default dark:text-text-default-dark">Hola</Text>
 </View>
+
+2) Con helper dinámico (ideal para usar con distintos roles)
+<Text style={{ color: getColorByRole(user.role, theme) }}>Texto dinámico</Text>
+
+3) Con getTailwindClass
+<Text className={getTailwindClass(user.role, 'text', isDark)}>Texto dinámico</Text>
 
 */

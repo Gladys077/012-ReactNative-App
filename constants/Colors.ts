@@ -96,23 +96,3 @@ export const getTailwindClass = (
   return `${property}-${getTailwindColorByRole(role, isDark)}`;
 };
 
-/* 
-MODO DE USO MEJORADO:
-
---> Para casos donde Tailwind funciona:
-<Text className={getTailwindClass('seller', 'text', isDark)}>Vendedor</Text>
-Resultado modo claro: className="text-brand-seller"
-Resultado modo oscuro: className="text-brand-seller-dark"
-
--->  Para casos donde necesitamos color directo (SVG, etc):
-<Icon color={getColorByRole('seller', 'light')} />
-Resultado: color="#ea580c"
-
---> Combinado (lo mejor de ambos):
-<Text 
-  className="text-base font-medium" 
-  style={{ color: getColorByRole('buyer', isDark ? 'dark' : 'light') }}
->
-  Comprador
-</Text>
-*/
