@@ -1,6 +1,8 @@
 // import { Redirect } from "expo-router";
 
-import FooterTest from "../components/Footer/FooterTest";
+import HeaderTest from "../components/Header/HeaderTest";
+
+// import FooterTest from "../components/Footer/FooterTest";
 
 // import { ButtonTest } from "../components/Button/ButtonTest";
 // import IconLabelTest from "../components/IconLabel/IconLabelTest";
@@ -9,7 +11,7 @@ import FooterTest from "../components/Footer/FooterTest";
 const App = () => {
   // return <Redirect href="/login" />;
   return (
-    <FooterTest />
+    <HeaderTest />
 );
  
 }

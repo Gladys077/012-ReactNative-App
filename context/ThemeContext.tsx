@@ -1,8 +1,8 @@
 import { Colors } from '@/constants/Colors';
-import React, { createContext, ReactNode, useContext, useState } from 'react';
-import { Appearance } from 'react-native';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { Appearance, AppearancePreferences } from 'react-native';
 
-// Podés agregar esto si definís las fuentes en algún archivo
+// Fuentes
 const fonts = {
   robotoRegular: 'Roboto_400Regular',
   robotoBold: 'Roboto_700Bold',
@@ -26,8 +26,18 @@ interface ThemeContextType extends Theme {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const systemPref = Appearance.getColorScheme() as ThemeMode;
-  const [mode, setMode] = useState<ThemeMode>(systemPref || 'light');
+  const systemPref = (Appearance.getColorScheme() as ThemeMode) || 'light';
+  const [mode, setMode] = useState<ThemeMode>(systemPref);
+
+  // Listener para cambios de modo en tiempo real
+  useEffect(() => {
+    const listener = ({ colorScheme }: AppearancePreferences) => {
+      setMode((colorScheme as ThemeMode) || 'light');
+    };
+    const subscription = Appearance.addChangeListener(listener);
+
+    return () => subscription.remove();
+  }, []);
 
   const toggleMode = () => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -41,11 +51,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     fonts,
   };
 
-  return (
-    <ThemeContext.Provider value={value}>
-        {children}
-    </ThemeContext.Provider>
-    );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => {

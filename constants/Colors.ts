@@ -36,8 +36,8 @@ export const Colors = {
 
     // Primarios por rol
     brandCommon: '#8b5cf6',   // violet-500
-    brandBuyer: '#3b82f6',    // blue-500
-    brandSeller: '#c43e00',   // orange-500
+    brandBuyer: '#5292fa',    // blue-500
+    brandSeller: '#ed6728',   // orange-500
 
     // Superficies
     headerBg: '#292b2f',

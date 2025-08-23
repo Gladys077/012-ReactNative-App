@@ -33,7 +33,7 @@ export default function ThemedText({
     <Text
       style={[
         {
-          color: colors.textBase,
+          color: colors.textDefault,
           fontSize: fontSizeMap[variant],
           fontFamily: fontFamilyMap[weight],
         },
