@@ -36,7 +36,7 @@ export default function Header({
   return (
     <SafeAreaView>
         <View
-          className="flex-row items-center justify-between px-4 py-4 border-b gap-4"
+          className="flex-row items-center justify-between px-2 py-2 border-b gap-4"
           style={{
             backgroundColor: colors.headerBg,
             borderBottomColor: colors.border,
@@ -46,7 +46,10 @@ export default function Header({
           {leftContent ? (
             leftContent
           ) : showBackArrow ? (
-            <Pressable onPress={() => navigation.goBack()}>
+            <Pressable 
+              className="h-11 w-11 items-center justify-center"
+
+              onPress={() => navigation.goBack()}>
               <Volver width={24} height={24} fill={colors.textDefault} />
             </Pressable>
           ) : isSeller ? (
@@ -85,3 +88,10 @@ export default function Header({
     </SafeAreaView>
   );
 }
+
+//Uso leftContent y rightContent para personalizar los lados del header para personalizar el header en diferentes pantallas sin necesidad de crear múltiples componentes Header.:
+// Ejemplo:
+// <Header 
+//   title="Perfil"
+//   leftContent={<Avatar source={user.image} />}
+// />
