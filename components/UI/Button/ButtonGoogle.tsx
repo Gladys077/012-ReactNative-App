@@ -1,7 +1,7 @@
 
 import { Pressable, Text, View } from 'react-native';
-import { BorderRadius } from '../../constants/Tokens';
-import { GoogleLogoColor } from '../icons';
+import { BorderRadius } from '../../../constants/Tokens';
+import { GoogleLogoColor } from '../../icons';
 
 interface ButtonGoogleProps {
   onLogin: () => void;

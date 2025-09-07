@@ -32,7 +32,13 @@ export const useAuthContext = () => useContext(AuthContext);  //Esto crea un ata
 //Esto crea un "repartidor/proveedor" del contexto. children son todos los componentes que van dentro del AuthProvider. El value={{}} es lo que compartiré (va a tener cosas como user, login, logout, etc).
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [status, setStatus] = useState<AuthStatus>(AuthStatus.checking);
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<User | undefined>({
+    name: "Usuario Test",
+    email: "test@test.com", 
+    role: "buyer", // o "seller"
+    credits: 150,
+    commerceName: "Mi Comercio Test"
+  });
   const [token, setToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {

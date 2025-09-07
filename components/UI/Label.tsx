@@ -1,3 +1,10 @@
+/* Muestra un texto principal (lo q pasemos x children, por ej. "Email" o "Contraseña").
+Opcionales: 
+-agrega un asterisco (*) en rojo si el campo es required.
+-muestra un icono al lado del texto principal si pasás icon.
+-muestra un subtexto (ejemplo: "Debe tener al menos 8 caracteres") debajo, en tipografía más pequeña y color tenue.
+Permite clases adicionales con className para ajustar su estilo/espaciado en contextos distintos.*/
+
 import { Text, View } from "react-native";
 
 interface LabelProps {
@@ -36,3 +43,8 @@ export default function Label({
     </View>
   );
 }
+
+// Ejemplo de uso:
+// <Label required icon={<SomeIcon />} subtext="Debe tener al menos 8 caracteres">
+//   Contraseña
+// </Label>

@@ -1,7 +1,7 @@
 import { ComponentType, ReactNode } from 'react';
 import { Pressable, Text, useColorScheme, View } from 'react-native';
 import { SvgProps } from 'react-native-svg';
-import { BorderRadius } from '../../constants/Tokens';
+import { BorderRadius } from '../../../constants/Tokens';
 
 interface ButtonProps {
   children: ReactNode;

@@ -8,12 +8,18 @@ import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import "./global.css";
 
-SplashScreen.preventAutoHideAsync(); 
+SplashScreen.preventAutoHideAsync(); // evita que la pantalla de presentación se cierre automáticamente, lo que te da tiempo para cargar activos en segundo plano o preparar la interfaz antes de que el usuario vea la aplicación principal. 
 
 // StatusBar que respeta el tema
 function ThemedStatusBar() {
   const { mode } = useTheme();
-  return <StatusBar style={mode === "dark" ? "light" : "dark"} />;
+  return (
+    <StatusBar 
+      style={mode === "dark" ? "light" : "dark"}
+      backgroundColor="transparent"
+      translucent
+  />
+  );
 }
 
 const RootLayout = () => {
@@ -25,18 +31,23 @@ const RootLayout = () => {
   });
   
   useEffect(() => {
-    if (error) throw error;
-    if (fontsLoaded) SplashScreen.hideAsync();
+    if (error) {
+      console.error('Font loading error:', error);
+      SplashScreen.hideAsync(); // Hide splash even on error
+    }
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded && !error) return null;
   
   return (
-    <ThemeProvider>
+    <ThemeProvider> 
       <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <ThemedStatusBar />
-          <Slot />
+          <Slot/>
         </GestureHandlerRootView>
       </AuthProvider>
     </ThemeProvider>
@@ -44,3 +55,9 @@ const RootLayout = () => {
 }
 
 export default RootLayout;
+
+// ThemeProvider: Componente que proporciona el contexto del tema (claro/oscuro) a toda la aplicación.
+// AuthProvider: Componente que proporciona el contexto de autenticación a toda la aplicación.
+// GestureHandlerRootView: Componente necesario para que react-native-gesture-handler funcione correctamente.
+// ThemedStatusBar: Componente que ajusta el estilo de la barra de estado según el tema actual.
+// Slot: Componente de expo-router que representa la ubicación donde se renderizarán las rutas hijas.

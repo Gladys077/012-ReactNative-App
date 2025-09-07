@@ -1,7 +1,8 @@
 // import { Redirect } from "expo-router";
+import LabelTest from "../--tests--/components/LabelTest";
 
 // import HeaderTest from "../components/Header/HeaderTest";
-import CompradorLayout from "./comprador/_layout";
+// import CompradorLayout from "./comprador/_layout";
 
 // import FooterTest from "../components/Footer/FooterTest";
 
@@ -10,10 +11,9 @@ import CompradorLayout from "./comprador/_layout";
 
 
 const App = () => {
-  // return <Redirect href="/login" />;
-  return (
-    <CompradorLayout />
-);
+  // return <Redirect href={"/(auth)/login" as any} />;
+  // return <Redirect href="/(app)/ajustes" />;
+  return LabelTest();
  
 }
 

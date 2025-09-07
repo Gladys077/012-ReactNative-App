@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Historial, Home, PendientesMenuVendedor } from '../icons';
+import { Historial, Home, PendientesMenuVendedor } from '../../icons';
 import Button from './Button';
 import ButtonGoogle from './ButtonGoogle';
 

@@ -26,7 +26,7 @@ const getVariantStyles = (variant: Variant, colors: any) => {
       container: "min-w-12 min-h-12 items-center justify-center",
       iconWrapper: getIconSizeClass("md"), // 24px
       iconSize: getIconPixelSize("md"),
-      labelBase: `text-xs text-${colors.textMuted}`,
+      labelBase: "text-[10px]",
       defaultColor: colors.textMuted,
     },
     menuVendedor: {
@@ -132,7 +132,7 @@ export const IconLabel = ({
       </View>
 
       <Text
-        className={`mt-1 text-center font-roboto ${active ? "font-medium" : ""}`}
+        className={[styles.labelBase, "mt-1 text-center font-roboto", active ? "font-medium" : ""].join(" ")}
         style={{ color: getLabelColor() }}
       >
         {label}

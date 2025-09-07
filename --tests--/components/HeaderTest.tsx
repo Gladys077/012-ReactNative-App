@@ -1,9 +1,9 @@
 import React from "react";
 import { ScrollView, View } from "react-native";
+import Header from "../../components/UI/Header";
+import { Carrito } from "../../components/icons";
 import { AuthContext } from "../../context/AuthContext";
 import { ThemeProvider, useTheme } from "../../context/ThemeContext";
-import { Carrito } from "../icons";
-import Header from "./Header";
 
 // Mock users
 const mockBuyer = {

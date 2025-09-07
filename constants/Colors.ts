@@ -17,7 +17,7 @@ export const Colors = {
     brandSeller: '#ea580c',  // orange-600
 
     // Superficies
-    headerBg: '#ffffff',
+    headerFooterBg: 'rgba(255,255,255,0.8)',
     cardBg: '#ffffff',
     background: '#f3f4f6', // gray-100
     border: '#E5E7EB',
@@ -40,7 +40,7 @@ export const Colors = {
     brandSeller: '#ed6728',   // orange-500
 
     // Superficies
-    headerBg: '#292b2f',
+    headerFooterBg: 'rgba(17,24,39,0.7)',
     cardBg: '#374151',          // gray-700
     background: '#1f2937', // gray-800
     border: '#374151', // gray-700
