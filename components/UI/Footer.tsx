@@ -5,8 +5,8 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { SvgProps } from "react-native-svg";
 import { useTheme } from "../../context/ThemeContext";
-import { IconLabel } from "../IconLabel/IconLabel";
 import { Ajustes, Historial, Home, Monedas, Pendientes } from "../icons";
+import { IconLabel } from "./IconLabel";
 
 interface FooterItem {
   icon: ComponentType<SvgProps>;
@@ -15,15 +15,15 @@ interface FooterItem {
 }
 
 const itemsBuyer: FooterItem[] = [
-  { icon: Home, label: "Inicio", route: "/homeRol" },
-  { icon: Historial, label: "Historial", route: "/comprador/historial" },
-  { icon: Pendientes, label: "Pendientes", route: "/comprador/pendientes" },
+  { icon: Home, label: "Inicio", route: "/comprador/nuevoPedido" },
+  { icon: Historial, label: "Historial", route: "/comprador/historialComprador" },
+  { icon: Pendientes, label: "Pendientes", route: "/comprador/estadoPedido" },
   { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustes" },
 ];
 
 const itemsSeller: FooterItem[] = [
-  { icon: Home, label: "Inicio", route: "/homeRol" },
-  { icon: Historial, label: "Historial", route: "/vendedor/historial" },
+  { icon: Home, label: "Inicio", route: "/vendedor/inicio" },
+  { icon: Historial, label: "Historial", route: "/vendedor/historialVendedor" },
   { icon: Monedas, label: "Créditos", route: "/vendedor/creditos" },
   { icon: Ajustes, label: "Ajustes", route: "/vendedor/ajustes" },
 ];

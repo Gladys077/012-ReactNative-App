@@ -4,11 +4,25 @@ import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 
 function ThemedStatusBar() {
-  const { mode } = useTheme();
+  const { mode, colors } = useTheme();
+
   return (
-    <StatusBar translucent backgroundColor="transparent" style={mode === "dark" ? "light" : "dark"} />
+    <>
+      {/* Fondo para StatusBar */}
+      <View
+        style={{
+          height: 50, // o StatusBar.currentHeight
+          backgroundColor: colors.background,
+        }}
+      />
+      <StatusBar 
+        style={mode === "dark" ? "light" : "dark"}
+        translucent
+      />
+    </>
   );
 }
+
 export default function AppLayout() {
   const { colors } = useTheme(); 
   

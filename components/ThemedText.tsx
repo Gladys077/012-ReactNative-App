@@ -1,28 +1,37 @@
-import { Text, TextProps } from 'react-native';
-import { useTheme } from '../context/ThemeContext';
+// ThemedText.tsx
+import { FontSizes } from "@/constants/Tokens";
+import { Text, TextProps } from "react-native";
+import { useTheme } from "../context/ThemeContext";
 
 interface Props extends TextProps {
-  variant?: 'title' | 'subtitle' | 'body' | 'caption';
-  weight?: 'regular' | 'bold' | 'medium' | 'light';
+  variant?: "title" | "subtitle" | "body" | "caption";
+  weight?: "regular" | "bold" | "medium" | "light";
   children: React.ReactNode;
 }
 
 export default function ThemedText({
-  variant = 'body',
-  weight = 'regular',
+  variant = "body",
+  weight = "regular",
   style,
   ...rest
 }: Props) {
   const { colors, fonts } = useTheme();
 
-  const fontSizeMap = {
-    title: 24,
-    subtitle: 18,
-    body: 14,
-    caption: 12,
+  // Mapeo directo a tus tokens
+  const fontSizeMap: Record<
+    NonNullable<Props["variant"]>, //un obj con las claves title, subtitle, body, caption y valores de tipo number
+    number
+  > = {
+    title: FontSizes.xl,
+    subtitle: FontSizes.lg,
+    body: FontSizes.base,
+    caption: FontSizes.sm,
   };
 
-  const fontFamilyMap = {
+  const fontFamilyMap: Record<
+    NonNullable<Props["weight"]>,
+    string
+  > = {
     regular: fonts.robotoRegular,
     bold: fonts.robotoBold,
     medium: fonts.robotoMedium,
@@ -33,7 +42,7 @@ export default function ThemedText({
     <Text
       style={[
         {
-          color: colors.textDefault,
+          color: colors.textDefault, // 🔥 dinámico según theme
           fontSize: fontSizeMap[variant],
           fontFamily: fontFamilyMap[weight],
         },

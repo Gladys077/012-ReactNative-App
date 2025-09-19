@@ -1,6 +1,7 @@
 import { useFonts } from 'expo-font';
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from 'react';
+import { Platform, StatusBar as RNStatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AuthProvider } from '@/context/AuthContext';
@@ -8,17 +9,28 @@ import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import "./global.css";
 
-SplashScreen.preventAutoHideAsync(); // evita que la pantalla de presentación se cierre automáticamente, lo que te da tiempo para cargar activos en segundo plano o preparar la interfaz antes de que el usuario vea la aplicación principal. 
+SplashScreen.preventAutoHideAsync();
 
 // StatusBar que respeta el tema
 function ThemedStatusBar() {
-  const { mode } = useTheme();
+  const { mode, colors } = useTheme();
+
   return (
-    <StatusBar 
-      style={mode === "dark" ? "light" : "dark"}
-      backgroundColor="transparent"
-      translucent
-  />
+    <>
+      {/* Fondo detrás del StatusBar */}
+      {Platform.OS === 'android' && (
+        <View
+          style={{
+            height: RNStatusBar.currentHeight,
+            backgroundColor: colors.background,
+          }}
+        />
+      )}
+      <StatusBar
+        style={mode === "dark" ? "light" : "dark"}
+        translucent
+      />
+    </>
   );
 }
 
@@ -33,7 +45,7 @@ const RootLayout = () => {
   useEffect(() => {
     if (error) {
       console.error('Font loading error:', error);
-      SplashScreen.hideAsync(); // Hide splash even on error
+      SplashScreen.hideAsync();
     }
     if (fontsLoaded) {
       SplashScreen.hideAsync();
@@ -43,11 +55,11 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   
   return (
-    <ThemeProvider> 
+    <ThemeProvider>
       <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'transparent' }}>
           <ThemedStatusBar />
-          <Slot/>
+          <Slot />
         </GestureHandlerRootView>
       </AuthProvider>
     </ThemeProvider>
@@ -55,9 +67,3 @@ const RootLayout = () => {
 }
 
 export default RootLayout;
-
-// ThemeProvider: Componente que proporciona el contexto del tema (claro/oscuro) a toda la aplicación.
-// AuthProvider: Componente que proporciona el contexto de autenticación a toda la aplicación.
-// GestureHandlerRootView: Componente necesario para que react-native-gesture-handler funcione correctamente.
-// ThemedStatusBar: Componente que ajusta el estilo de la barra de estado según el tema actual.
-// Slot: Componente de expo-router que representa la ubicación donde se renderizarán las rutas hijas.

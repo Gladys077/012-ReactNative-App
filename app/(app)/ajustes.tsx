@@ -7,6 +7,7 @@ const Ajustes = () => {
     <View className="flex-1">
       <Header title="Ajustes" showBackArrow />
       {/* Contenido */}
+      
       <Footer /> 
       {/* Footer dinámico según rol */}
       

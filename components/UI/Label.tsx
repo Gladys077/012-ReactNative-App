@@ -1,19 +1,14 @@
-/* Muestra un texto principal (lo q pasemos x children, por ej. "Email" o "Contraseña").
-Opcionales: 
--agrega un asterisco (*) en rojo si el campo es required.
--muestra un icono al lado del texto principal si pasás icon.
--muestra un subtexto (ejemplo: "Debe tener al menos 8 caracteres") debajo, en tipografía más pequeña y color tenue.
-Permite clases adicionales con className para ajustar su estilo/espaciado en contextos distintos.*/
-
-import { Text, View } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
+import { Text, TextStyle, View } from "react-native";
 
 interface LabelProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   required?: boolean;
   icon?: React.ReactNode;
   subtext?: string;
   className?: string;
-
+  subtextStyle?: TextStyle; // prop para color/estilo dinámico (si es error: rojo)
+  noMarginTop?: boolean;  
 }
 
 export default function Label({
@@ -22,29 +17,43 @@ export default function Label({
   icon,
   subtext,
   className = "",
+  subtextStyle,
+  noMarginTop = false,
 }: LabelProps) {
+  const { colors } = useTheme();
+
   return (
-    <View className={`flex flex-col mt-4 ${className}`}>
-      <View className="flex-row items-center gap-1">
-        <Text className="text-sm text-text-default font-medium">
-          {children}
-        </Text>
-        {required && (
-          <Text className="text-sm text-text-error font-medium">*</Text>
-        )}
-        {icon && <View className="ml-1">{icon}</View>}
-      </View>
+    <View className={`flex flex-col ${noMarginTop ? "" : "mt-4"} ${className}`}>
+      {children && (
+        <View className="flex-row items-center gap-1">
+          <Text
+            style={{ color: colors.textDefault, fontSize: 12, fontFamily: "Roboto_500Medium" }}
+          >
+            {children}
+          </Text>
+          {required && (
+            <Text
+              style={{ color: colors.textError, fontSize: 14, fontFamily: "Roboto_500Medium" }}
+            >
+              *
+            </Text>
+          )}
+          {icon && <View style={{ marginLeft: 4 }}>{icon}</View>}
+        </View>
+      )}
 
       {subtext && (
-        <Text className="text-xs text-text-muted mt-1 leading-4">
+        <Text
+          style={{
+            color: colors.textMuted,
+            fontSize: 12,
+            fontFamily: "Roboto_400Regular",
+            ...subtextStyle,
+          }}
+        >
           {subtext}
         </Text>
       )}
     </View>
   );
 }
-
-// Ejemplo de uso:
-// <Label required icon={<SomeIcon />} subtext="Debe tener al menos 8 caracteres">
-//   Contraseña
-// </Label>

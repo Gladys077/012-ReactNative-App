@@ -1,17 +1,17 @@
 import * as React from "react";
-import Svg, { Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
-const SvgVisible = (props: SvgProps) => (
+import Svg, { Path } from "react-native-svg";
+const SvgVisible = ({ width = 24, height = 24, ...props }: SvgProps) => (
   <Svg
-    xmlSpace="preserve"
-    width={24}
-    height={24}
+    width={width}
+    height={height}
     fill="currentColor"
     fillRule="evenodd"
     strokeLinejoin="round"
     strokeMiterlimit={2}
     clipRule="evenodd"
     viewBox="0 0 64 64"
+
     {...props}
   >
     <Path fill="none" d="M-896-256H384v800H-896z" />

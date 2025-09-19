@@ -1,7 +1,7 @@
+import { BorderRadius, Spacing } from '@/constants/Tokens';
 import { ComponentType, ReactNode } from 'react';
 import { Pressable, Text, useColorScheme, View } from 'react-native';
 import { SvgProps } from 'react-native-svg';
-import { BorderRadius } from '../../../constants/Tokens';
 
 interface ButtonProps {
   children: ReactNode;
@@ -93,7 +93,7 @@ const styles = variants[variant] ?? variants.primary;
   ].join(' ');
 
   return (
-    <Pressable onPress={onPress} disabled={disabled}>
+    <Pressable onPress={onPress} disabled={disabled}   style={{ marginTop: Spacing.lg }}>
       {({ pressed }) => (
         <View
           className={`${baseClass} ${styles.container}`}
