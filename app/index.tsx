@@ -1,7 +1,7 @@
 // import { Redirect } from "expo-router";
 
 // import InputFieldTest from "../--tests--/components/InputFieldTest";
-import LoginScreen from "./(app)/registro";
+import LoginScreen from "./(app)/login";
 
 // import HeaderTest from "../components/Header/HeaderTest";
 // import CompradorLayout from "./comprador/_layout";
