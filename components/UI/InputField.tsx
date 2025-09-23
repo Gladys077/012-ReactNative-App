@@ -1,5 +1,5 @@
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 import { BorderRadius } from "../../constants/Tokens";
 import { Invisible, Visible } from "../icons";
@@ -15,6 +15,7 @@ type InputFieldProps = {
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  error?: string;
   className?: string;
   accessibilityLabel?: string;
   showPasswordToggle?: boolean;
@@ -31,6 +32,7 @@ export const InputField = ({
   onChangeText,
   secureTextEntry = false,
   keyboardType = "default",
+  error,
   className = "",
   accessibilityLabel,
   showPasswordToggle = false,
@@ -38,43 +40,34 @@ export const InputField = ({
 }: InputFieldProps) => {
   const { colors } = useTheme();
 
-  // Estado para ocultar/mostrar contraseña
-  const [hidden, setHidden] = React.useState(secureTextEntry);
-  // Estado interno de error
-  const [error, setError] = React.useState<string | undefined>();
+  const [hidden, setHidden] = useState(secureTextEntry);
+  const [localError, setLocalError] = useState<string>("");
 
-  const heightStyles = {
-    sm: 40,
-    md: 48,
-    lg: 56,
-  };
+  const heightStyles = { sm: 40, md: 48, lg: 56 };
 
-  // Función que maneja cambios y valida
-  const handleChangeText = (text: string) => {
-    onChangeText(text);
-
-    // Validación required
-    if (required && !text.trim()) {
-      setError("Este campo es obligatorio");
-      return;
-    }
-
-    // Validación email si corresponde
-    if (keyboardType === "email-address") {
+  // Validación automática
+  useEffect(() => {
+    if (!value && required) {
+      setLocalError("Este campo es obligatorio");
+    } else if (keyboardType === "email-address") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (text && !emailRegex.test(text)) {
-        setError("Ingresa un correo válido");
-        return;
+      if (value && !emailRegex.test(value)) {
+        setLocalError("Debe ser un correo válido");
+      } else {
+        setLocalError("");
       }
+    } else {
+      setLocalError("");
     }
-
-    // Si pasa validaciones
-    setError(undefined);
-  };
+  }, [value, required, keyboardType]);
 
   return (
     <View className="w-full">
-      {label && <Label required={required} icon={icon}>{label}</Label>}
+      {label && (
+        <Label required={required} icon={icon}>
+          {label}
+        </Label>
+      )}
 
       <View className="relative">
         {icon && (
@@ -89,14 +82,14 @@ export const InputField = ({
             height: heightStyles[height],
             borderRadius: BorderRadius.pillBtn,
             backgroundColor: colors.cardBg,
-            borderColor: colors.border,
+            borderColor: localError ? colors.textError : colors.border,
             color: colors.textDefault,
             paddingVertical: 0,
           }}
           placeholder={placeholder}
           placeholderTextColor={colors.textMuted}
           value={value}
-          onChangeText={handleChangeText} // función q valida email
+          onChangeText={onChangeText}
           secureTextEntry={hidden}
           keyboardType={keyboardType}
           accessibilityLabel={accessibilityLabel || label || placeholder}
@@ -116,10 +109,12 @@ export const InputField = ({
         )}
       </View>
 
-      {(subtext || error) && (
+      {(subtext || error || localError) && (
         <Label
-          subtext={error ?? subtext}
-          subtextStyle={error ? { color: colors.textError } : { color: colors.textMuted }}
+          subtext={error ?? localError ?? subtext}
+          subtextStyle={{
+            color: error || localError ? colors.textError : colors.textMuted,
+          }}
           noMarginTop
         />
       )}

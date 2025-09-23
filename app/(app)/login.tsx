@@ -129,6 +129,24 @@ export default function LoginScreen() {
                 secureTextEntry // arranca como password
                 showPasswordToggle // activa el ojito
               />
+
+              {/* Forgot Password Link */}
+            <Pressable
+              // onPress={() => router.push("/forgot-password")}    // debe ir a la page forgot-password
+              style={{ alignSelf: "flex-end", marginTop: Spacing.sm }}
+            >
+              {({ pressed }) => (
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: colors.brandCommon,
+                    opacity: pressed ? 0.7 : 1,
+                  }}
+                >
+                  ¿Olvidaste tu contraseña?
+                </Text>
+              )}
+            </Pressable>
             </View>
 
             {/* Login Button */}
@@ -206,3 +224,6 @@ export default function LoginScreen() {
     </SafeAreaView>
   );
 }
+
+
+//TODO: INGRESAR CON GOOGLE, REGISTRAR USUARIO, OLVIDE MI CONTRASEÑA, VALIDACIONES, CONECTAR CON BACKEND
