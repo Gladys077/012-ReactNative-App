@@ -22,16 +22,16 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     console.log("Iniciar sesión", { email, password });
-    // router.push("/elegir-rol"); // debe ir a elegir-rol
+    router.push("/elegirRol"); // debe ir a elegir-rol
   };
 
   const handleGoogleLogin = () => {
     console.log("Continuar con Google");
-    // Aquí se delega al backend la lógica de OAuth con Google
+    // TODO: VER CON LIO la lógica de Auth con Google
   };
 
   const handleRegister = () => {
-    // router.push("/registro"); // debe ir a la page registro 
+    router.push("/registro"); // debe ir a la page registro 
   };
 
   return (
@@ -132,7 +132,7 @@ export default function LoginScreen() {
 
               {/* Forgot Password Link */}
             <Pressable
-              // onPress={() => router.push("/forgot-password")}    // debe ir a la page forgot-password
+              onPress={() => router.push("/olvideContrasena")}    
               style={{ alignSelf: "flex-end", marginTop: Spacing.sm }}
             >
               {({ pressed }) => (
@@ -226,4 +226,4 @@ export default function LoginScreen() {
 }
 
 
-//TODO: INGRESAR CON GOOGLE, REGISTRAR USUARIO, OLVIDE MI CONTRASEÑA, VALIDACIONES, CONECTAR CON BACKEND
+//TODO: INGRESAR CON GOOGLE, CONECTAR CON BACKEND

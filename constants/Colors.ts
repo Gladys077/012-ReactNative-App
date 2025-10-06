@@ -5,7 +5,6 @@ export const Colors = {
     textMuted: '#6b7280',      // gray-500  
     textError: '#ef4444',      // red-500
     textOnColor: '#ffffff',
-    textSecondary: '#ffd700',  // amarillo ejemplo
 
     // Botones secundarios
     textSecondaryBg: '#dadbdc',
@@ -28,7 +27,6 @@ export const Colors = {
     textMuted: '#9ca3af',       // gray-400
     textError: '#f87171',       // red-400
     textOnColor: '#ffffff',
-    textSecondary: '#ffd700',   // mismo amarillo si quieres mantener
 
     // Botones secundarios
     textSecondaryBg: '#636363',

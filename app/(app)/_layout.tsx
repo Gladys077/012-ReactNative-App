@@ -27,8 +27,9 @@ export default function AppLayout() {
   const { colors } = useTheme(); 
   
   return (
-    <View className="flex-1" style={{ backgroundColor: colors.background }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ThemedStatusBar />
+       
 
       <Slot />
     </View>

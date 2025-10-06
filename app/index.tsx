@@ -1,7 +1,8 @@
 // import { Redirect } from "expo-router";
 
 // import InputFieldTest from "../--tests--/components/InputFieldTest";
-import LoginScreen from "./(app)/login";
+// import LoginScreen from "./(app)/login";
+import Registro from "./(app)/registro";
 
 // import HeaderTest from "../components/Header/HeaderTest";
 // import CompradorLayout from "./comprador/_layout";
@@ -15,7 +16,7 @@ import LoginScreen from "./(app)/login";
 const App = () => {
   // return <Redirect href={"/(auth)/login" as any} />;
   // return <Redirect href="/(app)/ajustes" />;
-  return LoginScreen();
+  return Registro();
  
 }
 

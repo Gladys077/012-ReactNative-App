@@ -6,7 +6,7 @@ import { InputField } from "../../components/UI/InputField";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
-export default function ForgotPasswordScreen() {
+export default function OlvideContrasena() {
   const { colors } = useTheme();
   const router = useRouter();
 
@@ -21,22 +21,30 @@ export default function ForgotPasswordScreen() {
     }
 
     setError(undefined);
-    // Aquí se delega al backend el envío de mail de recuperación
+    // TODO: VER CON LIO el envío de mail de recuperación
     console.log("Enviar email de recuperación a:", email);
     setSubmitted(true);
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingTop: Spacing.lg }}>
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: Spacing.xl, paddingTop: Spacing.lg }}
+        contentContainerStyle={{ flexGrow: 1}}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ maxWidth: 500, width: "100%", alignSelf: "center" }}>
-          <Text style={{ color: colors.textDefault, fontSize: 24, fontWeight: "bold", marginBottom: Spacing.md }}>
+        <View style={{ flex: 1,
+                    paddingHorizontal: Spacing.xl,
+                    marginTop: Spacing.lg,
+                    paddingTop: Spacing.lg,
+                    maxWidth: 500,
+                    width: "100%",
+                    alignSelf: "center" }}>
+          <Text style={{ color: colors.textDefault, fontSize: 24, fontWeight: "bold", marginBottom: Spacing.md,
+                    alignSelf: "center" }}>
             Recuperar contraseña
           </Text>
-          <Text style={{ color: colors.textMuted, fontSize: 14, marginBottom: Spacing.xl }}>
+          <Text style={{ color: colors.textMuted, fontSize: 14, marginBottom: Spacing.xxl,
+                    alignSelf: "center" }}>
             Ingresa tu correo y te enviaremos un link para restablecer tu contraseña
           </Text>
 
@@ -53,7 +61,7 @@ export default function ForgotPasswordScreen() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 required
-                error={error || ""}
+error={error ? error : undefined}
               />
 
               <View style={{ marginTop: Spacing.lg }}>
@@ -67,7 +75,7 @@ export default function ForgotPasswordScreen() {
           <View style={{ marginTop: Spacing.xl, alignItems: "center" }}>
             <Text
               style={{ color: colors.brandCommon, fontWeight: "500" }}
-              onPress={() => router.back()}
+              onPress={() => router.push("/login")}
             >
               Volver al login
             </Text>

@@ -1,5 +1,5 @@
 import { useNavigation } from "expo-router";
-import { Pressable, StatusBar, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
@@ -38,12 +38,18 @@ export default function Header({
       {/*Este View se extiende hacia arriba y pinta el fondo detrás de la hora/batería.*/}
       <View
         style={{
-          paddingTop: (StatusBar.currentHeight || 0) + 12, // ocupa también el espacio del StatusBar
           backgroundColor: colors.headerFooterBg,
           borderBottomColor: colors.border,
+          width: "100%",
+          maxWidth: 500,
+          alignSelf: "center",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
         className="flex-row items-center justify-between px-2 py-2 border-b gap-4"
       >
+        
         {/* Lado izquierdo */}
         {leftContent ? (
           leftContent
