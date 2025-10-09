@@ -2,7 +2,7 @@
 import { Slot } from "expo-router";
 import { View } from "react-native";
 
-const AppLayout = () => {
+const AuthLayout = () => {
   return (
     <View className="flex-1 bg-background">
       <Slot />
@@ -10,4 +10,4 @@ const AppLayout = () => {
   );
 }
 
-export default AppLayout;
+export default AuthLayout;

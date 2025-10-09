@@ -1,0 +1,41 @@
+import { Spacing } from "@/constants/Tokens";
+import { useTheme } from "@/context/ThemeContext";
+import { Slot, useSegments } from "expo-router";
+import { View } from "react-native";
+import Header from "../../components/UI/Header";
+
+export default function PreAuthLayout() {
+  const { colors } = useTheme();
+  const segments = useSegments();
+  
+  const currentPage = segments[segments.length - 1];
+  
+  const getTitleByPage = () => {
+    switch (currentPage) {
+      case 'registro': 
+        return 'Registro';
+      case 'olvideContrasena': 
+        return 'Recuperar Contraseña';
+      default: 
+        return '';
+    }
+  };
+  
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <Header showBackArrow title={getTitleByPage()} />
+      
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: Spacing.xl,   
+          maxWidth: 500,                  
+          width: "100%",
+          alignSelf: "center",              
+        }}
+      >
+        <Slot />
+      </View>
+    </View>
+  );
+}

@@ -34,16 +34,13 @@ export default function OlvideContrasena() {
       >
         <View style={{ flex: 1,
                     paddingHorizontal: Spacing.xl,
-                    marginTop: Spacing.lg,
-                    paddingTop: Spacing.lg,
+                    marginTop: Spacing.xxl,
+                    paddingTop: Spacing.xxl,
                     maxWidth: 500,
                     width: "100%",
                     alignSelf: "center" }}>
-          <Text style={{ color: colors.textDefault, fontSize: 24, fontWeight: "bold", marginBottom: Spacing.md,
-                    alignSelf: "center" }}>
-            Recuperar contraseña
-          </Text>
-          <Text style={{ color: colors.textMuted, fontSize: 14, marginBottom: Spacing.xxl,
+        
+          <Text style={{ color: colors.textDefault, fontSize: 18, marginBottom: Spacing.xxl, fontWeight: "500",
                     alignSelf: "center" }}>
             Ingresa tu correo y te enviaremos un link para restablecer tu contraseña
           </Text>

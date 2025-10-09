@@ -1,9 +1,10 @@
+import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, View } from "react-native";
 import { Avatar, EditForm } from "../../components/icons";
 import Button from "../../components/UI/Button/Button";
-import Header from "../../components/UI/Header";
 import { InputField } from "../../components/UI/InputField";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
@@ -20,6 +21,30 @@ export default function RegistroScreen() {
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
   const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | undefined>(undefined);
+
+   const [avatarUri, setAvatarUri] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    // Pedir permisos
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (!permissionResult.granted) {
+      alert("Necesitas dar permisos para acceder a las fotos");
+      return;
+    }
+
+    // Abrir selector de imágenes
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // Permite recortar
+      aspect: [1, 1], // Cuadrado
+      quality: 0.8, // Calidad de compresión
+    });
+
+    if (!result.canceled) {
+      setAvatarUri(result.assets[0].uri);
+    }
+  };
 
   const handleRegister = () => {
     // Limpiar errores previos
@@ -69,10 +94,7 @@ export default function RegistroScreen() {
         paddingTop: Spacing.lg,
       }}
     >
-      {/* Header */}
-      <Header title="Registro" showBackArrow />
-
-
+      
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
@@ -81,35 +103,51 @@ export default function RegistroScreen() {
           style={{
             flex: 1,
             paddingHorizontal: Spacing.xl,
-            marginTop: Spacing.lg,
-            paddingTop: Spacing.lg,
+            marginTop: Spacing.xxl,
+            // paddingTop: Spacing.xl,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
           }}
         >
           {/* Avatar Section */}
-        <View style={{ alignItems: "center", marginBottom: Spacing.xxl }}>
+        <View 
+          style={{ 
+            alignItems: "center", 
+            // marginBottom: Spacing.lg 
+            }}>
             <View
                 style={{
-                width: 128,
-                height: 128,
-                borderRadius: 64,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: Spacing.md,
-                position: "relative",
-                backgroundColor: colors.background
+                  width: 128,
+                  height: 128,
+                  borderRadius: 64,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  // marginBottom: Spacing.xxl,
+                  position: "relative",
+                  backgroundColor: colors.background,
+                  overflow: 'hidden', // Para que la imagen respete el borderRadius
                 }}
             >
-                {/* Icono principal */}
+              {avatarUri ? (
+                // Muestra imagen seleccionada
+                <Image
+                  source={{ uri: avatarUri }}
+                  style={{ width: 128, height: 128 }}
+                  contentFit="cover"
+                  transition={200}
+                />
+              ) : (
+                // Muestra icono por defecto                
                 <Avatar width={128} height={128} color={colors.textMuted} />
+              )}
 
                 {/* Botón de editar */}
-                <View
+                <Pressable
+                onPress={pickImage}
                 style={{
                     position: "absolute",
-                    bottom: 6,
+                    bottom: 4,
                     right: 6,
                     width: 36,
                     height: 36,
@@ -120,15 +158,13 @@ export default function RegistroScreen() {
                     shadowColor: "#000",
                     shadowOpacity: 0.2,
                     shadowRadius: 3,
-                    elevation: 3,
-                }}
+                    elevation: 3                
+                  }}
                 >
-                <EditForm width={18} height={18} color={colors.textOnColor} />
+                  <EditForm width={18} height={18} color={colors.textOnColor} />
+                </Pressable>
                 </View>
             </View>
-
-
-            
         </View>
 
 
@@ -183,7 +219,6 @@ export default function RegistroScreen() {
               Registrarse
             </Button>
           </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

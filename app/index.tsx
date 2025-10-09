@@ -1,22 +1,10 @@
-// import { Redirect } from "expo-router";
 
-// import InputFieldTest from "../--tests--/components/InputFieldTest";
-// import LoginScreen from "./(app)/login";
-import Registro from "./(app)/registro";
-
-// import HeaderTest from "../components/Header/HeaderTest";
-// import CompradorLayout from "./comprador/_layout";
-
-// import FooterTest from "../components/Footer/FooterTest";
-
-// import { ButtonTest } from "../components/Button/ButtonTest";
-// import IconLabelTest from "../components/IconLabel/IconLabelTest";
+import { Redirect } from "expo-router";
 
 
 const App = () => {
-  // return <Redirect href={"/(auth)/login" as any} />;
-  // return <Redirect href="/(app)/ajustes" />;
-  return Registro();
+  return <Redirect href={"/(auth)/login" as any} />;
+  // return Registro();
  
 }
 
