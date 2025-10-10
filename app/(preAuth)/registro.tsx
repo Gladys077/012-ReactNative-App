@@ -22,10 +22,9 @@ export default function RegistroScreen() {
   const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | undefined>(undefined);
 
-   const [avatarUri, setAvatarUri] = useState<string | null>(null);
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
 
   const pickImage = async () => {
-    // Pedir permisos
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
     if (!permissionResult.granted) {
@@ -33,12 +32,11 @@ export default function RegistroScreen() {
       return;
     }
 
-    // Abrir selector de imágenes
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true, // Permite recortar
-      aspect: [1, 1], // Cuadrado
-      quality: 0.8, // Calidad de compresión
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
     });
 
     if (!result.canceled) {
@@ -47,12 +45,10 @@ export default function RegistroScreen() {
   };
 
   const handleRegister = () => {
-    // Limpiar errores previos
     setEmailError(undefined);
     setPasswordError(undefined);
     setConfirmPasswordError(undefined);
 
-    // Validaciones
     let hasError = false;
 
     if (!name.trim()) {
@@ -82,8 +78,7 @@ export default function RegistroScreen() {
 
     if (hasError) return;
 
-    // TODO: Aquí se conectaría al backend para registrar al usuario. VER CON LIO
-    router.push("/elegirRol"); 
+    router.push("/(auth)/elegirRol"); 
   };
 
   return (
@@ -94,79 +89,73 @@ export default function RegistroScreen() {
         paddingTop: Spacing.lg,
       }}
     >
-      
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
         <View
           style={{
-            flex: 1,
-            paddingHorizontal: Spacing.xl,
-            marginTop: Spacing.xxl,
-            // paddingTop: Spacing.xl,
+            paddingHorizontal: Spacing.lg,
+            paddingTop: Spacing.xl,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
           }}
         >
           {/* Avatar Section */}
-        <View 
-          style={{ 
-            alignItems: "center", 
-            // marginBottom: Spacing.lg 
-            }}>
+          <View style={{ alignItems: "center", marginBottom: Spacing.xxl }}>
             <View
+              style={{
+                width: 128,
+                height: 128,
+                position: "relative",
+              }}
+            >
+              <View
                 style={{
                   width: 128,
                   height: 128,
                   borderRadius: 64,
                   alignItems: "center",
                   justifyContent: "center",
-                  // marginBottom: Spacing.xxl,
-                  position: "relative",
                   backgroundColor: colors.background,
-                  overflow: 'hidden', // Para que la imagen respete el borderRadius
+                  overflow: 'hidden', 
                 }}
-            >
-              {avatarUri ? (
-                // Muestra imagen seleccionada
-                <Image
-                  source={{ uri: avatarUri }}
-                  style={{ width: 128, height: 128 }}
-                  contentFit="cover"
-                  transition={200}
-                />
-              ) : (
-                // Muestra icono por defecto                
-                <Avatar width={128} height={128} color={colors.textMuted} />
-              )}
+              >
+                {avatarUri ? (
+                  <Image
+                    source={{ uri: avatarUri }}
+                    style={{ width: 128, height: 128 }}
+                  />
+                ) : (
+                  <Avatar width={128} height={128} color={colors.textMuted} />
+                )}
+              </View>
 
-                {/* Botón de editar */}
-                <Pressable
+              <Pressable
                 onPress={pickImage}
                 style={{
-                    position: "absolute",
-                    bottom: 4,
-                    right: 6,
-                    width: 36,
-                    height: 36,
-                    borderRadius: 18,
-                    backgroundColor: colors.brandCommon,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    shadowColor: "#000",
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
-                    elevation: 3                
-                  }}
-                >
-                  <EditForm width={18} height={18} color={colors.textOnColor} />
-                </Pressable>
-                </View>
+                  position: "absolute",
+                  bottom: 4, 
+                  right: 4, 
+                  width: 36,
+                  height: 36,
+                  borderRadius: 18,
+                  backgroundColor: colors.brandCommon,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  shadowColor: "#000",
+                  shadowOpacity: 0.2,
+                  shadowRadius: 3,
+                  elevation: 3,
+                  borderWidth: 2, 
+                  borderColor: colors.background,
+                }}
+              >
+                <EditForm width={18} height={18} color={colors.textOnColor} />
+              </Pressable>
             </View>
-        </View>
-
+          </View>
 
           {/* Form Section */}
           <View style={{ marginBottom: Spacing.xl }}>
@@ -176,7 +165,7 @@ export default function RegistroScreen() {
                 placeholder="Nombre y apellido"
                 value={name}
                 onChangeText={setName}
-                error={emailError} // usando emailError para mostrar mensaje genérico si no ingresa nombre
+                error={emailError}
               />
             </View>
 
@@ -219,6 +208,7 @@ export default function RegistroScreen() {
               Registrarse
             </Button>
           </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
