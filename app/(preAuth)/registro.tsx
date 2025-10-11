@@ -15,10 +15,16 @@ export default function RegistroScreen() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [cellular, setCellular] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+
+  const [nameError, setNameError] = useState<string | undefined>(undefined);
   const [emailError, setEmailError] = useState<string | undefined>(undefined);
+  const [addressError, setAddressError] = useState<string | undefined>(undefined);
+  const [cellularError, setCellularError] = useState<string | undefined>(undefined);
   const [passwordError, setPasswordError] = useState<string | undefined>(undefined);
   const [confirmPasswordError, setConfirmPasswordError] = useState<string | undefined>(undefined);
 
@@ -45,21 +51,41 @@ export default function RegistroScreen() {
   };
 
   const handleRegister = () => {
+    setNameError(undefined); 
+    setAddressError(undefined);
+    setCellularError(undefined);
     setEmailError(undefined);
     setPasswordError(undefined);
     setConfirmPasswordError(undefined);
+
 
     let hasError = false;
 
     if (!name.trim()) {
       hasError = true;
-      setEmailError("Por favor ingresa tu nombre y apellido");
+      setNameError("Por favor ingresa tu nombre y apellido");
     }
 
-    if (!email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       hasError = true;
       setEmailError("Por favor ingresa un correo válido");
     }
+
+    if (!address.trim()) {
+      hasError = true;
+      setAddressError("Por favor ingresa tu dirección");
+    }
+
+    if (!cellular.trim()) {
+      hasError = true;
+      setCellularError("Por favor ingresa tu número de celular");
+    } else if (!/^\d+$/.test(cellular)) {
+      hasError = true;
+      setCellularError("El celular solo puede contener números");
+    }
+
+
 
     if (!password) {
       hasError = true;
@@ -165,7 +191,7 @@ export default function RegistroScreen() {
                 placeholder="Nombre y apellido"
                 value={name}
                 onChangeText={setName}
-                error={emailError}
+                error={nameError}
               />
             </View>
 
@@ -177,6 +203,27 @@ export default function RegistroScreen() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 error={emailError}
+              />
+            </View>
+
+            <View style={{ marginBottom: Spacing.xl }}>
+              <InputField
+                label="Dirección"
+                placeholder="Dirección"
+                value={address}
+                onChangeText={setAddress}
+                error={addressError}
+              />
+            </View>
+
+            <View style={{ marginBottom: Spacing.xl }}>
+              <InputField
+                label="Celular"
+                placeholder="Celular"
+                value={cellular}
+                onChangeText={setCellular}
+                keyboardType="phone-pad"
+                error={cellularError}
               />
             </View>
 

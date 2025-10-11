@@ -1,10 +1,11 @@
 
 import { Redirect } from "expo-router";
+// import PerfilScreen from "./(preAuth)/perfil";
 
 
 const App = () => {
   return <Redirect href={"/(auth)/login" as any} />;
-  // return Registro();
+  // return PerfilScreen();
  
 }
 

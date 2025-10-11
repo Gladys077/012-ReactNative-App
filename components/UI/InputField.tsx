@@ -10,6 +10,7 @@ type InputFieldProps = {
   required?: boolean;
   subtext?: string;
   icon?: React.ReactNode;
+  iconRight?: React.ReactNode;
   placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
@@ -20,6 +21,7 @@ type InputFieldProps = {
   accessibilityLabel?: string;
   showPasswordToggle?: boolean;
   height?: "sm" | "md" | "lg";
+  editable?: boolean,
 };
 
 export const InputField = ({
@@ -27,6 +29,7 @@ export const InputField = ({
   required = false,
   subtext,
   icon,
+  iconRight,
   placeholder,
   value,
   onChangeText,
@@ -37,6 +40,7 @@ export const InputField = ({
   accessibilityLabel,
   showPasswordToggle = false,
   height = "lg",
+  editable = true,
 }: InputFieldProps) => {
   const { colors } = useTheme();
 
@@ -64,12 +68,13 @@ export const InputField = ({
   return (
     <View className="w-full">
       {label && (
-        <Label required={required} icon={icon}>
+        <Label required={required}>
           {label}
         </Label>
       )}
 
       <View className="relative">
+        {/* Icono izquierdo (por ejemplo, Mail, User, etc.) */}
         {icon && (
           <View className="absolute left-4 top-1/2 -translate-y-1/2">
             {icon}
@@ -77,14 +82,18 @@ export const InputField = ({
         )}
 
         <TextInput
-          className={["w-full px-4 rounded-xl border", className].join(" ")}
-          style={{
+        className={[
+          "w-full rounded-xl border",
+          icon ? "pl-10" : "px-4", // deja espacio si hay ícono a la izquierda
+          className,
+        ].join(" ")}          style={{
             height: heightStyles[height],
             borderRadius: BorderRadius.pillBtn,
             backgroundColor: colors.cardBg,
             borderColor: localError ? colors.textError : colors.border,
             color: colors.textDefault,
             paddingVertical: 0,
+            paddingRight: showPasswordToggle || iconRight ? 40 : 16,
           }}
           placeholder={placeholder}
           placeholderTextColor={colors.textMuted}
@@ -92,9 +101,11 @@ export const InputField = ({
           onChangeText={onChangeText}
           secureTextEntry={hidden}
           keyboardType={keyboardType}
+          editable={editable !== false} 
           accessibilityLabel={accessibilityLabel || label || placeholder}
         />
 
+        {/* Icono para mostrar/ocultar contraseña */}
         {showPasswordToggle && secureTextEntry && (
           <Pressable
             className="absolute right-4 top-1/2 -translate-y-1/2"
@@ -106,6 +117,13 @@ export const InputField = ({
               <Visible width={20} height={20} color={colors.textMuted} />
             )}
           </Pressable>
+        )}
+
+        {/* Icono derecho general (por ejemplo, EditPencil) */}
+        {!showPasswordToggle && iconRight && (
+          <View className="absolute right-4 top-1/2 -translate-y-1/2">
+            {iconRight}
+          </View>
         )}
       </View>
 
