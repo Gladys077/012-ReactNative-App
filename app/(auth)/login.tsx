@@ -112,7 +112,7 @@ export default function LoginScreen() {
           <View style={{ marginBottom: Spacing.xl }}>
             <View style={{ marginBottom: Spacing.md }}>
               <InputField
-                label="Email o usuario"
+                label="Correo electrónico"
                 placeholder="nombre@ejemplo.com"
                 value={email}
                 onChangeText={setEmail}

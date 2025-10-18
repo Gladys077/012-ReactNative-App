@@ -1,8 +1,8 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Historial, Home, PendientesMenuVendedor } from '../../icons';
-import Button from './Button';
-import ButtonGoogle from './ButtonGoogle';
+import Button from '../../components/UI/Button/Button';
+import ButtonGoogle from '../../components/UI/Button/ButtonGoogle';
+import { Historial, Home, PendientesMenuVendedor } from '../../components/icons';
 
 // Mock icon para pruebas
 // const MockIcon = ({ height, width, color }: { height?: number; width?: number; color?: string }) => (
@@ -167,7 +167,7 @@ export const ButtonTest = () => {
         </View>
       </View>
 
-      {/* Comparación lado a lado */}
+      {/* Comparación lado a lado - 2 btns en la misma línea */}
       <View className="mb-8">
         <Text className="text-lg font-semibold mb-4 text-gray-700">
           ⚖️ Comparación
@@ -179,6 +179,7 @@ export const ButtonTest = () => {
               Seller
             </Button>
           </View>
+          
           <View className="flex-1 mr-2">
             <Button width="auto" section="buyer">
               Buyer  

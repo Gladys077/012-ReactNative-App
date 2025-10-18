@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { StatusBar } from 'expo-status-bar';
 import "./global.css";
 
@@ -58,8 +59,10 @@ const RootLayout = () => {
     <ThemeProvider>
       <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'transparent' }}>
-          <ThemedStatusBar />
-          <Slot />
+          <BottomSheetModalProvider>
+            <ThemedStatusBar />
+            <Slot />
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </AuthProvider>
     </ThemeProvider>

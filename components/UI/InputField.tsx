@@ -13,15 +13,18 @@ type InputFieldProps = {
   iconRight?: React.ReactNode;
   placeholder?: string;
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText: (text: string) => void; // función obligatoria: actualiza el valor del input cada vez que cambia
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   error?: string;
   className?: string;
-  accessibilityLabel?: string;
+  accessibilityLabel?: string; // texto que describe el campo para lectores de pantalla (mejora accesibilidad)
   showPasswordToggle?: boolean;
   height?: "sm" | "md" | "lg";
-  editable?: boolean,
+  editable?: boolean;
+  style?: any; // permite sobrescribir o extender estilos del input desde fuera (ej: borderColor dinámico)
+  onFocus?: () => void; // se llama cuando el input gana foco (ej: para resaltar el borde o limpiar errores)
+  onBlur?: () => void; // se llama cuando el input pierde foco (ej: validar o quitar resaltado)
 };
 
 export const InputField = ({
@@ -86,7 +89,8 @@ export const InputField = ({
           "w-full rounded-xl border",
           icon ? "pl-10" : "px-4", // deja espacio si hay ícono a la izquierda
           className,
-        ].join(" ")}          style={{
+        ].join(" ")}          
+        style={{
             height: heightStyles[height],
             borderRadius: BorderRadius.pillBtn,
             backgroundColor: colors.cardBg,

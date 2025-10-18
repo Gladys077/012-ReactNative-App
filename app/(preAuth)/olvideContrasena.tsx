@@ -58,7 +58,7 @@ export default function OlvideContrasena() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 required
-error={error ? error : undefined}
+            error={error ? error : undefined}
               />
 
               <View style={{ marginTop: Spacing.lg }}>

@@ -41,7 +41,7 @@ const HeaderTest = () => {
     <ThemeProvider>
       <ScrollView className="flex-1 p-4"
       style={{
-            backgroundColor: colors.headerBg,
+            backgroundColor: colors.background,
             borderBottomColor: colors.border,
           }}
       >

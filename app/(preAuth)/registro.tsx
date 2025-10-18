@@ -128,7 +128,7 @@ export default function RegistroScreen() {
 
             <View style={{ marginBottom: Spacing.xl }}>
               <InputField
-                label="Email"
+                label="Correo electrónico"
                 placeholder="nombre@ejemplo.com"
                 value={email}
                 onChangeText={setEmail}

@@ -20,6 +20,9 @@ export const Colors = {
     cardBg: '#ffffff',
     background: '#f3f4f6', // gray-100
     border: '#E5E7EB',
+
+    // Inputs (InputField)
+    inputBorder: "#E0E0E0",
   },
   dark: {
     // Textos
@@ -42,6 +45,9 @@ export const Colors = {
     cardBg: '#374151',          // gray-700
     background: '#1f2937', // gray-800
     border: '#374151', // gray-700
+    
+    // Inputs (InputField)
+    inputBorder: "#333333",
   },
 };
 
