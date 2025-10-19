@@ -16,7 +16,7 @@ export interface RubroConfig {
   iconColor: string;  // color del ícono
 }
 
-// Rubros predeterminados 
+// Rubros predeterminados (acá deberían agregarse más en el futuro - por ahora cada nuevo rubro tendrá un icono de tiendaIcon)
 export const rubrosVendedor: RubroConfig[] = [
   {
     label: "Almacén",

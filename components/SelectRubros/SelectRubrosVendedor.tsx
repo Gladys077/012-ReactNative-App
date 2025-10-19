@@ -2,6 +2,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { MasBlanca, TiendaIcon } from "../icons";
 import Button from "../UI/Button/Button";
 import NuevoRubroInput from "./NuevoRubroInput";
@@ -40,38 +41,28 @@ export default function SelectRubrosVendedor({
   const [nuevoRubro, setNuevoRubro] = useState("");
   const [agregando, setAgregando] = useState(false);
 
-  const handlePresentModal = () => {
-    sheetRef.current?.present();
-  };
+  const handlePresentModal = () => sheetRef.current?.present();
 
   const renderBackdrop = useCallback(
     (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        opacity={0.5}
-        pressBehavior="close"
-      />
+      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />
     ),
     []
   );
 
   const toggleRubro = (value: string) => {
     setSelectedValues((prev) =>
-      prev.includes(value)
-        ? prev.filter((v) => v !== value)
-        : [...prev, value]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     );
   };
 
   const agregarNuevoRubro = () => {
     const trimmed = nuevoRubro.trim();
     if (!trimmed) return;
-    
+
     const valor = trimmed.toLowerCase().replace(/\s+/g, "-");
     const yaExiste = rubrosInternos.some((r) => r.value === valor);
-    
+
     if (yaExiste) {
       alert("Ese rubro ya existe");
       setNuevoRubro("");
@@ -123,15 +114,12 @@ export default function SelectRubrosVendedor({
           backgroundColor: colors.cardBg,
         }}
       >
-        <Text 
+        <Text
           className="flex-1"
           style={{ color: selectedValues.length > 0 ? colors.textDefault : colors.textMuted }}
         >
           {selectedValues.length > 0
-            ? rubrosInternos
-                .filter((r) => selectedValues.includes(r.value))
-                .map((r) => r.label)
-                .join(", ")
+            ? rubrosInternos.filter((r) => selectedValues.includes(r.value)).map((r) => r.label).join(", ")
             : placeholder}
         </Text>
         <View className="ml-2">
@@ -139,113 +127,82 @@ export default function SelectRubrosVendedor({
         </View>
       </Pressable>
 
-      <BottomSheetModal
+    <BottomSheetModal
         ref={sheetRef}
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
-        enablePanDownToClose
-        backgroundStyle={{
-          backgroundColor: colors.background,
-        }}
-        handleIndicatorStyle={{
-          backgroundColor: colors.textMuted,
-        }}
+        enablePanDownToClose={false}
+        backgroundStyle={{ backgroundColor: colors.background }}
+        handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          {/* Header */}
-          <View className="px-5 pt-5 pb-3">
-            <Text 
-              className="text-lg font-bold"
-              style={{ color: colors.textDefault }}
-            >
-              Selecciona tus rubros
-            </Text>
-          </View>
-
-          {/* Lista de rubros */}
-          <FlatList
-            data={rubrosInternos}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => (
-              <RubroItem
-                rubro={item}
-                isSelected={selectedValues.includes(item.value)}
-                onToggle={toggleRubro}
-              />
-            )}
-            contentContainerStyle={{ paddingBottom: 140 }}
-            className="px-5"
-            ListFooterComponent={
-                <View className="pb-3">
-                  {agregando ? (
-                    <NuevoRubroInput
-                      value={nuevoRubro}
-                      onChange={setNuevoRubro}
-                      onAdd={agregarNuevoRubro}
-                      onCancel={() => {
-                        setAgregando(false);
-                        setNuevoRubro("");
-                      }}
-                    />
-                  ) : (
-                    <Pressable
-                      onPress={() => setAgregando(true)}
-                      className="flex-row items-center p-3 rounded-xl"
-                      style={{ backgroundColor: 'transparent' }}
-                    >
-                      <View 
-                        className="w-11 h-11 rounded-full items-center justify-center mr-3"
-                        style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#b4bbc5' }}
-                      >
-                      <MasBlanca width={24} height={24} color={mode === 'dark' ? '#CBD5E0' : '#9CA3AF'} />
-
-                      </View>
-                      <Text 
-                        className="flex-1 text-base"
-                        style={{ color: colors.textMuted }}
-                      >
-                        Nuevo Rubro
-                      </Text>
-                    </Pressable>
-                  )}
+          {/* Lista scrollable */}
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={rubrosInternos}
+              keyExtractor={(item) => item.value}
+              ListHeaderComponent={
+                <View className="px-5 pt-5 pb-3">
+                  <Text className="text-lg font-bold" style={{ color: colors.textDefault }}>
+                    Selecciona tus rubros
+                  </Text>
                 </View>
               }
+              renderItem={({ item }) => (
+                <RubroItem rubro={item} isSelected={selectedValues.includes(item.value)} onToggle={toggleRubro} />
+              )}
+              ListFooterComponent={
+                agregando ? (
+                  <NuevoRubroInput
+                    value={nuevoRubro}
+                    onChange={setNuevoRubro}
+                    onAdd={agregarNuevoRubro}
+                    onCancel={() => {
+                      setAgregando(false);
+                      setNuevoRubro("");
+                    }}
+                  />
+                ) : (
+                  <Pressable
+                    onPress={() => setAgregando(true)}
+                    className="flex-row items-center p-3 rounded-xl"
+                    style={{ backgroundColor: 'transparent', marginBottom: 16 }}
+                  >
+                    <View
+                      className="w-11 h-11 rounded-full items-center justify-center mr-3"
+                      style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#b4bbc5' }}
+                    >
+                      <MasBlanca width={24} height={24} color={mode === 'dark' ? '#CBD5E0' : '#9CA3AF'} />
+                    </View>
+                    <Text className="flex-1 text-base" style={{ color: colors.textMuted }}>
+                      Nuevo Rubro
+                    </Text>
+                  </Pressable>
+                )
+              }
+              contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
             />
-            
-          {/* Btns*/}
-          <View className="w-full flex-row px-5"
-            style={{ 
-              backgroundColor: colors.background,
-              borderTopWidth: 1,
-              borderTopColor: colors.border,
-              bottom: 60
-            }}
-          >
-            <View className="flex-1 mr-2">
-              <Button
-                variant="secondary"
-                section="seller"
-                width="auto"
-                onPress={handleCancel}
-              >
-                Cancelar
-              </Button>
-            </View>
-
-            <View className="flex-1">
-              <Button
-                variant="primary"
-                section="seller"
-                width="auto"
-                onPress={guardarCambios}
-              >
-                Guardar
-              </Button>
-            </View>
-
           </View>
+
+          {/* Footer fijo */}
+          <SafeAreaView edges={["bottom"]} style={{ paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background }}>
+            <View className="flex-row justify-between">
+              <View className="flex-1 mr-2">
+                <Button variant="secondary" section="seller" width="auto" onPress={handleCancel}>
+                  Cancelar
+                </Button>
+              </View>
+
+              <View className="flex-1">
+                <Button variant="primary" section="seller" width="auto" onPress={guardarCambios}>
+                  Guardar
+                </Button>
+              </View>
+            </View>
+          </SafeAreaView>
         </View>
       </BottomSheetModal>
     </View>
   );
 }
+  
