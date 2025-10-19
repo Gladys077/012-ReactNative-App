@@ -5,10 +5,10 @@ const SvgGoogleLogo = (props: SvgProps) => (
   <Svg
     width={24}
     height={24}
-    fill="currentColor"
+    fill={props.color || "currentColor"}
     viewBox="0 0 20 20"
     {...props}
-  >
+   color={props.color}>
     <Mask
       id="GoogleLogo_svg__a"
       width={5}

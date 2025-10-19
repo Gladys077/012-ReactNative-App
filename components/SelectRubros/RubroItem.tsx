@@ -6,7 +6,7 @@ import { Check } from "../icons";
 interface Rubro {
   label: string;
   value: string;
-  icon: React.ReactNode;
+  IconComponent: React.ComponentType<{ width: number; height: number; color?: string; fill?: string }>;  
   color: string;
   iconColor: string;
 }
@@ -19,6 +19,7 @@ interface RubroItemProps {
 
 export default function RubroItem({ rubro, isSelected, onToggle }: RubroItemProps) {
   const { colors } = useTheme();
+  const IconComponent = rubro.IconComponent;
   
   return (
     <Pressable
@@ -33,8 +34,13 @@ export default function RubroItem({ rubro, isSelected, onToggle }: RubroItemProp
         className="w-9 h-9 rounded-full items-center justify-center mr-3"
         style={{ backgroundColor: rubro.color }}
       >
-        {/* El ícono ya viene con su color aplicado desde donde se crea */}
-        {rubro.icon}
+        {/* Renderizar el ícono dinámicamente con su color */}
+        <IconComponent 
+          width={24} 
+          height={24} 
+          color={rubro.iconColor}
+          fill={rubro.iconColor}
+        />
       </View>
 
       {/* Nombre del rubro */}
@@ -47,10 +53,10 @@ export default function RubroItem({ rubro, isSelected, onToggle }: RubroItemProp
 
       {/* Checkbox personalizado */}
       <View
-        className="w-5 h-5 rounded-md items-center justify-center"
+        className="w-6 h-6 rounded-md items-center justify-center"
         style={{
           borderWidth: 2,
-          borderColor: isSelected ? colors.brandSeller : colors.border,
+          borderColor: isSelected ? colors.brandSeller : colors.textSecondaryBorder,
           backgroundColor: isSelected ? colors.brandSeller : 'transparent',
         }}
       >

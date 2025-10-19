@@ -2,7 +2,7 @@ import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
 const SvgMasBlanca = (props: SvgProps) => (
-  <Svg viewBox="0 0 27 27" width={24} height={24} {...props}>
+  <Svg viewBox="0 0 27 27" width={24} height={24} {...props} color={props.color}>
     <Path
       stroke="#fff"
       strokeLinecap="round"

@@ -2,16 +2,16 @@ import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import { TiendaIcon } from "../icons";
+import { MasBlanca, TiendaIcon } from "../icons";
 import Button from "../UI/Button/Button";
 import NuevoRubroInput from "./NuevoRubroInput";
 import { rubroColorPalette } from "./rubroColors";
 import RubroItem from "./RubroItem";
 
-interface Rubro {
+export interface Rubro {
   label: string;
   value: string;
-  icon: React.ReactNode;
+  IconComponent: React.ComponentType<{ width: number; height: number; color?: string; fill?: string }>;
   color: string;
   iconColor: string;
 }
@@ -85,7 +85,7 @@ export default function SelectRubrosVendedor({
     const nuevo: Rubro = {
       label: trimmed,
       value: valor,
-      icon: <TiendaIcon width={18} height={18} color={iconColor} />,
+      IconComponent: TiendaIcon,
       color,
       iconColor,
     };
@@ -155,7 +155,7 @@ export default function SelectRubrosVendedor({
           {/* Header */}
           <View className="px-5 pt-5 pb-3">
             <Text 
-              className="text-xl font-bold"
+              className="text-lg font-bold"
               style={{ color: colors.textDefault }}
             >
               Selecciona tus rubros
@@ -194,15 +194,11 @@ export default function SelectRubrosVendedor({
                       style={{ backgroundColor: 'transparent' }}
                     >
                       <View 
-                        className="w-9 h-9 rounded-full items-center justify-center mr-3"
-                        style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#E5E7EB' }}
+                        className="w-11 h-11 rounded-full items-center justify-center mr-3"
+                        style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#b4bbc5' }}
                       >
-                        <Text 
-                          className="text-xl"
-                          style={{ color: colors.textMuted }}
-                        >
-                          +
-                        </Text>
+                      <MasBlanca width={24} height={24} color={mode === 'dark' ? '#CBD5E0' : '#9CA3AF'} />
+
                       </View>
                       <Text 
                         className="flex-1 text-base"
@@ -216,15 +212,13 @@ export default function SelectRubrosVendedor({
               }
             />
             
-          
-
-
           {/* Btns*/}
-          <View className="w-full flex-row"
+          <View className="w-full flex-row px-5"
             style={{ 
               backgroundColor: colors.background,
               borderTopWidth: 1,
               borderTopColor: colors.border,
+              bottom: 60
             }}
           >
             <View className="flex-1 mr-2">
@@ -238,7 +232,7 @@ export default function SelectRubrosVendedor({
               </Button>
             </View>
 
-            <View className="flex-1 mr-2">
+            <View className="flex-1">
               <Button
                 variant="primary"
                 section="seller"

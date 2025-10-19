@@ -2,7 +2,7 @@ import * as React from "react";
 import Svg, { Rect, Text } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
 const SvgComprobante = (props: SvgProps) => (
-  <Svg width={24} height={24} viewBox="0 0 80 80" {...props}>
+  <Svg width={24} height={24} viewBox="0 0 80 80" {...props} color={props.color}>
     <Rect
       width={55}
       height={70}

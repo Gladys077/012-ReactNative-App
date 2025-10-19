@@ -5,11 +5,11 @@ const SvgConComprobante = (props: SvgProps) => (
   <Svg
     width={36}
     height={36}
-    fill="currentColor"
+    fill={props.color || "currentColor"}
     viewBox="10 10 90 80" 
     preserveAspectRatio="xMidYMid meet" 
     {...props}
-  >
+   color={props.color}>
     <Rect
       width={55}
       height={70}

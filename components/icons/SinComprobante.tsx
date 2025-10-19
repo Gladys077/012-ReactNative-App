@@ -9,7 +9,7 @@ const SvgSinComprobante = (props: SvgProps) => (
     viewBox="10 10 90 80" 
     preserveAspectRatio="xMidYMid meet" 
     {...props}
-  >
+   color={props.color}>
     <Rect
       width={55}
       height={70}
@@ -23,7 +23,7 @@ const SvgSinComprobante = (props: SvgProps) => (
     <Text
       x={30}
       y={36}
-      fill="currentColor"
+      fill={props.color || "currentColor"}
       fontFamily="Arial, sans-serif"
       fontSize={24}
       textAnchor="start"

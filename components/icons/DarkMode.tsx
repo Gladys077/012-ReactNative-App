@@ -6,7 +6,7 @@ const SvgDarkMode = (props: SvgProps) => (
     width={24}
     height={24}
     fill="none"
-    stroke="currentColor"
+    stroke={props.color || "currentColor"}
     strokeLinecap="square"
     aria-labelledby="nightModeIconTitle"
     color="#000"

@@ -6,14 +6,14 @@ const SvgInvisible = (props: SvgProps) => (
     xmlSpace="preserve"
     width={24}
     height={24}
-    fill="currentColor"
+    fill={props.color || "currentColor"}
     fillRule="evenodd"
     strokeLinejoin="round"
     strokeMiterlimit={2}
     clipRule="evenodd"
     viewBox="0 0 64 64"
     {...props}
-  >
+   color={props.color}>
     <Path fill="none" d="M-960-256H320v800H-960z" />
     <Path d="m13.673 10.345-3.097 3.096 39.853 39.854 3.097-3.097z" />
     <Path

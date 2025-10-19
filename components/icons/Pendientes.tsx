@@ -6,11 +6,11 @@ const SvgPendientes = (props: SvgProps) => (
   <Svg
     width={24}
     height={24}
-    stroke="currentColor"
+    stroke={props.color || "currentColor"}
     strokeWidth={1.5}
     viewBox="0 0 20 20"
     {...props}
-  >
+   color={props.color}>
     <G clipPath="url(#PendientesMenuVendedor_svg__a)">
       <G clipPath="url(#PendientesMenuVendedor_svg__b)">
         <Path

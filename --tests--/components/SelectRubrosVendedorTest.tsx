@@ -1,27 +1,9 @@
-import { TiendaIcon } from "@/components/icons";
-import { rubroColorPalette } from "@/components/SelectRubros/rubroColors";
 import SelectRubrosVendedor from "@/components/SelectRubros/SelectRubrosVendedor";
+import { rubrosVendedor } from "@/components/SelectRubros/rubrosConfig";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 
 export default function TestSelectRubros() {
-  const rubrosIniciales = [
-    {
-      label: "Panadería",
-      value: "panaderia",
-      icon: <TiendaIcon width={18} height={18} color={rubroColorPalette[0].iconColor} />,
-      color: rubroColorPalette[0].color,
-      iconColor: rubroColorPalette[0].iconColor,
-    },
-    {
-      label: "Verdulería",
-      value: "verduleria",
-      icon: <TiendaIcon width={18} height={18} color={rubroColorPalette[1].iconColor} />,
-      color: rubroColorPalette[1].color,
-      iconColor: rubroColorPalette[1].iconColor,
-    },
-  ];
-
   const [rubrosSeleccionados, setRubrosSeleccionados] = useState<string[]>([]);
 
   return (
@@ -31,7 +13,7 @@ export default function TestSelectRubros() {
       <SelectRubrosVendedor
         label="Rubros del negocio"
         selected={rubrosSeleccionados}
-        rubros={rubrosIniciales}
+        rubros={rubrosVendedor} 
         onChange={setRubrosSeleccionados}
       />
 
