@@ -91,7 +91,6 @@ export default function RegistroScreen() {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        // paddingTop: Spacing.lg,
       }}
     >
        <KeyboardAvoidingView

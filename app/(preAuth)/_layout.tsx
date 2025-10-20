@@ -14,6 +14,8 @@ export default function PreAuthLayout() {
     switch (currentPage) {
       case 'registro': 
         return 'Registro';
+      case 'perfil': 
+        return 'Perfil';
       case 'olvideContrasena': 
         return 'Recuperar Contraseña';
       default: 

@@ -2,6 +2,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
+import { Easing } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MasBlanca, TiendaIcon } from "../icons";
 import Button from "../UI/Button/Button";
@@ -43,16 +44,25 @@ export default function SelectRubrosVendedor({
 
   const handlePresentModal = () => sheetRef.current?.present();
 
-  const renderBackdrop = useCallback(
+  const renderBackdrop = useCallback( // controla la apariencia y comportamiento del fondo del modal.
     (props: any) => (
-      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} pressBehavior="close" />
+      <BottomSheetBackdrop 
+      {...props}
+      disappearsOnIndex={-1} // hace que el backdrop desaparezca cuando el sheet está cerrado
+      appearsOnIndex={0} // hace que el backdrop aparezca cuando el sheet está abierto
+      opacity={0.5} // opacidad del fondo oscuro
+      pressBehavior="close" 
+      />
     ),
     []
   );
 
+  // Función para seleccionar/deseleccionar un rubro
   const toggleRubro = (value: string) => {
     setSelectedValues((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+      prev.includes(value) 
+      ? prev.filter((v) => v !== value) 
+      : [...prev, value]
     );
   };
 
@@ -101,7 +111,7 @@ export default function SelectRubrosVendedor({
 
   return (
     <View>
-      <Text className="text-base mb-1" style={{ color: colors.textDefault }}>
+      <Text className="text-base mb-1" style={{ color: colors.textDefault, fontSize: 12 }}>
         {label}
       </Text>
 
@@ -127,16 +137,22 @@ export default function SelectRubrosVendedor({
         </View>
       </Pressable>
 
-    <BottomSheetModal
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}
-        enablePanDownToClose={false}
-        backgroundStyle={{ backgroundColor: colors.background }}
-        handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
+      {/* BottomSheet Modal */}
+      <BottomSheetModal
+        ref={sheetRef} // Referencia para controlar el sheet
+        snapPoints={snapPoints} // altura
+        backdropComponent={renderBackdrop} // Componente del fondo oscuro
+        enablePanDownToClose={true} // Permite cerrar deslizando hacia abajo 
+        backgroundStyle={{ backgroundColor: colors.background }} // Color de fondo del sheet
+        handleIndicatorStyle={{ backgroundColor: colors.textMuted }} // Color de la barrita superior
+        onDismiss={handleCancel} // Resetea los cambios cuando se cierra el sheet
+        animationConfigs={{
+          duration: 500, // más tiempo = más suave
+          easing: Easing.out(Easing.exp), // animación más natural
+        }}
       >
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          {/* Lista scrollable */}
+          {/* Contenedor de la lista scrollable - toma todo el espacio disponible */}
           <View style={{ flex: 1 }}>
             <FlatList
               data={rubrosInternos}
@@ -184,7 +200,7 @@ export default function SelectRubrosVendedor({
             />
           </View>
 
-          {/* Footer fijo */}
+          {/* Footer fijo - no se mueve al scrollear, siempre visible en la parte inferior */}
           <SafeAreaView edges={["bottom"]} style={{ paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background }}>
             <View className="flex-row justify-between">
               <View className="flex-1 mr-2">

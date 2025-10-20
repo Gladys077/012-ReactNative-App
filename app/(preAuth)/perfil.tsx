@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -7,7 +7,7 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { TiendaIcon } from "../../components/icons";
+import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubrosVendedor from "../../components/SelectRubros/SelectRubrosVendedor";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
@@ -63,7 +63,7 @@ export default function PerfilScreen() {
     setErrors(newErrors);
     if (hasError) return;
 
-    // Si cambia el email → modal de verificación
+    // Modal de verificación, si cambia el mail
     if (email !== "maria@mail.com") {
       setShowModal(true);
       return;
@@ -71,6 +71,11 @@ export default function PerfilScreen() {
 
     console.log("Datos guardados:", { name, email, address, cellular, roles });
   };
+
+// Callback memorizado para evitar que SelectRubrosVendedor se remonte
+  const handleChangeRubros = useCallback((values: string[]) => {
+    setRoles(values);
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -86,6 +91,7 @@ export default function PerfilScreen() {
           <View
             style={{
               flex: 1,
+              justifyContent: "center",
               paddingHorizontal: Spacing.lg,
               paddingBottom: Spacing.xl,
               maxWidth: 500,
@@ -93,109 +99,117 @@ export default function PerfilScreen() {
               alignSelf: "center",
             }}
           >
-            {/* Inputs */}
-            <View style={{ marginTop: Spacing.xxl }}>
-              <InputField
-                label="Nombre y apellido"
-                value={name}
-                onChangeText={setName}
-                editable
-                error={errors.name}
-                onFocus={() => setEditingField("name")}
-                onBlur={() => setEditingField(null)}
-                style={{
-                  borderColor:
-                    editingField === "name"
-                      ? colors.brandCommon
-                      : colors.inputBorder,
-                  borderWidth: 1.3,
-                }}
-              />
+            {/* Form Section */}
+            <View style={{ marginBottom: Spacing.xxl }}>
+              {/* Inputs */}
+              <View style={{ marginBottom: Spacing.xl }}>
+                <InputField
+                  label="Nombre y apellido"
+                  value={name}
+                  onChangeText={setName}
+                  editable
+                  error={errors.name}
+                  onFocus={() => setEditingField("name")}
+                  onBlur={() => setEditingField(null)}
+                  style={{
+                    borderColor:
+                      editingField === "name"
+                        ? colors.brandCommon
+                        : colors.inputBorder,
+                    borderWidth: 1.3,
+                  }}
+                />
+              </View>
 
-              <InputField
-                label="Correo electrónico"
-                value={email}
-                editable={false}
-                onChangeText={() => {}}
-                error={errors.email}
-              />
+              <View style={{ marginBottom: Spacing.xl }}>
+                <InputField
+                  label="Correo electrónico"
+                  value={email}
+                  editable={false}
+                  onChangeText={() => {}}
+                  error={errors.email}
+                />
+              </View>
 
-              <InputField
-                label="Dirección"
-                value={address}
-                onChangeText={setAddress}
-                editable
-                error={errors.address}
-                onFocus={() => setEditingField("address")}
-                onBlur={() => setEditingField(null)}
-                style={{
-                  borderColor:
-                    editingField === "address"
-                      ? colors.brandCommon
-                      : colors.inputBorder,
-                  borderWidth: 1.3,
-                }}
-              />
+              <View style={{ marginBottom: Spacing.xl }}>
+                <InputField
+                  label="Dirección"
+                  value={address}
+                  onChangeText={setAddress}
+                  editable
+                  error={errors.address}
+                  onFocus={() => setEditingField("address")}
+                  onBlur={() => setEditingField(null)}
+                  style={{
+                    borderColor:
+                      editingField === "address"
+                        ? colors.brandCommon
+                        : colors.inputBorder,
+                    borderWidth: 1.3,
+                  }}
+                />
+              </View>
 
-              <InputField
-                label="Celular"
-                value={cellular}
-                onChangeText={setCellular}
-                editable
-                keyboardType="phone-pad"
-                error={errors.cellular}
-                onFocus={() => setEditingField("cellular")}
-                onBlur={() => setEditingField(null)}
-                style={{
-                  borderColor:
-                    editingField === "cellular"
-                      ? colors.brandCommon
-                      : colors.inputBorder,
-                  borderWidth: 1.3,
-                }}
-              />
+              <View style={{ marginBottom: Spacing.xl }}>
+                <InputField
+                  label="Celular"
+                  value={cellular}
+                  onChangeText={setCellular}
+                  editable
+                  keyboardType="phone-pad"
+                  error={errors.cellular}
+                  onFocus={() => setEditingField("cellular")}
+                  onBlur={() => setEditingField(null)}
+                  style={{
+                    borderColor:
+                      editingField === "cellular"
+                        ? colors.brandCommon
+                        : colors.inputBorder,
+                    borderWidth: 1.3,
+                  }}
+                />
+              </View>
 
-              {/* Select Rubros */}
-              <SelectRubrosVendedor
-                label="¿Desea vender? Elija el/los rubro/s"
-                selected={roles}
-                rubros={[
-                  { label: "Panadería", value: "panaderia", icon: <TiendaIcon width={18} height={18} color="#FB8C00" />, color: "#FFF3E0", iconColor: "#FB8C00" },
-                  { label: "Verdulería", value: "verduleria", icon: <TiendaIcon width={18} height={18} color="#43A047" />, color: "#E8F5E9", iconColor: "#43A047" },
-                ]}
-                onChange={setRoles}
-              />
+              <View style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}>
+                {/* Select Rubros */}
+                <SelectRubrosVendedor
+                  label="¿Desea vender? Elija el/los rubro/s"
+                  selected={roles}
+                  rubros={rubrosVendedor}
+                  onChange={setRoles}
+                />
+              </View>
 
-            </View>
+              {/* Botones */}
+              <View className="flex-row justify-between">
+                <View className="flex-1 mr-2">
+                  <Button
+                    variant="secondary"
+                    section="common"
+                    width="auto"
+                    onPress={() => router.back()}
+                  >
+                    Cancelar
+                  </Button>
+                </View>
+                
+              <View className="flex-1">
+                <Button
+                  variant="primary"
+                  section="common"
+                  width="auto"
+                  onPress={handleSave} //TODO: guardar cambios
+                >
+                  Guardar
+                </Button>
+              </View>
 
-            {/* Botones */}
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: Spacing.xxl,
-              }}
-            >
-              <Button
-                variant="secondary"
-                section="common"
-                width="half"
-                onPress={() => router.back()}
-              >
-                Cancelar
-              </Button>
-
-              <Button
-                variant="primary"
-                section="common"
-                width="half"
-                onPress={handleSave}
-              >
-                Guardar
-              </Button>
             </View>
           </View>
+          </View>
+
         </ScrollView>
+
       </KeyboardAvoidingView>
 
       {/* Modal de verificación de email */}
