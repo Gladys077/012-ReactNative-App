@@ -116,9 +116,9 @@ export const InputField = ({
             onPress={() => setHidden(!hidden)}
           >
             {hidden ? (
-              <Invisible width={20} height={20} color={colors.textMuted} />
+              <Invisible width={24} height={24} color={colors.textMuted} />
             ) : (
-              <Visible width={20} height={20} color={colors.textMuted} />
+              <Visible width={24} height={24} color={colors.textMuted} />
             )}
           </Pressable>
         )}

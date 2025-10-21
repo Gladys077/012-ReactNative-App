@@ -123,7 +123,7 @@ export default function LoginScreen() {
             <View style={{ marginBottom: Spacing.xl }}>
               <InputField
                 label="Contraseña"
-                placeholder="••••••••"
+                placeholder="Escribe tu contraseña"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry // arranca como password

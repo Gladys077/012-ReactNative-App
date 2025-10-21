@@ -27,13 +27,13 @@ export default function Label({
       {children && (
         <View className="flex-row items-center gap-1">
           <Text
-            style={{ color: colors.textDefault, fontSize: 12, fontFamily: "Roboto_500Medium" }}
+            style={{ color: colors.textDefault, fontSize: 14, fontFamily: "Roboto_500Medium" }}
           >
             {children}
           </Text>
           {required && (
             <Text
-              style={{ color: colors.textError, fontSize: 14, fontFamily: "Roboto_500Medium" }}
+              style={{ color: colors.textError, fontSize: 12, fontFamily: "Roboto_500Medium" }}
             >
               *
             </Text>

@@ -70,7 +70,7 @@ export const getColorByRole = (
 
 // Texto de botón secundario
 export const getSecondaryTextColor = (theme: 'light' | 'dark' = 'light'): string => {
-  return Colors[theme].textSecondary;
+  return Colors[theme].textDefault;
 };
 
 export const getSecondaryBgColor = (theme: 'light' | 'dark' = 'light'): string => {

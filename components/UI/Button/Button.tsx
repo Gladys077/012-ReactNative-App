@@ -7,7 +7,7 @@ interface ButtonProps {
   children: ReactNode;
   variant?: 'primary' | 'secondary' ;
   section?: 'common' | 'buyer' | 'seller';
-  height?: 'sm' | 'md' | 'lg' | number;
+  height?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | number;
   width?: 'auto' | 'half' | 'full';
   disabled?: boolean;
   onPress?: () => void;
@@ -62,6 +62,8 @@ const styles = variants[variant] ?? variants.primary;
     sm: 'h-10', // 40px
     md: 'h-12', // 48px
     lg: 'h-14', // 56px
+    xl: 'h-20', // 80px
+    xxl: 'h-30', // 120px
   };
 // Anchos
   const widthClasses = {
@@ -115,45 +117,3 @@ const styles = variants[variant] ?? variants.primary;
   );
 };
 export default Button;
-
-/* Modo de uso:
- <View className="mb-8">
-        <Text className="text-lg font-semibold mb-4 text-gray-700">
-          🎯 Con Iconos
-        </Text>
-        
-        <View className="space-y-3">
-          <Button 
-            section="seller" 
-            icon={Home}
-            iconPosition="left"
-          >
-            Icon Left
-          </Button>
-          
-          <Button 
-            section="buyer" 
-            icon={Historial}
-            iconPosition="right"
-          >
-            Icon Right
-          </Button>
-          
-          <Button 
-            variant="secondary" 
-            icon={PendientesMenuVendedor}
-          >
-            Secondary + Icon
-          </Button>
-          
-          <ButtonGoogle onLogin={function (): void {
-            throw new Error('Function not implemented.');
-          } }>          
-            Google + Icon
-          </ButtonGoogle>
-        </View>
-      </View>
-
-
-
- */
