@@ -1,12 +1,12 @@
 import * as React from "react";
-import Svg, { G, Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { G, Path } from "react-native-svg";
 const SvgDocumentSolid = (props: SvgProps) => (
   <Svg
     width={24}
     height={24}
     fill={props.color || "currentColor"}
-    viewBox="0 0 1920 1920"
+    viewBox="0 0 24 24"
     {...props}
    color={props.color}>
     <G fillRule="evenodd">

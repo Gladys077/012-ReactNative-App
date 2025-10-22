@@ -1,16 +1,44 @@
-import * as React from "react";
-import Svg, { Path } from "react-native-svg";
-import type { SvgProps } from "react-native-svg";
-const SvgCambiarContrasea = (props: SvgProps) => (
-  <Svg
-    width={24}
-    height={24}
-    fill={props.color || "currentColor"}
-    viewBox="0 0 512 512"
-    {...props}
-   color={props.color}>
-    <Path d="M464.433 147.54a9.899 9.899 0 0 0-17.56 9.14 214.26 214.26 0 0 1-38.769 251.42c-83.856 83.848-220.315 83.875-304.207-.008a9.896 9.896 0 0 0-16.893 7.005v56.9a9.897 9.897 0 0 0 19.793 0v-34.55A234.95 234.95 0 0 0 464.433 147.54M103.897 103.902c83.882-83.874 220.341-83.865 304.207-.009a9.89 9.89 0 0 0 16.892-6.996v-56.9a9.897 9.897 0 0 0-19.793 0v34.55C313.023-1.356 176.055 3.751 89.904 89.901a233.96 233.96 0 0 0-42.337 274.553 9.899 9.899 0 0 0 17.56-9.14 214.25 214.25 0 0 1 38.77-251.412" />
-    <Path d="M126.4 254.556v109.44a27.08 27.08 0 0 0 27 27h205.2a27.077 27.077 0 0 0 27-27v-109.44a27.08 27.08 0 0 0-27-27H153.4a27.08 27.08 0 0 0-27 27M328 288.13a21.147 21.147 0 1 1-21.146 21.146A21.167 21.167 0 0 1 328 288.13m-72 0a21.147 21.147 0 1 1-21.146 21.146A21.167 21.167 0 0 1 256 288.13m-72 0a21.147 21.147 0 1 1-21.146 21.146A21.167 21.167 0 0 1 184 288.13M343.653 207.756v-36.002a87.653 87.653 0 0 0-175.306 0v36.002h19.793v-36.002a67.86 67.86 0 0 1 135.72 0v36.002Z" />
-  </Svg>
-);
-export default SvgCambiarContrasea;
+// CambiarContraseña.tsx
+import { useTheme } from "@/context/ThemeContext";
+import React from "react";
+import { Circle, Path, Polyline, Svg } from "react-native-svg";
+
+interface Props {
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}
+
+const CambiarContraseña = (props: Props) => {
+  const { colors } = useTheme();
+  const strokeWidth = props.strokeWidth ?? 1.5;
+
+  return (
+    <Svg
+      width={props.size || 24}
+      height={props.size || 24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={props.color || colors.textDefault}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* Círculo exterior */}
+      <Circle cx="12" cy="12" r="10" />
+
+      {/* Flechas de rotación */}
+      <Polyline points="16 8 18 8 18 10" />
+      <Polyline points="8 16 6 16 6 14" />
+      <Path d="M18 8a8 8 0 0 0-12 8" />
+      <Path d="M6 16a8 8 0 0 0 12-8" />
+
+      {/* Candado */}
+      <Path d="M15 12V10a3 3 0 0 0-6 0v2" />
+      <Path d="M9 12h6v6H9z" />
+      <Path d="M12 15v1" />
+    </Svg>
+  );
+};
+
+export default CambiarContraseña;

@@ -37,6 +37,7 @@ export const FontSizes = {
   sm: 12,
   base: 14,
   btn: 14,   // Específico para botones
+  md: 16,
   lg: 18,
   xl: 24,
   xxl: 32,

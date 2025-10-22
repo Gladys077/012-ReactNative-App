@@ -1,23 +1,23 @@
-import { DocumentSolid } from "@/components/icons"; // crea/usa un icono tipo mail/envelope
+import { Mail } from "@/components/icons";
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Linking,
-    Modal,
-    Platform,
-    Pressable,
-    Text,
-    View,
+  ActivityIndicator,
+  Alert,
+  Linking,
+  Modal,
+  Platform,
+  Pressable,
+  Text,
+  View,
 } from "react-native";
 
 type Props = {
   visible: boolean;
   email: string;
   onClose: () => void;
-  onResend: () => Promise<void>; // función que llama al backend para reenviar link
+  onResend: () => Promise<void>; // TODO: función que llama al backend para reenviar link - VER CON LIO
   resendCooldownSeconds?: number; // por defecto 30s
   onGoToLogin: () => Promise<void>; // función para ir a login
 };
@@ -76,7 +76,7 @@ useEffect(() => {
       android: ["mailto:"],
     }) as string[] | undefined;
 
-    // Primero intento mailto (abre el composer) porque es el más universal
+    // Primero intento mailto 
     Linking.canOpenURL(emailUrl)
       .then((supported) => {
         if (supported) {
@@ -115,7 +115,7 @@ useEffect(() => {
         }}>
           <View style={{ alignItems: "center", marginBottom: Spacing.md }}>
             {/* Icono */}
-            <DocumentSolid width={48} height={48} color={colors.brandCommon} />
+            <Mail width={48} height={48} color={colors.brandCommon} />
           </View>
 
           <Text style={{ fontSize: 16, fontWeight: "600", color: colors.textDefault, textAlign: "center", marginBottom: Spacing.sm }}>

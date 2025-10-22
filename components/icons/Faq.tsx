@@ -1,18 +1,42 @@
+import { useTheme } from "@/context/ThemeContext";
 import * as React from "react";
-import Svg, { Path } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
-const SvgFaq = (props: SvgProps) => (
-  <Svg
-    width={24}
-    height={24}
-    fill="none"
-    stroke={props.color || "currentColor"}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    viewBox="0 0 24 24"
-    {...props}
-   color={props.color}>
-    <Path d="M12 17v-.007m0-2.136c0-3.214 3-2.5 3-5C15 8.28 13.657 7 12 7c-1.343 0-2.48.84-2.863 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0" />
-  </Svg>
-);
+import Svg, { Circle, G, Text } from "react-native-svg";
+
+const SvgFaq = (props: SvgProps) => {
+  const { colors } = useTheme();
+  const strokeWidth = props.strokeWidth ?? 1.5;
+  const strokeColor = props.stroke ?? props.color ?? colors.textDefault;
+
+  return (
+    <Svg
+      width={props.width ?? 24}
+      height={props.height ?? 24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={strokeColor}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      {/* Círculo outline */}
+      <Circle cx={12} cy={12} r={10} fill="none" />
+
+      {/* Grupo para centrar texto */}
+      <G transform="translate(12,12)">
+        <Text
+          x={0}
+          y={4}
+          fontSize={12}
+          fill={strokeColor}
+          textAnchor="middle"
+        >
+          ?
+        </Text>
+      </G>
+    </Svg>
+  );
+};
+
 export default SvgFaq;

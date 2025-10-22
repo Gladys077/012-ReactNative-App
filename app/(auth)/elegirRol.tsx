@@ -11,7 +11,7 @@ export default function ElegirRolScreen() {
   const router = useRouter();
 
   const handleSelectRole = (role: "comprador" | "vendedor") => {
-    // 🚀 Redirige a la primera screen de cada rol
+    // Redirige a la primera screen de cada rol
     if (role === "comprador") {
       router.push("./(comprador)/home");
     } else {

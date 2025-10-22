@@ -20,6 +20,8 @@ export const Colors = {
     cardBg: '#ffffff',
     background: '#f3f4f6', // gray-100
     border: '#E5E7EB',
+    bgPressed: '#f3f4f6',     // color al presionar (gris-100)
+
 
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
@@ -45,6 +47,8 @@ export const Colors = {
     cardBg: '#374151',          // gray-700
     background: '#1f2937', // gray-800
     border: '#374151', // gray-700
+    bgPressed: '#3f3f46',       // zinc-700 
+
     
     // Inputs (InputField)
     inputBorder: "#333333",
