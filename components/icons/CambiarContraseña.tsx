@@ -1,42 +1,38 @@
 // CambiarContraseña.tsx
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
-import { Circle, Path, Polyline, Svg } from "react-native-svg";
+import * as React from "react";
+import type { SvgProps } from "react-native-svg";
+import Svg, { Circle, Path, Polyline } from "react-native-svg";
 
-interface Props {
-  size?: number;
-  color?: string;
-  strokeWidth?: number;
-}
-
-const CambiarContraseña = (props: Props) => {
+const CambiarContraseña = (props: SvgProps) => {
   const { colors } = useTheme();
-  const strokeWidth = props.strokeWidth ?? 1.5;
+  const strokeWidth = props.strokeWidth ?? 1;
+  const strokeColor = props.stroke ?? props.color ?? colors.textDefault;
+  const fillColor = "none";
+  
 
   return (
     <Svg
-      width={props.size || 24}
-      height={props.size || 24}
+      width={props.width ?? 24}
+      height={props.height ?? 24}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke={props.color || colors.textDefault}
+      fill={fillColor}
+      stroke={strokeColor}
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
-      {/* Círculo exterior */}
-      <Circle cx="12" cy="12" r="10" />
+<Circle cx="12" cy="12" r="11.5" fill={fillColor} />
 
-      {/* Flechas de rotación */}
-      <Polyline points="16 8 18 8 18 10" />
-      <Polyline points="8 16 6 16 6 14" />
-      <Path d="M18 8a8 8 0 0 0-12 8" />
-      <Path d="M6 16a8 8 0 0 0 12-8" />
+      {/* Flechitas */}
+      <Polyline points="17.5 5.5, 17 1.5, 21.5 2" />
+      <Polyline points="-1 20, 4 20, 4 16" />
 
-      {/* Candado */}
-      <Path d="M15 12V10a3 3 0 0 0-6 0v2" />
-      <Path d="M9 12h6v6H9z" />
-      <Path d="M12 15v1" />
+      {/* Candado*/}
+      <Path d="M15 12V9a3 3 0 0 0-6 0v2"  fill={fillColor} />
+      <Path d="M9 11.5h6v6H9z"  fill={fillColor} />
+      <Path d="M12 15v-2"  fill={fillColor} />
     </Svg>
   );
 };

@@ -7,7 +7,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import * as NavigationBar from "expo-navigation-bar";
 import { StatusBar } from 'expo-status-bar';
+
 import "./global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -15,6 +17,26 @@ SplashScreen.preventAutoHideAsync();
 // StatusBar que respeta el tema
 function ThemedStatusBar() {
   const { mode, colors } = useTheme();
+
+  useEffect(() => {
+    const setNavColor = async () => {
+      try {
+        // Definimos color de fondo del NavigationBar
+        await NavigationBar.setBackgroundColorAsync(colors.headerFooterBg);
+
+        // Ajuste del color de íconos según tema
+        await NavigationBar.setButtonStyleAsync(mode === "dark" ? "light" : "dark");
+
+        // Efecto suave (solo visual)
+        // NavigationBar.setVisibilityAsync("visible");
+      } catch (error) {
+        console.warn("Error configurando NavigationBar:", error);
+      }
+    };
+
+    // Ejecutar la función asíncrona; no devolver JSX desde useEffect
+    setNavColor();
+  }, [mode, colors]);
 
   return (
     <>

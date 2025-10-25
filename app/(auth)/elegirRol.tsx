@@ -4,18 +4,23 @@ import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { Carrito, TiendaIcon } from "../../components/icons";
 import RoleButton from "../../components/UI/Button/RolButton";
 import { Spacing } from "../../constants/Tokens";
+import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function ElegirRolScreen() {
   const { colors } = useTheme();
+  const { switchRole } = useAuthContext(); 
   const router = useRouter();
 
-  const handleSelectRole = (role: "comprador" | "vendedor") => {
-    // Redirige a la primera screen de cada rol
-    if (role === "comprador") {
-      router.push("./(comprador)/home");
+  const handleSelectRole = (role: "buyer" | "seller") => {
+    // Actualiza el contexto global antes de navegar
+    switchRole(role);
+
+    // Redirige según el rol
+    if (role === "buyer") {
+      router.push("/comprador/nuevoPedido" as any);
     } else {
-      router.push("./(vendedor)/home");
+      router.push("/vendedor/homeVendedor" as any);
     }
   };
 
@@ -43,7 +48,13 @@ export default function ElegirRolScreen() {
           }}
         >
           {/* Logo Section */}
-          <View style={{ alignItems: "center", marginBottom: Spacing.xxl, marginTop: Spacing.xxl  }}>
+          <View
+            style={{
+              alignItems: "center",
+              marginBottom: Spacing.xxl,
+              marginTop: Spacing.xxl,
+            }}
+          >
             <View
               style={{
                 width: 128,
@@ -63,7 +74,6 @@ export default function ElegirRolScreen() {
                   backgroundColor: colors.background,
                   alignItems: "center",
                   justifyContent: "center",
-                  
                 }}
               >
                 <Text
@@ -102,7 +112,7 @@ export default function ElegirRolScreen() {
               icon={Carrito}
               title="Comprador"
               subtitle="Haz tu pedido y elige la mejor opción"
-              onPress={() => handleSelectRole('comprador')}
+              onPress={() => handleSelectRole("buyer")}
             />
 
             <RoleButton
@@ -110,7 +120,7 @@ export default function ElegirRolScreen() {
               icon={TiendaIcon}
               title="Vendedor"
               subtitle="Pasa presupuestos y vende ahora"
-              onPress={() => handleSelectRole('vendedor')}
+              onPress={() => handleSelectRole("seller")}
             />
           </View>
         </View>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const estadoPedido = () => {
+const estadoPedidoScreen = () => {
   return (
     <View>
       <Text>estadoPedido</Text>
@@ -9,4 +9,4 @@ const estadoPedido = () => {
   )
 }
 
-export default estadoPedido
+export default estadoPedidoScreen

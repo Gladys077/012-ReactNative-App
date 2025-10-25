@@ -40,6 +40,7 @@ export default function Header({
         style={{
           backgroundColor: colors.headerFooterBg,
           borderBottomColor: colors.border,
+          minHeight: 56, 
           width: "100%",
           maxWidth: 500,
           alignSelf: "center",
@@ -47,7 +48,7 @@ export default function Header({
           alignItems: "center",
           justifyContent: "space-between",
         }}
-        className="flex-row items-center justify-between px-2 py-2 border-b gap-4"
+        className="flex-row items-center justify-between px-3 border-b gap-4"
       >
         
         {/* Lado izquierdo */}

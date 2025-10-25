@@ -76,12 +76,12 @@ export default function CambiarContraseñaScreen() {
             }}
           >
             {/* Icono */}
-            <View style={{ alignItems: "center", marginVertical: Spacing.xxl }}>
+            <View style={{ alignItems: "center", marginVertical: Spacing.xl }}>
               <CambiarContraseña width={100} height={100}  color={colors.textDefault}/>
             </View>
 
             {/* Inputs */}
-            <View style={{ marginBottom: Spacing.xl, marginTop: Spacing.md }}>
+            <View style={{ marginBottom: Spacing.xl, marginTop: Spacing.xxl }}>
               <InputField
                 label="Contraseña"
                 placeholder="Escribe tu contraseña"

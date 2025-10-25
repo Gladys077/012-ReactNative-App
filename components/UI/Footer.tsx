@@ -18,14 +18,14 @@ const itemsBuyer: FooterItem[] = [
   { icon: Home, label: "Inicio", route: "/comprador/nuevoPedido" },
   { icon: Historial, label: "Historial", route: "/comprador/historialComprador" },
   { icon: Pendientes, label: "Pendientes", route: "/comprador/estadoPedido" },
-  { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustes" },
+  { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustesComprador" },
 ];
 
 const itemsSeller: FooterItem[] = [
-  { icon: Home, label: "Inicio", route: "/vendedor/inicio" },
+  { icon: Home, label: "Inicio", route: "/vendedor/homeVendedor" },
   { icon: Historial, label: "Historial", route: "/vendedor/historialVendedor" },
   { icon: Monedas, label: "Créditos", route: "/vendedor/creditos" },
-  { icon: Ajustes, label: "Ajustes", route: "/vendedor/ajustes" },
+  { icon: Ajustes, label: "Ajustes", route: "/vendedor/ajustesVendedor" },
 ];
 
 export default function Footer() {

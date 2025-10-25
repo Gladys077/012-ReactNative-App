@@ -20,11 +20,13 @@ const SeccionAjustes = ({ titulo, children }: SeccionAjustesProps) => {
       accessibilityLabel={`Sección ${titulo}`}
     >
       <Text
-        className="font-semibold"
+        className="font-Roboto-Bold"
         style={{
           color: colors.textMuted,
-          fontSize: FontSizes.md,
+          fontSize: FontSizes.sm,
           marginBottom: Spacing.sm,
+          textTransform: "uppercase", 
+          letterSpacing: 1.5,
         }}
       >
         {titulo}

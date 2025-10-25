@@ -6,9 +6,9 @@ import Header from "../../components/UI/Header";
 
 export default function PreAuthLayout() {
   const { colors } = useTheme();
-  const segments = useSegments();
+  const segments = useSegments(); // Obtiene la ruta actual como array
   
-  const currentPage = segments[segments.length - 1];
+  const currentPage = segments[segments.length - 1] as string; // extrae el último segmento (nombre de la screen)
   
   const getTitleByPage = () => {
     switch (currentPage) {

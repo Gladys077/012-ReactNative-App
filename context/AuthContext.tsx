@@ -25,7 +25,7 @@ interface User {
     commerceName?: string;    // para seller
 }
 
-export const AuthContext = createContext({} as AuthState); //aquí guardo toda la info como si fuere un estado global
+export const AuthContext = createContext({} as AuthState); //aquí guardo toda la info como si fuera un estado global
 
 export const useAuthContext = () => useContext(AuthContext);  //Esto crea un atajo llamado useAuthContext, que permite acceder al contenido del contexto, desde cualquier parte de la app. 
 

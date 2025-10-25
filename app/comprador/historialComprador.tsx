@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const Historial = () => {
+const HistorialCompradorScreen = () => {
   return (
     <View>
       <Text>Historial</Text>
@@ -9,4 +9,4 @@ const Historial = () => {
   )
 }
 
-export default Historial
+export default HistorialCompradorScreen

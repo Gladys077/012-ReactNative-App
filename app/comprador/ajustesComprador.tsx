@@ -20,7 +20,7 @@ import {
 } from "../../components/icons";
 import { useAuthContext } from "../../context/AuthContext";
 
-const AjustesPage = () => {
+const AjustesCompradorScreen = () => {
   const { colors, toggleMode } = useTheme();
   const { logout } = useAuthContext();
   const router = useRouter();
@@ -82,6 +82,7 @@ const AjustesPage = () => {
         style={{
           backgroundColor: colors.background,
           paddingVertical: Spacing.lg,
+          paddingHorizontal: Spacing.xs,
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -154,8 +155,9 @@ const AjustesPage = () => {
             <ItemsAjustes
               icon={MonedasOutline}
               texto="Cargar créditos"
-              textoSecundario="Al registrarse recibirá un crédito de $5000 de regalo"
+              textoSecundario="Ingresa como vendedor para acceder"
               // onPress={() => router.push("/creditos")}
+              deshabilitado
             />
           </SeccionAjustes>
 
@@ -167,4 +169,4 @@ const AjustesPage = () => {
   );
 };
 
-export default AjustesPage;
+export default AjustesCompradorScreen;

@@ -67,7 +67,7 @@ const ItemsAjustes = ({
               <Text
                 style={{
                   fontSize: FontSizes.sm,
-                  color: colors.textMuted,
+                  color: colors.textDefault,
                   marginTop: 2,
                 }}
               >
