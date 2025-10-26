@@ -2,7 +2,6 @@ import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-import { Easing } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MasBlanca, TiendaIcon } from "../icons";
 import Button from "../UI/Button/Button";
@@ -24,14 +23,18 @@ type Props = {
   rubros: Rubro[];
   onChange: (values: string[]) => void;
   placeholder?: string;
+  allowAddNew?: boolean; // nuevo flag para compradores
+  section?: "seller" | "buyer"; // para los botones
 };
 
-export default function SelectRubrosVendedor({
+export default function SelectRubros({
   label,
   selected,
   rubros,
   onChange,
   placeholder = "Selecciona tu/s rubro/s",
+  allowAddNew = true,
+  section = "seller",
 }: Props) {
   const { colors, mode } = useTheme();
   const sheetRef = useRef<BottomSheetModal>(null);
@@ -44,25 +47,22 @@ export default function SelectRubrosVendedor({
 
   const handlePresentModal = () => sheetRef.current?.present();
 
-  const renderBackdrop = useCallback( // controla la apariencia y comportamiento del fondo del modal.
+  const renderBackdrop = useCallback(
     (props: any) => (
       <BottomSheetBackdrop 
-      {...props}
-      disappearsOnIndex={-1} // hace que el backdrop desaparezca cuando el sheet está cerrado
-      appearsOnIndex={0} // hace que el backdrop aparezca cuando el sheet está abierto
-      opacity={0.5} // opacidad del fondo oscuro
-      pressBehavior="close" 
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+        pressBehavior="close" 
       />
     ),
     []
   );
 
-  // Función para seleccionar/deseleccionar un rubro
   const toggleRubro = (value: string) => {
     setSelectedValues((prev) =>
-      prev.includes(value) 
-      ? prev.filter((v) => v !== value) 
-      : [...prev, value]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     );
   };
 
@@ -99,7 +99,8 @@ export default function SelectRubrosVendedor({
 
   const guardarCambios = () => {
     onChange(selectedValues);
-    sheetRef.current?.dismiss();
+    // evitamos bug de reabrir automáticamente
+    setTimeout(() => sheetRef.current?.dismiss(), 50);
   };
 
   const handleCancel = () => {
@@ -137,22 +138,16 @@ export default function SelectRubrosVendedor({
         </View>
       </Pressable>
 
-      {/* BottomSheet Modal */}
       <BottomSheetModal
-        ref={sheetRef} // Referencia para controlar el sheet
-        snapPoints={snapPoints} // altura
-        backdropComponent={renderBackdrop} // Componente del fondo oscuro
-        enablePanDownToClose={true} // Permite cerrar deslizando hacia abajo 
-        backgroundStyle={{ backgroundColor: colors.background }} // Color de fondo del sheet
-        handleIndicatorStyle={{ backgroundColor: colors.textMuted }} // Color de la barrita superior
-        onDismiss={handleCancel} // Resetea los cambios cuando se cierra el sheet
-        animationConfigs={{
-          duration: 500, // más tiempo = más suave
-          easing: Easing.out(Easing.exp), // animación más natural
-        }}
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        backdropComponent={renderBackdrop}
+        enablePanDownToClose
+        backgroundStyle={{ backgroundColor: colors.background }}
+        handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
+        onDismiss={handleCancel}
       >
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          {/* Contenedor de la lista scrollable - toma todo el espacio disponible */}
           <View style={{ flex: 1 }}>
             <FlatList
               data={rubrosInternos}
@@ -160,7 +155,7 @@ export default function SelectRubrosVendedor({
               ListHeaderComponent={
                 <View className="px-5 pt-5 pb-3">
                   <Text className="text-lg font-bold" style={{ color: colors.textDefault }}>
-                    Selecciona tus rubros
+                    {allowAddNew ? "Selecciona tus rubros" : "Selecciona destinatarios"}
                   </Text>
                 </View>
               }
@@ -168,49 +163,44 @@ export default function SelectRubrosVendedor({
                 <RubroItem rubro={item} isSelected={selectedValues.includes(item.value)} onToggle={toggleRubro} />
               )}
               ListFooterComponent={
-                agregando ? (
-                  <NuevoRubroInput
-                    value={nuevoRubro}
-                    onChange={setNuevoRubro}
-                    onAdd={agregarNuevoRubro}
-                    onCancel={() => {
-                      setAgregando(false);
-                      setNuevoRubro("");
-                    }}
-                  />
-                ) : (
-                  <Pressable
-                    onPress={() => setAgregando(true)}
-                    className="flex-row items-center p-3 rounded-xl"
-                    style={{ backgroundColor: 'transparent', marginBottom: 16 }}
-                  >
-                    <View
-                      className="w-11 h-11 rounded-full items-center justify-center mr-3"
-                      style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#b4bbc5' }}
-                    >
-                      <MasBlanca width={24} height={24} color={mode === 'dark' ? '#CBD5E0' : '#9CA3AF'} />
-                    </View>
-                    <Text className="flex-1 text-base" style={{ color: colors.textMuted }}>
-                      Nuevo Rubro
-                    </Text>
-                  </Pressable>
-                )
+                allowAddNew
+                  ? agregando
+                    ? <NuevoRubroInput
+                        value={nuevoRubro}
+                        onChange={setNuevoRubro}
+                        onAdd={agregarNuevoRubro}
+                        onCancel={() => { setAgregando(false); setNuevoRubro(""); }}
+                      />
+                    : <Pressable
+                        onPress={() => setAgregando(true)}
+                        className="flex-row items-center p-3 rounded-xl"
+                        style={{ backgroundColor: 'transparent', marginBottom: 16 }}
+                      >
+                        <View
+                          className="w-11 h-11 rounded-full items-center justify-center mr-3"
+                          style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#b4bbc5' }}
+                        >
+                          <MasBlanca width={24} height={24} color={mode === 'dark' ? '#CBD5E0' : '#9CA3AF'} />
+                        </View>
+                        <Text className="flex-1 text-base" style={{ color: colors.textMuted }}>
+                          Nuevo Rubro
+                        </Text>
+                      </Pressable>
+                  : null
               }
               contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
             />
           </View>
 
-          {/* Footer fijo - no se mueve al scrollear, siempre visible en la parte inferior */}
           <SafeAreaView edges={["bottom"]} style={{ paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background }}>
             <View className="flex-row justify-between">
               <View className="flex-1 mr-2">
-                <Button variant="secondary" section="seller" width="auto" onPress={handleCancel}>
+                <Button variant="secondary" section={section} width="auto" onPress={handleCancel}>
                   Cancelar
                 </Button>
               </View>
-
               <View className="flex-1">
-                <Button variant="primary" section="seller" width="auto" onPress={guardarCambios}>
+                <Button variant="primary" section={section} width="auto" onPress={guardarCambios}>
                   Guardar
                 </Button>
               </View>
@@ -221,4 +211,9 @@ export default function SelectRubrosVendedor({
     </View>
   );
 }
-  
+
+
+
+
+
+// 

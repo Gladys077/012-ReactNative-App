@@ -22,6 +22,9 @@ export const Colors = {
     border: '#E5E7EB',
     bgPressed: '#f3f4f6',     // color al presionar (gris-100)
 
+    //para TipsBottomSheet
+    brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
+    brandSellerSoft: "#FEF3C7", //ambar-100 = fondo suave
 
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
@@ -50,6 +53,10 @@ export const Colors = {
     bgPressed: '#3f3f46',       // zinc-700 
 
     
+    //para TipsBottomSheet
+    brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave
+    brandSellerSoft: "#78350F", //ambar-900 = fondo suave
+
     // Inputs (InputField)
     inputBorder: "#333333",
   },

@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
-import SelectRubrosVendedor from "../../components/SelectRubros/SelectRubrosVendedor";
+import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
@@ -72,10 +72,10 @@ export default function PerfilScreen() {
     console.log("Datos guardados:", { name, email, address, cellular, roles });
   };
 
-// Callback memorizado para evitar que SelectRubrosVendedor se remonte
-  const handleChangeRubros = useCallback((values: string[]) => {
-    setRoles(values);
-  }, []);
+// Callback memorizado para evitar que SelectRubros se remonte
+  // const handleChangeRubros = useCallback((values: string[]) => {
+    // setRoles(values);
+  // }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -172,7 +172,7 @@ export default function PerfilScreen() {
 
               <View style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}>
                 {/* Select Rubros */}
-                <SelectRubrosVendedor
+                <SelectRubros
                   label="¿Desea vender? Elija el/los rubro/s"
                   selected={roles}
                   rubros={rubrosVendedor}

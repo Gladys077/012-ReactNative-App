@@ -1,4 +1,4 @@
-import SelectRubrosVendedor from "@/components/SelectRubros/SelectRubrosVendedor";
+import SelectRubrosVendedor from "@/components/SelectRubros/SelectRubros";
 import { rubrosVendedor } from "@/components/SelectRubros/rubrosConfig";
 import React, { useState } from "react";
 import { Text, View } from "react-native";

@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { View } from "react-native";
-import SelectRubrosVendedor from "../../components/SelectRubros/SelectRubrosVendedor";
+import SelectRubrosVendedor from "../../components/SelectRubros/SelectRubros";
 import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 
 export default function FormularioVendedor() {
