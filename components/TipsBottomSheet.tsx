@@ -3,8 +3,10 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useCallback, useMemo } from "react";
+import React, { forwardRef, useCallback, useMemo, useRef } from "react";
 import { ScrollView, Text, View } from "react-native";
+import Button from "./UI/Button/Button";
+import { TipLamparita } from "./icons";
 
 interface TipsBottomSheetProps {
   onClose?: () => void;
@@ -54,6 +56,12 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
       []
     );
 
+  // referencia al BottomSheet
+  const tipsRef = useRef<BottomSheetModal>(null);
+     // función para abrir/cerrar el modal
+  const openTips = () => tipsRef.current?.present();
+  const closeTips = () => tipsRef.current?.dismiss();
+
     return (
       <BottomSheetModal
         ref={ref}
@@ -67,22 +75,33 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
           borderColor: bgSoft,
         }}
         handleIndicatorStyle={{ backgroundColor: colorRole }}
+        style={{
+          width: "100%",
+          maxWidth: 500,
+          alignSelf: "center",
+        }}
       >
         {/* Título */}
-        <View
-          className="flex-row justify-between items-center px-5 font-Roboto-Medium"
-          style={{ marginTop: Spacing.xl, marginBottom: Spacing.xl }}
-        >
-          <Text
+        <Button
+          width="full"
+          // variant="secondary"
+          section="buyer"
+          icon={TipLamparita}
+          onPress={openTips}        >
+          {/* <Text
             style={{
               fontSize: FontSizes.lg,
               fontWeight: "600",
               color: colorRole,
-            }}
+              width: "100%",
+              maxWidth: 500,
+              alignSelf: "center"
+                }}
           >
             {title}
-          </Text>
-        </View>
+          </Text> */}
+          
+        </Button>
 
         {/* Contenido */}
         <ScrollView
@@ -112,6 +131,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
           ))}
         </ScrollView>
       </BottomSheetModal>
+      
     );
   }
 );

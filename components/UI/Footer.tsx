@@ -64,7 +64,10 @@ export default function Footer() {
           borderTopWidth: 1,              //  Border
           borderTopColor: colors.border, 
           paddingTop: 12,  //espacio entre línea e iconos
-          height: 64,                   
+          height: 64, 
+          width: "100%",
+          maxWidth: 500,
+          alignSelf: "center",
           backgroundColor: colors.headerFooterBg,
         }}
       >
