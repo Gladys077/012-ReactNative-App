@@ -32,6 +32,27 @@ export const Colors = {
 
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
+
+    // EtiquetasEstadoDelPedido
+    statusRedBg: "#FEE2E2",
+    statusRedDot: "#EF4444",
+    statusGreenBg: "#DCFCE7",
+    statusGreenDot: "#16A34A",
+    statusMintBg: "#E0F2F1",
+    statusMintDot: "#00796B",
+    statusYellowBg: "#FEF3C7",
+    statusYellowDot: "#F59E0B",
+    statusPurpleBg: "#EDE9FE",
+    statusPurpleDot: "#7C3AED",
+    statusBlueBg: "#DBEAFE",
+    statusBlueDot: "#2563EB",
+    statusCyanBg: "#E0F7FA",
+    statusCyanDot: "#00ACC1",
+    statusGrayBg: "#E5E7EB",
+    statusGrayDot: "#6B7280",
+    statusLavenderBg: "#E0E7FF",
+    statusLavenderDot: "#4F46E5",
+
   },
   dark: {
     // Textos
@@ -66,6 +87,27 @@ export const Colors = {
 
     // Inputs (InputField)
     inputBorder: "#333333",
+
+    // EtiquetasEstadoDelPedido
+    statusRedBg: "#7F1D1D",
+    statusRedDot: "#F87171",
+    statusGreenBg: "#14532D",
+    statusGreenDot: "#4ADE80",
+    statusMintBg: "#134E4A",
+    statusMintDot: "#2DD4BF",
+    statusYellowBg: "#78350F",
+    statusYellowDot: "#FACC15",
+    statusPurpleBg: "#4C1D95",
+    statusPurpleDot: "#C4B5FD",
+    statusBlueBg: "#1E3A8A",
+    statusBlueDot: "#60A5FA",
+    statusCyanBg: "#083344",
+    statusCyanDot: "#22D3EE",
+    statusGrayBg: "#374151",
+    statusGrayDot: "#9CA3AF",
+    statusLavenderBg: "#312E81",
+    statusLavenderDot: "#A5B4FC",
+
   },
 };
 

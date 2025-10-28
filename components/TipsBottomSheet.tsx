@@ -66,6 +66,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             justifyContent: "space-between",
             width: "100%",
             padding: Spacing.lg,
+            paddingHorizontal: Spacing.xl,
             borderRadius: BorderRadius.pillBtn,
             backgroundColor: colors.brandBuyerSoft,
             marginBottom: Spacing.sm,
