@@ -18,20 +18,20 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
 
     const role = user?.role || "buyer";
 
-    const title = role === "buyer" ? "Tips para tu pedido" : "Tips para tus respuestas";
+    const title = role === "buyer" ? "Tips para hacer tu pedido" : "Tips para tus respuestas";
 
     const tips =
       role === "buyer"
         ? [
             "Escribe tu pedido en forma de lista, como el ejemplo.",
             "Especifica cantidades.",
-            "Incluye detalles de marcas, si tienes preferencias.",
+            "Incluye las marcas, si tienes alguna preferencia."
           ]
         : [
             "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
           ];
 
-    const colorRole = role === "buyer" ? colors.brandBuyer : colors.brandSeller;
+    const colorRole = role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
     const bgSoft = role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
 
     const snapPoints = useMemo(() => ["30%"], []);
@@ -69,6 +69,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             borderRadius: BorderRadius.pillBtn,
             backgroundColor: colors.brandBuyerSoft,
             marginBottom: Spacing.sm,
+            marginTop: Spacing.lg,
             height: 48
           }}
         >

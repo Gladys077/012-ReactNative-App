@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Alert, FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BorderRadius } from "../../constants/Tokens";
+import { BorderRadius, FontSizes } from "../../constants/Tokens";
 import { MasBlanca, TiendaIcon } from "../icons";
 import Button from "../UI/Button/Button";
 import NuevoRubroInput from "./NuevoRubroInput";
@@ -234,7 +234,7 @@ export default function SelectRubros({
             keyExtractor={(item) => item.value}
             ListHeaderComponent={
               <View className="px-5 pt-5 pb-3">
-                <Text className="text-lg font-Roboto-Bold" style={{ color: "colors.textDefault" }}>
+                <Text className="text-lg font-Roboto-Bold" style={{ color: colors.textDefault, fontSize: FontSizes.base }}>
                   {allowAddNew ? "Selecciona uno o más rubros" : "Selecciona el/los rubro/s"}
                 </Text>
               </View>
@@ -292,7 +292,7 @@ export default function SelectRubros({
               backgroundColor: colors.background,
             }}
           >
-            <View className="flex-row justify-between">
+            <View className="flex-row justify-between pb-3">
               <View className="flex-1 mr-2">
                 <Button variant="secondary" section={section} width="auto" onPress={handleCancel}>
                   Cancelar

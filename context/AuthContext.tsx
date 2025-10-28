@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     email: "test@test.com", 
     role: "buyer", // o "seller"
     credits: 150,
-    commerceName: "Mi Comercio Test"
+    commerceName: "Mi Comercio"
   });
   const [token, setToken] = useState<string | undefined>(undefined);
 

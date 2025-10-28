@@ -31,7 +31,7 @@ const ButtonGoogle = ({ onLogin, children = "Sign in with Google" }: ButtonGoogl
           <GoogleLogoColor height={20} className="mx-2" />
           <Text
             className="font-medium"
-            style={{ color: colors.textDefault }}
+            style={{ color: colors.textDefault, marginLeft: 8 }}
           >
             {children}
           </Text>

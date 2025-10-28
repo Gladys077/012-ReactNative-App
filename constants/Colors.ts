@@ -15,6 +15,10 @@ export const Colors = {
     brandBuyer: '#2563eb',   // blue-600
     brandSeller: '#ea580c',  // orange-600
 
+    
+    // Para fondos suaves
+    tipsColorBuyer: '#1D4ED8', // blue-700
+
     // Superficies
     headerFooterBg: 'rgba(255,255,255,0.8)',
     cardBg: '#ffffff',
@@ -44,6 +48,9 @@ export const Colors = {
     brandCommon: '#8b5cf6',   // violet-500
     brandBuyer: '#5292fa',    // blue-500
     brandSeller: '#ed6728',   // orange-500
+
+    // Para fondos suaves
+    tipsColorBuyer: '#64B5F6', // blue-400
 
     // Superficies
     headerFooterBg: 'rgba(17,24,39,0.7)',
