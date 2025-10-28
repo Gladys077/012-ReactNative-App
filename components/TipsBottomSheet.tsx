@@ -3,10 +3,9 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useCallback, useMemo, useRef } from "react";
-import { ScrollView, Text, View } from "react-native";
-import Button from "./UI/Button/Button";
-import { TipLamparita } from "./icons";
+import React, { forwardRef, useCallback, useMemo } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { FlechaAbajo, TipLamparita } from "./icons";
 
 interface TipsBottomSheetProps {
   onClose?: () => void;
@@ -17,32 +16,26 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
     const { colors } = useTheme();
     const { user } = useAuthContext();
 
-    // Detecta automáticamente el rol actual (fallback a buyer)
     const role = user?.role || "buyer";
 
-    // Define título y tips según rol
     const title = role === "buyer" ? "Tips para tu pedido" : "Tips para tus respuestas";
 
-    const tips = role === "buyer"
-      ? [
-          "Sé claro al describir lo que necesitás.",
-          "Subí una foto si eso ayuda al proveedor.",
-          "Verificá el rubro antes de enviar.",
-        ]
-      : [
-          "Respondé rápido los pedidos nuevos.",
-          "Agregá precios detallados por ítem.",
-          "Incluí información de entrega y tiempo estimado.",
-        ];
+    const tips =
+      role === "buyer"
+        ? [
+            "Escribe tu pedido en forma de lista, como el ejemplo.",
+            "Especifica cantidades.",
+            "Incluye detalles de marcas, si tienes preferencias.",
+          ]
+        : [
+            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
+          ];
 
-    // Colores dinámicos según rol y tema
     const colorRole = role === "buyer" ? colors.brandBuyer : colors.brandSeller;
     const bgSoft = role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
 
-    // Snap points del BottomSheet
     const snapPoints = useMemo(() => ["30%"], []);
 
-    // Backdrop con opacidad
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
@@ -56,82 +49,79 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
       []
     );
 
-  // referencia al BottomSheet
-  const tipsRef = useRef<BottomSheetModal>(null);
-     // función para abrir/cerrar el modal
-  const openTips = () => tipsRef.current?.present();
-  const closeTips = () => tipsRef.current?.dismiss();
+    const openTips = () => ref && "current" in ref && ref.current?.present?.();
+    const closeTips = () => {
+      ref && "current" in ref && ref.current?.dismiss?.();
+      onClose?.();
+    };
 
     return (
-      <BottomSheetModal
-        ref={ref}
-        snapPoints={snapPoints}
-        backdropComponent={renderBackdrop}
-        backgroundStyle={{
-          backgroundColor: bgSoft,
-          borderTopLeftRadius: BorderRadius.xl,
-          borderTopRightRadius: BorderRadius.xl,
-          borderWidth: 1,
-          borderColor: bgSoft,
-        }}
-        handleIndicatorStyle={{ backgroundColor: colorRole }}
-        style={{
-          width: "100%",
-          maxWidth: 500,
-          alignSelf: "center",
-        }}
-      >
-        {/* Título */}
-        <Button
-          width="full"
-          // variant="secondary"
-          section="buyer"
-          icon={TipLamparita}
-          onPress={openTips}        >
-          {/* <Text
-            style={{
-              fontSize: FontSizes.lg,
-              fontWeight: "600",
-              color: colorRole,
-              width: "100%",
-              maxWidth: 500,
-              alignSelf: "center"
-                }}
-          >
-            {title}
-          </Text> */}
-          
-        </Button>
-
-        {/* Contenido */}
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: Spacing.lg,
-            paddingBottom: Spacing.xl,
+      <>
+        {/* Botón fuera del BottomSheet */}
+        <Pressable
+          onPress={openTips}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            padding: Spacing.lg,
+            borderRadius: BorderRadius.pillBtn,
+            backgroundColor: colors.brandBuyerSoft,
+            marginBottom: Spacing.sm,
+            height: 48
           }}
         >
-          {tips.map((tip, index) => (
-            <View
-              key={index}
-              className="flex-row items-start mb-3"
-              style={{ gap: Spacing.sm }}
-            >
-              <Check width={18} height={18} fill={colorRole} />
-              <Text
-                style={{
-                  fontSize: FontSizes.base,
-                  color: colors.textDefault,
-                  flex: 1,
-                }}
+          <View style={{ flexDirection: "row", alignItems: "center", gap: Spacing.sm }}>
+            <TipLamparita width={24} height={24} color={colorRole} />
+            <Text style={{ color: colorRole, fontSize: FontSizes.base, fontWeight: "regular" }}>
+              {title}
+            </Text>
+          </View>
+          <FlechaAbajo width={20} height={20} color={colorRole} />
+        </Pressable>
+
+        {/* BottomSheet con la lista de tips */}
+        <BottomSheetModal
+          ref={ref}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackdrop}
+          backgroundStyle={{
+            backgroundColor: bgSoft,
+            borderTopLeftRadius: BorderRadius.xl,
+            borderTopRightRadius: BorderRadius.xl,
+            borderWidth: 1,
+            borderColor: bgSoft,
+          }}
+          handleIndicatorStyle={{ backgroundColor: colorRole }}
+          style={{
+            width: "100%",
+            maxWidth: 500,
+            alignSelf: "center",
+          }}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: Spacing.lg,
+              paddingBottom: Spacing.xl,
+              paddingTop: Spacing.md,
+            }}
+          >
+            {tips.map((tip, index) => (
+              <View
+                key={index}
+                style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: 12, gap: Spacing.sm }}
               >
-                {tip}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
-      </BottomSheetModal>
-      
+                <Check width={18} height={18} fill={colorRole} />
+                <Text style={{ fontSize: FontSizes.base, color: colors.textDefault, flex: 1 }}>
+                  {tip}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </BottomSheetModal>
+      </>
     );
   }
 );
@@ -139,20 +129,3 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
 TipsBottomSheet.displayName = "TipsBottomSheet";
 
 export default TipsBottomSheet;
-
-{/*
-MODO DE USO:
-
-//Función para abrir el bottomsheet:
-const openTips = useCallback(() => {
-  bottomSheetRef.current?.present();
-}, []);
-
-//Poner el componente en el jsx:
-<TipsBottomSheet ref={bottomSheetRef} />
-
-//Btn u otro trigger para abrirlo:
-<Button title="Mostrar Tips" onPress={openTips} />
-
-
- */}

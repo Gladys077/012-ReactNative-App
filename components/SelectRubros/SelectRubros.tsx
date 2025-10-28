@@ -27,6 +27,8 @@ type Props = {
   onChange: (values: string[]) => void;
   placeholder?: string;
   section?: "seller" | "buyer";
+  borderColor?: string;
+  borderRadius?: number
 };
 
 const STORAGE_KEY = "rubrosVendedorGuardados";
@@ -39,6 +41,8 @@ export default function SelectRubros({
   onChange,
   placeholder = "Selecciona tu/s rubro/s",
   section = "seller",
+  borderColor,
+  borderRadius
 }: Props) {
   const { colors, mode } = useTheme();
   const sheetRef = useRef<BottomSheetModal>(null);
@@ -184,9 +188,9 @@ export default function SelectRubros({
         className="rounded-xl p-3 flex-row items-center justify-between"
         style={{
           borderWidth: 1,
-          borderColor: colors.inputBorder,
+          borderColor: borderColor || colors.inputBorder,
           backgroundColor: colors.cardBg,
-          borderRadius: BorderRadius.pillBtn,
+          borderRadius: borderRadius || BorderRadius.pillBtn,
         }}
       >
         <Text
@@ -230,8 +234,8 @@ export default function SelectRubros({
             keyExtractor={(item) => item.value}
             ListHeaderComponent={
               <View className="px-5 pt-5 pb-3">
-                <Text className="text-lg font-bold" style={{ color: colors.textDefault }}>
-                  {allowAddNew ? "Selecciona tus rubros" : "Selecciona el rubro del pedido"}
+                <Text className="text-lg font-Roboto-Bold" style={{ color: colors.textDefault }}>
+                  {allowAddNew ? "Selecciona uno o más rubros" : "Selecciona el/los rubro/s"}
                 </Text>
               </View>
             }
