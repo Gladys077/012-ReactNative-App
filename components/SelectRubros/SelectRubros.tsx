@@ -234,7 +234,7 @@ export default function SelectRubros({
             keyExtractor={(item) => item.value}
             ListHeaderComponent={
               <View className="px-5 pt-5 pb-3">
-                <Text className="text-lg font-Roboto-Bold" style={{ color: colors.textDefault }}>
+                <Text className="text-lg font-Roboto-Bold" style={{ color: "colors.textDefault" }}>
                   {allowAddNew ? "Selecciona uno o más rubros" : "Selecciona el/los rubro/s"}
                 </Text>
               </View>

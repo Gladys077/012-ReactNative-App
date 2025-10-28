@@ -43,6 +43,8 @@ const NuevoPedido = () => {
     setSelectedRubros(values);
   };
 
+  const FooterHeight = 130; 
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -51,7 +53,7 @@ const NuevoPedido = () => {
     >
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: Spacing.sm, paddingTop: Spacing.xl, gap: Spacing.xl }}
+        contentContainerStyle={{ padding: Spacing.sm, paddingTop: Spacing.xl, gap: Spacing.xl, flexGrow: 1, paddingBottom: FooterHeight}}
         keyboardShouldPersistTaps="handled"
       >
         <Text style={{ color: colors.textDefault, fontFamily: "Roboto-Medium", fontSize: FontSizes.md }}>
@@ -70,13 +72,15 @@ const NuevoPedido = () => {
         </View>
 
         {/* Textarea de descripción */}
-        <View style={{ backgroundColor: colors.cardBg, padding: Spacing.md, borderRadius: Spacing.lg }}>
+        <View style={{ backgroundColor: colors.cardBg, padding: Spacing.md, borderRadius: Spacing.lg, flex:1, minHeight: 120 }}>
+          <Text style={{paddingBottom: Spacing.md}}>Escribe tu pedido:</Text>
           <TextInput
             placeholder={`Ejemplo:\n- 1K manzana\n- 2 paquetes de harina (prefiero marca Blancaflor)\n- 1 Litro de aceite`}
             placeholderTextColor={colors.textMuted}
             multiline
             textAlignVertical="top"
             style={{
+              flex: 1,
               minHeight: 120,
               borderWidth: 1,
               borderColor: colors.border,
