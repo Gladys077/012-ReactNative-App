@@ -52,6 +52,10 @@ export const Colors = {
     statusGrayDot: "#6B7280",
     statusLavenderBg: "#E0E7FF",
     statusLavenderDot: "#4F46E5",
+    
+    // Reloj
+    relojBuyer: '#0730a3',
+    relojSeller: '#ba480d',
 
   },
   dark: {
@@ -107,6 +111,11 @@ export const Colors = {
     statusGrayDot: "#9CA3AF",
     statusLavenderBg: "#312E81",
     statusLavenderDot: "#A5B4FC",
+
+    // Reloj
+    relojBuyer: '#6ce5f5',
+    relojSeller: '#f7d4c1',
+
 
   },
 };

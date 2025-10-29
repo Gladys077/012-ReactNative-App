@@ -54,6 +54,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     <View
       className="flex-row items-center justify-center"
       style={{
+        minWidth: 150,
         width: "40%",
         height: 32,
         backgroundColor: colorSet.bg,

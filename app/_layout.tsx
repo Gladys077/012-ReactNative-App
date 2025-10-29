@@ -63,6 +63,9 @@ const RootLayout = () => {
     "Roboto-Bold": require('../assets/fonts/Roboto-Bold.ttf'),
     "Roboto-Medium": require('../assets/fonts/Roboto-Medium.ttf'),
     "Roboto-Black": require('../assets/fonts/Roboto-Black.ttf'),
+
+    "AlarmClock": require('../assets/fonts/AlarmClock.ttf'),
+
   });
   
   useEffect(() => {
