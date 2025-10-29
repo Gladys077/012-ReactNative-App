@@ -160,3 +160,20 @@ const minutosFormateados = minutosTotales.toString().padStart(2, '0');
 );
 
 }
+
+
+// MODO DE USO: La duracionInicial se expresa en minutos | se guarda en AsyncStorage | el onFinish es opcional, pero sirve para disparar una acción 
+// (ej: actualizar estado del pedido o mostarr un aviso)
+// Cronometro de 1 hora -tipo: espera-:
+//   <Cronometro
+//       tipo="espera"
+//       duracionInicial={60} // minutos → 1 h
+//       onFinish={() => console.log('El tiempo de espera terminó')}
+//     />
+
+// Cronómetro de 20min -tipo: pagar-:
+//    <Cronometro
+//       tipo="pagar"
+//       duracionInicial={10} // minutos
+//       onFinish={() => console.log('Se terminó el tiempo para pagar')}
+//     />
