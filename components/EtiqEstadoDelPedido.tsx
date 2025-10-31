@@ -5,19 +5,19 @@ import { Text, View } from "react-native";
 
 // Defino las variantes (clave)
 type EtiqEstadoType =
+  | "En Proceso"
+  | "Ver Respuestas"
+  | "Pagar"
+  | "Pago En Revisión"
+  | "En Preparación"
+  | "En Camino"
+  | "Pedido Recibido"
+  | "Completado"
   | "Pago Pendiente"
   | "Pago Recibido"
-  | "En Preparación"
   | "Listo. Para enviar!"
   | "Enviado"
-  | "Entregado"
-  | "Pago En Revisión"
-  | "Pagar"
-  | "Ver Respuestas"
-  | "En Camino"
-  | "En Proceso"
-  | "Pedido Recibido"
-  | "Completado";
+  | "Entregado";
 
   // Interface: para definir objetos con propiedades (= datos q recibe el componente)
 interface EtiqEstadoDelPedidoProps {
@@ -33,19 +33,19 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     EtiqEstadoType,
     { bg: string; dot: string }
   > = {
-    "Pago Pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
+    "En Proceso": { bg: colors.statusTurquoiseBg, dot: colors.statusTurquoiseDot },
+    "Ver Respuestas": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Pagar": { bg: colors.statusRedBg, dot: colors.statusRedDot },
-    "Pago Recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
     "Pago En Revisión": { bg: colors.statusMintBg, dot: colors.statusMintDot },
     "En Preparación": { bg: colors.statusYellowBg, dot: colors.statusYellowDot },
+    "En Camino": { bg: colors.statusCyanBg, dot: colors.statusCyanDot },
+    "Pedido Recibido": { bg: colors.statusLavenderBg, dot: colors.statusLavenderDot },
+    "Completado": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
+    "Pago Pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
+    "Pago Recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
     "Listo. Para enviar!": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
     "Enviado": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Entregado": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
-    "Ver Respuestas": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
-    "En Camino": { bg: colors.statusCyanBg, dot: colors.statusCyanDot },
-    "En Proceso": { bg: colors.statusGrayBg, dot: colors.statusGrayDot },
-    "Pedido Recibido": { bg: colors.statusLavenderBg, dot: colors.statusLavenderDot },
-    "Completado": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
   };
 
   const colorSet = estadoColors[estado];
@@ -54,9 +54,10 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     <View
       className="flex-row items-center justify-center"
       style={{
+        
         minWidth: 150,
-        width: "40%",
-        height: 32,
+        maxWidth: "40%",
+        height: 24,
         backgroundColor: colorSet.bg,
         borderRadius: BorderRadius.lg,
         gap: Spacing.md,

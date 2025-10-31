@@ -16,7 +16,7 @@ export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: 
 
   const textoTitulo =
     tipo === 'espera'
-      ? 'Tiempo de espera'
+      ? null
       : tipo === 'elegir'
       ? 'Tiempo para elegir'
       : 'Tiempo para pagar';

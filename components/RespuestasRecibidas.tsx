@@ -15,24 +15,24 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
 
   return (
     <View
-      className="flex-row items-center justify-between rounded-2xl px-4"
+      className="flex-row items-center justify-between rounded-2xl px-4 "
       style={{
         backgroundColor: colors.brandBuyerSoft,
         height: 48,
-        width: 16
     }}
     >
-      <View className="flex-row items-center">
+      <View className="flex-row items-center" style={{paddingTop: 2}}>
         <Mail
-          width={20}
-          height={20}
+          width={24}
+          height={24}
           fill={colors.textDefault}
-          style={{ marginRight: 8 }}
+          style={{ marginRight: 8, 
+            paddingTop: 0 }}
         />
         <Text
           style={{
-            fontFamily: "robotoRegular",
-            fontSize: FontSizes.base,
+            fontFamily: "Roboto-Regular",
+            fontSize: FontSizes.md,
             color: colors.textDefault,
           }}
         >
@@ -42,7 +42,7 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
 
       <Text
         style={{
-          fontFamily: "robotoRegular",
+          fontFamily: "Roboto-Medium",
           fontSize: 24,
           color: hayRespuestas
             ? colors.brandBuyer

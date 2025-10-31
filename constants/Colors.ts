@@ -48,8 +48,8 @@ export const Colors = {
     statusBlueDot: "#2563EB",
     statusCyanBg: "#E0F7FA",
     statusCyanDot: "#00ACC1",
-    statusGrayBg: "#E5E7EB",
-    statusGrayDot: "#6B7280",
+    statusTurquoiseBg: "#82f5ee",
+    statusTurquoiseDot: "#1d8c86",
     statusLavenderBg: "#E0E7FF",
     statusLavenderDot: "#4F46E5",
     
@@ -107,8 +107,8 @@ export const Colors = {
     statusBlueDot: "#60A5FA",
     statusCyanBg: "#083344",
     statusCyanDot: "#22D3EE",
-    statusGrayBg: "#374151",
-    statusGrayDot: "#9CA3AF",
+    statusTurquoiseBg: "#166e69",
+    statusTurquoiseDot: "#05faec",
     statusLavenderBg: "#312E81",
     statusLavenderDot: "#A5B4FC",
 

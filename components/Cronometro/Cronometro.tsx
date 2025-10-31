@@ -38,7 +38,7 @@ export default function Cronometro({
     pagar: { bg: colors.brandBuyerSoft, texto: colors.relojBuyer },
   };
 
-  // 🔹 Cargar tiempo desde AsyncStorage o inicializar uno nuevo
+  // Cargar tiempo desde AsyncStorage o inicializar uno nuevo
   useEffect(() => {
     const cargarTiempo = async () => {
       const guardado = await AsyncStorage.getItem(`cronometro_${tipo}`);
@@ -62,7 +62,7 @@ export default function Cronometro({
     cargarTiempo();
   }, []);
 
-  // 🔹 Intervalo: actualiza el tiempo restante cada minuto
+  // Intervalo: actualiza el tiempo restante cada minuto
   useEffect(() => {
     const tick = async () => {
       if (!finRef.current) return;
@@ -103,7 +103,7 @@ const minutosFormateados = minutosTotales.toString().padStart(2, '0');
     transform: [{ scale: pulse.value }],
   }));
 
-  // 🔹 Agregar tiempo (+1h o +10min)
+  // Agregar tiempo (+1h o +10min)
   const agregarTiempo = async () => {
     const extraSegs = tipo === 'espera' ? 3600 : 600; // +1h o +10min
     const extraMs = extraSegs * 1000;
@@ -125,7 +125,7 @@ const minutosFormateados = minutosTotales.toString().padStart(2, '0');
         borderWidth: 2,
         borderColor: estaPorTerminar ? colors.textError : estilos[tipo].texto,
         padding: Spacing.md,
-        width: 180,
+        width: 140,
       },
       animatedStyle,
     ]}
@@ -133,11 +133,11 @@ const minutosFormateados = minutosTotales.toString().padStart(2, '0');
   >
     {/* Cronómetro */}
     <CronometroDisplay
-  tipo={tipo}
-  horas={horasFormateadas}
-  minutos={minutosFormateados}
-  textoColor={estilos[tipo].texto}
-/>
+      tipo={tipo}
+      horas={horasFormateadas}
+      minutos={minutosFormateados}
+      textoColor={estilos[tipo].texto}
+    />
 
     {/* Solo en 'espera' o 'pagar': línea divisoria + botón */}
     {(tipo === 'espera' || tipo === 'pagar') && (
