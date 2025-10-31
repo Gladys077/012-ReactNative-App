@@ -115,6 +115,7 @@ export const Colors = {
     // Reloj
     relojBuyer: '#6ce5f5',
     relojSeller: '#f7d4c1',
+    relojTiempoTerminado: 'e74c3c'
 
 
   },

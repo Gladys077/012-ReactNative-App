@@ -93,3 +93,5 @@ export default function CardPedidoEnEspera() {
     </View>
   );
 }
+
+// TODO: VER CON LIO función para eliminar el pedido de la API también

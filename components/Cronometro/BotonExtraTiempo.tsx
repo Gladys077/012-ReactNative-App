@@ -16,7 +16,7 @@ export default function BotonExtraTiempo({ tipo, onPress }: Props) {
     <Pressable
       onPress={onPress}
       // className="mt-1 w-full rounded-xl items-center"
-      style={{ backgroundColor: colors.brandBuyerSoft , paddingTop: 2, marginHorizontal: 3}}
+      // style={{ backgroundColor: colors.brandBuyerSoft , paddingTop: 2, paddingHorizontal: 10}}
     >
       <Text
         className="text-xs"

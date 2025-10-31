@@ -28,7 +28,6 @@ const Button = ({
   onPress,
   icon,
   iconPosition = 'left',
-  styleAdd,
 }: ButtonProps) => {
   const scheme = useColorScheme();
   const Icon = icon;
@@ -114,7 +113,7 @@ const Button = ({
             transform: [{ scale: pressed ? 0.95 : 1 }],
             opacity: pressed ? 0.9 : 1,
           },
-          styleAdd, // permite personalizar el estilo desde fuera
+          styleAdd, // 👈 permite personalizar el estilo desde fuera
         ]}
           >
             <View className={contentClass}>
