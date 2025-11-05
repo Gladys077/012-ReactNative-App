@@ -4,6 +4,7 @@ import { Slot, useSegments } from "expo-router";
 import { View } from "react-native";
 import Footer from "../../components/UI/Footer";
 import Header from "../../components/UI/Header";
+import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedidoContext";
 
 export default function CompradorLayout() {
   const { colors } = useTheme();
@@ -32,17 +33,19 @@ export default function CompradorLayout() {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Header title={getTitleByPage()} showBackArrow={showBackArrow} />
 
-      <View
-        style={{
-          flex: 1,
-          paddingHorizontal: Spacing.xl,
-          maxWidth: 500,
-          width: "100%",
-          alignSelf: "center",
-        }}
-      >
-        <Slot />
-      </View>
+      <BottomSheetVerPedidoProvider>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: Spacing.xl,
+            maxWidth: 500,
+            width: "100%",
+            alignSelf: "center",
+          }}
+        >
+          <Slot />
+        </View>
+      </BottomSheetVerPedidoProvider>
       <Footer />
     </View>
   );

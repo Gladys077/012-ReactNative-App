@@ -49,13 +49,17 @@ export const Colors = {
     statusCyanBg: "#E0F7FA",
     statusCyanDot: "#00ACC1",
     statusTurquoiseBg: "#82f5ee",
-    statusTurquoiseDot: "#1d8c86",
+    statusTurquoiseDot: "#046963",
     statusLavenderBg: "#E0E7FF",
     statusLavenderDot: "#4F46E5",
+    statusCanceledBg: "#F8D7DA", 
+    statusCanceledDot: "#C82333", 
     
     // Reloj
     relojBuyer: '#0730a3',
     relojSeller: '#ba480d',
+    relojTiempoTerminado: '#f79e94'
+
 
   },
   dark: {
@@ -111,13 +115,14 @@ export const Colors = {
     statusTurquoiseDot: "#05faec",
     statusLavenderBg: "#312E81",
     statusLavenderDot: "#A5B4FC",
+    statusCanceledBg: "#4A1F24",
+    statusCanceledDot: "#F5B3BA", 
+
 
     // Reloj
     relojBuyer: '#6ce5f5',
     relojSeller: '#f7d4c1',
-    relojTiempoTerminado: 'e74c3c'
-
-
+    relojTiempoTerminado: '#57312d'
   },
 };
 

@@ -3,8 +3,8 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useCallback, useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import React, { forwardRef, useCallback, useMemo, useState } from "react";
+import { Animated, Pressable, ScrollView, Text, View } from "react-native";
 import { FlechaAbajo, TipLamparita } from "./icons";
 
 interface TipsBottomSheetProps {
@@ -17,7 +17,6 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
     const { user } = useAuthContext();
 
     const role = user?.role || "buyer";
-
     const title = role === "buyer" ? "Tips para hacer tu pedido" : "Tips para tus respuestas";
 
     const tips =
@@ -28,7 +27,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             "Incluye las marcas, si tienes alguna preferencia."
           ]
         : [
-            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
+            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)"
           ];
 
     const colorRole = role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
@@ -49,38 +48,69 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
       []
     );
 
-    const openTips = () => ref && "current" in ref && ref.current?.present?.();
+    // Estado para controlar la rotación del chevron
+    const [isOpen, setIsOpen] = useState(false);
+    const rotateAnim = useMemo(() => new Animated.Value(0), []);
+
+    const animateChevron = (open: boolean) => {
+      Animated.timing(rotateAnim, {
+        toValue: open ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const openTips = () => {
+      if (ref && "current" in ref) {
+        ref.current?.present?.();
+        animateChevron(true);
+        setIsOpen(true);
+      }
+    };
+
     const closeTips = () => {
-      ref && "current" in ref && ref.current?.dismiss?.();
+      if (ref && "current" in ref) {
+        ref.current?.dismiss?.();
+        animateChevron(false);
+        setIsOpen(false);
+      }
       onClose?.();
     };
+
+    const rotateInterpolate = rotateAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["0deg", "180deg"]
+    });
 
     return (
       <>
         {/* Botón fuera del BottomSheet */}
         <Pressable
-          onPress={openTips}
+          onPress={isOpen ? closeTips : openTips}
           style={{
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            padding: Spacing.lg,
+            paddingVertical: Spacing.lg,
             paddingHorizontal: Spacing.xl,
-            borderRadius: BorderRadius.pillBtn,
-            backgroundColor: colors.brandBuyerSoft,
+            borderRadius: BorderRadius.md,
+            backgroundColor: colors.bgPressed,
             marginBottom: Spacing.sm,
             marginTop: Spacing.lg,
             height: 48
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: Spacing.sm }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TipLamparita width={24} height={24} color={colorRole} />
-            <Text style={{ color: colorRole, fontSize: FontSizes.base, fontWeight: "regular" }}>
+            <Text style={{ color: colorRole, fontSize: FontSizes.base, fontWeight: "regular", marginLeft: 4 }}>
               {title}
             </Text>
           </View>
-          <FlechaAbajo width={20} height={20} color={colorRole} />
+
+          <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+            <FlechaAbajo width={18} height={18} color={colorRole} />
+          </Animated.View>
         </Pressable>
 
         {/* BottomSheet con la lista de tips */}
@@ -88,18 +118,19 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
           ref={ref}
           snapPoints={snapPoints}
           backdropComponent={renderBackdrop}
+          onDismiss={closeTips}
           backgroundStyle={{
             backgroundColor: bgSoft,
             borderTopLeftRadius: BorderRadius.xl,
             borderTopRightRadius: BorderRadius.xl,
             borderWidth: 1,
-            borderColor: bgSoft,
+            borderColor: bgSoft
           }}
           handleIndicatorStyle={{ backgroundColor: colorRole }}
           style={{
             width: "100%",
             maxWidth: 500,
-            alignSelf: "center",
+            alignSelf: "center"
           }}
         >
           <ScrollView
@@ -107,7 +138,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             contentContainerStyle={{
               paddingHorizontal: Spacing.lg,
               paddingBottom: Spacing.xl,
-              paddingTop: Spacing.md,
+              paddingTop: Spacing.md
             }}
           >
             {tips.map((tip, index) => (

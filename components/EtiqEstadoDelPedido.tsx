@@ -17,7 +17,8 @@ type EtiqEstadoType =
   | "Pago Recibido"
   | "Listo. Para enviar!"
   | "Enviado"
-  | "Entregado";
+  | "Entregado"
+  | "Cancelado"; 
 
   // Interface: para definir objetos con propiedades (= datos q recibe el componente)
 interface EtiqEstadoDelPedidoProps {
@@ -46,6 +47,8 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     "Listo. Para enviar!": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
     "Enviado": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Entregado": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
+    "Cancelado": { bg: colors.statusCanceledBg, dot: colors.statusCanceledDot },
+
   };
 
   const colorSet = estadoColors[estado];

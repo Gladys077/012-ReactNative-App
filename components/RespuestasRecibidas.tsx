@@ -21,7 +21,7 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
         height: 48,
     }}
     >
-      <View className="flex-row items-center" style={{paddingTop: 2}}>
+      <View className="flex-row items-center" style={{paddingTop: 2, justifyContent: 'center'}}>
         <Mail
           width={24}
           height={24}
@@ -32,7 +32,7 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
         <Text
           style={{
             fontFamily: "Roboto-Regular",
-            fontSize: FontSizes.md,
+            fontSize: FontSizes.base,
             color: colors.textDefault,
           }}
         >

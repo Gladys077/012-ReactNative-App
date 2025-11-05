@@ -1,7 +1,7 @@
 // CronometroDisplay.tsx
 import React from 'react';
 import { Text, View } from 'react-native';
-import { FontSizes } from '../../constants/Tokens';
+import { FontSizes, Spacing } from '../../constants/Tokens';
 
 type Props = {
   tipo: 'espera' | 'elegir' | 'pagar';
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: Props) {
-  // Formato uniforme HH:MM para todas las variantes
+  // Formato HH:MM para todas las variantes
   const formato = `${horas}:${minutos}`;
 
   const textoTitulo =
@@ -22,22 +22,31 @@ export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: 
       : 'Tiempo para pagar';
 
   return (
-    <View className="items-center">
-      <Text
-        style={{
-          color: textoColor,
-          fontFamily: 'Roboto-Bold',
-          fontSize: FontSizes.sm,
-          marginBottom: 4,
-        }}
-      >
-        {textoTitulo}
-      </Text>
+    <View className="items-center" 
+    style={{
+        paddingHorizontal: Spacing.sm,
+      }}>
+      {/* Título  */}
+      {textoTitulo && (
+        <Text
+          style={{
+            color: textoColor,
+            fontFamily: 'Roboto-Bold',
+            fontSize: FontSizes.sm,
+            marginBottom: 2, 
+          }}
+        >
+          {textoTitulo}
+        </Text>
+       )}
+
+      {/* Hora */}
       <Text
         style={{
           color: textoColor,
           fontFamily: 'AlarmClock',
           fontSize: FontSizes.xxl,
+          marginHorizontal: Spacing.xs,
         }}
       >
         {formato}

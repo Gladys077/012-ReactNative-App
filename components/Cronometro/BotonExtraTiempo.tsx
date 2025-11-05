@@ -1,29 +1,29 @@
 import { useTheme } from '@/context/ThemeContext';
 import React from 'react';
-import { Pressable, Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { FontSizes } from '../../constants/Tokens';
 
 type Props = {
   tipo: 'espera' | 'pagar';
-  onPress: () => void;
 };
 
-export default function BotonExtraTiempo({ tipo, onPress }: Props) {
+export default function BotonExtraTiempo({ tipo }: Props) {
   const { colors } = useTheme();
 
-  const texto = tipo === 'espera' ? 'AÑADIR 1 HORA' : 'AÑADIR 10 Minutos';
+  const texto = tipo === 'espera' ? 'AÑADIR 1 HORA' : 'AÑADIR 10 MIN';
 
   return (
-    <Pressable
-      onPress={onPress}
-      // className="mt-1 w-full rounded-xl items-center"
-      // style={{ backgroundColor: colors.brandBuyerSoft , paddingTop: 2, paddingHorizontal: 10}}
+    <View
+      style={{ paddingTop: 5}}
     >
       <Text
-        className="text-xs"
-        style={{ fontFamily:'Roboto-Bold', color: colors.textDefault}} 
+        style={{ 
+          fontSize: FontSizes.xs, 
+          fontFamily:'Roboto-Bold', 
+          color: colors.textDefault}} 
       >
         {texto}
       </Text>
-    </Pressable>
+    </View>
   );
 }

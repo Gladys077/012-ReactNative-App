@@ -121,6 +121,7 @@ const NuevoPedido = () => {
   const FooterHeight = 130; 
 
   return (
+    //KeyboardAvoidingView evita q el teclado oculte los campos de textInputs cuando el usuairo los está usando.
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       className="flex-1"
@@ -143,7 +144,7 @@ const NuevoPedido = () => {
             label=""
             selected={selectedRubros}
             onChange={handleChange}
-            borderColor={colors.brandBuyer} 
+            borderColor={colors.textSecondaryBg} 
           />
            {errors.rubros && (
             <Text
@@ -178,7 +179,7 @@ const NuevoPedido = () => {
               flex: 1,
               minHeight: 120,
               borderWidth: 1,
-              borderColor: colors.brandBuyer,
+              borderColor: colors.textSecondaryBg,
               borderRadius: Spacing.lg,
               padding: Spacing.md,
               color: colors.textDefault,
