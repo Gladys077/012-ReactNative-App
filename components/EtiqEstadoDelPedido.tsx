@@ -57,7 +57,6 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     <View
       className="flex-row items-center justify-center"
       style={{
-        
         minWidth: 150,
         maxWidth: "40%",
         height: 24,
@@ -78,7 +77,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
       />
       <Text
         style={{
-          fontFamily: "Roboto-Bold",
+          fontFamily: "Roboto-Regular",
           fontSize: FontSizes.sm,
           color: colors.textDefault,
           marginRight: 8

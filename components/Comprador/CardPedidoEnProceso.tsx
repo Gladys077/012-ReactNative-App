@@ -131,15 +131,15 @@ export default function CardPedidoEnProceso({
               style={{
                 fontFamily: "Roboto-Medium",
                 color: colors.brandBuyer,
-                fontSize: FontSizes.sm,
+                fontSize: FontSizes.base,
                 marginRight: 4,
               }}
             >
               Ver pedido
             </Text>
             <Clipboard
-              width={14}
-              height={14}
+              width={20}
+              height={20}
               fill={colors.brandBuyer}
               stroke={colors.brandBuyer}
             />
@@ -160,12 +160,12 @@ export default function CardPedidoEnProceso({
       {/* BTN "Cancelar Pedido" centrado */}
       <View
         style={{
-          alignItems: "center", // centra horizontalmente el contenido
-          marginTop: Spacing.xs,
+          alignItems: "center", 
         }}
       >
         <Button
           variant="secondary"
+          height="md"
           width="auto"
           onPress={onCancelarPedido}
         >

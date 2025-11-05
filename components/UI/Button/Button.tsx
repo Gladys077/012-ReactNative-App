@@ -55,7 +55,6 @@ const Button: React.FC<ButtonProps> = ({
   };
 
 
-
   // colores según variant + sección (usa useTheme)
   const sectionBgMap = {
     common: colors.brandCommon,
@@ -75,16 +74,6 @@ const Button: React.FC<ButtonProps> = ({
       ? { backgroundColor: primaryBg, borderColor: "transparent", textColor: primaryTextColor, iconColor: primaryTextColor }
       : { backgroundColor: secondaryBg, borderColor: secondaryBorder, textColor: secondaryTextColor, iconColor: secondaryTextColor };
 
-  // ===== alignment wrapper (se aplica al contenedor externo: fuera del btn)
-  // const alignWrapperStyle = (
-  //   width === "full"
-  //     ? { alignSelf: "stretch" } // asegura que el contenedor se estire al máximo
-  //     : align === "center"
-  //     ? { alignItems: "center" }
-  //     : align === "right"
-  //     ? { alignItems: "flex-end" }
-  //     : { alignItems: "flex-start" }
-  // ) as ViewStyle;
 
 
   // ===== botón estilos base (inline, Android-friendly)

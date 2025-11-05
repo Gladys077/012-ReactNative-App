@@ -38,7 +38,7 @@ export default function Cronometro({
 
   const estilos: Record<CronometroTipo, { bg: string; texto: string }> = {
     espera: { bg: colors.statusTurquoiseBg, texto: colors.statusTurquoiseDot },
-    elegir: { bg: colors.brandSellerSoft, texto: colors.relojSeller },
+    elegir: { bg: colors.brandBuyerSoft, texto: colors.relojBuyer },
     pagar: { bg: colors.brandBuyerSoft, texto: colors.relojBuyer },
   };
 
@@ -146,7 +146,7 @@ export default function Cronometro({
                 marginVertical: Spacing.sm,
               }}
             />
-            <BotonExtraTiempo tipo={tipo} onPress={agregarTiempo} />
+            <BotonExtraTiempo tipo={tipo} />
           </>
         )}
       </Animated.View>

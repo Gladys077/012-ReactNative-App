@@ -24,7 +24,7 @@ export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: 
   return (
     <View className="items-center" 
     style={{
-        paddingHorizontal: Spacing.sm,
+        paddingHorizontal: Spacing.lg,
       }}>
       {/* Título  */}
       {textoTitulo && (
@@ -32,7 +32,7 @@ export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: 
           style={{
             color: textoColor,
             fontFamily: 'Roboto-Bold',
-            fontSize: FontSizes.sm,
+            fontSize: FontSizes.xs,
             marginBottom: 2, 
           }}
         >
@@ -45,8 +45,8 @@ export default function CronometroDisplay({ tipo, horas, minutos, textoColor }: 
         style={{
           color: textoColor,
           fontFamily: 'AlarmClock',
-          fontSize: FontSizes.xxl,
-          marginHorizontal: Spacing.xs,
+          fontSize: FontSizes.xl,
+          marginHorizontal: Spacing.sm,
         }}
       >
         {formato}

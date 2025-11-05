@@ -15,10 +15,11 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
 
   return (
     <View
-      className="flex-row items-center justify-between rounded-2xl px-4 "
+      className="flex-row items-center justify-between px-4 "
       style={{
         backgroundColor: colors.brandBuyerSoft,
         height: 48,
+        marginBottom: 8,
     }}
     >
       <View className="flex-row items-center" style={{paddingTop: 2, justifyContent: 'center'}}>
@@ -26,7 +27,7 @@ export default function RespuestasRecibidas({ cantidad = 0 }: Props) {
           width={24}
           height={24}
           fill={colors.textDefault}
-          style={{ marginRight: 8, 
+          style={{ marginRight: 8, marginTop: 2, 
             paddingTop: 0 }}
         />
         <Text
