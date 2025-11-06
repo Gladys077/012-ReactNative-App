@@ -5,7 +5,7 @@ import { Animated, Pressable, Text, View } from "react-native";
 import EtiqEstadoDelPedido from "../EtiqEstadoDelPedido";
 import PedidoNumero from "../PedidoNumero";
 import RespuestasRecibidas from "../RespuestasRecibidas";
-import { FlechaAbajo } from "../icons";
+import { Clipboard, FlechaAbajo } from "../icons";
 import CardRespuestaVendedor from "./CardRespuestasVendedor";
 import MascotaConMensaje from "./MascotaConMensaje";
 
@@ -27,6 +27,8 @@ interface CardPedidoVerRespuestasProps {
   onCancelarRespuesta: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
   onFinishCronometro?: (respuestaId: string | number) => void;
+  onVerPedido?: (id: string | number) => void;
+
 }
 
 export default function CardPedidoVerRespuestas({
@@ -37,6 +39,8 @@ export default function CardPedidoVerRespuestas({
   onCancelarRespuesta,
   onVerNota,
   onFinishCronometro,
+  onVerPedido,
+
 }: CardPedidoVerRespuestasProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -87,6 +91,33 @@ export default function CardPedidoVerRespuestas({
       {/* Respuestas Recibidas - Solo visible cuando está colapsado */}
       {!expandido && <RespuestasRecibidas cantidad={respuestas.length} />}
 
+      {/* "Ver pedido" alineado a la derecha */}
+          <Pressable
+            onPress={() => onVerPedido?.(id)}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              alignSelf: "flex-end",
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Roboto-Medium",
+                color: colors.brandBuyer,
+                fontSize: FontSizes.base,
+                marginRight: 4,
+              }}
+            >
+              Ver pedido
+            </Text>
+            <Clipboard
+              width={20}
+              height={20}
+              fill={colors.brandBuyer}
+              stroke={colors.brandBuyer}
+            />
+          </Pressable>
+
       {/* Mascota con mensaje - Solo visible cuando está expandido */}
       {expandido && (
         <MascotaConMensaje
@@ -113,7 +144,7 @@ export default function CardPedidoVerRespuestas({
           justifyContent: "center",
           alignItems: "center",
           paddingVertical: Spacing.xs,
-        }}
+        }}    
       >
         <Text
           style={{

@@ -151,21 +151,15 @@ export default function CardRespuestaVendedor({
       </View>
 
       {/* Precio */}
-      <View
-        style={{
-          alignItems: "flex-end",
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "Roboto-Bold",
-            fontSize: FontSizes.xl,
-            color: colors.textDefault,
-          }}
-        >
+      <View style={{ alignItems: "flex-end" }}>
+        <Text style={{ fontFamily: "Roboto-Regular", fontSize: FontSizes.sm, color: colors.textDefault }}>
+          Presupuesto
+        </Text>
+        <Text style={{ fontFamily: "Roboto-Bold", fontSize: FontSizes.xl, color: colors.textDefault }}>
           ${precio.toLocaleString("es-AR")}
         </Text>
       </View>
+
 
       {/* Nota del vendedor */}
       {nota ? (

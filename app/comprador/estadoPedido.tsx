@@ -32,8 +32,8 @@ const EstadoPedido = () => {
         estado: "Ver Respuestas",
         respuestasRecibidas: 2,
         duracionCronometro: 30,
-        textoPedido: `Revisión de cañerías del baño.
-        Traer soplete y materiales básicos.`,
+        textoPedido: `Revisión de cañerías del baño. 
+Traer soplete y materiales básicos.`,
         // Array de respuestas para este pedido
         respuestas: [
           {
@@ -42,7 +42,7 @@ const EstadoPedido = () => {
             // vendedorAvatar: undefined,
             rating: 4.0,
             precio: 4250,
-            nota: "Tengo todo el material necesario. Puedo ir mañana temprano.",
+            nota: "Puedo ir mañana temprano. El precio no incluye materiales si hubiera que cambiar algo.",
             duracionCronometro: 45,
           },
           {
@@ -174,6 +174,7 @@ const EstadoPedido = () => {
                   onCancelarRespuesta={(respuestaId) => handleCancelarRespuesta(pedido.id, respuestaId)}
                   onVerNota={handleVerNota}
                   onFinishCronometro={(respuestaId) => handleFinishCronometroRespuesta(pedido.id, respuestaId)}
+                  onVerPedido={() => handleVerPedido(pedido)}
                 />
               );
             }
