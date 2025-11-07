@@ -59,7 +59,7 @@ Traer soplete y materiales básicos.`,
       {
         id: 3,
         numeroPedido: 2556,
-        estado: "En Proceso",
+        estado: "Pagar",
         respuestasRecibidas: 0,
         duracionCronometro: 30,
         textoPedido: `200 Sandwichs de miga de jamón y queso`,
@@ -202,8 +202,10 @@ Traer soplete y materiales básicos.`,
                 return (
                   <CardPedidoPagar
                     key={pedido.id}
-                    pedidoId={pedido.id}
-                    vendedorData={pedido.respuestaSeleccionada}
+                    id={pedido.id}
+                    numeroPedido={pedido.numeroPedido}
+                    estadoActual={pedido.estadoActual}
+                    onVerPedido={handleVerPedido}
                   />
                 );
               }

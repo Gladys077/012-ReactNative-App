@@ -19,7 +19,6 @@ export const Colors = {
     errorSoft: "fcc7c7",
     error: "#ef4444",
     
-    
     // Para fondos suaves
     tipsColorBuyer: '#1D4ED8', // blue-700
 
@@ -30,10 +29,9 @@ export const Colors = {
     border: '#E5E7EB',
     bgPressed: '#f3f4f6',     // color al presionar (gris-100)
 
-    
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
-    fondoCirculoActivo: "#81b0d6", // celeste
+    fondoCirculoActivo: "#c5e2fa", // celeste
     success: '#059669', // green-400 (verde esmeralda)
 
     //para TipsBottomSheet
@@ -100,7 +98,7 @@ export const Colors = {
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
-    fondoCirculoActivo: "#81b0d6", // celeste
+    fondoCirculoActivo: "#a8d0f0", // celeste
     success: '#10b981', // green (verde esmeralda más brillante)
     
     //para TipsBottomSheet

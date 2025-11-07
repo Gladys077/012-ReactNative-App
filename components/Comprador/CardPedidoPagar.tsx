@@ -59,6 +59,7 @@ export default function CardPedidoPagar({
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          marginRight: Spacing.xl,
         }}
       >
         <PedidoNumero numero={numeroPedido} />
@@ -66,7 +67,7 @@ export default function CardPedidoPagar({
       </View>
 
       {/* Línea de tiempo del pedido */}
-      <LineaEstadoPedido estadoActual={estadoActual} />
+      <LineaEstadoPedido estadoActual={"Pago"} />
 
       {/* Separador */}
       <View
@@ -119,3 +120,4 @@ export default function CardPedidoPagar({
     </View>
   );
 }
+
