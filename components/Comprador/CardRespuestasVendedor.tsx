@@ -3,7 +3,8 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
-import { FlechaAbajo } from "../icons";
+import { Chat } from "../icons";
+import AttentionRebote from "../UI/Animations/AttentionRebote";
 import Button from "../UI/Button/Button";
 import EstrellaReputacion from "./EstrellaReputación";
 
@@ -150,17 +151,9 @@ export default function CardRespuestaVendedor({
         />
       </View>
 
-      {/* Precio */}
-      <View style={{ alignItems: "flex-end" }}>
-        <Text style={{ fontFamily: "Roboto-Regular", fontSize: FontSizes.sm, color: colors.textDefault }}>
-          Presupuesto
-        </Text>
-        <Text style={{ fontFamily: "Roboto-Bold", fontSize: FontSizes.xl, color: colors.textDefault }}>
-          ${precio.toLocaleString("es-AR")}
-        </Text>
-      </View>
 
 
+      <View style={{justifyContent: "space-between", flexDirection: "row", alignItems: "flex-start"}}>
       {/* Nota del vendedor */}
       {nota ? (
         <Pressable
@@ -173,33 +166,53 @@ export default function CardRespuestaVendedor({
         >
           <Text
             style={{
-              fontFamily: "Roboto-Regular",
+              fontFamily: "Roboto-Bold",
               fontSize: FontSizes.sm,
+              // fontStyle: "italic",
               color: colors.brandBuyer,
               textDecorationLine: "underline",
             }}
           >
-            Ver nota del vendedor
+            VER NOTA
           </Text>
-          <FlechaAbajo
-            width={14}
-            height={14}
-            stroke={colors.brandBuyer}
-            style={{ transform: [{ rotate: "-90deg" }] }}
-          />
+
+            <AttentionRebote>
+          {/* Ícono con efecto solo si hay nota */}
+            <Chat
+              width={20}
+              height={20}
+              stroke={colors.brandBuyer}
+              strokeWidth={1.5}
+              fill={"white"}
+            />
+          </AttentionRebote>
         </Pressable>
       ) : (
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: FontSizes.sm,
-            color: colors.textMuted,
-            fontStyle: "italic",
-          }}
-        >
-          Sin nota del vendedor
-        </Text>
+          <Text
+            style={{
+              fontFamily: "Roboto-Regular",
+              fontSize: FontSizes.sm,
+              color: colors.textMuted,
+              fontStyle: "italic",
+            }}
+          >
+            {""}
+          </Text>
+          
       )}
+          <Text style={{ fontFamily: "Roboto-Medium", fontSize: FontSizes.sm, color: colors.textDefault }}>
+            Presupuesto:
+          </Text>
+      </View>
+
+            {/* Precio */}
+      <View style={{ alignItems: "flex-end" }}>
+        
+        <Text style={{ fontFamily: "Roboto-Bold", fontSize: FontSizes.xl, color: colors.textDefault }}>
+          ${precio.toLocaleString("es-AR")}
+        </Text>
+
+      </View>
 
       {/* Botones */}
       <View

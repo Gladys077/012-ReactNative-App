@@ -8,7 +8,7 @@ const Clipboard = (props: SvgProps) => {
 
   const strokeWidth = props.strokeWidth ?? 0.4;
   const strokeColor = props.stroke ?? props.color ?? colors.textDefault;
-  const fillColor = props.fill ?? "none";
+  const fillColor = props.fill ?? "currentColor";
 
   return (
     <Svg

@@ -15,6 +15,10 @@ export const Colors = {
     brandBuyer: '#2563eb',   // blue-600
     brandSeller: '#ea580c',  // orange-600
 
+    // Error
+    errorSoft: "fcc7c7",
+    error: "#ef4444",
+    
     
     // Para fondos suaves
     tipsColorBuyer: '#1D4ED8', // blue-700
@@ -25,6 +29,12 @@ export const Colors = {
     background: '#f3f4f6', // gray-100
     border: '#E5E7EB',
     bgPressed: '#f3f4f6',     // color al presionar (gris-100)
+
+    
+    //linea de tiempo - Estado del pedido
+    fondoCirculo: "#D3D3D3", // lightgray
+    fondoCirculoActivo: "#81b0d6", // celeste
+    success: '#059669', // green-400 (verde esmeralda)
 
     //para TipsBottomSheet
     brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
@@ -56,9 +66,9 @@ export const Colors = {
     statusCanceledDot: "#C82333", 
     
     // Reloj
-    relojBuyer: '#0730a3',
-    relojSeller: '#ba480d',
-    relojTiempoTerminado: '#f79e94'
+    relojBuyer: '#0730a3', // azul oscuro
+    relojSeller: '#ba480d', //naranja oscuro
+    relojTiempoTerminado: '#f79e94' //rojo suave (salmón)
 
 
   },
@@ -88,6 +98,10 @@ export const Colors = {
     border: '#374151', // gray-700
     bgPressed: '#3f3f46',       // zinc-700 
 
+    //linea de tiempo - Estado del pedido
+    fondoCirculo: "#D3D3D3", // lightgray
+    fondoCirculoActivo: "#81b0d6", // celeste
+    success: '#10b981', // green (verde esmeralda más brillante)
     
     //para TipsBottomSheet
     brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave

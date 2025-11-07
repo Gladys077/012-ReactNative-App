@@ -5,6 +5,7 @@ import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, Vibration, View } from "react-native";
+import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
@@ -41,7 +42,7 @@ Traer soplete y materiales básicos.`,
             vendedorNombre: "Minimarket Juan",
             // vendedorAvatar: undefined,
             rating: 4.0,
-            precio: 4250,
+            precio: 4500,
             nota: "Puedo ir mañana temprano. El precio no incluye materiales si hubiera que cambiar algo.",
             duracionCronometro: 45,
           },
@@ -49,7 +50,7 @@ Traer soplete y materiales básicos.`,
             id: "v2",
             vendedorNombre: "Tienda María",
             rating: 4.5,
-            precio: 4245,
+            precio: 4250,
             nota: undefined,
             duracionCronometro: 30,
           },
@@ -108,8 +109,25 @@ Traer soplete y materiales básicos.`,
   // Handler para cuando el comprador acepta una respuesta
   const handleAceptarRespuesta = (pedidoId: number | string, respuestaId: string | number) => {
     console.log(`Pedido ${pedidoId}: Respuesta ${respuestaId} aceptada`);
-    // TODO: Acá irá la lógica para enviar al backend y cambiar el estado del pedido a "Pagar"
+
+    setPedidos((prev) =>
+      prev.map((pedido) => {
+        if (pedido.id === pedidoId) {
+          const respuestaSeleccionada = pedido.respuestas.find(
+            (r: any) => r.id === respuestaId
+          );
+
+          return {
+            ...pedido,
+            estado: "Pagar",
+            respuestaSeleccionada, // guardamos la elegida para pasarla a la nueva card
+          };
+        }
+        return pedido;
+      })
+    );
   };
+
 
   // Handler para cuando el comprador cancela una respuesta específica
   const handleCancelarRespuesta = (pedidoId: number | string, respuestaId: string | number) => {
@@ -179,7 +197,19 @@ Traer soplete y materiales básicos.`,
               );
             }
 
-            // Card original para estado "En Proceso"
+            // CardPedidoPagar para estado "Pagar"
+            if (pedido.estado === "Pagar") {
+                return (
+                  <CardPedidoPagar
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    vendedorData={pedido.respuestaSeleccionada}
+                  />
+                );
+              }
+
+
+            // CardPedidoEnProceso para estado "En Proceso"
             return (
               <CardPedidoEnProceso
                 key={pedido.id}

@@ -14,6 +14,7 @@ export { default as Check } from './Check';
 export { default as CheckCircle } from './CheckCircle';
 export { default as Chevron } from './Chevron';
 export { default as Clipboard } from './Clipboard';
+export { default as ClipboardSolid } from './ClipboardSolid';
 export { default as Comprobante } from './Comprobante';
 export { default as ConComprobante } from './ConComprobante';
 export { default as Copiar } from './Copiar';
