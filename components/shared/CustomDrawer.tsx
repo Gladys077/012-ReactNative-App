@@ -2,7 +2,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } 
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const CustomDrawer = (props: DrawerContentComponentProps) => { //las props estaban en drawerContent (dentro de _layout.tsx)
+const CustomDrawer = (props: DrawerContentComponentProps) => { //las props están en drawerContent (dentro de _layout.tsx)
   return (
     <DrawerContentScrollView
     {...props}          //así las disperso, ahora tendrá las mismas funcionalidades que están en <Drawer /> en _layout.tsx 

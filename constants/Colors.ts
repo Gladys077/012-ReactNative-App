@@ -83,14 +83,14 @@ export const Colors = {
 
     // Primarios por rol
     brandCommon: '#8b5cf6',   // violet-500
-    brandBuyer: '#5292fa',    // blue-500
+    brandBuyer: '#52a0fa',    // blue-500
     brandSeller: '#ed6728',   // orange-500
 
     // Para fondos suaves
     tipsColorBuyer: '#64B5F6', // blue-400
 
     // Superficies
-    headerFooterBg: 'rgba(17,24,39,0.7)',
+    headerFooterBg: 'rgba(17,24,39,.9)',
     cardBg: '#374151',          // gray-700
     background: '#1f2937', // gray-800
     border: '#374151', // gray-700

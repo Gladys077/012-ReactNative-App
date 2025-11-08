@@ -1,6 +1,6 @@
 import { Colors } from '@/constants/Colors';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { Appearance, AppearancePreferences } from 'react-native';
+import { Appearance, ColorSchemeName } from 'react-native';
 
 // Fuentes
 const fonts = {
@@ -13,7 +13,7 @@ const fonts = {
 type ThemeMode = 'light' | 'dark';
 
 interface Theme {
-  colors: typeof Colors.light;
+  colors: (typeof Colors)['light' | 'dark'];
   fonts: typeof fonts;
 }
 
@@ -31,11 +31,11 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   // Listener para cambios de modo en tiempo real
   useEffect(() => {
-    const listener = ({ colorScheme }: AppearancePreferences) => {
-      setMode((colorScheme as ThemeMode) || 'light');
+    const listener = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
+      if (colorScheme) setMode(colorScheme as ThemeMode);
     };
-    const subscription = Appearance.addChangeListener(listener);
 
+    const subscription = Appearance.addChangeListener(listener);
     return () => subscription.remove();
   }, []);
 

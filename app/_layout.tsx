@@ -22,7 +22,7 @@ function ThemedStatusBar() {
     const setNavColor = async () => {
       try {
         // Definimos color de fondo del NavigationBar
-        await NavigationBar.setBackgroundColorAsync(colors.headerFooterBg);
+        await NavigationBar.setBackgroundColorAsync(colors.background);
 
         // Ajuste del color de íconos según tema
         await NavigationBar.setButtonStyleAsync(mode === "dark" ? "light" : "dark");
@@ -51,7 +51,9 @@ function ThemedStatusBar() {
       )}
       <StatusBar
         style={mode === "dark" ? "light" : "dark"}
-        translucent
+        backgroundColor={colors.background}
+
+        translucent={false}
       />
     </>
   );

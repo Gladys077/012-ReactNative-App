@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
 import { Chat } from "../icons";
+import EstrellaReputacion from "../subcomponentes/EstrellaReputación";
 import AttentionRebote from "../UI/Animations/AttentionRebote";
 import Button from "../UI/Button/Button";
-import EstrellaReputacion from "./EstrellaReputación";
 
 interface CardRespuestaVendedorProps {
   id: string | number;
@@ -75,6 +75,8 @@ export default function CardRespuestaVendedor({
         borderBottomWidth: 4,
         borderColor: colors.brandBuyerSoft,
         elevation: 4,
+        margin: 4,
+        
       }}
     >
       {/* Header: Avatar + Nombre + Rating */}

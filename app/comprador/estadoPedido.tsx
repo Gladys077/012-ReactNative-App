@@ -1,11 +1,19 @@
 import CardPedidoEnProceso from "@/components/Comprador/CardPedidoEnProceso";
+import CardPedidoPagar from "@/components/Comprador/CardPedidoPagar";
 import CardPedidoVerRespuestas from "@/components/Comprador/CardPedidoVerRespuestas";
+import CardRespuestaVendedor from "@/components/Comprador/CardRespuestasVendedor";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, ScrollView, Text, Vibration, View } from "react-native";
-import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Text,
+  Vibration,
+  View,
+} from "react-native";
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
@@ -15,7 +23,7 @@ const EstadoPedido = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: (VER CON LIO) Por ahora simula la carga 
+    // Simulación de datos
     const mockData = [
       {
         id: 1,
@@ -35,12 +43,10 @@ const EstadoPedido = () => {
         duracionCronometro: 30,
         textoPedido: `Revisión de cañerías del baño. 
 Traer soplete y materiales básicos.`,
-        // Array de respuestas para este pedido
         respuestas: [
           {
             id: "v1",
             vendedorNombre: "Minimarket Juan",
-            // vendedorAvatar: undefined,
             rating: 4.0,
             precio: 4500,
             nota: "Puedo ir mañana temprano. El precio no incluye materiales si hubiera que cambiar algo.",
@@ -55,6 +61,7 @@ Traer soplete y materiales básicos.`,
             duracionCronometro: 30,
           },
         ],
+        expandido: false,
       },
       {
         id: 3,
@@ -69,9 +76,10 @@ Traer soplete y materiales básicos.`,
     setTimeout(() => {
       setPedidos(mockData);
       setLoading(false);
-    }, 800); // Simula delay de red
+    }, 800);
   }, []);
 
+  // Handlers
   const handleVerPedido = (pedido: any) => {
     openBottomSheetVerPedido({
       numeroPedido: pedido.numeroPedido,
@@ -81,7 +89,6 @@ Traer soplete y materiales básicos.`,
 
   const handleCancelarPedido = (id: number | string) => {
     Vibration.vibrate(300);
-
     Alert.alert(
       "Cancelar pedido",
       "¿Querés cancelar este pedido?",
@@ -106,8 +113,10 @@ Traer soplete y materiales básicos.`,
     console.log(`El cronómetro del pedido ${id} finalizó.`);
   };
 
-  // Handler para cuando el comprador acepta una respuesta
-  const handleAceptarRespuesta = (pedidoId: number | string, respuestaId: string | number) => {
+  const handleAceptarRespuesta = (
+    pedidoId: number | string,
+    respuestaId: string | number
+  ) => {
     console.log(`Pedido ${pedidoId}: Respuesta ${respuestaId} aceptada`);
 
     setPedidos((prev) =>
@@ -116,11 +125,10 @@ Traer soplete y materiales básicos.`,
           const respuestaSeleccionada = pedido.respuestas.find(
             (r: any) => r.id === respuestaId
           );
-
           return {
             ...pedido,
             estado: "Pagar",
-            respuestaSeleccionada, // guardamos la elegida para pasarla a la nueva card
+            respuestaSeleccionada,
           };
         }
         return pedido;
@@ -128,15 +136,18 @@ Traer soplete y materiales básicos.`,
     );
   };
 
-
-  // Handler para cuando el comprador cancela una respuesta específica
-  const handleCancelarRespuesta = (pedidoId: number | string, respuestaId: string | number) => {
+  const handleCancelarRespuesta = (
+    pedidoId: number | string,
+    respuestaId: string | number
+  ) => {
     setPedidos((prev) =>
       prev.map((pedido) => {
         if (pedido.id === pedidoId && pedido.respuestas) {
           return {
             ...pedido,
-            respuestas: pedido.respuestas.filter((r: any) => r.id !== respuestaId),
+            respuestas: pedido.respuestas.filter(
+              (r: any) => r.id !== respuestaId
+            ),
             respuestasRecibidas: pedido.respuestas.length - 1,
           };
         }
@@ -146,21 +157,31 @@ Traer soplete y materiales básicos.`,
     console.log(`Pedido ${pedidoId}: Respuesta ${respuestaId} cancelada`);
   };
 
-  // Handler para ver la nota del vendedor (abre bottom sheet)
   const handleVerNota = (nota: string) => {
-    // TODO: Crear un bottom sheet específico para mostrar la nota
-    Alert.alert("Nota del vendedor", nota); // Temporal, reemplazar con bottom sheet
+    Alert.alert("Nota del vendedor", nota);
   };
 
-  // Handler para cuando termina el cronómetro de una respuesta
-  const handleFinishCronometroRespuesta = (pedidoId: number | string, respuestaId: string | number) => {
-    console.log(`Pedido ${pedidoId}: El cronómetro de la respuesta ${respuestaId} finalizó`);
-    // TODO: Eliminar automáticamente esa respuesta
+  const handleFinishCronometroRespuesta = (
+    pedidoId: number | string,
+    respuestaId: string | number
+  ) => {
+    console.log(
+      `Pedido ${pedidoId}: El cronómetro de la respuesta ${respuestaId} finalizó`
+    );
+  };
+
+  const toggleExpandido = (pedidoId: number | string, valor: boolean) => {
+    setPedidos((prev) =>
+      prev.map((p) => (p.id === pedidoId ? { ...p, expandido: valor } : p))
+    );
   };
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.background }}>
+      <View
+        className="flex-1 justify-center items-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" color={colors.brandBuyer} />
       </View>
     );
@@ -180,38 +201,81 @@ Traer soplete y materiales básicos.`,
       >
         {pedidos.length > 0 ? (
           pedidos.map((pedido) => {
-            // Condicional para renderizar la card correcta según el estado
             if (pedido.estado === "Ver Respuestas") {
               return (
-                <CardPedidoVerRespuestas
+                <View
+                  key={pedido.id}
+                  style={{
+                    backgroundColor: colors.cardBg,
+                    borderRadius: 12,
+                    overflow: "hidden",
+                    borderWidth: pedido.expandido ? 1.5 : 0,
+                    borderColor: pedido.expandido
+                      ? colors.brandBuyer
+                      : "transparent",
+                  }}
+                >
+                  <CardPedidoVerRespuestas
+                    id={pedido.id}
+                    numeroPedido={pedido.numeroPedido}
+                    cantidadRespuestas={pedido.respuestas?.length || 0}
+                    expandido={pedido.expandido || false}
+                    setExpandido={(valor) =>
+                      toggleExpandido(pedido.id, valor)
+                    }
+                    onVerPedido={() => handleVerPedido(pedido)}
+                  />
+
+                  {pedido.expandido && (
+                    <View
+                      style={{
+                        paddingHorizontal: Spacing.md,
+                        paddingBottom: Spacing.md,
+                        gap: Spacing.md,
+                      }}
+                    >
+                      {pedido.respuestas?.map((respuesta: any) => (
+                        <CardRespuestaVendedor
+                          key={respuesta.id}
+                          id={respuesta.id}
+                          vendedorNombre={respuesta.vendedorNombre}
+                          rating={respuesta.rating}
+                          precio={respuesta.precio}
+                          nota={respuesta.nota}
+                          duracionCronometro={respuesta.duracionCronometro}
+                          onAceptar={(respuestaId) =>
+                            handleAceptarRespuesta(pedido.id, respuestaId)
+                          }
+                          onCancelar={(respuestaId) =>
+                            handleCancelarRespuesta(pedido.id, respuestaId)
+                          }
+                          onVerNota={handleVerNota}
+                          onFinishCronometro={() =>
+                            handleFinishCronometroRespuesta(
+                              pedido.id,
+                              respuesta.id
+                            )
+                          }
+                        />
+                      ))}
+                    </View>
+                  )}
+                </View>
+              );
+            }
+
+            if (pedido.estado === "Pagar") {
+              return (
+                <CardPedidoPagar
                   key={pedido.id}
                   id={pedido.id}
                   numeroPedido={pedido.numeroPedido}
-                  respuestas={pedido.respuestas || []}
-                  onAceptarRespuesta={(respuestaId) => handleAceptarRespuesta(pedido.id, respuestaId)}
-                  onCancelarRespuesta={(respuestaId) => handleCancelarRespuesta(pedido.id, respuestaId)}
-                  onVerNota={handleVerNota}
-                  onFinishCronometro={(respuestaId) => handleFinishCronometroRespuesta(pedido.id, respuestaId)}
-                  onVerPedido={() => handleVerPedido(pedido)}
+                  estadoActual={pedido.estadoActual}
+                  onVerPedido={handleVerPedido}
                 />
               );
             }
 
-            // CardPedidoPagar para estado "Pagar"
-            if (pedido.estado === "Pagar") {
-                return (
-                  <CardPedidoPagar
-                    key={pedido.id}
-                    id={pedido.id}
-                    numeroPedido={pedido.numeroPedido}
-                    estadoActual={pedido.estadoActual}
-                    onVerPedido={handleVerPedido}
-                  />
-                );
-              }
-
-
-            // CardPedidoEnProceso para estado "En Proceso"
             return (
               <CardPedidoEnProceso
                 key={pedido.id}

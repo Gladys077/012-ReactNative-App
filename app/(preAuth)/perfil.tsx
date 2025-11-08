@@ -7,7 +7,6 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
@@ -174,8 +173,8 @@ export default function PerfilScreen() {
                 {/* Select Rubros */}
                 <SelectRubros
                   label="¿Desea vender? Elija el/los rubro/s"
+                  section="seller"
                   selected={roles}
-                  rubros={rubrosVendedor}
                   onChange={setRoles}
                 />
               </View>

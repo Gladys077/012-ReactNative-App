@@ -1,13 +1,13 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
-import EtiqEstadoDelPedido from "../EtiqEstadoDelPedido";
-import PedidoNumero from '../PedidoNumero';
-import RespuestasRecibidas from "../RespuestasRecibidas";
 import Button from "../UI/Button/Button";
-import { Clipboard } from "../icons";
+import EtiqEstadoDelPedido from "../subcomponentes/EtiqEstadoDelPedido";
+import LinkFraseIcon from "../subcomponentes/LinkFraseIcon";
+import PedidoNumero from '../subcomponentes/PedidoNumero';
+import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 
 
 interface CardPedidoEnProcesoProps {
@@ -110,7 +110,6 @@ export default function CardPedidoEnProceso({
               fontFamily: "Roboto-Regular",
               fontSize: FontSizes.sm,
               color: colors.textDefault,
-              // lineHeight: 18,
               marginBottom: 6,
               textAlign: "left",
             }}
@@ -119,31 +118,7 @@ export default function CardPedidoEnProceso({
           </Text>
 
           {/* "Ver pedido" alineado a la derecha */}
-          <Pressable
-            onPress={() => onVerPedido?.(id)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "flex-end",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Roboto-Medium",
-                color: colors.brandBuyer,
-                fontSize: FontSizes.base,
-                marginRight: 4,
-              }}
-            >
-              Ver pedido
-            </Text>
-            <Clipboard
-              width={20}
-              height={20}
-              fill={colors.brandBuyer}
-              stroke={colors.brandBuyer}
-            />
-          </Pressable>
+          <LinkFraseIcon onPress={() => onVerPedido?.(id)} />
         </View>
       </View>
 

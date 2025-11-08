@@ -1,6 +1,6 @@
 import BottomSheetVerPedido, {
-    BottomSheetVerPedidoRef,
-} from "@/components/BottomSheetVerPedido";
+  BottomSheetVerPedidoRef,
+} from "@/components/subcomponentes/BottomSheetVerPedido";
 import React, { createContext, useCallback, useContext, useRef, useState } from "react";
 
 interface PedidoData {

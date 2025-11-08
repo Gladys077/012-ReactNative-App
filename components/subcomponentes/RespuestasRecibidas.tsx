@@ -1,8 +1,8 @@
 import { FontSizes } from "@/constants/Tokens";
 import React from "react";
 import { Text, View } from "react-native";
-import { useTheme } from "../context/ThemeContext";
-import { Mail } from "./icons";
+import { useTheme } from "../../context/ThemeContext";
+import { Mail } from "../icons";
 
 type Props = {
   cantidad?: number;

@@ -1,4 +1,3 @@
-// ThemedText.tsx
 import { FontSizes } from "@/constants/Tokens";
 import { Text, TextProps } from "react-native";
 import { useTheme } from "../context/ThemeContext";
@@ -17,7 +16,7 @@ export default function ThemedText({
 }: Props) {
   const { colors, fonts } = useTheme();
 
-  // Mapeo directo a tus tokens
+  // Mapeo directo a los tokens
   const fontSizeMap: Record<
     NonNullable<Props["variant"]>, //un obj con las claves title, subtitle, body, caption y valores de tipo number
     number
@@ -42,7 +41,7 @@ export default function ThemedText({
     <Text
       style={[
         {
-          color: colors.textDefault, // 🔥 dinámico según theme
+          color: colors.textDefault, // dinámico según theme
           fontSize: fontSizeMap[variant],
           fontFamily: fontFamilyMap[weight],
         },

@@ -1,67 +1,32 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useState } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
-import EtiqEstadoDelPedido from "../EtiqEstadoDelPedido";
-import PedidoNumero from "../PedidoNumero";
-import RespuestasRecibidas from "../RespuestasRecibidas";
-import { Clipboard, FlechaAbajo } from "../icons";
-import CardRespuestaVendedor from "./CardRespuestasVendedor";
-import MascotaConMensaje from "./MascotaConMensaje";
-
-interface Respuesta {
-  id: string | number;
-  vendedorNombre: string;
-//   vendedorAvatar?: string;
-  rating: number;
-  precio: number;
-  nota?: string;
-  duracionCronometro: number;
-}
+import React from "react";
+import { View } from "react-native";
+import EtiqEstadoDelPedido from "../subcomponentes/EtiqEstadoDelPedido";
+import LinkFraseIcon from "../subcomponentes/LinkFraseIcon";
+import MascotaConMensaje from "../subcomponentes/MascotaConMensaje";
+import PedidoNumero from "../subcomponentes/PedidoNumero";
+import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
+import ToggleExpandir from "../subcomponentes/ToggleExpandir";
 
 interface CardPedidoVerRespuestasProps {
   id: string | number;
   numeroPedido: number;
-  respuestas: Respuesta[];
-  onAceptarRespuesta: (respuestaId: string | number) => void;
-  onCancelarRespuesta: (respuestaId: string | number) => void;
-  onVerNota?: (nota: string) => void;
-  onFinishCronometro?: (respuestaId: string | number) => void;
+  cantidadRespuestas: number;
+  expandido: boolean;
+  setExpandido: (valor: boolean) => void;
   onVerPedido?: (id: string | number) => void;
-
 }
 
 export default function CardPedidoVerRespuestas({
   id,
   numeroPedido,
-  respuestas,
-  onAceptarRespuesta,
-  onCancelarRespuesta,
-  onVerNota,
-  onFinishCronometro,
+  cantidadRespuestas,
+  expandido,
+  setExpandido,
   onVerPedido,
-
 }: CardPedidoVerRespuestasProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(false);
-  const [animacion] = useState(new Animated.Value(0));
-
-  const toggleExpandir = () => {
-    const toValue = expandido ? 0 : 1;
-
-    Animated.timing(animacion, {
-      toValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-
-    setExpandido(!expandido);
-  };
-
-  const rotacion = animacion.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
-  });
 
   return (
     <View
@@ -71,11 +36,11 @@ export default function CardPedidoVerRespuestas({
         padding: Spacing.xl,
         gap: Spacing.md,
         elevation: 5,
-        borderWidth: expandido ? 2 : 0,
-        borderColor: expandido ? colors.brandBuyer : "transparent",
+        // borderWidth: expandido ? 2 : 0,
+        // borderColor: expandido ? colors.brandBuyer : "transparent",
       }}
     >
-      {/* Header: Pedido número + etiqueta */}
+      {/* Header: número de pedido + etiqueta */}
       <View
         style={{
           flexDirection: "row",
@@ -88,37 +53,13 @@ export default function CardPedidoVerRespuestas({
         <EtiqEstadoDelPedido estado="Ver Respuestas" />
       </View>
 
-      {/* Respuestas Recibidas - Solo visible cuando está colapsado */}
-      {!expandido && <RespuestasRecibidas cantidad={respuestas.length} />}
+      {/* Resumen de respuestas */}
+      {!expandido && <RespuestasRecibidas cantidad={cantidadRespuestas} />}
 
-      {/* "Ver pedido" alineado a la derecha */}
-          <Pressable
-            onPress={() => onVerPedido?.(id)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignSelf: "flex-end",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Roboto-Medium",
-                color: colors.brandBuyer,
-                fontSize: FontSizes.base,
-                marginRight: 4,
-              }}
-            >
-              Ver pedido
-            </Text>
-            <Clipboard
-              width={20}
-              height={20}
-              fill={colors.brandBuyer}
-              stroke={colors.brandBuyer}
-            />
-          </Pressable>
+      {/* Link para ver pedido */}
+      <LinkFraseIcon label="Ver pedido" onPress={() => onVerPedido?.(id)} />
 
-      {/* Mascota con mensaje - Solo visible cuando está expandido */}
+      {/* Mascota visible solo cuando está expandido */}
       {expandido && (
         <MascotaConMensaje
           mensaje="Elige el presupuesto que prefieras para recibir los datos de pago."
@@ -132,62 +73,17 @@ export default function CardPedidoVerRespuestas({
           width: "100%",
           height: 1,
           backgroundColor: colors.textMuted,
-          marginTop: Spacing.xs,
+          marginVertical: Spacing.md,
         }}
       />
 
-      {/* Toggle para mostrar/ocultar respuestas */}
-      <Pressable
-        onPress={toggleExpandir}
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingVertical: Spacing.xs,
-        }}    
-      >
-        <Text
-          style={{
-            fontFamily: "Roboto-Medium",
-            fontSize: FontSizes.sm,
-            color: colors.brandBuyer,
-            marginRight: 8,
-          }}
-        >
-          {expandido ? "Ocultar respuestas recibidas" : "Mostrar respuestas recibidas"}
-        </Text>
-        <Animated.View style={{ transform: [{ rotate: rotacion }] }}>
-          <FlechaAbajo width={18} height={18} stroke={colors.brandBuyer} />
-        </Animated.View>
-      </Pressable>
-
-      {/* Lista de respuestas - Con animación */}
-      {expandido && (
-        <Animated.View
-          style={{
-            opacity: animacion,
-            gap: Spacing.xxl,
-            marginTop: Spacing.sm,
-          }}
-        >
-          {respuestas.map((respuesta) => (
-            <CardRespuestaVendedor
-              key={respuesta.id}
-              id={respuesta.id}
-              vendedorNombre={respuesta.vendedorNombre}
-            //   vendedorAvatar={respuesta.vendedorAvatar}
-              rating={respuesta.rating}
-              precio={respuesta.precio}
-              nota={respuesta.nota}
-              duracionCronometro={respuesta.duracionCronometro}
-              onAceptar={onAceptarRespuesta}
-              onCancelar={onCancelarRespuesta}
-              onVerNota={onVerNota}
-              onFinishCronometro={() => onFinishCronometro?.(respuesta.id)}
-            />
-          ))}
-        </Animated.View>
-      )}
+      {/* Toggle expandir */}
+      <ToggleExpandir
+        textoMostrar="Mostrar respuestas recibidas"
+        textoOcultar="Ocultar respuestas recibidas"
+        colorTexto={colors.brandBuyer}
+        onToggle={(estado) => setExpandido(estado)}
+      />
     </View>
   );
 }
