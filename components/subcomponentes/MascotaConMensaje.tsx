@@ -5,33 +5,38 @@ import { Image, Text, View } from "react-native";
 
 interface MascotaConMensajeProps {
   mensaje: string;
-  varianteBg?: "primary" | "secondary" | "accent"; // Para los 3 colores que mencionaste
+  varianteBg?: "message" | "attention" | "success"; // 3 colores de fondo
+  posicion?: "left" | "right"; // Para poner la mascota a la derecha o izquierda
 }
 
 export default function MascotaConMensaje({
   mensaje,
-  varianteBg = "primary",
+  varianteBg = "message",
+  posicion = "left",
 }: MascotaConMensajeProps) {
   const { colors } = useTheme();
 
   // Mapeo de variantes a colores de fondo
   const bgColors = {
-    primary: colors.brandBuyer,
-    secondary: colors.brandSeller,
-    accent: colors.brandBuyerSoft, // Ajustá según tus necesidades
+    message: colors.brandBuyerSoft,
+    attention: colors.brandSellerSoft,
+    success: colors.success, 
   };
 
   // Color de texto según el fondo
   const textColors = {
-    primary: "#FFFFFF",
-    secondary: "#FFFFFF",
-    accent: colors.textDefault,
+    message: colors.textDefault,
+    attention: colors.textDefault,
+    success: colors.textDefault,
   };
+
+    const isLeft = posicion === "left";
+
 
   return (
     <View
       style={{
-        flexDirection: "row",
+        flexDirection: isLeft ? "row" : "row-reverse",
         alignItems: "center",
         gap: Spacing.md,
         marginVertical: Spacing.sm,
@@ -42,10 +47,6 @@ export default function MascotaConMensaje({
         style={{
           width: 56,
           height: 56,
-          // borderRadius: 28,
-          // backgroundColor: colors.brandBuyerSoft,
-          // borderWidth: 2,
-          // borderColor: colors.border,
           overflow: "hidden",
           justifyContent: "center",
           alignItems: "center",
@@ -73,7 +74,7 @@ export default function MascotaConMensaje({
         <View
           style={{
             position: "absolute",
-            left: -8,
+            [isLeft ? "left" : "right"]: -8,
             top: "50%",
             marginTop: -8,
             width: 0,
@@ -82,8 +83,9 @@ export default function MascotaConMensaje({
             borderTopColor: "transparent",
             borderBottomWidth: 8,
             borderBottomColor: "transparent",
-            borderRightWidth: 8,
-            borderRightColor: bgColors[varianteBg],
+            ...(isLeft
+              ? { borderRightWidth: 8, borderRightColor: bgColors[varianteBg] }
+              : { borderLeftWidth: 8, borderLeftColor: bgColors[varianteBg] }),
           }}
         />
 
@@ -101,3 +103,11 @@ export default function MascotaConMensaje({
     </View>
   );
 }
+
+// MODO DE USO
+// <MascotaConMensaje
+//   mensaje="¡Tu pedido está en camino!"
+//   varianteBg="primary"
+//   posicion="left"
+// />
+// </USO>

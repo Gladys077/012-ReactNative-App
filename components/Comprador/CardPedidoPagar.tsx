@@ -1,93 +1,97 @@
-import { BorderRadius, Spacing } from "@/constants/Tokens";
+import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useState } from "react";
-import { Animated, Text, View } from "react-native";
-import EtiqEstadoDelPedido from "../subcomponentes/EtiqEstadoDelPedido";
-import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
-import PedidoNumero from "../subcomponentes/PedidoNumero";
-import ToggleExpandir from "../subcomponentes/ToggleExpandir";
+import React from "react";
+import { Text, View } from "react-native";
+import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
+import Button from "../UI/Button/Button";
+import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoPagarProps {
-  id: string | number;
+  id: number;
   numeroPedido: number;
-  estadoActual: "Pago" | "Verificacion" | "Preparacion" | "EnCamino" | "Entregado";
-  onVerPedido?: (id: string | number) => void;
+  estado?: EtiqEstadoType;
+  monto?: number; 
+  onPagar?: (id: number) => void;
+  onVerPedido?: (id: number) => void;
 }
 
 export default function CardPedidoPagar({
   id,
   numeroPedido,
-  estadoActual,
+  estado = "Pagar",
+  monto,
+  onPagar,
   onVerPedido,
 }: CardPedidoPagarProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(false);
-  const [animacion] = useState(new Animated.Value(0));
-
-
-
- 
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.cardBg,
-        borderRadius: BorderRadius.md,
-        padding: Spacing.xl,
-        gap: Spacing.md,
-        elevation: 5,
-        borderWidth: expandido ? 2 : 0,
-        borderColor: expandido ? colors.brandBuyer : "transparent",
-      }}
+    <CardPedidoBase
+      numeroPedido={numeroPedido}
+      estado={estado}
+      mostrarMascota
+      mascotaMensaje="Tu pedido está listo para pagar."
+      mascotaVariante="attention"
+      elevation={5}
     >
-      {/* Header: Pedido número + etiqueta */}
+      {/* Monto a pagar */}
+      {monto !== undefined && (
+        <Text
+          style={{
+            fontFamily: "Roboto-Medium",
+            fontSize: FontSizes.lg,
+            color: colors.textDefault,
+            textAlign: "center",
+          }}
+        >
+          Monto a abonar: ${monto.toLocaleString("es-AR")}
+        </Text>
+      )}
+
+      {/* Botones de acción */}
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginRight: Spacing.xl,
+          justifyContent: "center",
+          gap: Spacing.md,
+          marginTop: Spacing.md,
         }}
       >
-        <PedidoNumero numero={numeroPedido} />
-        <EtiqEstadoDelPedido estado="Pagar" />
-      </View>
+        {onVerPedido && (
+          <Button
+            variant="secondary"
+            height="md"
+            width="auto"
+            onPress={() => onVerPedido(id)}
+          >
+            Ver pedido
+          </Button>
+        )}
 
-      {/* Línea de tiempo del pedido */}
-      <LineaEstadoPedido estadoActual={"Pago"} />
-
-      {/* Separador */}
-      <View
-        style={{
-          width: "100%",
-          height: 1,
-          backgroundColor: colors.textMuted,
-          marginVertical: Spacing.md,
-        }}
-      />
-
-      {/* Toggle para mostrar/ocultar detalles */}
-      <ToggleExpandir
-        textoMostrar="Mostrar respuestas recibidas"
-        textoOcultar="Ocultar respuestas recibidas"
-        colorTexto={colors.brandBuyer}
-        onToggle={(estado) => setExpandido(estado)}
-      />
-
-      {/* Contenido expandido - Aquí irá la card del vendedor */}
-      {expandido && (
-        <Animated.View
-          style={{
-            opacity: animacion,
-            marginTop: Spacing.sm,
-          }}
+        <Button
+          variant="primary"
+          height="md"
+          width="auto"
+          onPress={() => onPagar?.(id)}
         >
-          <Text style={{ color: colors.brandBuyer }}>
-            {/* Aquí irá la nueva versión de CardVendedor */}
-          </Text>
-        </Animated.View>
-      )}
-    </View>
+          Realizar pago
+        </Button>
+      </View>
+    </CardPedidoBase>
   );
 }
 
+
+// MODO DE USO:
+// case "Pagar":
+//   return (
+//     <CardPedidoPagar
+//       key={pedido.id}
+//       id={pedido.id}
+//       numeroPedido={pedido.numeroPedido}
+//       estado={pedido.estado}
+//       monto={pedido.respuestaSeleccionada?.precio}
+//       onPagar={handlePagar}
+//       onVerPedido={handleVerPedido}
+//     />
+//   );

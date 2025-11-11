@@ -30,6 +30,8 @@ export default function CompradorLayout() {
   const showBackArrow = currentPage !== "nuevoPedido";
 
   return (
+
+
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Header title={getTitleByPage()} showBackArrow={showBackArrow} />
 
@@ -48,5 +50,6 @@ export default function CompradorLayout() {
       </BottomSheetVerPedidoProvider>
       <Footer />
     </View>
+
   );
 }

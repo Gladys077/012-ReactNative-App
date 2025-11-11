@@ -24,6 +24,7 @@ export default function PreAuthLayout() {
   };
   
   return (
+    
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Header showBackArrow title={getTitleByPage()} />
       

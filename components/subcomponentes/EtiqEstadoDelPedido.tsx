@@ -4,17 +4,17 @@ import React from "react";
 import { Text, View } from "react-native";
 
 // Defino las variantes (clave)
-type EtiqEstadoType =
-  | "En Proceso"
-  | "Ver Respuestas"
+export type EtiqEstadoType =
+  | "En proceso"
+  | "Ver respuestas"
   | "Pagar"
-  | "Pago En Revisión"
-  | "En Preparación"
-  | "En Camino"
-  | "Pedido Recibido"
+  | "Pago en revisión"
+  | "En preparación"
+  | "En camino"
+  | "Pedido recibido"
   | "Completado"
-  | "Pago Pendiente"
-  | "Pago Recibido"
+  | "Pago pendiente"
+  | "Pago recibido"
   | "Listo. Para enviar!"
   | "Enviado"
   | "Entregado"
@@ -34,16 +34,16 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     EtiqEstadoType,
     { bg: string; dot: string }
   > = {
-    "En Proceso": { bg: colors.statusTurquoiseBg, dot: colors.statusTurquoiseDot },
-    "Ver Respuestas": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
+    "En proceso": { bg: colors.statusTurquoiseBg, dot: colors.statusTurquoiseDot },
+    "Ver respuestas": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Pagar": { bg: colors.statusRedBg, dot: colors.statusRedDot },
-    "Pago En Revisión": { bg: colors.statusMintBg, dot: colors.statusMintDot },
-    "En Preparación": { bg: colors.statusYellowBg, dot: colors.statusYellowDot },
-    "En Camino": { bg: colors.statusCyanBg, dot: colors.statusCyanDot },
-    "Pedido Recibido": { bg: colors.statusLavenderBg, dot: colors.statusLavenderDot },
+    "Pago en revisión": { bg: colors.statusMintBg, dot: colors.statusMintDot },
+    "En preparación": { bg: colors.statusYellowBg, dot: colors.statusYellowDot },
+    "En camino": { bg: colors.statusCyanBg, dot: colors.statusCyanDot },
+    "Pedido recibido": { bg: colors.statusLavenderBg, dot: colors.statusLavenderDot },
     "Completado": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
-    "Pago Pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
-    "Pago Recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
+    "Pago pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
+    "Pago recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
     "Listo. Para enviar!": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
     "Enviado": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Entregado": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },

@@ -1,17 +1,55 @@
-import { FontSizes, Spacing } from "@/constants/Tokens";
+import { FontSizes } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+import AttentionRebote from "../UI/Animations/AttentionRebote";
+import { Chat } from "../icons";
 
-interface NotaDelVendedorProps {
-  nota?: string | null;
-}
+type NotaDelVendedorProps = {
+  nota?: string;
+  onVerNota?: (nota: string) => void;
+};
 
-export default function NotaDelVendedor({ nota }: NotaDelVendedorProps) {
+const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({ nota, onVerNota }) => {
   const { colors } = useTheme();
+  const hayNota = nota && nota.trim() !== "";
 
+  if (hayNota) {
+    return (
+      <Pressable
+        onPress={() => onVerNota?.(nota!)}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Roboto-Bold",
+            fontSize: FontSizes.sm,
+            color: colors.brandBuyer,
+            textDecorationLine: "underline",
+          }}
+        >
+          Ver nota
+        </Text>
+        <AttentionRebote>
+          <Chat
+            width={20}
+            height={20}
+            stroke={colors.brandBuyer}
+            strokeWidth={1.5}
+            fill={"white"}
+          />
+        </AttentionRebote>
+      </Pressable>
+    );
+  }
+
+  // si no hay nota:
   return (
-    <View style={{ marginBottom: Spacing.xs }}>
+    <View>
       <Text
         style={{
           fontFamily: "Roboto-Regular",
@@ -19,8 +57,10 @@ export default function NotaDelVendedor({ nota }: NotaDelVendedorProps) {
           color: colors.textMuted,
         }}
       >
-        {nota && nota.trim() !== "" ? nota : "Sin nota del vendedor"}
+        Sin nota del vendedor
       </Text>
     </View>
   );
-}
+};
+
+export default NotaDelVendedor;

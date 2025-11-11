@@ -4,7 +4,7 @@ import React from "react";
 import { Pressable, Text, ViewStyle } from "react-native";
 import Clipboard from "../icons/Clipboard";
 
-interface LinkFraseIconProps {
+interface VerBottomSheetProps {
   label?: string;
   iconPosition?: "left" | "right";
   variant?: "buyer" | "seller";
@@ -13,7 +13,7 @@ interface LinkFraseIconProps {
   style?: ViewStyle;
 }
 
-const LinkFraseIcon: React.FC<LinkFraseIconProps> = ({
+const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
   label = "Ver pedido",
   iconPosition = "right",
   variant = "buyer",
@@ -59,12 +59,12 @@ const LinkFraseIcon: React.FC<LinkFraseIconProps> = ({
   );
 };
 
-export default LinkFraseIcon;
+export default VerBottomSheet;
 
 //MODO DE USO:
-{/* <LinkFraseIcon onPress={() => onVerPedido?.(id)} variant="buyer"/>
+{/* <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="buyer"/>
 
-<LinkFraseIcon
+<VerBottomSheet
   label="Ver detalle"
   iconPosition="left"
   icon={MiOtroIcono}
@@ -72,9 +72,9 @@ export default LinkFraseIcon;
 /> */}
 
 // Para seller: 
-{/* <VerPedidoButton onPress={() => onVerPedido?.(id)} variant="seller" /> */}
+{/* <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="seller" /> */}
 
 // Con icono a la izquierda:
-{/* <VerPedidoButton iconSide="left" label="Ver detalle" variant="buyer" /> */}
+{/* <VerBottomSheet iconSide="left" label="Ver detalle" variant="buyer" /> */}
 
 

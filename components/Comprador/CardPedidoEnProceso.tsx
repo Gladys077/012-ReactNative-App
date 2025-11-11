@@ -1,32 +1,19 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
-import Button from "../UI/Button/Button";
-import EtiqEstadoDelPedido from "../subcomponentes/EtiqEstadoDelPedido";
-import LinkFraseIcon from "../subcomponentes/LinkFraseIcon";
-import PedidoNumero from '../subcomponentes/PedidoNumero';
+import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
+import LineaDivisoria from '../subcomponentes/LineaDivisoria';
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
-
+import LinkFraseIcon from "../subcomponentes/VerBottomSheet";
+import Button from "../UI/Button/Button";
+import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {
   id: string | number;
   numeroPedido: number;
-  estado: | "En Proceso"
-  | "Ver Respuestas"
-  | "Pagar"
-  | "Pago En Revisión"
-  | "En Preparación"
-  | "En Camino"
-  | "Pedido Recibido"
-  | "Completado"
-  | "Pago Pendiente"
-  | "Pago Recibido"
-  | "Listo. Para enviar!"
-  | "Enviado"
-  | "Entregado"
-  | "Cancelado";
+  estado: EtiqEstadoType;
   respuestasRecibidas?: number;
   duracionCronometro: number; // en minutos
   onFinishCronometro?: () => void;
@@ -45,42 +32,24 @@ export default function CardPedidoEnProceso({
   onVerPedido,
 }: CardPedidoEnProcesoProps) {
   const { colors } = useTheme();
-  const frase = `Pasado este tiempo si no recibe respuesta, se eliminará el pedido.`;
-
-  // TODO: Los datos de la card (nro del pedido, estado del pedido -etiq-, tiempo) vendrán de la API - VER CON LIO
+  const frase =
+    "Pasado este tiempo si no recibe respuesta, se eliminará el pedido.";
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.cardBg,
-        borderRadius: BorderRadius.md,
-        padding: Spacing.xl,
-        gap: Spacing.md,
-        elevation: 5,
-      }}
+    <CardPedidoBase
+      numeroPedido={numeroPedido}
+      estado="En proceso"
+      elevation={5}
     >
-      {/* Header: pedido número + etiqueta estado */}
+      {/* Respuestas recibidas (si hay) */}
+      {respuestasRecibidas > 0 && (
+        <RespuestasRecibidas cantidad={respuestasRecibidas} />
+      )}
+
+      {/* Cronómetro + texto + link */}
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 8
-        }}
-      >
-        <PedidoNumero numero={numeroPedido} />
-        
-        <EtiqEstadoDelPedido estado={estado} />
-      </View>
-
-      {/* Respuestas Recibidas */}
-      {respuestasRecibidas > 0 && <RespuestasRecibidas cantidad={respuestasRecibidas} />}
-
-      {/* Cronómetro + frase + link "Ver pedido + icono" */}
-      <View
-        style={{
-          flexDirection: "row",
-          // alignItems: "stretch", // <- esto hace que ambos hijos (cronómetro y bloque derecho) tengan la misma altura
           justifyContent: "center",
           alignSelf: "center",
           marginTop: 4,
@@ -88,7 +57,7 @@ export default function CardPedidoEnProceso({
           width: "98%",
         }}
       >
-        {/* Cronómetro a la izquierda */}
+        {/* Cronómetro */}
         <Cronometro
           id={`pedido_${id}`}
           tipo="espera"
@@ -96,7 +65,7 @@ export default function CardPedidoEnProceso({
           onFinish={onFinishCronometro}
         />
 
-        {/* Bloque derecho: texto + link */}
+        {/* Bloque derecho: frase + ver pedido */}
         <View
           style={{
             flex: 1,
@@ -104,7 +73,6 @@ export default function CardPedidoEnProceso({
             justifyContent: "space-between",
           }}
         >
-          {/* Frase alineada a la izquierda */}
           <Text
             style={{
               fontFamily: "Roboto-Regular",
@@ -117,25 +85,18 @@ export default function CardPedidoEnProceso({
             {frase}
           </Text>
 
-          {/* "Ver pedido" alineado a la derecha */}
           <LinkFraseIcon onPress={() => onVerPedido?.(id)} />
         </View>
       </View>
 
-      {/* Separador (divider) */}
-      <View
-        style={{
-          width: "100%",
-          height: 1,
-          backgroundColor: colors.textMuted,
-          marginTop: Spacing.md,
-        }}
-      />
+      {/* Linea Divisoria */}
+      <LineaDivisoria />
 
-      {/* BTN "Cancelar Pedido" centrado */}
+      {/* Botón cancelar */}
       <View
         style={{
-          alignItems: "center", 
+          alignItems: "center",
+          marginBottom: Spacing.lg,
         }}
       >
         <Button
@@ -147,8 +108,19 @@ export default function CardPedidoEnProceso({
           Cancelar pedido
         </Button>
       </View>
-    </View>
+    </CardPedidoBase>
   );
 }
 
-// TODO: VER CON LIO función para eliminar el pedido de la API también
+
+//MODO DE USO:
+    {/* <CardPedidoEnProceso
+          id={101}
+          estado="En proceso"
+          numeroPedido={4587}
+          respuestasRecibidas={2}
+          duracionCronometro={60} // en minutos
+          onFinishCronometro={() => console.log("Pedido 101 finalizó")}
+          onCancelarPedido={() => console.log("Pedido cancelado")}
+          onVerPedido={(id) => console.log("👁 Ver pedido", id)}
+        /> */}

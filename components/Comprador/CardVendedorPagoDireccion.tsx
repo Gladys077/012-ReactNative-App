@@ -4,12 +4,10 @@ import React, { useState } from "react";
 import { Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
 import DireccionEntrega from "../subcomponentes/DireccionEntrega";
-import EtiqEstadoDelPedido from "../subcomponentes/EtiqEstadoDelPedido";
 import FormaDePago from "../subcomponentes/FormaDePago";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
 import PagoTransferencia from "../subcomponentes/PagoTransferencia";
-import PedidoNumero from "../subcomponentes/PedidoNumero";
 import Button from "../UI/Button/Button";
 
 interface CardVendedorPagoDireccionProps {
@@ -68,10 +66,10 @@ export default function CardVendedorPagoDireccion({
       }}
     >
       {/* Header */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+      {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <PedidoNumero numero={numeroPedido} />
         <EtiqEstadoDelPedido estado="Pagar" />
-      </View>
+      </View> */}
 
       {/* Cronómetro y total */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
