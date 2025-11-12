@@ -22,10 +22,13 @@ export const Colors = {
     // Para fondos suaves
     tipsColorBuyer: '#1D4ED8', // blue-700
 
+    // Bordes cards dentro de las cards del comprador
+    borderTopBottom: '#72a5cf', // 
+
     // Superficies
     headerFooterBg: 'rgba(255,255,255,0.8)',
     cardBg: '#ffffff',
-    background: '#f3f4f6', // gray-100
+    background: '#ededed', // gray-100
     border: '#E5E7EB',
     bgPressed: '#f3f4f6',     // color al presionar (gris-100)
 
@@ -88,6 +91,9 @@ export const Colors = {
 
     // Para fondos suaves
     tipsColorBuyer: '#64B5F6', // blue-400
+
+    // Bordes cards dentro de las cards del comprador
+    borderTopBottom: '#72a5cf', // 
 
     // Superficies
     headerFooterBg: 'rgba(17,24,39,.9)',

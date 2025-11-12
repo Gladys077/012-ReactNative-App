@@ -1,97 +1,113 @@
-import { FontSizes, Spacing } from "@/constants/Tokens";
+import { BorderRadius, FontSizes } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
-import Button from "../UI/Button/Button";
+import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardPedidoBase from "./CardPedidoBase";
+import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
 interface CardPedidoPagarProps {
   id: number;
   numeroPedido: number;
-  estado?: EtiqEstadoType;
-  monto?: number; 
-  onPagar?: (id: number) => void;
+  estado: EtiqEstadoType;
+  monto: number;
+  nombreNegocio: string;
+  rating: number;
+  alias: string;
+  entidad: string;
+  titular: string;
+  direccion: string;
+  nota?: string;
+  duracionCronometro?: number;
   onVerPedido?: (id: number) => void;
+  onEditarDireccion?: () => void;
+  onFinishCronometro?: (pedidoId: number, respuestaId: string | number) => void;
 }
 
 export default function CardPedidoPagar({
   id,
   numeroPedido,
-  estado = "Pagar",
+  estado,
   monto,
-  onPagar,
+  nombreNegocio,
+  rating,
+  alias,
+  entidad,
+  titular,
+  direccion,
+  nota,
+  duracionCronometro = 60,
   onVerPedido,
+  onEditarDireccion,
+  onFinishCronometro,
 }: CardPedidoPagarProps) {
   const { colors } = useTheme();
+  const [expandido, setExpandido] = useState(false);
 
   return (
-    <CardPedidoBase
-      numeroPedido={numeroPedido}
-      estado={estado}
-      mostrarMascota
-      mascotaMensaje="Tu pedido está listo para pagar."
-      mascotaVariante="attention"
-      elevation={5}
+    <View
+      style={{
+        backgroundColor: colors.cardBg,
+        borderRadius: BorderRadius.lg,
+      }}
     >
-      {/* Monto a pagar */}
-      {monto !== undefined && (
+      <CardPedidoBase
+        numeroPedido={numeroPedido}
+        estado="Pagar"
+        expandido={expandido}
+        onToggleExpandir={() => setExpandido(!expandido)}
+        mostrarToggle
+        textoMostrar="Mostrar detalles"
+        textoOcultar="Ocultar detalles"
+        mostrarMascota
+        mascotaMensaje="Elegí tu forma de pago y confirmá la dirección de entrega. ¡Gracias!"
+        mascotaVariante="message"
+        mostrarDivisor
+        elevation={expandido ? 0 : 5}
+      >
+        <LineaEstadoPedido estadoActual="Pago" />
+
+        {/* Monto principal */}
         <Text
           style={{
             fontFamily: "Roboto-Medium",
-            fontSize: FontSizes.lg,
+            fontSize: FontSizes.base,
             color: colors.textDefault,
             textAlign: "center",
           }}
         >
-          Monto a abonar: ${monto.toLocaleString("es-AR")}
-        </Text>
-      )}
-
-      {/* Botones de acción */}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: Spacing.md,
-          marginTop: Spacing.md,
-        }}
-      >
-        {onVerPedido && (
-          <Button
-            variant="secondary"
-            height="md"
-            width="auto"
-            onPress={() => onVerPedido(id)}
+          Monto a abonar:{" "}
+          <Text
+            style={{
+              fontFamily: "Roboto-Medium",
+              fontSize: FontSizes.xl,
+              color: colors.textDefault,
+            }}
           >
-            Ver pedido
-          </Button>
-        )}
+            ${monto.toLocaleString("es-AR")}
+          </Text>
+        </Text>
+      </CardPedidoBase>
 
-        <Button
-          variant="primary"
-          height="md"
-          width="auto"
-          onPress={() => onPagar?.(id)}
-        >
-          Realizar pago
-        </Button>
-      </View>
-    </CardPedidoBase>
+      {/* Bloque expandible */}
+      {expandido && (
+        <CardVendedorPagoDireccion
+          id={id}
+          nombreNegocio={nombreNegocio}
+          rating={rating}
+          monto={monto}
+          nota={nota}
+          duracionCronometro={duracionCronometro}
+          alias={alias}
+          entidad={entidad}
+          titular={titular}
+          direccion={direccion}
+          onEditarDireccion={onEditarDireccion ?? (() => {})}
+          onVerPedido={() => onVerPedido?.(id)}
+          // onFinishCronometro={onFinishCronometro}
+        />
+      )}
+    </View>
   );
 }
-
-
-// MODO DE USO:
-// case "Pagar":
-//   return (
-//     <CardPedidoPagar
-//       key={pedido.id}
-//       id={pedido.id}
-//       numeroPedido={pedido.numeroPedido}
-//       estado={pedido.estado}
-//       monto={pedido.respuestaSeleccionada?.precio}
-//       onPagar={handlePagar}
-//       onVerPedido={handleVerPedido}
-//     />
-//   );

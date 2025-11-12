@@ -73,7 +73,7 @@ export default function CardPedidoVerRespuestas({
 
       {/* Botones */}
       <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="buyer"/>
-      {/* )} */}
+      
   </CardPedidoBase>
 
       {/* Lista de respuestas - Solo cuando está expandido */}

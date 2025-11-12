@@ -34,23 +34,6 @@ export default function CardRespuestaVendedor({
 }: CardRespuestaVendedorProps) {
   const { colors } = useTheme();
 
-  // const handleCancelar = () => {
-  //   Alert.alert(
-  //     "Cancelar presupuesto",
-  //     "Si confirmás la cancelación, este presupuesto se borrará y no podrás recuperarlo.",
-  //     [
-  //       { text: "Volver", style: "cancel" },
-  //       {
-  //         text: "Sí, cancelar",
-  //         style: "destructive",
-  //         onPress: () => onCancelar(id),
-  //       },
-  //     ],
-  //     { cancelable: true }
-  //   );
-  // };
-
-
 
   return (
     <View
@@ -62,7 +45,7 @@ export default function CardRespuestaVendedor({
         gap: Spacing.md,
         borderTopWidth: 1,
         borderBottomWidth: 4,
-        borderColor: colors.brandBuyerSoft,
+        borderColor: colors.borderTopBottom,
         elevation: 2,
         marginHorizontal: 4,
         marginVertical: 8,

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
 import DireccionEntrega from "../subcomponentes/DireccionEntrega";
+import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
 import FormaDePago from "../subcomponentes/FormaDePago";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
@@ -12,32 +13,37 @@ import Button from "../UI/Button/Button";
 
 interface CardVendedorPagoDireccionProps {
   id: string | number;
-  numeroPedido: number;
   nombreNegocio: string;
-  notaVendedor?: string | null;
-  duracionCronometro: number;
+  rating: number; // De 0 a 5
+  monto: number;
+  nota?: string;
+  duracionCronometro: number; // En minutos
   alias: string;
   entidad: string;
   titular: string;
   direccion: string;
-  total: string;
+  // importe: string;
   onEditarDireccion: () => void;
   onVerPedido: (id: string | number) => void;
+  onFinishCronometro?: () => void;
+  onVerNota?: (nota: string) => void;
 }
 
 export default function CardVendedorPagoDireccion({
   id,
-  numeroPedido,
   nombreNegocio,
-  notaVendedor,
+  rating,
+  monto,
+  nota,
   duracionCronometro,
   alias,
   entidad,
   titular,
   direccion,
-  total,
   onEditarDireccion,
   onVerPedido,
+  onFinishCronometro,
+  onVerNota,
 }: CardVendedorPagoDireccionProps) {
   const { colors } = useTheme();
   const [metodo, setMetodo] = useState<"transferencia" | "efectivo">("transferencia");
@@ -45,7 +51,7 @@ export default function CardVendedorPagoDireccion({
   const [comprobanteUri, setComprobanteUri] = useState<string | null>(null);
 
   const handleCargarComprobante = () => {
-    // Simulación: en real usarías expo-document-picker o image-picker
+    // TODO: (Simulación) en real usaría expo-document-picker o image-picker
     setComprobanteUri("comprobante_simulado.jpg");
   };
 
@@ -58,23 +64,57 @@ export default function CardVendedorPagoDireccion({
   return (
     <View
       style={{
-        backgroundColor: colors.cardBg,
+        backgroundColor: colors.background,
         borderRadius: BorderRadius.md,
-        padding: Spacing.xl,
+        paddingHorizontal: Spacing.xl,
+        paddingVertical: Spacing.xxl,
         gap: Spacing.md,
-        elevation: 5,
+        borderTopWidth: 1,
+        borderBottomWidth: 4,
+        borderColor: colors.borderTopBottom,
+        elevation: 2,
+        marginHorizontal: 8,
+        marginVertical: 8,
       }}
     >
-      {/* Header */}
-      {/* <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <PedidoNumero numero={numeroPedido} />
-        <EtiqEstadoDelPedido estado="Pagar" />
-      </View> */}
+      {/* Header: Nombre + Rating + Cronómetro */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: Spacing.md,
+        }}
+      >
+        {/* Datos del vendedor */}
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontFamily: "Roboto-Medium",
+              fontSize: FontSizes.md,
+              color: colors.textDefault,
+              marginBottom: 4,
+            }}
+          >
+            {nombreNegocio}
+          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <EstrellaReputacion rating={rating} size={14} />
+            <Text
+              style={{
+                fontFamily: "Roboto-Regular",
+                fontSize: FontSizes.sm,
+                color: colors.textMuted,
+              }}
+            >
+              ({rating.toFixed(1)})
+            </Text>
+          </View>
+        </View>
 
       {/* Cronómetro y total */}
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Cronometro id={`pago_${id}`} tipo="pagar" duracionInicial={duracionCronometro} />
-        <Text
+        {/* <Text
           style={{
             fontFamily: "Roboto-Bold",
             fontSize: FontSizes.lg,
@@ -82,10 +122,32 @@ export default function CardVendedorPagoDireccion({
           }}
         >
           ${total}
-        </Text>
+        </Text> */}
       </View>
 
-      <NotaDelVendedor nota={notaVendedor} />
+      {/* Nota + Presupuesto */}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        {/* Nota del vendedor */}
+        <NotaDelVendedor nota={nota} onVerNota={onVerNota} />
+
+
+        {/* Título Presupuesto */}
+        <Text
+          style={{
+            fontFamily: "Roboto-Medium",
+            fontSize: FontSizes.sm,
+            color: colors.textDefault,
+          }}
+        >
+          Presupuesto:
+        </Text>
+      </View>
 
       {/* "Ver pedido" */}
       <Text
@@ -118,6 +180,7 @@ export default function CardVendedorPagoDireccion({
       <DireccionEntrega direccion={direccion} onEditar={onEditarDireccion} />
 
       <Button
+      section="buyer"
         variant="primary"
         height="lg"
         width="full"
@@ -128,29 +191,7 @@ export default function CardVendedorPagoDireccion({
           : "Confirma pedido y dirección"}
       </Button>
     </View>
+    </View>
   );
 }
 
-
-//MODO DE USO:
-//  <ScrollView
-//       contentContainerStyle={{
-//         padding: 16,
-//         gap: 24,
-//       }}
-//     >
-//       <CardVendedorPagoDireccion
-//         id={1}
-//         numeroPedido={1234}
-//         nombreNegocio="Verdulería San Jorge"
-//         notaVendedor="Podés pagar por transferencia o en efectivo al entregar."
-//         duracionCronometro={3600} // 1 hora
-//         alias="SANJORGE.PAGOS"
-//         entidad="Banco Galicia"
-//         titular="Verdulería San Jorge SRL"
-//         direccion="Av. Mitre 2450, San Clemente"
-//         total="4800"
-//         onEditarDireccion={handleEditarDireccion}
-//         onVerPedido={handleVerPedido}
-//       />
-//     </ScrollView>

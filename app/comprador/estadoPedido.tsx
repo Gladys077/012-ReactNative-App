@@ -323,14 +323,28 @@ const EstadoPedido = () => {
                 );
 
               case "Pagar":
+                  if (!pedido.respuestaSeleccionada) return null;
+
                 return (
                   <CardPedidoPagar
                     key={pedido.id}
                     id={pedido.id}
                     numeroPedido={pedido.numeroPedido}
                     estado={pedido.estado}
-                    monto={pedido.respuestaSeleccionada?.precio}
+                    monto={pedido.respuestaSeleccionada.precio}
+                    nombreNegocio={pedido.respuestaSeleccionada.vendedorNombre}
+                    rating={pedido.respuestaSeleccionada.rating}
+                    alias="SANDWICHERIAEXPRESS" // Simulado, luego vendrá de API
+                    entidad="Mercado Pago"       // idem
+                    titular="Juan Pérez"
+                    direccion="Av. San Martín 1024"
+                    nota={pedido.respuestaSeleccionada.nota}
+                    duracionCronometro={pedido.duracionCronometro ?? 60}
                     onVerPedido={handleVerPedido}
+                    onEditarDireccion={() => console.log("Editar dirección")}
+                    onFinishCronometro={(pedidoId, respuestaId) =>
+                      handleFinishCronometroRespuesta(pedidoId, respuestaId)
+                    }
                   />
                 );
 

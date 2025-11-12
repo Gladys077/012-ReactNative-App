@@ -137,3 +137,6 @@ export default function LineaEstadoPedido({ estadoActual }: LineaEstadoPedidoPro
     </View>
   );
 }
+
+// MODO DE USO:
+// <LineaEstadoPedido estadoActual="Preparacion" />
