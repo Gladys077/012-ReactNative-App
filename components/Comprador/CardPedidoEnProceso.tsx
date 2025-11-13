@@ -115,12 +115,15 @@ export default function CardPedidoEnProceso({
 
 //MODO DE USO:
     {/* <CardPedidoEnProceso
-          id={101}
+          key={pedido.id}
+          id={pedido.id}
+          numeroPedido={pedido.numeroPedido}
           estado="En proceso"
-          numeroPedido={4587}
-          respuestasRecibidas={2}
-          duracionCronometro={60} // en minutos
-          onFinishCronometro={() => console.log("Pedido 101 finalizó")}
-          onCancelarPedido={() => console.log("Pedido cancelado")}
-          onVerPedido={(id) => console.log("👁 Ver pedido", id)}
-        /> */}
+          respuestasRecibidas={pedido.respuestasRecibidas}
+          duracionCronometro={60}
+          onVerPedido={() => handleVerPedido(pedido.id)}
+          onCancelarPedido={() => handleCancelarPedido(pedido.id)}
+          onFinishCronometro={() =>
+          handleFinishCronometro(pedido.id)
+          }
+        />*/}

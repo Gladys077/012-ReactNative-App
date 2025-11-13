@@ -1,4 +1,5 @@
 import { BorderRadius, Spacing } from "@/constants/Tokens";
+import { Respuesta } from "@/types/pedidos";
 import React from "react";
 import { View } from "react-native";
 import { useTheme } from "../../context/ThemeContext";
@@ -8,29 +9,20 @@ import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardPedidoBase from "./CardPedidoBase";
 import CardRespuestaVendedor from "./CardRespuestasVendedor";
 
-interface Respuesta {
-  id: string | number;
-  vendedorNombre: string;
-  rating: number;
-  precio: number;
-  nota?: string;
-  duracionCronometro: number;
-}
-
 interface CardPedidoVerRespuestasProps {
-  id: number;
+  id: string | number;
   numeroPedido: number;
   cantidadRespuestas: number;
   estado: EtiqEstadoType;
   expandido?: boolean;
   respuestas?: Respuesta[];
   onToggleExpandir?: (valor: boolean) => void;
-  onVerPedido?: (id: number) => void;
-  // onCancelarPedido?: (id: number) => void;
-  onAceptarRespuesta?: (pedidoId: number, respuestaId: string | number) => void;
-  onCancelarRespuesta?: (pedidoId: number, respuestaId: string | number) => void;
+  onVerPedido?: (id: string | number) => void;
+  onCancelarPedido?: () => void;
+  onAceptarRespuesta?: (pedidoId: string | number, respuestaId: string | number) => void;
+  onRechazarRespuesta?: (pedidoId: string | number, respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
-  onFinishCronometro?: (pedidoId: number, respuestaId: string | number) => void;
+  onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
 }
 
 export default function CardPedidoVerRespuestas({
@@ -41,10 +33,10 @@ export default function CardPedidoVerRespuestas({
   expandido = false,
   onToggleExpandir,
   onVerPedido,
-  // onCancelarPedido,
+  onCancelarPedido,
   respuestas = [],
   onAceptarRespuesta,
-  onCancelarRespuesta,
+  onRechazarRespuesta,
   onVerNota,
   onFinishCronometro,
 }: CardPedidoVerRespuestasProps) {
@@ -73,6 +65,8 @@ export default function CardPedidoVerRespuestas({
 
       {/* Botones */}
       <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="buyer"/>
+
+        
       
   </CardPedidoBase>
 
@@ -96,14 +90,33 @@ export default function CardPedidoVerRespuestas({
               precio={respuesta.precio}
               nota={respuesta.nota}
               duracionCronometro={respuesta.duracionCronometro}
-              onAceptar={(respuestaId) => onAceptarRespuesta?.(id, respuestaId)}
-              onCancelar={(respuestaId) => onCancelarRespuesta?.(id, respuestaId)}
+              onAceptar={() => onAceptarRespuesta?.(id, respuesta.id)}
+              onRechazar={() => onRechazarRespuesta?.(id, respuesta.id)}
               onVerNota={onVerNota}
               onFinishCronometro={() => onFinishCronometro?.(id, respuesta.id)}
             />
           ))}
         </View>
       )}
+
     </View>
   );
 }
+
+// MODO DE USO
+// <CardPedidoVerRespuestas
+//   key={pedido.id}
+//   id={pedido.id}
+//   numeroPedido={pedido.numeroPedido}
+//   cantidadRespuestas={pedido.respuestas?.length || 0}
+//   estado="Ver respuestas"
+//   expandido={pedido.expandido || false}
+//   onToggleExpandir={(valor) => toggleExpandido(pedido.id, valor)} 
+//   onVerPedido={handleVerPedido}
+//   // onCancelarPedido={handleCancelarPedido}
+//   respuestas={pedido.respuestas}
+//   onAceptarRespuesta={handleAceptarRespuesta}
+//   onRechazarRespuesta={handleRechazarRespuesta}
+//   onVerNota={handleVerNota}
+//   onFinishCronometro={handleFinishCronometroRespuesta}
+// />

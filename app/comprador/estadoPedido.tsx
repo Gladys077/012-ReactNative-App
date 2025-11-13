@@ -1,8 +1,8 @@
-import CardPedidoPagar from "@/components/Comprador/CardPedidoPagar";
 import CardPedidoVerRespuestas from "@/components/Comprador/CardPedidoVerRespuestas";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
+import { Pedido } from "@/types/pedidos";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -14,39 +14,8 @@ import {
 } from "react-native";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
 
-// Tipado básico
-export type EstadoPedidoActual =
-  | "En proceso"
-  | "Ver respuestas"
-  | "Pagar"
-  | "Pago en revisión"
-  | "En preparación"
-  | "En camino"
-  | "Pedido entregado"
-  | "Completado";
 
-// Estructura general del pedido
-interface Pedido {
-  id: number;
-  numeroPedido: number;
-  estado: EstadoPedidoActual;
-  respuestasRecibidas?: number;
-  duracionCronometro?: number;
-  textoPedido: string;
-  respuestas?: Respuesta[];
-  expandido?: boolean;
-  respuestaSeleccionada?: Respuesta;
-}
 
-// Estructura de las respuestas de vendedores
-interface Respuesta {
-  id: string | number;
-  vendedorNombre: string;
-  rating: number;
-  precio: number;
-  nota?: string;
-  duracionCronometro: number;
-}
 
 // COMPONENTE PRINCIPAL 
 
@@ -87,6 +56,7 @@ const EstadoPedido = () => {
         {
           id: 1,
           numeroPedido: 2548,
+          direccionComprador: "Av. San Martín 1024",
           estado: "En proceso",
           respuestasRecibidas: 0,
           duracionCronometro: 60,
@@ -97,6 +67,7 @@ const EstadoPedido = () => {
         {
           id: 2,
           numeroPedido: 2552,
+          direccionComprador: "Av. SiempreViva 724",
           estado: "Ver respuestas",
           respuestasRecibidas: 2,
           duracionCronometro: 30,
@@ -105,7 +76,10 @@ const EstadoPedido = () => {
           respuestas: [
             {
               id: "v1",
-              vendedorNombre: "Minimarket Juan",
+              vendedorNombre: "Plomería Juan",
+              alias: "plomerojuan", 
+              entidad: "Mercado Pago",      
+              titular: "Juan Pérez",
               rating: 4.0,
               precio: 4500,
               nota: "Puedo ir mañana temprano. El precio no incluye materiales si hubiera que cambiar algo.",
@@ -114,6 +88,9 @@ const EstadoPedido = () => {
             {
               id: "v2",
               vendedorNombre: "Tienda María",
+              alias: "TIENDAMARIA", 
+              entidad: "Mercado Pago",      
+              titular: "María Rodriguez",
               rating: 4.5,
               precio: 4250,
               nota: undefined,
@@ -125,17 +102,23 @@ const EstadoPedido = () => {
         {
           id: 3,
           numeroPedido: 2556,
+          direccionComprador: "Calle 1, nro 933",
           estado: "Pagar",
           respuestasRecibidas: 0,
           duracionCronometro: 30,
           textoPedido: `200 Sandwichs de miga de jamón y queso`,
-          respuestaSeleccionada: { 
+          respuestas: [
+            {
             id: "v3",
-            vendedorNombre: "Sandwichería Express",
+            vendedorNombre: "Minimarket Juan",
+            alias: "SANDWICHERIAEXPRESS", 
+            entidad: "Mercado Pago",      
+            titular: "Juan Pérez",
             rating: 4.8,
             precio: 25000,
             duracionCronometro: 0,
-        }
+            }
+          ]
         },
       ];
 
@@ -144,9 +127,11 @@ const EstadoPedido = () => {
       setLoading(false);
     }, 800); // Simula delay de red
   }, []);
+  // -----------------------fin simulación de datos ------------------------
 
-  // ------> HANDLERS <------
-  const handleVerPedido = (id: number) => {
+  
+  // --------> HANDLERS <--------
+  const handleVerPedido = (id: string | number) => {
     const pedido = pedidos.find((p) => p.id === id);
     if (!pedido) return;
     
@@ -179,7 +164,7 @@ const EstadoPedido = () => {
     console.log(`Pedido ${id} cancelado correctamente`);
   };
 
-  //este lo uso con el componente CardPedidoEnProceso
+  // -------> este lo uso con el componente CardPedidoEnProceso
   const handleFinishCronometro = (id: number | string) => {
     console.log(`El cronómetro del pedido ${id} finalizó.`);
   };
@@ -208,8 +193,8 @@ const EstadoPedido = () => {
   };
 
 
-// Handler para cuando el comprador cancela una respuesta específica
-  const handleCancelarRespuesta = (
+// -------> Handler para cuando el comprador cancela una respuesta específica, dentro de la CardRespuestasVendedor
+  const handleRechazarRespuesta = (
     pedidoId: number | string, 
     respuestaId: string | number
   ) => {
@@ -233,26 +218,6 @@ const EstadoPedido = () => {
         // return updated;
 
   };
-
-  // Confirma antes de cancelar una respuesta de un vendedor
-  const confirmarCancelarRespuesta = (
-    pedidoId: number | string,
-    respuestaId: string | number
-  ) => {
-
-    Vibration.vibrate(100);
-
-   Alert.alert(
-    "Cancelar respuesta",
-    "¿Estás segura de cancelar esta respuesta?",
-    [
-      { text: "No", style: "cancel" },
-      { text: "Sí", 
-        style: "destructive", // Para que se vea rojo
-        onPress: () => handleCancelarRespuesta(pedidoId, respuestaId) },
-    ]
-  );
-};
 
 
   // Handler para ver la nota del vendedor (abre bottom sheet)
@@ -313,40 +278,38 @@ const EstadoPedido = () => {
                       expandido={pedido.expandido || false}
                       onToggleExpandir={(valor) => toggleExpandido(pedido.id, valor)} 
                       onVerPedido={handleVerPedido}
-                      // onCancelarPedido={handleCancelarPedido}
+                      onCancelarPedido={() => handleCancelarPedido(pedido.id)}
                       respuestas={pedido.respuestas}
                       onAceptarRespuesta={handleAceptarRespuesta}
-                      onCancelarRespuesta={confirmarCancelarRespuesta}
+                      onRechazarRespuesta={handleRechazarRespuesta}
                       onVerNota={handleVerNota}
                       onFinishCronometro={handleFinishCronometroRespuesta}
                     />
                 );
 
-              case "Pagar":
-                  if (!pedido.respuestaSeleccionada) return null;
-
-                return (
-                  <CardPedidoPagar
-                    key={pedido.id}
-                    id={pedido.id}
-                    numeroPedido={pedido.numeroPedido}
-                    estado={pedido.estado}
-                    monto={pedido.respuestaSeleccionada.precio}
-                    nombreNegocio={pedido.respuestaSeleccionada.vendedorNombre}
-                    rating={pedido.respuestaSeleccionada.rating}
-                    alias="SANDWICHERIAEXPRESS" // Simulado, luego vendrá de API
-                    entidad="Mercado Pago"       // idem
-                    titular="Juan Pérez"
-                    direccion="Av. San Martín 1024"
-                    nota={pedido.respuestaSeleccionada.nota}
-                    duracionCronometro={pedido.duracionCronometro ?? 60}
-                    onVerPedido={handleVerPedido}
-                    onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={(pedidoId, respuestaId) =>
-                      handleFinishCronometroRespuesta(pedidoId, respuestaId)
-                    }
-                  />
-                );
+              // case "Pagar":
+              //   return (
+              //     <CardPedidoPagar
+              //       key={pedido.id}
+              //       id={pedido.id}
+              //       numeroPedido={pedido.numeroPedido}
+              //       estado={pedido.estado}
+              //       monto={pedido.respuestaSeleccionada.precio}
+              //       nombreNegocio={pedido.respuestaSeleccionada.vendedorNombre}
+              //       rating={pedido.respuestaSeleccionada.rating}
+              //       alias={pedido.respuestaSeleccionada.alias}
+              //       entidad="Mercado Pago"       // idem
+              //       titular="Juan Pérez"
+              //       direccion="Av. San Martín 1024"
+              //       nota={pedido.respuestaSeleccionada.nota}
+              //       duracionCronometro={pedido.duracionCronometro ?? 60}
+              //       onVerPedido={handleVerPedido}
+              //       onEditarDireccion={() => console.log("Editar dirección")}
+              //       onFinishCronometro={(pedidoId, respuestaId) =>
+              //         handleFinishCronometroRespuesta(pedidoId, respuestaId)
+              //       }
+              //     />
+              //   );
 
               case "En proceso":
               default:
@@ -361,7 +324,7 @@ const EstadoPedido = () => {
                     onVerPedido={() => handleVerPedido(pedido.id)}
                     onCancelarPedido={() => handleCancelarPedido(pedido.id)}
                     onFinishCronometro={() =>
-                      handleFinishCronometro(pedido.id)
+                    handleFinishCronometro(pedido.id)
                     }
                   />
                 );

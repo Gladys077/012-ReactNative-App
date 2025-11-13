@@ -2,29 +2,35 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
+import Cronometro from "../Cronometro/Cronometro";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
-import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 
 interface CardRespVendedorBaseProps {
-    id: number;
+  id: string | number;
   vendedorNombre: string;
   rating: number;
-  children?: React.ReactNode;
-  onVerPedido?: (id: number) => void;
-  elevation?: number;
+  precio: number;
+  nota?: string;
+  duracionCronometro: number; // En minutos
+  onAceptar?: (id: number) => void;
+  onRechazar?: (id: number) => void;
+  onFinishCronometro?: () => void;
+  onVerNota?: (nota: string) => void;
+  children: any
 }
 
-/**
- * Card base reutilizable para todas las respuestas del vendedor.
- * Proporciona estructura, estilos y encabezado común (nombre, rating, botón "Ver pedido").
- */
 export default function CardRespVendedorBase({
   id,
   vendedorNombre,
   rating,
+  precio,
+  nota,
+  duracionCronometro,
+  onAceptar,
+  onRechazar,
+  onFinishCronometro,
+  onVerNota,
   children,
-  onVerPedido,
-  elevation = 2,
 }: CardRespVendedorBaseProps) {
   const { colors } = useTheme();
 
@@ -38,53 +44,60 @@ export default function CardRespVendedorBase({
         borderTopWidth: 1,
         borderBottomWidth: 4,
         borderColor: colors.borderTopBottom,
-        elevation,
+        elevation: 2,
         marginHorizontal: 8,
         marginVertical: 8,
       }}
     >
-      {/* Header: nombre + rating + "Ver pedido" */}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: Spacing.md,
-        }}
-      >
-        {/* Nombre + Rating */}
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontFamily: "Roboto-Medium",
-              fontSize: FontSizes.md,
-              color: colors.textDefault,
-              marginBottom: 4,
-            }}
-          >
-            {vendedorNombre}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: "Roboto-Regular",
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
-          </View>
-        </View>
+        {/* Header: Nombre + Rating + Cronómetro */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: Spacing.md,
+                }}
+              >
+                {/* Datos del vendedor */}
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontFamily: "Roboto-Medium",
+                      fontSize: FontSizes.md,
+                      color: colors.textDefault,
+                      marginBottom: 4,
+                    }}
+                  >
+                    {vendedorNombre}
+                  </Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                    <EstrellaReputacion rating={rating} size={14} />
+                    <Text
+                      style={{
+                        fontFamily: "Roboto-Regular",
+                        fontSize: FontSizes.sm,
+                        color: colors.textMuted,
+                      }}
+                    >
+                      ({rating.toFixed(1)})
+                    </Text>
+                  </View>
+                </View>
+        
+                {/* Cronómetro */}
+                <Cronometro
+                  id={`respuesta_${id}`}
+                  tipo="elegir"
+                  duracionInicial={duracionCronometro}
+                  onFinish={onFinishCronometro}
+                />
+              </View>
 
-        {/* Ver pedido */}
-       <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="buyer"/>
-
-      </View>
 
       {/* Contenido variable (pasa cada card específica) */}
       <View>{children}</View>
     </View>
   );
 }
+
+
+/* Card base reutilizable para todas las respuestas del vendedor. Estas son las que le aparecerán al comprador, en la page "estadoPedido" */

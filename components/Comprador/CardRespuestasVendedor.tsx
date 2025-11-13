@@ -1,23 +1,23 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { Text, View } from "react-native";
-import Cronometro from "../Cronometro/Cronometro";
-import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
+import { Alert, Text, Vibration, View } from "react-native";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import Button from "../UI/Button/Button";
+import CardRespVendedorBase from "./CardRespVendedorBase";
 
 interface CardRespuestaVendedorProps {
   id: string | number;
   vendedorNombre: string;
-  rating: number; // De 0 a 5
+  rating: number;
   precio: number;
   nota?: string;
-  duracionCronometro: number; // En minutos
-  onAceptar: (id: string | number) => void;
-  onCancelar: (id: string | number) => void;
-  onFinishCronometro?: () => void;
+  duracionCronometro: number;
+  onAceptar: (respuestaId: string | number) => void;
+  onRechazar: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onFinishCronometro?: () => void;
+  onCancelarPedido?: () => void;
 }
 
 export default function CardRespuestaVendedor({
@@ -28,85 +28,50 @@ export default function CardRespuestaVendedor({
   nota,
   duracionCronometro,
   onAceptar,
-  onCancelar,
-  onFinishCronometro,
+  onRechazar,
   onVerNota,
+  onFinishCronometro,
+  onCancelarPedido
 }: CardRespuestaVendedorProps) {
   const { colors } = useTheme();
 
+  const handleRechazarRespuesta = () => {
+    Vibration.vibrate(100);
+    Alert.alert(
+      "Rechazar presupuesto",
+      "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
+      [
+        { text: "Volver", style: "cancel" },
+        {
+          text: "Sí, rechazar",
+          style: "destructive",
+          onPress: () => onRechazar(id),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.background,
-        borderRadius: BorderRadius.md,
-        paddingHorizontal: Spacing.xl,
-        paddingVertical: Spacing.xxl,
-        gap: Spacing.md,
-        borderTopWidth: 1,
-        borderBottomWidth: 4,
-        borderColor: colors.borderTopBottom,
-        elevation: 2,
-        marginHorizontal: 4,
-        marginVertical: 8,
-      }}
+    <CardRespVendedorBase
+      id={id}
+      vendedorNombre={vendedorNombre}
+      rating={rating}
+      precio={precio}
+      nota={nota}
+      duracionCronometro={duracionCronometro}
+      onFinishCronometro={onFinishCronometro}
     >
-      {/* Header: Nombre + Rating + Cronómetro */}
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: Spacing.md,
-        }}
-      >
-        {/* Datos del vendedor */}
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontFamily: "Roboto-Medium",
-              fontSize: FontSizes.md,
-              color: colors.textDefault,
-              marginBottom: 4,
-            }}
-          >
-            {vendedorNombre}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: "Roboto-Regular",
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
-          </View>
-        </View>
-
-        {/* Cronómetro */}
-        <Cronometro
-          id={`respuesta_${id}`}
-          tipo="elegir"
-          duracionInicial={duracionCronometro}
-          onFinish={onFinishCronometro}
-        />
-      </View>
-
-      {/* Nota + Presupuesto */}
-      <View
-        style={{
-          flexDirection: "row",
           justifyContent: "space-between",
+          flexDirection: "row",
           alignItems: "flex-start",
+          marginTop: Spacing.sm,
         }}
       >
-        {/* Nota del vendedor */}
         <NotaDelVendedor nota={nota} onVerNota={onVerNota} />
 
-
-        {/* Título Presupuesto */}
         <Text
           style={{
             fontFamily: "Roboto-Medium",
@@ -118,7 +83,6 @@ export default function CardRespuestaVendedor({
         </Text>
       </View>
 
-      {/* Precio */}
       <View style={{ alignItems: "flex-end" }}>
         <Text
           style={{
@@ -131,21 +95,20 @@ export default function CardRespuestaVendedor({
         </Text>
       </View>
 
-      {/* Botones */}
       <View
         style={{
           flexDirection: "row",
           gap: Spacing.md,
-          marginTop: Spacing.xs,
+          marginTop: Spacing.md,
         }}
       >
         <View style={{ flex: 1 }}>
-          <Button 
-          variant="secondary" 
-          height="md" 
-          onPress={() => onCancelar?.(id)}
+          <Button
+            variant="secondary"
+            height="md"
+            onPress={handleRechazarRespuesta}
           >
-            Cancelar
+            Rechazar
           </Button>
         </View>
 
@@ -160,6 +123,9 @@ export default function CardRespuestaVendedor({
           </Button>
         </View>
       </View>
-    </View>
+
+
+    </CardRespVendedorBase>
+    
   );
 }
