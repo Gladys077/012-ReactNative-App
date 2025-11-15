@@ -1,4 +1,4 @@
-import { BorderRadius, FontSizes } from "@/constants/Tokens";
+import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
@@ -8,7 +8,7 @@ import CardPedidoBase from "./CardPedidoBase";
 import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
 interface CardPedidoPagarProps {
-  id: number;
+  pedidoId: string | number;
   numeroPedido: number;
   estado: EtiqEstadoType;
   monto: number;
@@ -20,13 +20,13 @@ interface CardPedidoPagarProps {
   direccion: string;
   nota?: string;
   duracionCronometro?: number;
-  onVerPedido?: (id: number) => void;
+  onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
-  onFinishCronometro?: (pedidoId: number, respuestaId: string | number) => void;
+  onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
 }
 
 export default function CardPedidoPagar({
-  id,
+  pedidoId,
   numeroPedido,
   estado,
   monto,
@@ -37,7 +37,7 @@ export default function CardPedidoPagar({
   titular,
   direccion,
   nota,
-  duracionCronometro = 60,
+  duracionCronometro,
   onVerPedido,
   onEditarDireccion,
   onFinishCronometro,
@@ -46,68 +46,72 @@ export default function CardPedidoPagar({
   const [expandido, setExpandido] = useState(false);
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.cardBg,
-        borderRadius: BorderRadius.lg,
-      }}
+    <CardPedidoBase
+      numeroPedido={numeroPedido}
+      estado={estado}
+      expandido={expandido}
+      onToggleExpandir={() => setExpandido(!expandido)}
+      mostrarToggle
+      textoMostrar="Mostrar detalles"
+      textoOcultar="Ocultar detalles"
+      mostrarMascota
+      mascotaMensaje="Elegí tu forma de pago y confirmá la dirección de entrega. ¡Gracias!"
+      mascotaVariante="message"
+      mostrarDivisor
+      elevation={expandido ? 0 : 5}
+      contenidoExpandible={
+        <View
+          style={{
+            marginTop: Spacing.lg,
+            backgroundColor: colors.cardBg,
+            borderRadius: BorderRadius.md,
+          }}
+        >
+          <CardVendedorPagoDireccion
+            pedidoId={pedidoId}
+            respuestaId={undefined}
+            nombreNegocio={nombreNegocio}
+            rating={rating}
+            monto={monto}
+            nota={nota}
+            duracionCronometro={15}
+            alias={alias}
+            entidad={entidad}
+            titular={titular}
+            direccion={direccion}
+            onEditarDireccion={onEditarDireccion ?? (() => {})}
+            onVerPedido={() => onVerPedido?.(pedidoId)}
+            onFinishCronometro={onFinishCronometro}
+          />
+        </View>
+      }
     >
-      <CardPedidoBase
-        numeroPedido={numeroPedido}
-        estado="Pagar"
-        expandido={expandido}
-        onToggleExpandir={() => setExpandido(!expandido)}
-        mostrarToggle
-        textoMostrar="Mostrar detalles"
-        textoOcultar="Ocultar detalles"
-        mostrarMascota
-        mascotaMensaje="Elegí tu forma de pago y confirmá la dirección de entrega. ¡Gracias!"
-        mascotaVariante="message"
-        mostrarDivisor
-        elevation={expandido ? 0 : 5}
-      >
-        <LineaEstadoPedido estadoActual="Pago" />
+      {/* Estado visual del pedido */}
+      <LineaEstadoPedido estadoActual="Pago" />
 
-        {/* Monto principal */}
+      {/* Monto a pagar */}
+      <Text
+        style={{
+          fontFamily: "Roboto-Medium",
+          fontSize: FontSizes.base,
+          color: colors.textDefault,
+          backgroundColor: colors.background,
+          padding: 4,
+          textAlign: "center",
+          margin: 4,
+        }}
+      >
+        Monto a pagar: {" $  "}
         <Text
           style={{
             fontFamily: "Roboto-Medium",
-            fontSize: FontSizes.base,
+            fontSize: FontSizes.xl,
             color: colors.textDefault,
-            textAlign: "center",
           }}
         >
-          Monto a abonar:{" "}
-          <Text
-            style={{
-              fontFamily: "Roboto-Medium",
-              fontSize: FontSizes.xl,
-              color: colors.textDefault,
-            }}
-          >
-            ${monto.toLocaleString("es-AR")}
-          </Text>
+          {monto.toLocaleString("es-AR")}
         </Text>
-      </CardPedidoBase>
-
-      {/* Bloque expandible */}
-      {expandido && (
-        <CardVendedorPagoDireccion
-          id={id}
-          nombreNegocio={nombreNegocio}
-          rating={rating}
-          monto={monto}
-          nota={nota}
-          duracionCronometro={duracionCronometro}
-          alias={alias}
-          entidad={entidad}
-          titular={titular}
-          direccion={direccion}
-          onEditarDireccion={onEditarDireccion ?? (() => {})}
-          onVerPedido={() => onVerPedido?.(id)}
-          // onFinishCronometro={onFinishCronometro}
-        />
-      )}
-    </View>
+      </Text>
+    </CardPedidoBase>
   );
 }

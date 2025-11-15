@@ -24,6 +24,7 @@ interface CardPedidoBaseProps {
   mostrarDivisor?: boolean;
   style?: ViewStyle;
   elevation?: number;
+  contenidoExpandible?: React.ReactNode;
 }
 
 export default function CardPedidoBase({
@@ -42,6 +43,7 @@ export default function CardPedidoBase({
   mostrarDivisor = false,
   style,
   elevation,
+  contenidoExpandible,
 }: CardPedidoBaseProps) {
   const { colors } = useTheme();
 
@@ -62,7 +64,7 @@ export default function CardPedidoBase({
       ]}
     >
       {/* HEADER: número de pedido + estado (si existe) */}
-      {(numeroPedido || estado) && (
+      {(numeroPedido !== undefined || estado) && (
         <View
           style={{
             flexDirection: "row",
@@ -71,7 +73,7 @@ export default function CardPedidoBase({
             marginBottom: 8,
           }}
         >
-          {numeroPedido && <PedidoNumero numero={numeroPedido} />}
+          {numeroPedido !== undefined && <PedidoNumero numero={numeroPedido} />}
           {estado && <EtiqEstadoDelPedido estado={estado} />}
         </View>
       )}
@@ -101,6 +103,10 @@ export default function CardPedidoBase({
           onToggle={onToggleExpandir}
         />
       )}
+
+      
+      {/* AQUÍ VA EL CONTENIDO EXPANDIBLE, DESPUÉS DE TODO */}
+      {expandido && contenidoExpandible}
     </View>
   );
 }

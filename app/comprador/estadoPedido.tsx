@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
+import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
 
 
 
@@ -110,10 +111,10 @@ const EstadoPedido = () => {
           respuestas: [
             {
             id: "v3",
-            vendedorNombre: "Minimarket Juan",
+            vendedorNombre: "Minimarket Pedo",
             alias: "SANDWICHERIAEXPRESS", 
             entidad: "Mercado Pago",      
-            titular: "Juan Pérez",
+            titular: "Pedro Pascal",
             rating: 4.8,
             precio: 25000,
             duracionCronometro: 0,
@@ -270,8 +271,8 @@ const EstadoPedido = () => {
               case "Ver respuestas":
                 return (
                     <CardPedidoVerRespuestas
-                      key={pedido.id}
-                      id={pedido.id}
+                      key={pedido.id} // solo para q React identifiq cada elemento dentro de una lista (.map) y optimice el renderizado -no se pasa como prop.
+                      pedidoId={pedido.id} // prop del interior del componente
                       numeroPedido={pedido.numeroPedido}
                       cantidadRespuestas={pedido.respuestas?.length || 0}
                       estado="Ver respuestas"
@@ -287,36 +288,37 @@ const EstadoPedido = () => {
                     />
                 );
 
-              // case "Pagar":
-              //   return (
-              //     <CardPedidoPagar
-              //       key={pedido.id}
-              //       id={pedido.id}
-              //       numeroPedido={pedido.numeroPedido}
-              //       estado={pedido.estado}
-              //       monto={pedido.respuestaSeleccionada.precio}
-              //       nombreNegocio={pedido.respuestaSeleccionada.vendedorNombre}
-              //       rating={pedido.respuestaSeleccionada.rating}
-              //       alias={pedido.respuestaSeleccionada.alias}
-              //       entidad="Mercado Pago"       // idem
-              //       titular="Juan Pérez"
-              //       direccion="Av. San Martín 1024"
-              //       nota={pedido.respuestaSeleccionada.nota}
-              //       duracionCronometro={pedido.duracionCronometro ?? 60}
-              //       onVerPedido={handleVerPedido}
-              //       onEditarDireccion={() => console.log("Editar dirección")}
-              //       onFinishCronometro={(pedidoId, respuestaId) =>
-              //         handleFinishCronometroRespuesta(pedidoId, respuestaId)
-              //       }
-              //     />
-              //   );
+              case "Pagar":
+                 const r = pedido.respuestaSeleccionada;
+                  if (!r) return null; // Evita error si aún no hay respuesta seleccionada
+
+                return (
+                  <CardPedidoPagar
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    numeroPedido={pedido.numeroPedido}
+                    estado={pedido.estado}
+                    monto={r.precio}
+                    nombreNegocio={r.vendedorNombre}
+                    rating={r.rating}
+                    alias={r.alias ?? ""}
+                    entidad={r.entidad ?? ""}
+                    titular={r.titular ?? ""}
+                    direccion={pedido.direccionComprador}
+                    nota={r.nota}
+                    duracionCronometro={r.duracionCronometro}
+                    onVerPedido={() => handleVerPedido(pedido.id)}
+                    onEditarDireccion={() => console.log("Editar dirección")}
+                    onFinishCronometro={handleFinishCronometro}
+                  />
+                );
 
               case "En proceso":
               default:
                 return (
                   <CardPedidoEnProceso
                     key={pedido.id}
-                    id={pedido.id}
+                    pedidoId={pedido.id}
                     numeroPedido={pedido.numeroPedido}
                     estado="En proceso"
                     respuestasRecibidas={pedido.respuestasRecibidas}

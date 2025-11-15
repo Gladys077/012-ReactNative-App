@@ -7,7 +7,7 @@ import Button from "../UI/Button/Button";
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
 interface CardRespuestaVendedorProps {
-  id: string | number;
+  respuestaId: string | number; 
   vendedorNombre: string;
   rating: number;
   precio: number;
@@ -16,12 +16,12 @@ interface CardRespuestaVendedorProps {
   onAceptar: (respuestaId: string | number) => void;
   onRechazar: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
-  onFinishCronometro?: () => void;
+  onFinishCronometro?: (respuestaId: string | number) => void;
   onCancelarPedido?: () => void;
 }
 
 export default function CardRespuestaVendedor({
-  id,
+  respuestaId,
   vendedorNombre,
   rating,
   precio,
@@ -45,7 +45,7 @@ export default function CardRespuestaVendedor({
         {
           text: "Sí, rechazar",
           style: "destructive",
-          onPress: () => onRechazar(id),
+          onPress: () => onRechazar(respuestaId),
         },
       ],
       { cancelable: true }
@@ -54,13 +54,13 @@ export default function CardRespuestaVendedor({
 
   return (
     <CardRespVendedorBase
-      id={id}
+      respuestaId={respuestaId}
       vendedorNombre={vendedorNombre}
       rating={rating}
       precio={precio}
       nota={nota}
       duracionCronometro={duracionCronometro}
-      onFinishCronometro={onFinishCronometro}
+      onFinishCronometro={() => onFinishCronometro?.(respuestaId)}
     >
       <View
         style={{
@@ -117,7 +117,7 @@ export default function CardRespuestaVendedor({
             variant="primary"
             section="buyer"
             height="md"
-            onPress={() => onAceptar(id)}
+            onPress={() => onAceptar(respuestaId)}
           >
             Aceptar
           </Button>

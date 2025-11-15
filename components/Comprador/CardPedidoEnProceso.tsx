@@ -11,7 +11,7 @@ import Button from "../UI/Button/Button";
 import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {
-  id: string | number;
+  pedidoId: string | number; 
   numeroPedido: number;
   estado: EtiqEstadoType;
   respuestasRecibidas?: number;
@@ -22,7 +22,7 @@ interface CardPedidoEnProcesoProps {
 }
 
 export default function CardPedidoEnProceso({
-  id,
+  pedidoId,
   numeroPedido,
   estado,
   respuestasRecibidas = 0,
@@ -59,7 +59,7 @@ export default function CardPedidoEnProceso({
       >
         {/* Cronómetro */}
         <Cronometro
-          id={`pedido_${id}`}
+          id={`pedido_${pedidoId}`}
           tipo="espera"
           duracionInicial={duracionCronometro}
           onFinish={onFinishCronometro}
@@ -85,7 +85,7 @@ export default function CardPedidoEnProceso({
             {frase}
           </Text>
 
-          <LinkFraseIcon onPress={() => onVerPedido?.(id)} />
+          <LinkFraseIcon onPress={() => onVerPedido?.(pedidoId)} />
         </View>
       </View>
 
@@ -116,7 +116,7 @@ export default function CardPedidoEnProceso({
 //MODO DE USO:
     {/* <CardPedidoEnProceso
           key={pedido.id}
-          id={pedido.id}
+          pedidoId={pedido.id}
           numeroPedido={pedido.numeroPedido}
           estado="En proceso"
           respuestasRecibidas={pedido.respuestasRecibidas}

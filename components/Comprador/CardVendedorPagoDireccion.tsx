@@ -9,10 +9,12 @@ import FormaDePago from "../subcomponentes/FormaDePago";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
 import PagoTransferencia from "../subcomponentes/PagoTransferencia";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import Button from "../UI/Button/Button";
 
 interface CardVendedorPagoDireccionProps {
-  id: string | number;
+  pedidoId: string | number; 
+  respuestaId?: string | number;
   nombreNegocio: string;
   rating: number; // De 0 a 5
   monto: number;
@@ -25,12 +27,13 @@ interface CardVendedorPagoDireccionProps {
   // importe: string;
   onEditarDireccion: () => void;
   onVerPedido: (id: string | number) => void;
-  onFinishCronometro?: () => void;
+  onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
 }
 
 export default function CardVendedorPagoDireccion({
-  id,
+  pedidoId,
+  respuestaId,
   nombreNegocio,
   rating,
   monto,
@@ -73,57 +76,58 @@ export default function CardVendedorPagoDireccion({
         borderBottomWidth: 4,
         borderColor: colors.borderTopBottom,
         elevation: 2,
-        marginHorizontal: 8,
-        marginVertical: 8,
       }}
     >
-      {/* Header: Nombre + Rating + Cronómetro */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: Spacing.md,
-        }}
-      >
-        {/* Datos del vendedor */}
-        <View style={{ flex: 1 }}>
-          <Text
-            style={{
-              fontFamily: "Roboto-Medium",
-              fontSize: FontSizes.md,
-              color: colors.textDefault,
-              marginBottom: 4,
-            }}
-          >
-            {nombreNegocio}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: "Roboto-Regular",
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
-          </View>
-        </View>
-
-      {/* Cronómetro y total */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Cronometro id={`pago_${id}`} tipo="pagar" duracionInicial={duracionCronometro} />
-        {/* <Text
+        {/* Header: Nombre + Rating + Cronómetro */}
+        <View
           style={{
-            fontFamily: "Roboto-Bold",
-            fontSize: FontSizes.lg,
-            color: colors.textDefault,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: Spacing.md,
           }}
         >
-          ${total}
-        </Text> */}
-      </View>
+          {/* Datos del vendedor */}
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontFamily: "Roboto-Medium",
+                fontSize: FontSizes.md,
+                color: colors.textDefault,
+                marginBottom: 4,
+              }}
+            >
+              {nombreNegocio}
+            </Text>
+
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <EstrellaReputacion rating={rating} size={14} />
+              <Text
+                style={{
+                  fontFamily: "Roboto-Regular",
+                  fontSize: FontSizes.sm,
+                  color: colors.textMuted,
+                }}
+              >
+                ({rating.toFixed(1)})
+              </Text>
+            </View>
+          </View>
+
+          {/* Cronómetro */}
+          <Cronometro
+            id={`pago_pedido_${pedidoId}`}  
+            tipo="pagar"
+            duracionInicial={15}             // 15 minutos
+            onFinish={() =>
+              onFinishCronometro?.(
+                pedidoId,
+                respuestaId ?? pedidoId
+              )
+            }
+          />
+
+        </View>
+
 
       {/* Nota + Presupuesto */}
       <View
@@ -138,7 +142,7 @@ export default function CardVendedorPagoDireccion({
 
 
         {/* Título Presupuesto */}
-        <Text
+        {/* <Text
           style={{
             fontFamily: "Roboto-Medium",
             fontSize: FontSizes.sm,
@@ -146,21 +150,14 @@ export default function CardVendedorPagoDireccion({
           }}
         >
           Presupuesto:
-        </Text>
+        </Text> */}
       </View>
 
-      {/* "Ver pedido" */}
-      <Text
-        onPress={() => onVerPedido(id)}
-        style={{
-          fontFamily: "Roboto-Medium",
-          color: colors.brandBuyer,
-          fontSize: FontSizes.base,
-          textAlign: "right",
-        }}
-      >
-        Ver pedido
-      </Text>
+       {/* Botón ver pedido */}
+        <VerBottomSheet
+          onPress={() => onVerPedido?.(pedidoId)}
+          variant="buyer"
+        />
 
       <FormaDePago metodo={metodo} onChange={setMetodo} />
 
@@ -190,7 +187,6 @@ export default function CardVendedorPagoDireccion({
           ? "Enviar comprobante y dirección"
           : "Confirma pedido y dirección"}
       </Button>
-    </View>
     </View>
   );
 }

@@ -6,21 +6,22 @@ import Cronometro from "../Cronometro/Cronometro";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
 
 interface CardRespVendedorBaseProps {
-  id: string | number;
+  respuestaId: string | number;
   vendedorNombre: string;
   rating: number;
   precio: number;
   nota?: string;
   duracionCronometro: number; // En minutos
-  onAceptar?: (id: number) => void;
-  onRechazar?: (id: number) => void;
-  onFinishCronometro?: () => void;
+  children: React.ReactNode;
+  onAceptar?: (respuestaId: string | number) => void;
+  onRechazar?: (respuestaId: string | number) => void;
+  onFinishCronometro?: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
-  children: any
 }
 
+
 export default function CardRespVendedorBase({
-  id,
+  respuestaId,
   vendedorNombre,
   rating,
   precio,
@@ -85,10 +86,10 @@ export default function CardRespVendedorBase({
         
                 {/* Cronómetro */}
                 <Cronometro
-                  id={`respuesta_${id}`}
+                  id={`respuesta_${respuestaId}`}
                   tipo="elegir"
                   duracionInicial={duracionCronometro}
-                  onFinish={onFinishCronometro}
+                  onFinish={() => onFinishCronometro?.(respuestaId)}
                 />
               </View>
 

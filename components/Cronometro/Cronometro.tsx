@@ -13,12 +13,10 @@ import CronometroDisplay from './CronometroDisplay';
 
 type CronometroTipo = 'espera' | 'elegir' | 'pagar';
 
-type CronometroProps = {
-  id?: string;               // identificador único por cada card=pedido
-  tipo: CronometroTipo;
-  duracionInicial: number;   // minutos
-  onFinish?: () => void;
-};
+type CronometroProps =
+  | { tipo: 'espera'; duracionInicial: number; id?: string | number; onFinish?: () => void }
+  | { tipo: 'elegir' | 'pagar'; duracionInicial: number; id: string | number; onFinish?: () => void };
+
 
 export default function Cronometro({
   id,
