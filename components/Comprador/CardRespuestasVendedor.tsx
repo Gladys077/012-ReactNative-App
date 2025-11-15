@@ -31,8 +31,8 @@ export default function CardRespuestaVendedor({
   onRechazar,
   onVerNota,
   onFinishCronometro,
-  onCancelarPedido
 }: CardRespuestaVendedorProps) {
+
   const { colors } = useTheme();
 
   const handleRechazarRespuesta = () => {
@@ -60,8 +60,10 @@ export default function CardRespuestaVendedor({
       precio={precio}
       nota={nota}
       duracionCronometro={duracionCronometro}
-      onFinishCronometro={() => onFinishCronometro?.(respuestaId)}
+      tipoCronometro="espera"
+      onFinishCronometro={onFinishCronometro}
     >
+      {/* Nota del vendedor a la izq. y Presupuesto a la derecha */}
       <View
         style={{
           justifyContent: "space-between",
@@ -95,6 +97,7 @@ export default function CardRespuestaVendedor({
         </Text>
       </View>
 
+      {/* Btns: Rechazar - Aceptar */}
       <View
         style={{
           flexDirection: "row",
@@ -124,8 +127,6 @@ export default function CardRespuestaVendedor({
         </View>
       </View>
 
-
     </CardRespVendedorBase>
-    
   );
 }

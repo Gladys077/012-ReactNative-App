@@ -7,7 +7,7 @@ import { Text, View } from "react-native";
 export type EtiqEstadoType =
   | "En proceso"
   | "Ver respuestas"
-  | "Pagar"
+  | "Pago y dirección"
   | "Pago en revisión"
   | "En preparación"
   | "En camino"
@@ -15,7 +15,7 @@ export type EtiqEstadoType =
   | "Completado"
   | "Pago pendiente"
   | "Pago recibido"
-  | "Listo. Para enviar!"
+  | "Listo. Enviar!"
   | "Enviado"
   | "Entregado"
   | "Cancelado"; 
@@ -36,7 +36,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
   > = {
     "En proceso": { bg: colors.statusTurquoiseBg, dot: colors.statusTurquoiseDot },
     "Ver respuestas": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
-    "Pagar": { bg: colors.statusRedBg, dot: colors.statusRedDot },
+    "Pago y dirección": { bg: colors.statusRedBg, dot: colors.statusRedDot },
     "Pago en revisión": { bg: colors.statusMintBg, dot: colors.statusMintDot },
     "En preparación": { bg: colors.statusYellowBg, dot: colors.statusYellowDot },
     "En camino": { bg: colors.statusCyanBg, dot: colors.statusCyanDot },
@@ -44,7 +44,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     "Completado": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
     "Pago pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
     "Pago recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
-    "Listo. Para enviar!": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
+    "Listo. Enviar!": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
     "Enviado": { bg: colors.statusBlueBg, dot: colors.statusBlueDot },
     "Entregado": { bg: colors.statusPurpleBg, dot: colors.statusPurpleDot },
     "Cancelado": { bg: colors.statusCanceledBg, dot: colors.statusCanceledDot },
@@ -57,8 +57,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({ estado }) => 
     <View
       className="flex-row items-center justify-center"
       style={{
-        minWidth: 150,
-        maxWidth: "40%",
+        minWidth: 155,
         height: 24,
         backgroundColor: colorSet.bg,
         borderRadius: BorderRadius.lg,

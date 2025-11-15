@@ -14,14 +14,14 @@ import CronometroDisplay from './CronometroDisplay';
 type CronometroTipo = 'espera' | 'elegir' | 'pagar';
 
 type CronometroProps =
-  | { tipo: 'espera'; duracionInicial: number; id?: string | number; onFinish?: () => void }
-  | { tipo: 'elegir' | 'pagar'; duracionInicial: number; id: string | number; onFinish?: () => void };
-
+  | { tipo: 'espera'; duracionInicial: number; id?: string | number; timestampInicio?: number; onFinish?: () => void }
+  | { tipo: 'elegir' | 'pagar'; duracionInicial: number; id: string | number; timestampInicio?: number; onFinish?: () => void };
 
 export default function Cronometro({
   id,
   tipo,
   duracionInicial,
+  timestampInicio, // NEW
   onFinish,
 }: CronometroProps) {
   const { colors } = useTheme();
@@ -45,20 +45,33 @@ export default function Cronometro({
     const cargarTiempo = async () => {
       const guardado = await AsyncStorage.getItem(storageKey);
       if (guardado) {
+        // Si ya existe un tiempo guardado, usarlo
         let fin = parseInt(guardado, 10);
         if (fin < 1e12) fin = fin * 1000; // normaliza si estaba en segs
         finRef.current = fin;
         const diffSegs = Math.max(0, Math.ceil((fin - Date.now()) / 1000));
         setTiempoRestante(diffSegs);
       } else {
-        const nuevoFin = Date.now() + duracionInicial * 60 * 1000;
+        // NEW: Si viene timestampInicio del backend, calcular desde ahí
+        let nuevoFin: number;
+        
+        if (timestampInicio) {
+          // Calcular fin basado en el timestamp de inicio del backend
+          nuevoFin = timestampInicio + duracionInicial * 60 * 1000;
+        } else {
+          // Fallback: usar tiempo actual (comportamiento original)
+          nuevoFin = Date.now() + duracionInicial * 60 * 1000;
+        }
+        
         finRef.current = nuevoFin;
         await AsyncStorage.setItem(storageKey, nuevoFin.toString());
-        setTiempoRestante(duracionInicial * 60);
+        
+        const diffSegs = Math.max(0, Math.ceil((nuevoFin - Date.now()) / 1000));
+        setTiempoRestante(diffSegs);
       }
     };
     cargarTiempo();
-  }, [storageKey, duracionInicial]);
+  }, [storageKey, duracionInicial, timestampInicio]);
 
   // Intervalo de actualización
   useEffect(() => {
@@ -120,7 +133,6 @@ export default function Cronometro({
             borderWidth: 2,
             borderColor: estaPorTerminar ? colors.textError : estilos[tipo].texto,
             paddingVertical: Spacing.md,
-            // width: 135,
           },
           animatedStyle,
         ]}
@@ -134,7 +146,6 @@ export default function Cronometro({
         />
 
         {(tipo === 'espera' || tipo === 'pagar') && (
-          // Línea divisoria
           <>
             <View
               style={{
@@ -149,10 +160,12 @@ export default function Cronometro({
         )}
       </Animated.View>
     </Pressable>
-
   );
 }
 
-//Modo de uso:
-{/* <Cronometro id={`pedido_${pedido.id}`} tipo="espera" duracionInicial={60} /> */}
+// Modo de uso:
+// Sin timestamp (comportamiento original):
+// <Cronometro id={`pedido_${pedido.id}`} tipo="espera" duracionInicial={60} />
 
+// Con timestamp del backend:
+// <Cronometro id={`pedido_${pedido.id}`} tipo="pagar" duracionInicial={15} timestampInicio={respuesta.createdAt} />

@@ -2,7 +2,6 @@ import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { Respuesta } from "@/types/pedidos";
 import React from "react";
 import { View } from "react-native";
-import { useTheme } from "../../context/ThemeContext";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -48,7 +47,6 @@ export default function CardPedidoVerRespuestas({
   onVerNota,
   onFinishCronometro,
 }: CardPedidoVerRespuestasProps) {
-  const { colors } = useTheme();
 
   const contenidoExpandible =
     respuestas.length === 0 ? null : (
@@ -57,7 +55,6 @@ export default function CardPedidoVerRespuestas({
           gap: Spacing.lg,
           borderRadius: BorderRadius.md,
           marginTop: Spacing.sm,
-          paddingHorizontal: Spacing.lg,
           paddingBottom: Spacing.xxl,
         }}
       >
@@ -80,12 +77,12 @@ export default function CardPedidoVerRespuestas({
     );
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.cardBg,
-        borderRadius: BorderRadius.lg,
-      }}
-    >
+    // <View
+    //   style={{
+    //     backgroundColor: colors.cardBg,
+    //     borderRadius: BorderRadius.lg,
+    //   }}
+    // >
       <CardPedidoBase
         numeroPedido={numeroPedido}
         estado={estado}
@@ -110,6 +107,6 @@ export default function CardPedidoVerRespuestas({
           variant="buyer"
         />
       </CardPedidoBase>
-    </View>
+    // </View>
   );
 }

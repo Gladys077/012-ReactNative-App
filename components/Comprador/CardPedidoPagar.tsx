@@ -1,7 +1,7 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Alert, View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardPedidoBase from "./CardPedidoBase";
@@ -9,9 +9,10 @@ import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
 interface CardPedidoPagarProps {
   pedidoId: string | number;
+  respuestaId: string | number;
   numeroPedido: number;
   estado: EtiqEstadoType;
-  monto: number;
+  precio: number;
   nombreNegocio: string;
   rating: number;
   alias: string;
@@ -20,16 +21,19 @@ interface CardPedidoPagarProps {
   direccion: string;
   nota?: string;
   duracionCronometro?: number;
+  timestampRespuesta: number;
   onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
+  onVerNota?: (nota: string) => void; // ← AGREGÁ ESTO
   onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
 }
 
 export default function CardPedidoPagar({
   pedidoId,
+  respuestaId,
   numeroPedido,
   estado,
-  monto,
+  precio,
   nombreNegocio,
   rating,
   alias,
@@ -37,9 +41,11 @@ export default function CardPedidoPagar({
   titular,
   direccion,
   nota,
-  duracionCronometro,
+  duracionCronometro = 15,
+  timestampRespuesta,
   onVerPedido,
   onEditarDireccion,
+  onVerNota,
   onFinishCronometro,
 }: CardPedidoPagarProps) {
   const { colors } = useTheme();
@@ -48,7 +54,7 @@ export default function CardPedidoPagar({
   return (
     <CardPedidoBase
       numeroPedido={numeroPedido}
-      estado={estado}
+      estado="Pago y dirección"
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
@@ -69,19 +75,25 @@ export default function CardPedidoPagar({
         >
           <CardVendedorPagoDireccion
             pedidoId={pedidoId}
-            respuestaId={undefined}
+            respuestaId={respuestaId}
             nombreNegocio={nombreNegocio}
             rating={rating}
-            monto={monto}
+            precio={precio}
             nota={nota}
-            duracionCronometro={15}
+            duracionCronometro={duracionCronometro}
+            timestampRespuesta={timestampRespuesta}
             alias={alias}
             entidad={entidad}
             titular={titular}
             direccion={direccion}
             onEditarDireccion={onEditarDireccion ?? (() => {})}
             onVerPedido={() => onVerPedido?.(pedidoId)}
-            onFinishCronometro={onFinishCronometro}
+            onVerNota={(nota) => {
+              Alert.alert("Nota del vendedor", nota);
+            }}
+            onFinishCronometro={(pedidoId, respuestaId) => {
+              console.log("Tiempo terminado", pedidoId, respuestaId);
+            }}
           />
         </View>
       }
@@ -89,29 +101,7 @@ export default function CardPedidoPagar({
       {/* Estado visual del pedido */}
       <LineaEstadoPedido estadoActual="Pago" />
 
-      {/* Monto a pagar */}
-      <Text
-        style={{
-          fontFamily: "Roboto-Medium",
-          fontSize: FontSizes.base,
-          color: colors.textDefault,
-          backgroundColor: colors.background,
-          padding: 4,
-          textAlign: "center",
-          margin: 4,
-        }}
-      >
-        Monto a pagar: {" $  "}
-        <Text
-          style={{
-            fontFamily: "Roboto-Medium",
-            fontSize: FontSizes.xl,
-            color: colors.textDefault,
-          }}
-        >
-          {monto.toLocaleString("es-AR")}
-        </Text>
-      </Text>
+
     </CardPedidoBase>
   );
 }

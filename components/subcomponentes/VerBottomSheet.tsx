@@ -62,7 +62,7 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
 export default VerBottomSheet;
 
 //MODO DE USO:
-{/* <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="buyer"/>
+{/* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer"/>
 
 <VerBottomSheet
   label="Ver detalle"
@@ -72,7 +72,7 @@ export default VerBottomSheet;
 /> */}
 
 // Para seller: 
-{/* <VerBottomSheet onPress={() => onVerPedido?.(id)} variant="seller" /> */}
+{/* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="seller" /> */}
 
 // Con icono a la izquierda:
 {/* <VerBottomSheet iconSide="left" label="Ver detalle" variant="buyer" /> */}

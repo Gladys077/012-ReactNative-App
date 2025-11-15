@@ -54,7 +54,7 @@ export default function CardPedidoEnProceso({
           alignSelf: "center",
           marginTop: 4,
           gap: 16,
-          width: "98%",
+          width: "100%",
         }}
       >
         {/* Cronómetro */}

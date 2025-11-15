@@ -298,7 +298,7 @@ const EstadoPedido = () => {
                     pedidoId={pedido.id}
                     numeroPedido={pedido.numeroPedido}
                     estado={pedido.estado}
-                    monto={r.precio}
+                    precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
                     alias={r.alias ?? ""}
@@ -309,8 +309,7 @@ const EstadoPedido = () => {
                     duracionCronometro={r.duracionCronometro}
                     onVerPedido={() => handleVerPedido(pedido.id)}
                     onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={handleFinishCronometro}
-                  />
+                    onFinishCronometro={handleFinishCronometro} respuestaId={""} timestampRespuesta={0}                  />
                 );
 
               case "En proceso":

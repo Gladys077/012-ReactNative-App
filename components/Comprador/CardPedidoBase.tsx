@@ -71,6 +71,7 @@ export default function CardPedidoBase({
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: 8,
+            
           }}
         >
           {numeroPedido !== undefined && <PedidoNumero numero={numeroPedido} />}
