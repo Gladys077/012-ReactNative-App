@@ -1,12 +1,16 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import * as Clipboard from "expo-clipboard";
+import * as DocumentPicker from "expo-document-picker";
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Alert, Pressable, Text, View } from 'react-native';
 import { Cancel, Copiar, DocumentSolid, EditPencil, Ubicacion, } from "../icons";
 import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
+import { InputField } from "../UI/InputField";
 import CardRespVendedorBase from "./CardRespVendedorBase";
+
 
 type FormaPago = "transferencia" | "efectivo";
 
@@ -18,7 +22,7 @@ interface CardVendedorPagoDireccionProps {
   precio: number;
   nota?: string;
   duracionCronometro: number; // duración total en minutos (15 por defecto, puede ser más si extendió)
-  timestampRespuesta: number; // NEW: timestamp cuando el vendedor respondió (Date.now() del backend)
+  timestampRespuesta: number; // timestamp cuando el vendedor respondió (Date.now() del backend)
   alias?: string;
   entidad?: string;
   titular?: string;
@@ -50,6 +54,75 @@ export default function CardVendedorPagoDireccion({
   const { colors } = useTheme();
   const [formaPago, setFormaPago] = useState<FormaPago>("transferencia");
 
+
+  // estado local comprobante + importe
+  const [comprobanteUri, setComprobanteUri] = useState<string | null>(null);
+  const [importe, setImporte] = useState<string>("");
+
+  // Para elegir archivo y cargarlo
+ const handleCargarComprobante = async () => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: ["image/*", "application/pdf"],
+      copyToCacheDirectory: true,
+    });
+
+    if (result.canceled) return;
+
+    const file = result.assets[0];
+    setComprobanteUri(file.uri);
+  } catch (error) {
+    console.log("Error al elegir comprobante:", error);
+    Alert.alert("Error", "No se pudo cargar el archivo.");
+  }
+};
+
+  const handleEliminarComprobante = () => {
+    setComprobanteUri(null);
+  };
+
+  const handleCopiarAlias = async () => {
+    if (!alias) {
+      Alert.alert("Alias no disponible", "El vendedor no proporcionó alias.");
+      return;
+    }
+    await Clipboard.setStringAsync(alias);
+    Alert.alert("Copiado", "Alias copiado al portapapeles.");
+  };
+
+  const handleEnviar = () => {
+    // Validaciones
+    if (!direccion || direccion.trim().length === 0) {
+      Alert.alert("Dirección faltante", "Por favor completá la dirección de entrega.");
+      return;
+    }
+
+    if (formaPago === "transferencia") {
+      if (!comprobanteUri) {
+        Alert.alert(
+          "Comprobante faltante",
+          "Por favor cargá el comprobante de pago antes de enviar."
+        );
+        return;
+      }
+      // ok: enviar comprobante + dirección
+      console.log("Enviando comprobante y dirección", { comprobanteUri, direccion });
+      Alert.alert("Enviado", "Comprobante y dirección enviados correctamente.");
+    } else {
+      // efectivo: validar importe (opcional, sugiriste placeholder)
+      if (!importe || importe.trim().length === 0) {
+        Alert.alert("Importe faltante", "Por favor indicá con cuánto vas a pagar.");
+        return;
+      }
+      console.log("Confirmando pedido (efectivo)", { importe, direccion });
+      Alert.alert("Confirmado", "Pedido confirmado. Gracias.");
+    }
+
+    // opcional: llamar callback
+    if (pedidoId !== undefined) {
+      onFinishCronometro?.(pedidoId, respuestaId);
+    }
+  };
 
   return (
     <CardRespVendedorBase
@@ -103,25 +176,29 @@ export default function CardVendedorPagoDireccion({
         </Text>
       </View>
 
-      <View>
+      {/* Ver pedido: alineado a la izquierda */}
+      <View style={{ alignSelf: "flex-start", marginTop: Spacing.sm }}>
         <VerBottomSheet onPress={() => onVerPedido?.()} iconPosition="left" variant="buyer" />
       </View>
 
       <LineaDivisoria marginVertical={Spacing.lg} />
 
-      {/* Título */}
+      {/* <View style={{backgroundColor: colors.textSecondaryBg }}> */}
+      {/* Título Forma de Pago */}
       <Text
         style={{
-          fontFamily: "Roboto-Medium",
-          fontSize: FontSizes.base,
-          backgroundColor: colors.textSecondaryBg || "#F9FAFB",
+          fontFamily: "Roboto-Bold",
+          fontSize: FontSizes.sm,
           color: colors.textDefault,
+          textAlign: "center",
           marginBottom: Spacing.md,
-          padding: 4
+          backgroundColor: colors.textSecondaryBg,
+          paddingTop: 4,
         }}
       >
-        Forma de pago
+        FORMA DE PAGO
       </Text>
+      {/* </View> */}
 
       {/* Selector de forma de pago (tabs) */}
       <View
@@ -226,6 +303,7 @@ export default function CardVendedorPagoDireccion({
                 fontSize: FontSizes.base,
                 color: colors.textDefault,
                 marginBottom: Spacing.xs,
+                textDecorationLine: "underline"
               }}
             >
               Datos para transferencia:
@@ -255,13 +333,13 @@ export default function CardVendedorPagoDireccion({
                 </Text>
               </View>
 
-              <Pressable style={{ padding: 8}}>
-                <Copiar
-                  width={26}
-                  height={26}
-                  fill={colors.textDefault}
-                  stroke={colors.brandBuyer}
-                />
+              <Pressable
+                onPress={handleCopiarAlias}
+                accessible
+                accessibilityLabel="Copiar alias"
+                style={{ padding: 8 }}
+              >
+                <Copiar width={24} height={24} fill={colors.textDefault} />
               </Pressable>
             </View>
 
@@ -290,73 +368,67 @@ export default function CardVendedorPagoDireccion({
               </Text>
             </Text>
 
-          {/* Botón cargar comprobante */}
-          <View>
-            <Pressable
-              style={{
+          {/* Botón cargar comprobante + btn cancelar al lado*/}
+          <View  style={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                marginTop: Spacing.md,
+                gap: 4,
+              }}>
+            <Pressable
+              onPress={handleCargarComprobante}
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
                 paddingVertical: Spacing.md,
                 paddingHorizontal: Spacing.lg,
-                marginTop: Spacing.md,
-                borderRadius: BorderRadius.md,
+                borderTopStartRadius: BorderRadius.md,
+                borderBottomStartRadius: BorderRadius.md,
                 borderWidth: 1,
                 borderColor: colors.textMuted,
                 backgroundColor: colors.background
               }}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                <DocumentSolid
+                <DocumentSolid  //TODO: ARREGLAR ESTE ICONO PARA Q SE VEA
                     width={24}
                     height={24}
                     fill={colors.brandBuyer}
                     stroke={colors.brandBuyer}
                   />
-                <Text
-                  style={{
-                    fontSize: FontSizes.xs,
-                    fontFamily: "Roboto-Regular",
-                    color: colors.textDefault,
-                  }}
-                >
-                  Cargar comprobante de pago
+                <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
+                  {comprobanteUri ? "Comprobante cargado" : "Cargar comprobante"}
                 </Text>
-              </View>
               
             </Pressable>
-          
-
-          <Pressable>
-            <View
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 10,
-                backgroundColor: colors.textMuted,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Cancel
-                  width={24}
-                  height={24}
-                  fill={colors.textDefault}
-                  // stroke={colors.brandBuyer}
-                />
+            {/* Cancel (borra comprobante) */}
+              <Pressable
+                onPress={handleEliminarComprobante}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderTopEndRadius: BorderRadius.md,
+                  borderBottomEndRadius: BorderRadius.md,
+                  borderWidth: 1,
+                  borderColor: colors.textMuted,
+                  backgroundColor: colors.brandBuyer,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Cancel width={18} height={18} fill="#fff" />
+              </Pressable>
             </View>
-            </Pressable>
           </View>
-          </View>
-
-
         </>
       ) : (
         /* Efectivo contra entrega */
-        <View
+         <View
           style={{
-            backgroundColor: colors.textSecondaryBg,
+            backgroundColor: colors.textSecondaryBg || "#FEF3C7",
             padding: Spacing.md,
+            borderRadius: BorderRadius.md,
+            alignItems: "center",
           }}
         >
           <Text
@@ -364,30 +436,28 @@ export default function CardVendedorPagoDireccion({
               fontSize: FontSizes.sm,
               color: colors.textError,
               textAlign: "center",
+              marginBottom: Spacing.sm,
             }}
           >
             Para pagos en efectivo, indique con cuánto pagará así le llevamos cambio.
           </Text>
-          <Pressable
-            style={{
-              marginTop: Spacing.sm,
-              paddingVertical: Spacing.sm,
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: FontSizes.sm,
-                fontFamily: "Roboto-Bold",
-                color: colors.textDefault,
-                paddingVertical: 8,
-                backgroundColor: colors.textOnColor,
-                width: "90%"
-              }}
-            >
-              Importe
-            </Text>
-          </Pressable>
+
+          <InputField
+            value={importe}
+            onChangeText={setImporte}
+            placeholder="Importe"
+            // placeholderTextColor={colors.textMuted}
+            // keyboardType={Platform.OS === "ios" ? "numbers-and-punctuation" : "numeric"}
+            // style={{
+            //   width: "90%",
+            //   textAlign: "center",
+            //   paddingVertical: Spacing.sm,
+            //   borderRadius: BorderRadius.sm,
+            //   backgroundColor: colors.background,
+            //   borderWidth: 1,
+            //   borderColor: colors.textMuted,
+            // }}
+          />
         </View>
       )}
 
@@ -399,8 +469,7 @@ export default function CardVendedorPagoDireccion({
           flexDirection: "row",
           alignItems: "center",
           gap: 6,
-          marginTop: Spacing.sm,
-          marginBottom: Spacing.sm,
+          margin: Spacing.md,
         }}
       >
         <Ubicacion 
@@ -421,33 +490,20 @@ export default function CardVendedorPagoDireccion({
         </Text>
 
         {/* Btn edit dirección de entrega */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 6,
-            marginTop: Spacing.sm,
-            marginBottom: Spacing.sm,
-          }}
+        <Pressable
+          onPress={onEditarDireccion}
+          style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
         >
-          <Pressable onPress={onEditarDireccion}>
-            <EditPencil width={18} height={18}/>
-            <Text
-              style={{
-                fontFamily: "Roboto-Bold",
-                fontSize: FontSizes.sm,
-                color: colors.brandBuyer,
-              }}
-            >
-              Editar
-            </Text>
-          </Pressable>
-        </View>
+          <EditPencil width={16} height={16} fill={colors.brandBuyer} />
+          <Text style={{ fontFamily: "Roboto-Bold", fontSize: FontSizes.sm, color: colors.brandBuyer }}>
+            Editar
+          </Text>
+        </Pressable>
       </View>
 
       <Text
         style={{
-          fontSize: FontSizes.btn,
+          fontSize: FontSizes.md,
           color: colors.textDefault,
           backgroundColor: colors.textSecondaryBg || "#F9FAFB",
           padding: Spacing.md,
@@ -459,6 +515,7 @@ export default function CardVendedorPagoDireccion({
 
       {/* Botón principal */}
       <Pressable
+        onPress={handleEnviar}
         style={{
           backgroundColor: colors.brandBuyer,
           paddingVertical: Spacing.md,
@@ -475,7 +532,7 @@ export default function CardVendedorPagoDireccion({
           }}
         >
           {formaPago === "transferencia"
-            ? "Enviar comprobante y dirección"
+            ? "Enviar información"
             : "Confirmar dirección"}
         </Text>
       </Pressable>
