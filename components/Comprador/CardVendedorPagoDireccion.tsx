@@ -2,7 +2,7 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { Cancel, Copiar, DocumentSolid, EditPencil, Ubicacion } from "../icons";
+import { Cancel, Copiar, DocumentSolid, EditPencil, Ubicacion, } from "../icons";
 import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -355,15 +355,14 @@ export default function CardVendedorPagoDireccion({
         /* Efectivo contra entrega */
         <View
           style={{
-            backgroundColor: "#FEF3C7",
+            backgroundColor: colors.textSecondaryBg,
             padding: Spacing.md,
-            borderRadius: BorderRadius.md,
           }}
         >
           <Text
             style={{
               fontSize: FontSizes.sm,
-              color: "#92400E",
+              color: colors.textError,
               textAlign: "center",
             }}
           >
@@ -380,7 +379,10 @@ export default function CardVendedorPagoDireccion({
               style={{
                 fontSize: FontSizes.sm,
                 fontFamily: "Roboto-Bold",
-                color: colors.brandBuyer,
+                color: colors.textDefault,
+                paddingVertical: 8,
+                backgroundColor: colors.textOnColor,
+                width: "90%"
               }}
             >
               Importe
@@ -474,7 +476,7 @@ export default function CardVendedorPagoDireccion({
         >
           {formaPago === "transferencia"
             ? "Enviar comprobante y dirección"
-            : "Confirmar pedido y dirección"}
+            : "Confirmar dirección"}
         </Text>
       </Pressable>
     </CardRespVendedorBase>
