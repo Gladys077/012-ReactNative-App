@@ -142,7 +142,7 @@ export const Colors = {
     relojSeller: '#f7d4c1',
     relojTiempoTerminado: '#57312d'
   },
-};
+} as const;
 
 // Helpers
 //getColorByRole devuelve el color direct en HEX para usar en style={{color: ...}} o en props de SVGs

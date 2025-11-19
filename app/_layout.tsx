@@ -5,11 +5,14 @@ import { Platform, StatusBar as RNStatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AuthProvider } from '@/context/AuthContext';
+import { ModalProvider } from '@/context/ModalContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as NavigationBar from "expo-navigation-bar";
 import { StatusBar } from 'expo-status-bar';
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ModalComponent from '../components/UI/ModalComponent';
 import "./global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -83,16 +86,23 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   
   return (
-    <ThemeProvider>
+  <SafeAreaProvider>
+  <ThemeProvider>
+    <ModalProvider>
       <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'transparent' }}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
           <BottomSheetModalProvider>
             <ThemedStatusBar />
             <Slot />
+            <ModalComponent /> 
           </BottomSheetModalProvider>
         </GestureHandlerRootView>
       </AuthProvider>
-    </ThemeProvider>
+    </ModalProvider>
+  </ThemeProvider>
+</SafeAreaProvider>
+
+
   );
 }
 

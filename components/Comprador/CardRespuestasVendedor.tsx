@@ -1,7 +1,8 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import useModal from "@/hooks/useModal";
 import React from "react";
-import { Alert, Text, Vibration, View } from "react-native";
+import { Text, Vibration, View } from "react-native";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import Button from "../UI/Button/Button";
 import CardRespVendedorBase from "./CardRespVendedorBase";
@@ -32,24 +33,19 @@ export default function CardRespuestaVendedor({
   onVerNota,
   onFinishCronometro,
 }: CardRespuestaVendedorProps) {
-
   const { colors } = useTheme();
+  const { openModal } = useModal();
+
 
   const handleRechazarRespuesta = () => {
     Vibration.vibrate(100);
-    Alert.alert(
-      "Rechazar presupuesto",
-      "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
-      [
-        { text: "Volver", style: "cancel" },
-        {
-          text: "Sí, rechazar",
-          style: "destructive",
-          onPress: () => onRechazar(respuestaId),
-        },
-      ],
-      { cancelable: true }
-    );
+     openModal("confirm", {
+        title: "Rechazar presupuesto",
+        message: "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
+        cancelText: "Volver",
+        confirmText: "Sí, rechazar",
+        onConfirm: () => onRechazar(respuestaId),
+      });
   };
 
   return (
