@@ -86,23 +86,21 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
   
   return (
-  <SafeAreaProvider>
-  <ThemeProvider>
-    <ModalProvider>
-      <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <BottomSheetModalProvider>
-            <ThemedStatusBar />
-            <Slot />
-            <ModalComponent /> 
-          </BottomSheetModalProvider>
-        </GestureHandlerRootView>
-      </AuthProvider>
-    </ModalProvider>
-  </ThemeProvider>
-</SafeAreaProvider>
-
-
+     <SafeAreaProvider>
+      <ThemeProvider>
+        <ModalProvider>
+          <AuthProvider>
+            <ModalComponent />  
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <BottomSheetModalProvider>
+                <ThemedStatusBar />
+                <Slot />
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
+          </AuthProvider>
+        </ModalProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 
