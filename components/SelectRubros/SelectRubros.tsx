@@ -3,15 +3,26 @@ import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Alert, Animated, FlatList, Pressable, Text, View } from "react-native";
+import { Alert, Animated, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "../../components/UI/Button/Button";
 import { BorderRadius, FontSizes } from "../../constants/Tokens";
 import { FlechaAbajo, MasBlanca, TiendaIcon } from "../icons";
-import Button from "../UI/Button/Button";
 import NuevoRubroInput from "./NuevoRubroInput";
 import { rubroColorPalette } from "./rubroColors";
 import RubroItem from "./RubroItem";
-import { rubrosVendedor } from "./rubrosConfig";
+import { RubroConfig, rubrosVendedor } from "./rubrosConfig";
+
+// Limpieza y validación: Asegura que todos los rubros —incluidos los cargados desde AsyncStorage— tengan icono y colores válidos
+export function sanitizeRubros(lista: RubroConfig[]): RubroConfig[] {
+  return lista.map((r: RubroConfig) => ({
+    ...r,
+    IconComponent: r.IconComponent ?? TiendaIcon,
+    color: r.color ?? "#CFD8DC",
+    iconColor: r.iconColor ?? "#607D8B",
+  }));
+}
+
 
 export interface Rubro {
   label: string;
@@ -81,7 +92,13 @@ export default function SelectRubros({
         try {
           const stored = await AsyncStorage.getItem(STORAGE_KEY);
           const rubrosGuardados: Rubro[] = stored ? JSON.parse(stored) : [];
-          const combinados = [...rubrosVendedor, ...rubrosGuardados];
+
+          // Sanitizamos los rubros personalizados que vienen rotos del storage
+          const rubrosSanitizados = sanitizeRubros(rubrosGuardados);
+ 
+          // Combinamos base + personalizados sanitizados
+          const combinados = [...rubrosVendedor, ...rubrosSanitizados];
+          
           setRubrosInternos(combinados);
 
           const storedSelected = await AsyncStorage.getItem(SELECTED_KEY(section));
@@ -191,11 +208,19 @@ export default function SelectRubros({
     ),
     []
   );
+// para debbug
+  console.log("rubrosInternos", rubrosInternos);
+  rubrosInternos.forEach((r) => {
+    if (!r.IconComponent) {
+      console.warn("Rubro sin IconComponent:", r.value);
+    }
+  });
+// fin debbug
 
   return (
     <View>
       {label ? (
-        <Text style={{ color: colors.textDefault, fontSize: 12, marginBottom: 4 }}>
+        <Text style={{ color: colors.textDefault, fontSize: FontSizes.btn, marginBottom: 4 }}>
           {label}
         </Text>
       ) : null}
@@ -207,7 +232,7 @@ export default function SelectRubros({
           borderColor: borderColor || colors.inputBorder,
           backgroundColor: colors.cardBg,
           borderRadius: borderRadius || BorderRadius.pillBtn,
-          padding: 12,
+          padding: 18,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
@@ -277,15 +302,12 @@ export default function SelectRubros({
           <SafeAreaView edges={["bottom"]} style={{ paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background }}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 12 }}>
               <View style={{ flex: 1, marginRight: 8 }}>
-                <Button variant="secondary" section={section} width="half" onPress={handleCancel}>
-                  Cancelar
-                </Button>
+                <Button variant="secondary" section="common" width="auto" onPress={handleCancel}>Cancelar</Button>
               </View>
               <View style={{ flex: 1 }}>
-                <Button variant="primary" section={section} width="half" onPress={guardarCambios}>
-                  Guardar
-                </Button>
+                <Button variant="primary" section="common" width="auto" onPress={guardarCambios}>Guardar</Button>
               </View>
+              
             </View>
           </SafeAreaView>
         </View>

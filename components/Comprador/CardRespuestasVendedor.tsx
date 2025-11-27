@@ -1,8 +1,8 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import useModal from "@/hooks/useModal";
+// import useModal from "@/hooks/useModal";
 import React from "react";
-import { Text, Vibration, View } from "react-native";
+import { Alert, Text, Vibration, View } from "react-native";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import Button from "../UI/Button/Button";
 import CardRespVendedorBase from "./CardRespVendedorBase";
@@ -18,7 +18,7 @@ interface CardRespuestaVendedorProps {
   onRechazar: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
   onFinishCronometro?: (respuestaId: string | number) => void;
-  onCancelarPedido?: () => void;
+  // onCancelarPedido?: () => void;
 }
 
 export default function CardRespuestaVendedor({
@@ -34,19 +34,33 @@ export default function CardRespuestaVendedor({
   onFinishCronometro,
 }: CardRespuestaVendedorProps) {
   const { colors } = useTheme();
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
 
 
-  const handleRechazarRespuesta = () => {
-    Vibration.vibrate(100);
-     openModal("confirm", {
-        title: "Rechazar presupuesto",
-        message: "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
-        cancelText: "Volver",
-        confirmText: "Sí, rechazar",
-        onConfirm: () => onRechazar(respuestaId),
-      });
+  const handleConfirmarRechazo  = () => {
+    Vibration.vibrate(300);
+    //  openModal("confirm", {
+    //     title: "Rechazar presupuesto",
+    //     message: "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
+    //     cancelText: "Volver",
+    //     confirmText: "Sí, rechazar",
+    //     onConfirm: () => onRechazar(respuestaId),
+    //   });
+     Alert.alert(
+          "Rechazar presupuesto",
+          "Si confirmas, este presupuesto se eliminará y no podrás recuperarlo.",
+          [
+            { text: "Volver", style: "cancel" },
+            {
+              text: "Sí, rechazar",
+              style: "destructive",
+              onPress: () => onRechazar(respuestaId),
+            },
+          ],
+          { cancelable: true }
+        );
   };
+  
 
   return (
     <CardRespVendedorBase
@@ -105,7 +119,7 @@ export default function CardRespuestaVendedor({
           <Button
             variant="secondary"
             height="md"
-            onPress={handleRechazarRespuesta}
+            onPress={handleConfirmarRechazo}
           >
             Rechazar
           </Button>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Asunto del correo -->
+    <title th:text="${emailSubject}">¡Bienvenido a VeciApp!</title>
+    <!-- Estilos defensivos para asegurar la compatibilidad con clientes de diferentes correos -->
+    <style type="text/css">
+      /* Usé código defensivo para que se vea en todos los correos */
+      body,
+      table,
+      td,
+      a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+      }
+      a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+      }
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+
+      /* mobile responsive */
+      @media only screen and (max-width: 600px) {
+        .mobile-padding {
+          padding: 10px 20px !important;
+        }
+        .content-table {
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        /* Hace que el btn ocupe todo el ancho en mobile */
+        .cta-button a {
+          display: block !important;
+          padding: 15px 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <!-- Background cuerpo del correo -->
+  <body style="margin: 0; padding: 0; background-color: #f0f4f8">
+    <!-- Tabla Principal (Centra el contenido) -->
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      style="border-collapse: collapse; background-color: #c7def5"
+    >
+      <tr>
+        <td align="center" style="padding: 20px 0">
+          <!-- Tabla de Contenido del Email (Ancho máximo para PC) -->
+          <table
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="600"
+            class="content-table"
+            style="
+              border-collapse: collapse;
+              max-width: 600px;
+              background-color: #ffffff;
+              border-radius: 12px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            "
+          >
+            <!-- 1. Encabezado y Logo de VeciApp  -->
+            <tr>
+              <td align="center" style="padding: 30px 20px 20px 20px">
+                <!-- Logo (si lo llamamos VeciApp) -->
+                <h1
+                  style="
+                    margin: 0;
+                    font-family: Verdana, sans-serif;
+                    font-size: 38px;
+                    font-weight: 700;
+                    line-height: 1;
+                  "
+                >
+                  <span style="letter-spacing: -12px">
+                    <span style="color: #2563eb">V</span>
+                    <span style="color: #ea580c">A </span>
+                  </span>
+                  <span
+                    style="
+                      display: inline-block;
+                      margin-left: 15px;
+                      margin-right: -3px;
+                    "
+                    >V</span
+                  ><span style="font-size: 26px">ECI</span><span>A</span
+                  ><span style="font-size: 26px">PP</span>
+                </h1>
+                <p
+                  style="
+                    margin: 5px 0 0 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    color: #6b7280;
+                  "
+                >
+                  Compara y elige la mejor opción para tu bolsillo.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Separador -->
+            <tr>
+              <td align="center" style="padding: 0 30px">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="border-top: 1px solid #c0d4fb"></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- 2. Contenido y Mensaje -->
+            <tr>
+              <td class="mobile-padding" style="padding: 30px 40px">
+                <!-- Saludo con emailSubjetc -->
+                <p
+                  style="
+                    margin: 0 0 20px 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 18px;
+                    line-height: 28px;
+                    color: #333333;
+                    font-weight: 600;
+                  "
+                >
+                  ¡Hola <span th:text="${emailSubject}">[Usuario]</span>!
+                </p>
+
+                <!-- Mensaje de Bienvenida e Instrucciones enfocado en la propuesta de valor -->
+                <p
+                  style="
+                    margin: 0 0 15px 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #4a5568;
+                  "
+                >
+                  ¡Bienvenido a veciApp! Estás a solo un paso de unirte a la
+                  plataforma que simplifica la forma en que **solicitas y
+                  recibes los mejores presupuestos**.
+                </p>
+
+                <p
+                  style="
+                    margin: 0 0 15px 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #4a5568;
+                    border-left: 3px solid #2563eb;
+                    padding-left: 10px;
+                  "
+                >
+                  **¿Cómo funciona?**
+                  <br />1. **Solicitas presupuesto:** Sube una lista de compras
+                  o pide un servicio (electricista, gasista, abogado, etc.)
+                  <br />2. **Recibe respuestas:** Vendedores y profesionales
+                  verificados envían sus presupuestos. <br />3. **¡Tú eliges!**
+                  Compara y selecciona la oferta que más te convenga.
+                </p>
+
+                <p
+                  style="
+                    margin: 0 0 30px 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #4a5568;
+                  "
+                >
+                  Haz clic en el botón para activar tu cuenta y **empezar a
+                  conectar**:
+                </p>
+
+                <!-- 3. Botón de CTA -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="padding: 10px 0 40px 0">
+                      <table border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td
+                            align="center"
+                            class="cta-button"
+                            style="
+                              border-radius: 8px;
+                              background-color: #2563eb;
+                            "
+                          >
+                            <a
+                              th:href="'https://veciapp-docker.onrender.com/api/v1/user/' + ${emailMessage} + '/activate'"
+                              target="_blank"
+                              style="
+                                font-size: 18px;
+                                font-family: Arial, sans-serif;
+                                color: #ffffff;
+                                text-decoration: none;
+                                border-radius: 8px;
+                                padding: 15px 25px;
+                                border: 1px solid #2563eb;
+                                display: inline-block;
+                                font-weight: bold;
+                              "
+                            >
+                              ¡Activa tu Cuenta Ahora!
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Despedida y Firma -->
+                <p
+                  style="
+                    margin: 0 0 10px 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #4a5568;
+                  "
+                >
+                  ¡Empieza a encontrar los mejores presupuestos hoy mismo!
+                </p>
+
+                <p
+                  style="
+                    margin: 20px 0 0 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: #333333;
+                    font-weight: 600;
+                  "
+                >
+                  Atentamente,<br />
+                  El Equipo de VeciApp
+                </p>
+              </td>
+            </tr>
+
+            <!-- 4. Pie de página  -->
+            <tr>
+              <td
+                align="center"
+                style="
+                  padding: 30px 40px;
+                  background-color: #e5e7eb;
+                  border-radius: 0 0 12px 12px;
+                "
+              >
+                <p
+                  style="
+                    margin: 0;
+                    font-family: Arial, sans-serif;
+                    font-size: 12px;
+                    line-height: 18px;
+                    color: #6b7280;
+                  "
+                >
+                  Este es un correo automático de activación. Por favor, no
+                  respondas a esta dirección de correo electrónico.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -17,7 +17,7 @@ interface FooterItem {
 const itemsBuyer: FooterItem[] = [
   { icon: Home, label: "Inicio", route: "/comprador/nuevoPedido" },
   { icon: Historial, label: "Historial", route: "/comprador/historialComprador" },
-  { icon: Pendientes, label: "Pendientes", route: "/comprador/estadoPedido" },
+  { icon: Pendientes, label: "Pedidos", route: "/comprador/estadoPedido" },
   { icon: Ajustes, label: "Ajustes", route: "/comprador/ajustesComprador" },
 ];
 

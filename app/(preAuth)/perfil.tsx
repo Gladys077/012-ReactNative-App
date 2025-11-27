@@ -5,13 +5,15 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
+  Text,
   View,
 } from "react-native";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
+import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
-import { Spacing } from "../../constants/Tokens";
+import { Spacing } from '../../constants/Tokens';
 import { useTheme } from "../../context/ThemeContext";
 
 export default function PerfilScreen() {
@@ -19,11 +21,16 @@ export default function PerfilScreen() {
   const router = useRouter();
 
   // TODO: VER CON LIO. Por ahora datos del usuario simulados
-  const [name, setName] = useState("María López");
-  const [email, setEmail] = useState("maria@mail.com");
-  const [address, setAddress] = useState("Av. Siempre Viva 123");
-  const [cellular, setCellular] = useState("1134567890");
-  const [roles, setRoles] = useState<string[]>([]); // para el select futuro
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [cellular, setCellular] = useState("");
+  const [rubros, setRubros] = useState<string[]>([]);
+
+  // Datos para cobrar x transferencia
+  const [alias, setAlias] = useState("");
+  const [banco, setBanco] = useState("");
+  const [titular, setTitular] = useState("");
 
   // Estados de edición
   const [editingField, setEditingField] = useState<string | null>(null);
@@ -35,11 +42,22 @@ export default function PerfilScreen() {
     email: "",
     address: "",
     cellular: "",
+    alias: "",
+    banco: "",
+    titular: "",
   });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     let hasError = false;
-    const newErrors = { name: "", email: "", address: "", cellular: "" };
+    const newErrors = {
+      name: "",
+      email: "",
+      address: "",
+      cellular: "",
+      alias: "",
+      banco: "",
+      titular: "",
+    };
 
     if (!name.trim()) {
       newErrors.name = "Por favor ingresa tu nombre y apellido";
@@ -59,22 +77,69 @@ export default function PerfilScreen() {
       hasError = true;
     }
 
+    // Validaciones extra SOLO si elige rubros (o sea: si quiere vender)
+    if (rubros.length > 0) {
+      if (!alias.trim()) {
+        newErrors.alias = "Ingresa tu alias bancario";
+        hasError = true;
+      }
+      if (!banco.trim()) {
+        newErrors.banco = "Ingresa el banco";
+        hasError = true;
+      }
+      if (!titular.trim()) {
+        newErrors.titular = "Ingresa el nombre del titular de la cuenta";
+        hasError = true;
+      }
+    }
+
     setErrors(newErrors);
     if (hasError) return;
 
-    // Modal de verificación, si cambia el mail
+    // Si cambia email -> modal de verificación
     if (email !== "maria@mail.com") {
       setShowModal(true);
       return;
     }
 
-    console.log("Datos guardados:", { name, email, address, cellular, roles });
-  };
+    // -----------------> GUARDAR EN EL BACKEND - VER CON LIO <------------- //
+    try {
+      const resp = await fetch("https://TU_BACKEND.com/api/user/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          address,
+          cellular,
+          rubros,
+          alias,
+          banco,
+          titular,
+        }),
+      });
 
-// Callback memorizado para evitar que SelectRubros se remonte
-  // const handleChangeRubros = useCallback((values: string[]) => {
-    // setRoles(values);
-  // }, []);
+      if (!resp.ok) {
+        console.log("Error del servidor:", await resp.text());
+        return;
+      }
+
+      console.log("Datos actualizados correctamente");
+
+      // 2) REDIRECCIÓN AUTOMÁTICA SOLO SI ELIGE RUBROS
+      if (rubros.length > 0) {
+        await router.replace("/(auth)/elegirRol");
+      } else {
+        // Si NO elige rubros, simplemente vuelve a donde estaba
+        router.back();
+      }
+
+    } catch (err) {
+      console.log("Error al conectar al servidor:", err);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -98,8 +163,10 @@ export default function PerfilScreen() {
               alignSelf: "center",
             }}
           >
+
             {/* Form Section */}
             <View style={{ marginBottom: Spacing.xxl }}>
+
               {/* Inputs */}
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
@@ -149,7 +216,7 @@ export default function PerfilScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.xxl }}>
                 <InputField
                   label="Celular"
                   value={cellular}
@@ -169,15 +236,82 @@ export default function PerfilScreen() {
                 />
               </View>
 
+                  <LineaDivisoria/>
+
+              <View >
+                <Text style={{fontSize: 11, color: colors.statusLavenderDot, fontWeight: "600", textTransform: "uppercase", marginTop: 18 }}>
+                  ¿Deseas vender u ofrecer algún servicio?</Text>
+              </View>
+
+              {/* Select Rubros */}
               <View style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}>
-                {/* Select Rubros */}
                 <SelectRubros
-                  label="¿Desea vender? Elija el/los rubro/s"
+                  label="Selecciona tu/s rubro/s"
                   section="seller"
-                  selected={roles}
-                  onChange={setRoles}
+                  selected={rubros}
+                  onChange={setRubros}
                 />
               </View>
+
+              {/* --- Datos para recibir pagos por transferencia --- */}
+              {rubros.length > 0 && (
+                <>
+                  <View style={{ marginTop: Spacing.lg, marginBottom: Spacing.xxl, borderWidth: 3, borderRadius: 24, borderColor: colors.cardBg , padding: 16, paddingBottom: 4 }}>
+                    <Text
+                      style={{
+                        color: colors.textDefault,
+                        fontWeight: "600",
+                        marginBottom: Spacing.sm,
+                      }}
+                    >
+                      Datos bancarios
+                    </Text>
+
+                    <Text
+                      style={{
+                        color: colors.textMuted,
+                        fontSize: 12,
+                      }}
+                    >
+                      Estos datos le llegarán a tus clientes cuando elijan abonarte por transferencia.
+                    </Text>
+                  
+
+                  {/* Alias */}
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Alias"
+                      value={alias}
+                      onChangeText={setAlias}
+                      editable
+                      error={errors.alias}
+                    />
+                  </View>
+
+                  {/* Banco */}
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Banco o billetera virtual"
+                      value={banco}
+                      onChangeText={setBanco}
+                      editable
+                      error={errors.banco}
+                    />
+                  </View>
+
+                  {/* Titular */}
+                  <View style={{ marginBottom: Spacing.xxl }}>
+                    <InputField
+                      label="Titular"
+                      value={titular}
+                      onChangeText={setTitular}
+                      editable
+                      error={errors.titular}
+                    />
+                  </View>
+                  </View>
+                </>
+              )}
 
               {/* Botones */}
               <View className="flex-row justify-between">
@@ -191,24 +325,22 @@ export default function PerfilScreen() {
                     Cancelar
                   </Button>
                 </View>
-                
-              <View className="flex-1">
-                <Button
-                  variant="primary"
-                  section="common"
-                  width="auto"
-                  onPress={handleSave} //TODO: guardar cambios
-                >
-                  Guardar
-                </Button>
+
+                <View className="flex-1">
+                  <Button
+                    variant="primary"
+                    section="common"
+                    width="auto"
+                    onPress={handleSave}
+                  >
+                    Guardar
+                  </Button>
+                </View>
               </View>
 
             </View>
           </View>
-          </View>
-
         </ScrollView>
-
       </KeyboardAvoidingView>
 
       {/* Modal de verificación de email */}

@@ -1,0 +1,163 @@
+Gladys Romero gladysromero9443 En línea Aquí empieza el canal #front-end. Lionel
+Staricoff — 19/11/25, 17:05
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    Expandir message.txt 5 KB ﻿
+    <!DOCTYPE html>
+    <html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"
+          rel="stylesheet"
+        />
+        <style>
+          h2 {
+            font-size: 24px !important;
+            line-height: 28px !important;
+          }
+
+          .asunto {
+            display: block;
+          }
+
+          .gracias {
+            line-height: 33px;
+          }
+        </style>
+        <title th:text="${emailSubject}">Asunto del Correo</title>
+      </head>
+      <body>
+        <table
+          style="
+            font-family: 'Merriweather', 'Garamond', serif;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0.25px;
+            color: #eae2d4;
+            background-color: #2a2926;
+            max-width: 800px;
+            margin: auto;
+            border-spacing: 30px;
+          "
+        >
+          <thead>
+            <tr>
+              <th colspan="2">
+                <h2
+                  style="
+                    font-size: 28px;
+                    text-align: center;
+                    height: 300px;
+                    line-height: 80px;
+                    color: #e2c46d;
+                    font-family: 'Merriweather', 'Garamond', serif;
+                    font-weight: 700;
+                  "
+                >
+                  <br />
+                  <img
+                    style="width: 280px"
+                    alt="imagen Bookie logo"
+                    src="https://res.cloudinary.com/dc3jgamlj/image/upload/v1741288816/bookiee_gzfjmr.jpg"
+                  />
+                  <br />
+                  Bienvenido a veciApp !!
+                </h2>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="2">
+                <h2
+                  style="
+                    color: #e2c46d;
+                    font-family: 'Merriweather', 'Garamond', serif;
+                    font-weight: 700;
+                    line-height: 35px;
+                    padding: 0 0 0 20px;
+                  "
+                >
+                  Hola <span th:text="${emailSubject}">usuario</span>
+                </h2>
+              </td>
+            </tr>
+            <tr></tr>
+
+            <tr>
+              <td
+                colspan="2"
+                style="
+                  background-color: #52504c;
+                  color: #e2c46d;
+                  padding: 20px;
+                  border-radius: 15px;
+                  text-align: center;
+                "
+              >
+                <a
+                  th:href="'https://veciapp-docker.onrender.com/api/v1/user/' + ${emailMessage} + '/activate'"
+                  style="margin-right: 20px; color: #eae2d4; font-size: 24px"
+                >
+                  Toca para activar tu cuenta
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="2" style="padding: 20px">
+                <h2
+                  class="gracias"
+                  style="
+                    font-size: 22px;
+                    color: #e2c46d;
+                    font-family: 'Merriweather', 'Garamond', serif;
+                    font-weight: 700;
+                  "
+                >
+                  Gracias por ser parte de la comunidad !!
+                </h2>
+              </td>
+            </tr>
+            <tr>
+              <td
+                colspan="2"
+                style="background-color: #713345; color: #eae2d4; padding: 20px"
+              >
+                <p class="gracias" style="font-size: 20px">
+                  Este es un correo automatico. Por favor, no respondas a esta
+                  direccion.
+                </p>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2" style="padding: 20px">
+                <p style="font-size: 22px">Atentamente,</p>
+                <p style="font-size: 22px">
+                  El equipo de VeciApp
+                  <img
+                    src="https://res.cloudinary.com/dc3jgamlj/image/upload/v1741288385/guino_rrkita.png"
+                    alt="guiÃ±o icono"
+                    style="width: 18px; margin-left: 5px"
+                  />
+                </p>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </body>
+    </html>
+    message.txt 5 KB
+  </head>
+</html>

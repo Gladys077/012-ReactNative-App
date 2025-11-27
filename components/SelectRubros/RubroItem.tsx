@@ -56,8 +56,8 @@ export default function RubroItem({ rubro, isSelected, onToggle }: RubroItemProp
         className="w-6 h-6 rounded-md items-center justify-center"
         style={{
           borderWidth: 2,
-          borderColor: isSelected ? colors.brandSeller : colors.textSecondaryBorder,
-          backgroundColor: isSelected ? colors.brandSeller : 'transparent',
+          borderColor: isSelected ? colors.brandCommon : colors.textSecondaryBorder,
+          backgroundColor: isSelected ? colors.brandCommon : 'transparent',
         }}
       >
         {isSelected && <Check width={14} height={14} color="#fff" />}
