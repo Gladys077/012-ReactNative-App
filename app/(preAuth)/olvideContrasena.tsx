@@ -61,7 +61,7 @@ export default function OlvideContrasena() {
             error={error ? error : undefined}
               />
 
-              <View style={{ marginTop: Spacing.lg }}>
+              <View style={{ marginTop: Spacing.xxl}}>
                 <Button section="common" width="full" onPress={handleSubmit}>
                   Enviar link de recuperación
                 </Button>

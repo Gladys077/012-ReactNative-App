@@ -117,7 +117,7 @@ export default function CambiarContraseñaScreen() {
             </View>
 
             {/* Botones */}
-            <View className="flex-row justify-between">
+            <View className="flex-row justify-between mt-4">
               <View className="flex-1 mr-2">
                 <Button
                   variant="secondary"

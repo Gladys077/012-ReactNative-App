@@ -5,7 +5,7 @@ import Svg, { Path } from "react-native-svg";
 
 const SvgAvatar = (props: SvgProps) => {
   const { colors } = useTheme(); 
-  const strokeWidth = props.strokeWidth ?? 0.4; 
+  const strokeWidth = props.strokeWidth ?? 0.2; 
   const strokeColor = props.stroke ?? props.color ?? colors.textDefault; 
   const fillColor = props.fill ?? "none"; 
 

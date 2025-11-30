@@ -503,7 +503,7 @@ export default function CardVendedorPagoDireccion({
 
       <Text
         style={{
-          fontSize: FontSizes.md,
+          fontSize: FontSizes.base,
           color: colors.textDefault,
           backgroundColor: colors.textSecondaryBg || "#F9FAFB",
           padding: Spacing.md,

@@ -16,6 +16,8 @@ export default function PreAuthLayout() {
         return 'Registro';
       case 'perfil': 
         return 'Perfil';
+      case 'cambiarContrasena': 
+        return 'Cambiar Contraseña';
       case 'olvideContrasena': 
         return 'Recuperar Contraseña';
       default: 
