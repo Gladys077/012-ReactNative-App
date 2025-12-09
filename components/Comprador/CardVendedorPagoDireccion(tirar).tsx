@@ -183,7 +183,6 @@ export default function CardVendedorPagoDireccion({
 
       <LineaDivisoria marginVertical={Spacing.lg} />
 
-      {/* <View style={{backgroundColor: colors.textSecondaryBg }}> */}
       {/* Título Forma de Pago */}
       <Text
         style={{
@@ -198,7 +197,6 @@ export default function CardVendedorPagoDireccion({
       >
         FORMA DE PAGO
       </Text>
-      {/* </View> */}
 
       {/* Selector de forma de pago (tabs) */}
       <View

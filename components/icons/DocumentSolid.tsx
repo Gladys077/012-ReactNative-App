@@ -1,18 +1,20 @@
 import * as React from "react";
 import type { SvgProps } from "react-native-svg";
 import Svg, { G, Path } from "react-native-svg";
-const SvgDocumentSolid = (props: SvgProps) => (
+
+const SvgDocumentSolid = ({ color = "currentColor", ...props }: SvgProps) => (
   <Svg
     width={24}
     height={24}
-    fill={props.color || "currentColor"}
     viewBox="0 0 24 24"
+    fill="none"
     {...props}
-   color={props.color}>
-    <G fillRule="evenodd">
-      <Path d="M1185.471 0v564.706h564.705V1920H169V0zm-225.77 1355.294H507.823v113.054h451.878zm338.711-225.881H507.823v112.94h790.589zm-112.941-225.884H507.823v112.941h677.648zm225.882-225.882h-903.53v112.941h903.53zM959.701 451.878H507.823v112.941h451.878z" />
-      <Path d="M1667.673 345.623c30.38 30.268 51.84 66.635 65.619 106.164h-434.937V16.851c39.53 13.779 75.897 35.35 106.278 65.619z" />
+  >
+    <G fill={color} fillRule="evenodd">
+      <Path d="M7.4 2h7.4v2.17h2.17V22H4V2h3.4Zm-.45 15.75h4.02v1.17H6.95v-1.17Zm3-2.35H6.95v1.17h7.03v-1.17Zm-1-2.35H6.95v1.17h6.03v-1.17Zm3-2.35H6.95v1.17h9.03v-1.17Zm-5-2.35H6.95v1.17h3.03V8.65Z" />
+      <Path d="M17.2 4.73c1.7 1.7 2.3 3.05 2.52 3.65h-3.7V2.8c.6.22 1.97.83 3.7 1.93Z" />
     </G>
   </Svg>
 );
+
 export default SvgDocumentSolid;

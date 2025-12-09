@@ -5,7 +5,7 @@ import { Alert, View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardPedidoBase from "./CardPedidoBase";
-import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
+import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion/CardVendedorPagoDireccion";
 
 interface CardPedidoPagarProps {
   pedidoId: string | number;
