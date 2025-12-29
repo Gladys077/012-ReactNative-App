@@ -1,7 +1,7 @@
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { BorderRadius, FontSizes, Spacing } from "../../../constants/Tokens";
+import { BorderRadius, FontSizes, Spacing } from "../../constants/Tokens";
 
 interface Props {
   formaPago: "transferencia" | "efectivo";

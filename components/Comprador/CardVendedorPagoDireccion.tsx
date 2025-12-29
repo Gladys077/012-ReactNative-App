@@ -2,15 +2,15 @@ import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 
 import { Pressable, Text, View } from "react-native";
-import { BorderRadius, FontSizes, Spacing } from "../../../constants/Tokens";
-import LineaDivisoria from "../../subcomponentes/LineaDivisoria";
-import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
-import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
-import CardRespVendedorBase from "../CardRespVendedorBase";
-import DireccionEntrega from "./DireccionEntrega";
-import FormaPagoTabs from "./FormaPagoTabs";
-import PagoEfectivo from "./PagoEfectivo";
-import PagoTransferencia from "./PagoTransferencia";
+import { BorderRadius, FontSizes, Spacing } from "../../constants/Tokens";
+import DireccionEntrega from "../subcomponentes/DireccionEntrega";
+import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
+import LineaDivisoria from "../subcomponentes/LineaDivisoria";
+import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
+import PagoEfectivo from "../subcomponentes/PagoEfectivo";
+import PagoTransferencia from "../subcomponentes/PagoTransferencia";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
+import CardRespVendedorBase from "./CardRespVendedorBase";
 
 interface CardVendedorPagoDireccionProps {
   pedidoId: string | number;
@@ -99,7 +99,7 @@ export default function CardVendedorPagoDireccion(props: CardVendedorPagoDirecci
     onFinishCronometro?.(pedidoId, respuestaId);
   };
 
-  //TODO: FALTARÍA AGREGAR A LA FUNCIÓN handleEnviar EL ENVÍO DE DATOS AL BACKEND SEGÚN FORMA DE PAGO . Ver con LIO
+  //TODO: FALTARÍA AGREGAR A LA FUNCIÓN handleEnviar EL ENVÍO DE DATOS AL BACKEND SEGÚN FORMA DE PAGO. Esta info le llega al vendedor y si se hizo una transferencia el vendedor confirma la acreditación del pago, o si se eligió efectivo contra entrega y la dirección de entrega está bien, el Vendedor dará el OK "confirmando que la transferencia es correcta" o dando continuar (en el caso de que el comprador abone contra entrega).  Si la transferencia no es correcta, el vendedor contactará al comprador desde la card PagoRecibido "en la sección Mensajes" para informarle que hubo un problema con la transferencia y que debe volver a cargar un nuevo comprobante de pago con el importe correcto (o con falte para completar el total).
 
   return (
     <CardRespVendedorBase

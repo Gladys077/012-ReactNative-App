@@ -12,7 +12,7 @@ import {
   Lupa$,
 } from "../icons";
 
-type EstadoPedido = "Pago" | "Verificacion" | "Preparacion" | "EnCamino" | "Entregado";
+type EstadoPedido = | "Pago" | "Verificacion" | "Preparacion" | "EnCamino" | "Entregado";
 
 interface LineaEstadoPedidoProps {
   estadoActual: EstadoPedido;
@@ -26,17 +26,25 @@ const ESTADOS_ORDEN: EstadoPedido[] = [
   "Entregado",
 ];
 
-export default function LineaEstadoPedido({ estadoActual }: LineaEstadoPedidoProps) {
+export default function LineaEstadoPedido({
+  estadoActual,
+}: LineaEstadoPedidoProps) {
   const { colors } = useTheme();
   const estadoActualIndex = ESTADOS_ORDEN.indexOf(estadoActual);
 
+  /**
+   * Devuelve el ícono correspondiente según el estado
+   */
   const obtenerIcono = (estado: EstadoPedido, index: number) => {
     const completado = index < estadoActualIndex;
     const activo = index === estadoActualIndex;
-    const color = completado ? colors.success : activo ? colors.brandBuyer : colors.textMuted;
     const size = 28;
 
-    if (completado) return <Check width={size} height={size} fill={colors.success} />;
+    if (completado) {
+      return <Check width={size} height={size} fill={colors.textOnColor} />;
+    }
+
+    const color = activo ? colors.brandBuyer : colors.textMuted;
 
     switch (estado) {
       case "Pago":
@@ -54,15 +62,6 @@ export default function LineaEstadoPedido({ estadoActual }: LineaEstadoPedidoPro
     }
   };
 
-  // const obtenerColorCirculo = (index: number) => {
-  //   const completado = index < estadoActualIndex;
-  //   const activo = index === estadoActualIndex;
-
-  //   if (completado) return colors.success;
-  //   if (activo) return colors.brandBuyer;
-  //   return colors.textSecondaryBorder;
-  // };
-
   return (
     <View style={{ paddingVertical: Spacing.md }}>
       <View className="relative flex-row items-center justify-between">
@@ -76,7 +75,7 @@ export default function LineaEstadoPedido({ estadoActual }: LineaEstadoPedidoPro
           }}
         />
 
-        {/* Línea activa con degradé */}
+        {/* Línea de progreso */}
         <LinearGradient
           colors={[colors.fondoCirculo, colors.success]}
           start={{ x: 1, y: 0 }}
@@ -87,56 +86,68 @@ export default function LineaEstadoPedido({ estadoActual }: LineaEstadoPedidoPro
             top: 24,
             left: 0,
             borderRadius: 2,
-          width: `${(estadoActualIndex / (ESTADOS_ORDEN.length - 1)) * 100}%`,
+            width: `${
+              (estadoActualIndex / (ESTADOS_ORDEN.length - 1)) * 100
+            }%`,
           }}
         />
 
+        {/* Estados */}
+        {ESTADOS_ORDEN.map((estado, index) => {
+          const completado = index < estadoActualIndex;
+          const activo = index === estadoActualIndex;
 
-        {ESTADOS_ORDEN.map((estado, index) => (
-          <View key={estado} style={{ alignItems: "center", zIndex: 2 }}>
-            <View
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 24,
-                borderWidth: 2,
-                borderColor:
-                  index === estadoActualIndex
+          return (
+            <View key={estado} style={{ alignItems: "center", zIndex: 2 }}>
+              {/* Círculo */}
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  borderWidth: 2,
+                  borderColor: completado
+                    ? colors.brandBuyer
+                    : activo
                     ? colors.brandBuyer
                     : colors.textSecondaryBorder,
-                backgroundColor:
-                  index <= estadoActualIndex
+                  backgroundColor: completado
+                    ? colors.success
+                    : activo
                     ? colors.fondoCirculoActivo
                     : colors.fondoCirculo,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {obtenerIcono(estado, index)}
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {obtenerIcono(estado, index)}
+              </View>
+
+              {/* Label */}
+              <Text
+                style={{
+                  fontFamily: "Roboto-Medium",
+                  fontSize: FontSizes.xxs,
+                  color: colors.textDefault,
+                  marginTop: Spacing.sm,
+                  textAlign: "center",
+                }}
+              >
+                {estado === "Verificacion"
+                  ? "Verificación"
+                  : estado === "Preparacion"
+                  ? "Preparación"
+                  : estado === "EnCamino"
+                  ? "En Camino"
+                  : estado}
+              </Text>
             </View>
-            <Text
-              style={{
-                fontFamily: "Roboto-Medium",
-                fontSize: FontSizes.xxs,
-                color: colors.textDefault,
-                marginTop: Spacing.sm,
-                textAlign: "center",
-              }}
-            >
-              {estado === "Verificacion"
-                ? "Verificación"
-                : estado === "Preparacion"
-                ? "Preparación"
-                : estado === "EnCamino"
-                ? "En Camino"
-                : estado}
-            </Text>
-          </View>
-        ))}
+          );
+        })}
       </View>
     </View>
   );
 }
 
-// MODO DE USO:
-// <LineaEstadoPedido estadoActual="Preparacion" />
+// USO:
+// <LineaEstadoPedido estadoActual="Verificacion" />

@@ -1,8 +1,9 @@
 export type EstadoPedidoActual =
   | "En proceso"
   | "Ver respuestas"
-  | "Pagar"
+  | "Pago y dirección"
   | "Pago en revisión"
+  | "A resolver"
   | "En preparación"
   | "En camino"
   | "Pedido entregado"

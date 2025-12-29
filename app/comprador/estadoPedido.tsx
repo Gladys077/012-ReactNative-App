@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
 import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
+import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 
 
 
@@ -104,14 +105,14 @@ const EstadoPedido = () => {
           id: 3,
           numeroPedido: 2556,
           direccionComprador: "Calle 1, nro 933",
-          estado: "Pagar",
+          estado: "Pago y dirección",
           respuestasRecibidas: 0,
           duracionCronometro: 30,
           textoPedido: `200 Sandwichs de miga de jamón y queso`,
           respuestas: [
             {
             id: "v3",
-            vendedorNombre: "Minimarket Pedo",
+            vendedorNombre: "Minimarket Pedro",
             alias: "SANDWICHERIAEXPRESS", 
             entidad: "Mercado Pago",      
             titular: "Pedro Pascal",
@@ -121,6 +122,37 @@ const EstadoPedido = () => {
             }
           ]
         },
+        {
+          id: 4,
+          numeroPedido: 2550,
+          direccionComprador: "Calle 50, nro 90",
+          estado: "Pago en revisión",
+          respuestasRecibidas: 0,
+          duracionCronometro: 30,
+          textoPedido: `200 Sandwichs de miga de jamón y queso`,
+          respuestas: [
+            {
+              id: "v3",
+              vendedorNombre: "Minimarket Pedro",
+              alias: "SANDWICHERIAEXPRESS",
+              entidad: "Mercado Pago",
+              titular: "Pedro Pascal",
+              rating: 4.8,
+              precio: 25000,
+              duracionCronometro: 0,
+            }
+          ],
+          respuestaSeleccionada: {
+            id: "v3",
+            vendedorNombre: "Minimarket Pedro",
+            alias: "SANDWICHERIAEXPRESS",
+            entidad: "Mercado Pago",
+            titular: "Pedro Pascal",
+            rating: 4.8,
+            precio: 25000,
+            duracionCronometro: 0,
+          }
+        }
       ];
 
       setTimeout(() => {
@@ -184,7 +216,7 @@ const EstadoPedido = () => {
           );
           return {
             ...pedido,
-            estado: "Pagar",
+            estado: "Pago y dirección",
             respuestaSeleccionada,
           };
         }
@@ -268,7 +300,7 @@ const EstadoPedido = () => {
         {pedidos.length > 0 ? (
           pedidos.map((pedido) => {
             switch (pedido.estado) {
-              case "Ver respuestas":
+              case "Ver respuestas": {
                 return (
                     <CardPedidoVerRespuestas
                       key={pedido.id} // solo para q React identifiq cada elemento dentro de una lista (.map) y optimice el renderizado -no se pasa como prop.
@@ -286,9 +318,9 @@ const EstadoPedido = () => {
                       onVerNota={handleVerNota}
                       onFinishCronometro={handleFinishCronometroRespuesta}
                     />
-                );
+                );}
 
-              case "Pagar":
+              case "Pago y dirección": {
                  const r = pedido.respuestaSeleccionada;
                   if (!r) return null; // Evita error si aún no hay respuesta seleccionada
 
@@ -297,7 +329,7 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     numeroPedido={pedido.numeroPedido}
-                    estado={pedido.estado}
+                    estado="Pago y dirección"
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
@@ -309,10 +341,40 @@ const EstadoPedido = () => {
                     duracionCronometro={r.duracionCronometro}
                     onVerPedido={() => handleVerPedido(pedido.id)}
                     onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={handleFinishCronometro} respuestaId={""} timestampRespuesta={0}                  />
-                );
+                    onFinishCronometro={handleFinishCronometro} 
+                    respuestaId={""} 
+                    timestampRespuesta={0}                  
+                    />
+                );}
 
-              case "En proceso":
+              case "Pago en revisión": {
+                 const r = pedido.respuestaSeleccionada;
+                  if (!r) return null; // Evita error si no hay respuesta seleccionada
+
+                return (
+                  <CardPedidoPagoEnRevision
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    numeroPedido={pedido.numeroPedido}
+                    estado="Pago en revisión"
+                    precio={r.precio}
+                    nombreNegocio={r.vendedorNombre}
+                    rating={r.rating}
+                    alias={r.alias ?? ""}
+                    entidad={r.entidad ?? ""}
+                    titular={r.titular ?? ""}
+                    direccion={pedido.direccionComprador}
+                    nota={r.nota}
+                    duracionCronometro={r.duracionCronometro}
+                    onVerPedido={() => handleVerPedido(pedido.id)}
+                    onEditarDireccion={() => console.log("Editar dirección")}
+                    onFinishCronometro={handleFinishCronometro} 
+                    respuestaId={""} 
+                    timestampRespuesta={0}                  
+                    />
+                );}
+
+              case "En proceso": 
               default:
                 return (
                   <CardPedidoEnProceso
@@ -329,6 +391,7 @@ const EstadoPedido = () => {
                     }
                   />
                 );
+              
             }
           })
         ) : (
