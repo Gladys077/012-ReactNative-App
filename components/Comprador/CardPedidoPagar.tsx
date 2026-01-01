@@ -24,7 +24,7 @@ interface CardPedidoPagarProps {
   timestampRespuesta: number;
   onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
-  onVerNota?: (nota: string) => void; // ← AGREGÁ ESTO
+  onVerNota?: (nota: string) => void; 
   onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
 }
 
@@ -98,7 +98,7 @@ export default function CardPedidoPagar({
         </View>
       }
     >
-      {/* Estado visual del pedido */}
+      {/* Línea de tiempo */}
       <LineaEstadoPedido estadoActual="Pago" />
 
 

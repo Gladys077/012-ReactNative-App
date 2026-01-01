@@ -12,6 +12,7 @@ import {
   Vibration,
   View,
 } from "react-native";
+import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
 import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
@@ -152,7 +153,25 @@ const EstadoPedido = () => {
             precio: 25000,
             duracionCronometro: 0,
           }
+        },
+        {
+          id: 5,
+          numeroPedido: 2560,
+          direccionComprador: "Av. Corrientes 1234",
+          estado: "A resolver",
+          respuestasRecibidas: 0,
+          textoPedido: "Pedido con problema en el pago",
+          respuestaSeleccionada: {
+            id: "v5",
+            vendedorNombre: "Minimarket Juan",
+            alias: "MINIMARKETJUAN",
+            entidad: "Mercado Pago",
+            titular: "Juan Pérez",
+            rating: 4.0,
+            precio: 4150,
+          },
         }
+
       ];
 
       setTimeout(() => {
@@ -370,9 +389,36 @@ const EstadoPedido = () => {
                     onEditarDireccion={() => console.log("Editar dirección")}
                     onFinishCronometro={handleFinishCronometro} 
                     respuestaId={""} 
-                    timestampRespuesta={0}                  
+                    timestampRespuesta={0}      
+                    tieneProblema={false}            
                     />
                 );}
+
+                case "A resolver": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+
+                  return (
+                    <CardPedidoAResolver
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      respuestaId={r.id}
+                      numeroPedido={pedido.numeroPedido}
+                      precio={r.precio}
+                      nombreNegocio={r.vendedorNombre}
+                      rating={r.rating}
+                      alias={r.alias ?? ""}
+                      entidad={r.entidad ?? ""}
+                      titular={r.titular ?? ""}
+                      direccion={pedido.direccionComprador}
+                      nota={r.nota}
+                      onVerPedido={() => handleVerPedido(pedido.id)}
+                      onEditarDireccion={() => console.log("Editar dirección")}
+                      onVerNota={handleVerNota}
+                    />
+                  );
+}
+
 
               case "En proceso": 
               default:

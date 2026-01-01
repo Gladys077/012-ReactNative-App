@@ -7,7 +7,6 @@ import DireccionEntrega from "@/components/subcomponentes/DireccionEntrega";
 import LineaDivisoria from "@/components/subcomponentes/LineaDivisoria";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
 import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
-
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
 type ProblemaPago = "comprobante" | "direccion" | "ambos";
@@ -19,18 +18,23 @@ interface Props {
   nombreNegocio: string;
   rating: number;
   precio: number;
-  nota?: string;
+  
+  nota: string | undefined;
+  duracionCronometro: number;
+  timestampRespuesta: number;
 
   alias: string;
   entidad: string;
   titular: string;
 
   direccion: string;
+  
   problema: ProblemaPago;
 
   onVerPedido: () => void;
   onVerMensajes: () => void;
   onVerNota: (nota: string) => void;
+  onFinishCronometro: (pedidoId: string | number, respuestaId: string | number) => void;
 
   onEnviarCorreccion: (data: {
     comprobante?: { uri: string; name: string };
@@ -40,24 +44,29 @@ interface Props {
   onCancelarPedido: () => void;
 }
 
-export default function CardErrorPagoDireccion({
-  pedidoId,
-  respuestaId,
-  nombreNegocio,
-  rating,
-  precio,
-  nota,
-  alias,
-  entidad,
-  titular,
-  direccion,
-  problema,
-  onVerPedido,
-  onVerMensajes,
-  onVerNota,
-  onEnviarCorreccion,
-  onCancelarPedido,
-}: Props) {
+export default function CardErrorPagoDireccion(props: Props) {
+  const {
+    pedidoId,
+    respuestaId,
+    nombreNegocio,
+    rating,
+    precio,
+    nota,
+    duracionCronometro,
+    timestampRespuesta,
+    alias,
+    entidad,
+    titular,
+    direccion,
+    problema,
+    onVerPedido,
+    onVerNota,
+    onVerMensajes,
+    onFinishCronometro,
+    onEnviarCorreccion,
+    onCancelarPedido,
+  } = props;
+
   const { colors } = useTheme();
 
   const [comprobante, setComprobante] =
@@ -89,17 +98,15 @@ export default function CardErrorPagoDireccion({
       rating={rating}
       precio={precio}
       nota={nota}
+      duracionCronometro={duracionCronometro}
+      timestampRespuesta={timestampRespuesta}
       tipoCronometro="pagar"
-      duracionCronometro={0} // no se muestra visualmente
       onVerNota={onVerNota}
+      onFinishCronometro={() => { onFinishCronometro?.(pedidoId, respuestaId);  }}
     >
-      {/* Acciones superiores */}
+      {/* Ver pedido + Mensajes */}
       <View style={{ flexDirection: "row", gap: Spacing.lg }}>
-        <VerBottomSheet
-          onPress={onVerPedido}
-          iconPosition="left"
-          variant="buyer"
-        />
+        <VerBottomSheet onPress={onVerPedido} iconPosition="left" variant="buyer" />
 
         <Pressable onPress={onVerMensajes}>
           <Text
@@ -116,16 +123,14 @@ export default function CardErrorPagoDireccion({
 
       <LineaDivisoria marginVertical={Spacing.lg} />
 
-      {/* Comprobante */}
+      {/* Transferencia */}
       <PagoTransferencia
         alias={alias}
         entidad={entidad}
         titular={titular}
         disabled={!puedeEditarComprobante}
         errorComprobante={
-          puedeEditarComprobante
-            ? "Revisá el comprobante enviado."
-            : undefined
+          puedeEditarComprobante ? "Revisá el comprobante enviado." : undefined
         }
         onComprobanteChange={(file) => {
           if (puedeEditarComprobante) setComprobante(file);
@@ -136,26 +141,16 @@ export default function CardErrorPagoDireccion({
       <DireccionEntrega
         direccion={direccionState}
         editable={puedeEditarDireccion && editandoDireccion}
-        onEditarDireccion={() =>
-          puedeEditarDireccion && setEditandoDireccion(true)
-        }
+        onEditarDireccion={() => puedeEditarDireccion && setEditandoDireccion(true)}
         onCambiarDireccion={setDireccionState}
         onGuardarDireccion={() => setEditandoDireccion(false)}
         errorDireccion={
-          puedeEditarDireccion
-            ? "La dirección es incorrecta o incompleta."
-            : undefined
+          puedeEditarDireccion ? "La dirección es incorrecta o incompleta." : undefined
         }
       />
 
       {/* Acciones */}
-      <View
-        style={{
-          flexDirection: "row",
-          gap: Spacing.md,
-          marginTop: Spacing.xl,
-        }}
-      >
+      <View style={{ flexDirection: "row", gap: Spacing.md, marginTop: Spacing.xl }}>
         <Pressable
           onPress={onCancelarPedido}
           style={{
@@ -188,7 +183,7 @@ export default function CardErrorPagoDireccion({
               color: colors.textDefault,
             }}
           >
-            Enviar comprobante
+            Enviar
           </Text>
         </Pressable>
       </View>

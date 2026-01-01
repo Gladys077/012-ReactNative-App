@@ -12,8 +12,8 @@ interface CardRespVendedorBaseProps {
   rating: number;
   precio: number;
   nota?: string;
-  tipoCronometro: "espera" | "elegir" | "pagar";
-  duracionCronometro: number; //en minutos
+  tipoCronometro?: "espera" | "elegir" | "pagar";
+  duracionCronometro?: number; //en minutos
   timestampRespuesta?: number; 
 
   children: React.ReactNode;

@@ -18,7 +18,7 @@ export interface Respuesta {
   rating: number;
   precio: number;
   nota?: string;
-  duracionCronometro: number;
+  duracionCronometro?: number;
 }
 
 export interface Pedido {
