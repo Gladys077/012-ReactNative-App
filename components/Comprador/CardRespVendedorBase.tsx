@@ -14,7 +14,7 @@ interface CardRespVendedorBaseProps {
   nota?: string;
   tipoCronometro?: "espera" | "elegir" | "pagar";
   duracionCronometro?: number; //en minutos
-  timestampRespuesta?: number; 
+  timestampRespuesta?: number;
 
   children: React.ReactNode;
 
@@ -91,14 +91,16 @@ export default function CardRespVendedorBase({
           </View>
         </View>
 
-        {/* Cronómetro */}
-        <Cronometro
-          id={`respuesta_${respuestaId}`}
-          tipo={tipoCronometro}
-          duracionInicial={duracionCronometro}
-          timestampInicio={timestampRespuesta} 
-          onFinish={() => onFinishCronometro?.(respuestaId)}
-        />
+        {/* Crónometro (sólo si aplica) */}
+        {tipoCronometro && duracionCronometro != null && (
+          <Cronometro
+            id={`respuesta_${respuestaId}`}
+            tipo={tipoCronometro}
+            duracionInicial={duracionCronometro}
+            timestampInicio={timestampRespuesta}
+            onFinish={() => onFinishCronometro?.(respuestaId)}
+          />
+        )}
       </View>
 
       {/* Contenido variable (cada card específica lo pasa) */}

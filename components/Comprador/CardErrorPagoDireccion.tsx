@@ -7,10 +7,11 @@ import DireccionEntrega from "@/components/subcomponentes/DireccionEntrega";
 import LineaDivisoria from "@/components/subcomponentes/LineaDivisoria";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
 import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
-
+import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
+import PagoEfectivo from "../subcomponentes/PagoEfectivo";
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
-type ProblemaPago = "comprobante" | "direccion" | "ambos";
+type FormaPago = "transferencia" | "efectivo";
 
 interface Props {
   pedidoId: string | number;
@@ -21,19 +22,27 @@ interface Props {
   precio: number;
   nota?: string;
 
+  formaPagoInicial: FormaPago;
+
   alias: string;
   entidad: string;
   titular: string;
 
   direccion: string;
-  problema: ProblemaPago;
+
+  problemaPago?: {
+    comprobante: boolean;
+    direccion: boolean;
+  };
 
   onVerPedido: () => void;
   onVerMensajes: () => void;
   onVerNota: (nota: string) => void;
 
   onEnviarCorreccion: (data: {
+    formaPago: FormaPago;
     comprobante?: { uri: string; name: string };
+    importeEfectivo?: string;
     direccion?: string;
   }) => void;
 
@@ -47,11 +56,12 @@ export default function CardErrorPagoDireccion({
   rating,
   precio,
   nota,
+  formaPagoInicial,
   alias,
   entidad,
   titular,
   direccion,
-  problema,
+  problemaPago,
   onVerPedido,
   onVerMensajes,
   onVerNota,
@@ -60,24 +70,40 @@ export default function CardErrorPagoDireccion({
 }: Props) {
   const { colors } = useTheme();
 
-  const [comprobante, setComprobante] =
-    useState<{ uri: string; name: string } | null>(null);
+  const [formaPago, setFormaPago] = useState<FormaPago>(formaPagoInicial);
+
+  const [comprobante, setComprobante] = useState<{
+    uri: string;
+    name: string;
+  } | null>(null);
+
+  const [importeEfectivo, setImporteEfectivo] = useState("");
 
   const [direccionState, setDireccionState] = useState(direccion);
-  const [editandoDireccion, setEditandoDireccion] = useState(
-    problema === "direccion" || problema === "ambos"
-  );
 
-  const puedeEditarComprobante =
-    problema === "comprobante" || problema === "ambos";
+  const hayErrorComprobante = !!problemaPago?.comprobante;
+  const hayErrorDireccion = !!problemaPago?.direccion;
 
-  const puedeEditarDireccion =
-    problema === "direccion" || problema === "ambos";
+  const errorComprobante =
+    hayErrorComprobante && !comprobante
+      ? "Carga el comprobante correcto."
+      : undefined;
+
+  const errorDireccion = hayErrorDireccion
+    ? "La dirección es incorrecta o incompleta."
+    : undefined;
+
+  const [editandoDireccion, setEditandoDireccion] = useState(hayErrorDireccion);
 
   const handleEnviar = () => {
     onEnviarCorreccion({
-      comprobante: puedeEditarComprobante ? comprobante ?? undefined : undefined,
-      direccion: puedeEditarDireccion ? direccionState : undefined,
+      formaPago,
+      comprobante:
+        formaPago === "transferencia" && hayErrorComprobante
+          ? (comprobante ?? undefined)
+          : undefined,
+      importeEfectivo: formaPago === "efectivo" ? importeEfectivo : undefined,
+      direccion: hayErrorDireccion ? direccionState : undefined,
     });
   };
 
@@ -89,8 +115,8 @@ export default function CardErrorPagoDireccion({
       rating={rating}
       precio={precio}
       nota={nota}
-      tipoCronometro="pagar"
-      duracionCronometro={0} // no se muestra visualmente
+      // tipoCronometro="pagar"
+      // duracionCronometro={0} // no se muestra visualmente
       onVerNota={onVerNota}
     >
       {/* Acciones superiores */}
@@ -116,36 +142,38 @@ export default function CardErrorPagoDireccion({
 
       <LineaDivisoria marginVertical={Spacing.lg} />
 
-      {/* Comprobante */}
-      <PagoTransferencia
-        alias={alias}
-        entidad={entidad}
-        titular={titular}
-        disabled={!puedeEditarComprobante}
-        errorComprobante={
-          puedeEditarComprobante
-            ? "Revisá el comprobante enviado."
-            : undefined
-        }
-        onComprobanteChange={(file) => {
-          if (puedeEditarComprobante) setComprobante(file);
-        }}
-      />
+      {/* Forma de pago */}
+      <FormaPagoTabs formaPago={formaPago} setFormaPago={setFormaPago} />
+
+      {/* Transferencia */}
+      {formaPago === "transferencia" && (
+        <PagoTransferencia
+          alias={alias}
+          entidad={entidad}
+          titular={titular}
+          errorComprobante={errorComprobante}
+          onComprobanteChange={setComprobante}
+        />
+      )}
+
+      {/* Efectivo */}
+      {formaPago === "efectivo" && (
+        <PagoEfectivo
+          importe={importeEfectivo}
+          onCambiarImporte={setImporteEfectivo}
+        />
+      )}
 
       {/* Dirección */}
       <DireccionEntrega
         direccion={direccionState}
-        editable={puedeEditarDireccion && editandoDireccion}
+        editable={hayErrorDireccion && editandoDireccion}
         onEditarDireccion={() =>
-          puedeEditarDireccion && setEditandoDireccion(true)
+          hayErrorDireccion && setEditandoDireccion(true)
         }
         onCambiarDireccion={setDireccionState}
         onGuardarDireccion={() => setEditandoDireccion(false)}
-        errorDireccion={
-          puedeEditarDireccion
-            ? "La dirección es incorrecta o incompleta."
-            : undefined
-        }
+        errorDireccion={errorDireccion}
       />
 
       {/* Acciones */}
@@ -162,13 +190,11 @@ export default function CardErrorPagoDireccion({
             flex: 1,
             paddingVertical: Spacing.md,
             borderRadius: BorderRadius.md,
-            backgroundColor: colors.border,
+            backgroundColor: colors.textSecondaryBg,
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: FontSizes.btn }}>
-            Cancelar pedido
-          </Text>
+          <Text style={{ fontSize: FontSizes.btn }}>Cancelar pedido</Text>
         </Pressable>
 
         <Pressable
@@ -184,8 +210,8 @@ export default function CardErrorPagoDireccion({
           <Text
             style={{
               fontSize: FontSizes.btn,
-              fontFamily: "Roboto-Bold",
-              color: colors.textDefault,
+              fontFamily: "Roboto-Regular",
+              color: colors.textOnColor,
             }}
           >
             Enviar comprobante

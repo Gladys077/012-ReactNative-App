@@ -26,10 +26,22 @@ export interface Pedido {
   numeroPedido: number;
   direccionComprador: string;
   estado: EstadoPedidoActual;
+  textoPedido: string;
+
   respuestasRecibidas?: number;
   duracionCronometro?: number;
-  textoPedido: string;
+  
   respuestas?: Respuesta[];
-  expandido?: boolean;
   respuestaSeleccionada?: Respuesta;
+
+  formaPago?: "transferencia" | "efectivo";
+
+  // SOLO cuando estado === "A resolver"
+  problemaPago?: {
+    comprobante: boolean;
+    direccion: boolean;
+  };
+
+  expandido?: boolean;
+
 }

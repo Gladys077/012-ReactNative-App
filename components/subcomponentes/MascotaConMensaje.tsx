@@ -20,7 +20,7 @@ export default function MascotaConMensaje({
   const bgColors = {
     message: colors.brandBuyerSoft,
     attention: colors.brandSellerSoft,
-    success: colors.success, 
+    success: colors.success,
   };
 
   // Color de texto según el fondo
@@ -30,8 +30,7 @@ export default function MascotaConMensaje({
     success: colors.textDefault,
   };
 
-    const isLeft = posicion === "left";
-
+  const isLeft = posicion === "left";
 
   return (
     <View
@@ -63,8 +62,10 @@ export default function MascotaConMensaje({
       <View
         style={{
           flex: 1,
-          backgroundColor: bgColors[varianteBg],
+          // backgroundColor: bgColors[varianteBg],
           borderRadius: BorderRadius.md,
+          borderColor: colors.brandCommon,
+          borderWidth: 1,
           padding: Spacing.md,
           paddingHorizontal: Spacing.lg,
           position: "relative",
@@ -84,8 +85,8 @@ export default function MascotaConMensaje({
             borderBottomWidth: 8,
             borderBottomColor: "transparent",
             ...(isLeft
-              ? { borderRightWidth: 8, borderRightColor: bgColors[varianteBg] }
-              : { borderLeftWidth: 8, borderLeftColor: bgColors[varianteBg] }),
+              ? { borderRightWidth: 8, borderRightColor: colors.brandCommon }
+              : { borderLeftWidth: 8, borderLeftColor: colors.brandCommon }),
           }}
         />
 

@@ -1,24 +1,36 @@
 import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { BorderRadius, Spacing } from "../../constants/Tokens";
-import { useTheme } from "../../context/ThemeContext";
+import { Spacing } from "../../constants/Tokens";
+
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import CardErrorPagoDireccion from "./CardErrorPagoDireccion";
+
+type FormaPago = "transferencia" | "efectivo";
+
 
 interface CardPedidoAResolverProps {
   pedidoId: string | number;
   respuestaId: string | number;
   numeroPedido: number;
-  precio: number;
+
   nombreNegocio: string;
   rating: number;
+  precio: number;
   alias: string;
   entidad: string;
   titular: string;
   direccion: string;
   nota?: string;
+
+  formaPagoInicial: FormaPago;
+  
+  problemaPago: {
+    comprobante: boolean;
+    direccion: boolean;
+  };
+
   onVerPedido?: (id: string | number) => void;
-  onEditarDireccion?: () => void;
   onVerNota?: (nota: string) => void; 
 }
 
@@ -34,12 +46,12 @@ export default function CardPedidoAResolver({
   titular,
   direccion,
   nota,
+  formaPagoInicial,
+  problemaPago,
   onVerPedido,
-  onEditarDireccion,
   onVerNota,
 }: CardPedidoAResolverProps) {
-   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(false);
+     const [expandido, setExpandido] = useState(false);
 
   return (
     <CardPedidoBase
@@ -56,16 +68,36 @@ export default function CardPedidoAResolver({
       mostrarDivisor
       elevation={expandido ? 0 : 5}
       contenidoExpandible={
-        <View
-            style={{
-              marginTop: Spacing.lg,
-              backgroundColor: colors.cardBg,
-              borderRadius: BorderRadius.md,
+        <View style={{ marginTop: Spacing.lg }}>
+          <CardErrorPagoDireccion
+            pedidoId={pedidoId}
+            respuestaId={respuestaId}
+            nombreNegocio={nombreNegocio}
+            rating={rating}
+            precio={precio}
+            nota={nota}
+            alias={alias}
+            entidad={entidad}
+            titular={titular}
+            direccion={direccion}
+            formaPagoInicial={formaPagoInicial}
+            problemaPago={problemaPago}
+            onVerPedido={() => onVerPedido?.(pedidoId)}
+            onVerMensajes={() => {
+              console.log("Abrir chat comprador ↔ vendedor");
             }}
-        >
-            {/* <CardErrorPagoDireccion /> */}
-     </View>
-          }
+            onVerNota={(nota) => onVerNota?.(nota)}
+            onEnviarCorreccion={(data) => {
+              console.log("Corrección enviada:", data);
+            }}
+            onCancelarPedido={() => {
+              console.log("Cancelar pedido", pedidoId);
+            }}
+            
+          />
+        </View>
+      }
+
         >
       {/* Línea de tiempo */}
             <LineaEstadoPedido estadoActual="Verificacion" />

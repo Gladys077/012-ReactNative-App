@@ -39,7 +39,7 @@ export const Colors = {
 
     //para TipsBottomSheet
     brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
-    brandSellerSoft: "#FEF3C7", //ambar-100 = fondo suave
+    brandSellerSoft: "#f7d3c8", //ambar-100 = fondo suave
 
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
@@ -123,7 +123,7 @@ export const Colors = {
     statusGreenDot: "#4ADE80",
     statusMintBg: "#134E4A",
     statusMintDot: "#2DD4BF",
-    statusOrangeBg: "#78350F",
+    statusOrangeBg: "#b54404",
     statusOrangeDot: "#FB923C",
     statusYellowBg: "#78350F",
     statusYellowDot: "#FACC15",

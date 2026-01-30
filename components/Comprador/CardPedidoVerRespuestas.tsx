@@ -20,16 +20,16 @@ interface CardPedidoVerRespuestasProps {
   onCancelarPedido?: () => void;
   onAceptarRespuesta?: (
     pedidoId: string | number,
-    respuestaId: string | number
+    respuestaId: string | number,
   ) => void;
   onRechazarRespuesta?: (
     pedidoId: string | number,
-    respuestaId: string | number
+    respuestaId: string | number,
   ) => void;
   onVerNota?: (nota: string) => void;
   onFinishCronometro?: (
     pedidoId: string | number,
-    respuestaId: string | number
+    respuestaId: string | number,
   ) => void;
 }
 
@@ -47,7 +47,6 @@ export default function CardPedidoVerRespuestas({
   onVerNota,
   onFinishCronometro,
 }: CardPedidoVerRespuestasProps) {
-
   const contenidoExpandible =
     respuestas.length === 0 ? null : (
       <View
@@ -58,21 +57,30 @@ export default function CardPedidoVerRespuestas({
           paddingBottom: Spacing.xxl,
         }}
       >
-        {respuestas.map((respuesta) => (
-          <CardRespuestaVendedor
-            key={respuesta.id}
-            respuestaId={respuesta.id}
-            vendedorNombre={respuesta.vendedorNombre}
-            rating={respuesta.rating}
-            precio={respuesta.precio}
-            nota={respuesta.nota}
-            duracionCronometro={respuesta.duracionCronometro}
-            onAceptar={() => onAceptarRespuesta?.(pedidoId, respuesta.id)}
-            onRechazar={() => onRechazarRespuesta?.(pedidoId, respuesta.id)}
-            onFinishCronometro={() => onFinishCronometro?.(pedidoId, respuesta.id)}
-            onVerNota={onVerNota}
-          />
-        ))}
+        {respuestas
+          // Filtra respuestas sin cronómetro y además "enseña" a TypeScript
+          // que las que pasan este filtro tienen duracionCronometro: number
+          .filter(
+            (r): r is Respuesta & { duracionCronometro: number } =>
+              r.duracionCronometro !== undefined,
+          )
+          .map((respuesta) => (
+            <CardRespuestaVendedor
+              key={respuesta.id}
+              respuestaId={respuesta.id}
+              vendedorNombre={respuesta.vendedorNombre}
+              rating={respuesta.rating}
+              precio={respuesta.precio}
+              nota={respuesta.nota}
+              duracionCronometro={respuesta.duracionCronometro}
+              onAceptar={() => onAceptarRespuesta?.(pedidoId, respuesta.id)}
+              onRechazar={() => onRechazarRespuesta?.(pedidoId, respuesta.id)}
+              onFinishCronometro={() =>
+                onFinishCronometro?.(pedidoId, respuesta.id)
+              }
+              onVerNota={onVerNota}
+            />
+          ))}
       </View>
     );
 
@@ -83,30 +91,27 @@ export default function CardPedidoVerRespuestas({
     //     borderRadius: BorderRadius.lg,
     //   }}
     // >
-      <CardPedidoBase
-        numeroPedido={numeroPedido}
-        estado={estado}
-        expandido={expandido}
-        onToggleExpandir={onToggleExpandir}
-        mostrarToggle={!!onToggleExpandir}
-        textoMostrar="Mostrar respuestas recibidas"
-        textoOcultar="Ocultar respuestas recibidas"
-        mostrarDivisor
-        mostrarMascota={expandido}
-        mascotaMensaje="Para continuar, elige uno de los presupuestos recibidos."
-        mascotaVariante="message"
-        elevation={expandido ? 0 : 5}
-        contenidoExpandible={contenidoExpandible}
-      >
-        {/* Respuestas Recibidas (solo al estar colapsado) */}
-        {!expandido && <RespuestasRecibidas cantidad={cantidadRespuestas} />}
+    <CardPedidoBase
+      numeroPedido={numeroPedido}
+      estado={estado}
+      expandido={expandido}
+      onToggleExpandir={onToggleExpandir}
+      mostrarToggle={!!onToggleExpandir}
+      textoMostrar="Mostrar respuestas recibidas"
+      textoOcultar="Ocultar respuestas recibidas"
+      mostrarDivisor
+      mostrarMascota={expandido}
+      mascotaMensaje="Para continuar, elige uno de los presupuestos recibidos."
+      mascotaVariante="message"
+      elevation={expandido ? 0 : 5}
+      contenidoExpandible={contenidoExpandible}
+    >
+      {/* Respuestas Recibidas (solo al estar colapsado) */}
+      {!expandido && <RespuestasRecibidas cantidad={cantidadRespuestas} />}
 
-        {/* Botón ver pedido */}
-        <VerBottomSheet
-          onPress={() => onVerPedido?.(pedidoId)}
-          variant="buyer"
-        />
-      </CardPedidoBase>
+      {/* Botón ver pedido */}
+      <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer" />
+    </CardPedidoBase>
     // </View>
   );
 }

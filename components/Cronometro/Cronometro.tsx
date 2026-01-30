@@ -1,21 +1,33 @@
-import { useTheme } from '@/context/ThemeContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { useTheme } from "@/context/ThemeContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useRef, useState } from "react";
+import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
-import { BorderRadius, Spacing } from '../../constants/Tokens';
-import BotonExtraTiempo from './BotonExtraTiempo';
-import CronometroDisplay from './CronometroDisplay';
+} from "react-native-reanimated";
+import { BorderRadius, Spacing } from "../../constants/Tokens";
+import BotonExtraTiempo from "./BotonExtraTiempo";
+import CronometroDisplay from "./CronometroDisplay";
 
-type CronometroTipo = 'espera' | 'elegir' | 'pagar';
+type CronometroTipo = "espera" | "elegir" | "pagar";
 
 type CronometroProps =
-  | { tipo: 'espera'; duracionInicial: number; id?: string | number; timestampInicio?: number; onFinish?: () => void }
-  | { tipo: 'elegir' | 'pagar'; duracionInicial: number; id: string | number; timestampInicio?: number; onFinish?: () => void };
+  | {
+      tipo: "espera";
+      duracionInicial: number;
+      id?: string | number;
+      timestampInicio?: number;
+      onFinish?: () => void;
+    }
+  | {
+      tipo: "elegir" | "pagar";
+      duracionInicial: number;
+      id: string | number;
+      timestampInicio?: number;
+      onFinish?: () => void;
+    };
 
 export default function Cronometro({
   id,
@@ -24,6 +36,8 @@ export default function Cronometro({
   timestampInicio, // NEW
   onFinish,
 }: CronometroProps) {
+  console.log("[Cronometro]", { id, tipo });
+
   const { colors } = useTheme();
 
   const [tiempoRestante, setTiempoRestante] = useState(duracionInicial * 60); // segs
@@ -35,7 +49,7 @@ export default function Cronometro({
   const storageKey = id ? `cronometro_${tipo}_${id}` : `cronometro_${tipo}`;
 
   const estilos: Record<CronometroTipo, { bg: string; texto: string }> = {
-    espera: { bg: colors.statusTurquoiseBg, texto: colors.statusTurquoiseDot },
+    espera: { bg: colors.statusTurquoiseBg, texto: colors.textDefault },
     elegir: { bg: colors.brandBuyerSoft, texto: colors.relojBuyer },
     pagar: { bg: colors.brandBuyerSoft, texto: colors.relojBuyer },
   };
@@ -54,7 +68,7 @@ export default function Cronometro({
       } else {
         // NEW: Si viene timestampInicio del backend, calcular desde ahí
         let nuevoFin: number;
-        
+
         if (timestampInicio) {
           // Calcular fin basado en el timestamp de inicio del backend
           nuevoFin = timestampInicio + duracionInicial * 60 * 1000;
@@ -62,10 +76,10 @@ export default function Cronometro({
           // Fallback: usar tiempo actual (comportamiento original)
           nuevoFin = Date.now() + duracionInicial * 60 * 1000;
         }
-        
+
         finRef.current = nuevoFin;
         await AsyncStorage.setItem(storageKey, nuevoFin.toString());
-        
+
         const diffSegs = Math.max(0, Math.ceil((nuevoFin - Date.now()) / 1000));
         setTiempoRestante(diffSegs);
       }
@@ -78,15 +92,20 @@ export default function Cronometro({
     const tick = async () => {
       if (!finRef.current) return;
 
-      const diffSegs = Math.max(0, Math.ceil((finRef.current - Date.now()) / 1000));
+      const diffSegs = Math.max(
+        0,
+        Math.ceil((finRef.current - Date.now()) / 1000),
+      );
       setTiempoRestante(diffSegs);
 
       if (diffSegs <= 0) {
         await AsyncStorage.removeItem(storageKey);
         onFinish?.();
       } else {
-        pulse.value = withTiming(1.1, { duration: 200 }, () =>
-          (pulse.value = withTiming(1, { duration: 200 }))
+        pulse.value = withTiming(
+          1.1,
+          { duration: 200 },
+          () => (pulse.value = withTiming(1, { duration: 200 })),
         );
       }
     };
@@ -100,11 +119,15 @@ export default function Cronometro({
   const horasTotales = Math.floor(tiempoRestante / 3600);
   const minutosTotales = Math.floor((tiempoRestante % 3600) / 60);
 
-  const horasFormateadas = Math.min(horasTotales, 23).toString().padStart(2, '0');
-  const minutosFormateados = minutosTotales.toString().padStart(2, '0');
+  const horasFormateadas = Math.min(horasTotales, 23)
+    .toString()
+    .padStart(2, "0");
+  const minutosFormateados = minutosTotales.toString().padStart(2, "0");
 
   const estaPorTerminar = tiempoRestante <= 10 * 60;
-  const fondo = estaPorTerminar ? colors.relojTiempoTerminado : estilos[tipo].bg;
+  const fondo = estaPorTerminar
+    ? colors.relojTiempoTerminado
+    : estilos[tipo].bg;
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulse.value }],
@@ -112,7 +135,7 @@ export default function Cronometro({
 
   // Agregar tiempo (+1h o +10min)
   const agregarTiempo = async () => {
-    const extraSegs = tipo === 'espera' ? 3600 : 600;
+    const extraSegs = tipo === "espera" ? 3600 : 600;
     const extraMs = extraSegs * 1000;
     const nuevoFin = (finRef.current ?? Date.now()) + extraMs;
 
@@ -131,7 +154,9 @@ export default function Cronometro({
             backgroundColor: fondo,
             borderRadius: BorderRadius.lg,
             borderWidth: 2,
-            borderColor: estaPorTerminar ? colors.textError : estilos[tipo].texto,
+            borderColor: estaPorTerminar
+              ? colors.textError
+              : estilos[tipo].texto,
             paddingVertical: Spacing.md,
           },
           animatedStyle,
@@ -145,11 +170,11 @@ export default function Cronometro({
           textoColor={estilos[tipo].texto}
         />
 
-        {(tipo === 'espera' || tipo === 'pagar') && (
+        {(tipo === "espera" || tipo === "pagar") && (
           <>
             <View
               style={{
-                width: '100%',
+                width: "100%",
                 height: 1,
                 backgroundColor: colors.textMuted,
                 marginVertical: Spacing.sm,

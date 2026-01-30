@@ -14,18 +14,28 @@ interface Props {
   errorComprobante?: string;
   disabled?: boolean;
   onComprobanteChange?: (value: { uri: string; name: string } | null) => void;
-
 }
 
-const PagoTransferencia: React.FC<Props> = ({ alias, entidad, titular, errorComprobante, onComprobanteChange }) => {
+const PagoTransferencia: React.FC<Props> = ({
+  alias,
+  entidad,
+  titular,
+  errorComprobante,
+  onComprobanteChange,
+}) => {
   const { colors } = useTheme();
 
   // estado local comprobante + importe
-  const [comprobante, setComprobante] = useState<{ uri: string; name: string } | null>(null);
+  const [comprobante, setComprobante] = useState<{
+    uri: string;
+    name: string;
+  } | null>(null);
 
   const [copiado, setCopiado] = useState(false); //para copiar alias
 
-  // Cada vez que cambia el comprobante, avisamos al padre
+  const [mensajeEliminado, setMensajeEliminado] = useState(false); //controla si se muestra o no el mensaje
+
+  // Cada vez que cambia el comprobante, avisa al padre
   useEffect(() => {
     onComprobanteChange?.(comprobante);
   }, [comprobante]);
@@ -44,7 +54,7 @@ const PagoTransferencia: React.FC<Props> = ({ alias, entidad, titular, errorComp
 
       //el estado local se actualiza y el padre recibe el valor
       setComprobante({ uri: file.uri, name: file.name });
-
+      setMensajeEliminado(false); //vuelve a ocultar el mensaje de eliminado si estaba visible
     } catch (error) {
       console.log("Error al elegir comprobante:", error);
       Alert.alert("Error", "No se pudo cargar el archivo.");
@@ -52,18 +62,11 @@ const PagoTransferencia: React.FC<Props> = ({ alias, entidad, titular, errorComp
   };
 
   const handleEliminarComprobante = () => {
-    Alert.alert(
-      "Eliminar comprobante",
-      "¿Querés borrar el archivo cargado?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: () => setComprobante(null), //elimina el comprobante y le avisa al padre
-        },
-      ]
-    );
+    setComprobante(null);
+    setMensajeEliminado(true);
+
+    // Ocultar mensaje luego de un tiempo
+    setTimeout(() => setMensajeEliminado(false), 2000);
   };
 
   const handleCopiarAlias = async () => {
@@ -192,38 +195,49 @@ const PagoTransferencia: React.FC<Props> = ({ alias, entidad, titular, errorComp
             backgroundColor: colors.background,
           }}
         >
-          <DocumentSolid
-            width={20}
-            height={20}
-            stroke={colors.brandBuyer}
-          />
+          <DocumentSolid width={20} height={20} stroke={colors.brandBuyer} />
 
           <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
             {comprobante ? comprobante.name : "Cargar comprobante"}
           </Text>
         </Pressable>
 
-        {/* Cancel (borra comprobante) */}
-        <Pressable
-          onPress={handleEliminarComprobante}
-          style={{
-            width: 40,
-            height: 40,
-            borderTopEndRadius: BorderRadius.md,
-            borderBottomEndRadius: BorderRadius.md,
-            borderWidth: 1,
-            borderColor: colors.textMuted,
-            backgroundColor: colors.brandBuyer,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Cancel width={18} height={18} fill="#fff" />
-        </Pressable>
+        {/* X = cancel, solo si hay comprobante */}
+        {comprobante && (
+          <Pressable
+            onPress={handleEliminarComprobante}
+            style={{
+              width: 40,
+              height: 40,
+              borderTopEndRadius: BorderRadius.md,
+              borderBottomEndRadius: BorderRadius.md,
+              borderWidth: 1,
+              borderColor: colors.textMuted,
+              backgroundColor: colors.brandBuyer,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Cancel width={18} height={18} fill="#fff" />
+          </Pressable>
+        )}
       </View>
 
-      {/* TEXTO DE ERROR */}
-      {errorComprobante ? (
+      {/* Feedback */}
+      {mensajeEliminado && (
+        <Text
+          style={{
+            marginTop: 6,
+            fontSize: FontSizes.xs,
+            color: colors.textMuted,
+          }}
+        >
+          Comprobante eliminado
+        </Text>
+      )}
+
+      {/* TEXTO DE ERROR -&& renderiza solo si la condición es true-*/}
+      {errorComprobante && (
         <Text
           style={{
             marginTop: 6,
@@ -234,7 +248,7 @@ const PagoTransferencia: React.FC<Props> = ({ alias, entidad, titular, errorComp
         >
           {errorComprobante}
         </Text>
-      ) : null}
+      )}
     </View>
   );
 };
