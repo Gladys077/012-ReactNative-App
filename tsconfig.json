@@ -5,6 +5,8 @@
     "jsxImportSource": "nativewind",
     "types": ["expo"],
     "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@/*": ["./*"]
     }
