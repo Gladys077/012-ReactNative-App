@@ -4,14 +4,14 @@ import React from "react";
 import { Text, View } from "react-native";
 import Cronometro from "../Cronometro/Cronometro";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
-import LineaDivisoria from '../subcomponentes/LineaDivisoria';
+import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import LinkFraseIcon from "../subcomponentes/VerBottomSheet";
 import Button from "../UI/Button/Button";
 import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {
-  pedidoId: string | number; 
+  pedidoId: string | number;
   numeroPedido: number;
   estado: EtiqEstadoType;
   respuestasRecibidas?: number;
@@ -31,7 +31,7 @@ export default function CardPedidoEnProceso({
   onCancelarPedido,
   onVerPedido,
 }: CardPedidoEnProcesoProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const frase =
     "Pasado este tiempo si no recibe respuesta, se eliminará el pedido.";
 
@@ -75,7 +75,7 @@ export default function CardPedidoEnProceso({
         >
           <Text
             style={{
-              fontFamily: "Roboto-Regular",
+              fontFamily: fonts.robotoRegular,
               fontSize: FontSizes.sm,
               color: colors.textDefault,
               marginBottom: 6,
@@ -112,9 +112,9 @@ export default function CardPedidoEnProceso({
   );
 }
 
-
 //MODO DE USO:
-    {/* <CardPedidoEnProceso
+{
+  /* <CardPedidoEnProceso
           key={pedido.id}
           pedidoId={pedido.id}
           numeroPedido={pedido.numeroPedido}
@@ -126,4 +126,5 @@ export default function CardPedidoEnProceso({
           onFinishCronometro={() =>
           handleFinishCronometro(pedido.id)
           }
-        />*/}
+        />*/
+}

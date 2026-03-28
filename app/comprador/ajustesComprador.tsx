@@ -1,9 +1,10 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Alert, Linking, SafeAreaView, ScrollView, View } from "react-native";
+import { Alert, Linking, ScrollView, View } from "react-native";
 
 import { Spacing } from "@/constants/Tokens";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ItemsAjustes from "../../components/ajustes/ItemsAjustes";
 import SeccionAjustes from "../../components/ajustes/SeccionAjustes";
 import {
@@ -25,28 +26,24 @@ const AjustesCompradorScreen = () => {
   const { logout } = useAuthContext();
   const router = useRouter();
 
-  // Cerrar sesión 
+  // Cerrar sesión
   const handleLogout = async () => {
-    Alert.alert(
-      "Cerrar sesión",
-      "¿Seguro que querés cerrar sesión?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Cerrar sesión",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await logout(); // Limpia el estado local y tokens (AuthContext)
-              router.replace("/login"); // Redirige a la pantalla de login
-            } catch (error) {
-              console.error("Error al cerrar sesión:", error);
-              Alert.alert("Error", "No se pudo cerrar la sesión correctamente.");
-            }
-          },
+    Alert.alert("Cerrar sesión", "¿Seguro que querés cerrar sesión?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Cerrar sesión",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await logout(); // Limpia el estado local y tokens (AuthContext)
+            router.replace("/login"); // Redirige a la pantalla de login
+          } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+            Alert.alert("Error", "No se pudo cerrar la sesión correctamente.");
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   // Abrir cliente de correo
@@ -55,7 +52,7 @@ const AjustesCompradorScreen = () => {
     const subject = "Consulta sobre la app";
     const body = "Hola, necesito ayuda con...";
     const mailtoURL = `mailto:${email}?subject=${encodeURIComponent(
-      subject
+      subject,
     )}&body=${encodeURIComponent(body)}`;
 
     try {
@@ -78,8 +75,8 @@ const AjustesCompradorScreen = () => {
       }}
     >
       <ScrollView
-        className="flex-1"
         style={{
+          flex: 1,
           backgroundColor: colors.background,
           paddingVertical: Spacing.lg,
           paddingHorizontal: Spacing.xs,
@@ -109,7 +106,11 @@ const AjustesCompradorScreen = () => {
               texto="Cambiar contraseña"
               onPress={() => router.push("/cambiarContrasena")}
             />
-            <ItemsAjustes icon={Salir} texto="Cerrar sesión" onPress={handleLogout} />
+            <ItemsAjustes
+              icon={Salir}
+              texto="Cerrar sesión"
+              onPress={handleLogout}
+            />
           </SeccionAjustes>
 
           {/* Preferencias */}

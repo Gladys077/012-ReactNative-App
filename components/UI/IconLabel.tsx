@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 
 import { getColorByRole } from "@/constants/Colors";
-import { getIconPixelSize, getIconSizeClass } from "@/constants/Tokens";
+import { FontSizes, getIconPixelSize } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 
 type Variant = "footer" | "menuVendedor" | "pendientes";
@@ -23,31 +23,30 @@ interface IconLabelProps {
 const getVariantStyles = (variant: Variant, colors: any) => {
   const baseStyles = {
     footer: {
-      container: "min-w-12 min-h-12 items-center justify-center",
-      iconWrapper: getIconSizeClass("md"), // 24px
       iconSize: getIconPixelSize("md"),
-      labelBase: "text-[10px]",
       defaultColor: colors.textMuted,
     },
     menuVendedor: {
-      container: `p-3 items-center rounded-xl bg-${colors.bg}`,
-      iconWrapper: getIconSizeClass("md"),
       iconSize: getIconPixelSize("md"),
-      labelBase: `text-sm text-${colors.textMuted}`,
       defaultColor: colors.textMuted,
     },
     pendientes: {
-      container: "p-2 items-center",
-      iconWrapper: getIconSizeClass("lg"), // 32px
       iconSize: getIconPixelSize("lg"),
-      labelBase: `text-sm text-${colors.textDefault}`,
       defaultColor: colors.textDefault,
     },
   };
   return baseStyles[variant];
 };
 
-const Badge = ({ iconSize, count, colors }: { iconSize: number; count: number; colors: any }) => {
+const Badge = ({
+  iconSize,
+  count,
+  colors,
+}: {
+  iconSize: number;
+  count: number;
+  colors: any;
+}) => {
   if (count <= 0) return null;
   const offset = iconSize / 3;
 
@@ -68,7 +67,14 @@ const Badge = ({ iconSize, count, colors }: { iconSize: number; count: number; c
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "#fff", fontSize: 10, fontWeight: "bold", lineHeight: 12 }}>
+      <Text
+        style={{
+          color: "#fff",
+          fontSize: 10,
+          fontWeight: "bold",
+          lineHeight: 12,
+        }}
+      >
         {count}
       </Text>
     </View>
@@ -84,7 +90,7 @@ export const IconLabel = ({
   role = "buyer",
   onPress,
 }: IconLabelProps) => {
-  const { colors, mode } = useTheme();
+  const { colors, fonts, mode } = useTheme();
   const isDark = mode === "dark";
   const styles = getVariantStyles(variant, colors);
   const showBadge = badgeCount > 0 && variant !== "footer";
@@ -108,32 +114,78 @@ export const IconLabel = ({
     if (!active) return styles.defaultColor;
     if (variant === "footer") return getColorByRole(role, mode);
     if (variant === "menuVendedor") return colors.brandSeller;
-    return colors.brandSeller; // pendientes
+    return colors.brandSeller;
   };
 
   const getLabelColor = () => {
     if (!active) return styles.defaultColor;
     if (variant === "footer") return getColorByRole(role, mode);
     if (variant === "pendientes") return styles.defaultColor;
-    return colors.brandSeller; // menuVendedor
+    return colors.brandSeller;
+  };
+
+  const getContainerStyle = () => {
+    switch (variant) {
+      case "footer":
+        return {
+          minWidth: 48,
+          minHeight: 48,
+          alignItems: "center" as const,
+          justifyContent: "center" as const,
+        };
+      case "menuVendedor":
+        return {
+          padding: 12,
+          alignItems: "center" as const,
+          borderRadius: 12,
+          backgroundColor: colors.cardBg,
+        };
+      case "pendientes":
+        return { padding: 8, alignItems: "center" as const };
+    }
   };
 
   return (
     <Pressable
       onPress={handlePress}
       accessibilityRole="button"
-      className={styles.container}
-      android_ripple={{ color: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)" }}
-      style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+      android_ripple={{
+        color: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+      }}
+      style={({ pressed }) => [
+        getContainerStyle(),
+        { opacity: pressed ? 0.7 : 1 },
+      ]}
     >
-      <View style={{ position: "relative", width: styles.iconSize, height: styles.iconSize }}>
-        <Icon width={styles.iconSize} height={styles.iconSize} color={getIconColor()} />
-        {showBadge && <Badge iconSize={styles.iconSize} count={badgeCount} colors={colors} />}
+      <View
+        style={{
+          position: "relative",
+          width: styles.iconSize,
+          height: styles.iconSize,
+        }}
+      >
+        <Icon
+          width={styles.iconSize}
+          height={styles.iconSize}
+          color={getIconColor()}
+        />
+        {showBadge && (
+          <Badge
+            iconSize={styles.iconSize}
+            count={badgeCount}
+            colors={colors}
+          />
+        )}
       </View>
 
       <Text
-        className={[styles.labelBase, "mt-1 text-center font-roboto", active ? "font-medium" : ""].join(" ")}
-        style={{ color: getLabelColor() }}
+        style={{
+          color: getLabelColor(),
+          fontSize: FontSizes.xs,
+          fontFamily: active ? fonts.robotoMedium : fonts.robotoRegular,
+          marginTop: 4,
+          textAlign: "center",
+        }}
       >
         {label}
       </Text>

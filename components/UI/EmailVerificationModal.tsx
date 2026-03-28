@@ -29,22 +29,21 @@ export default function EmailVerificationModal({
   onResend,
   resendCooldownSeconds = 30,
 }: Props) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const [cooldown, setCooldown] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
-useEffect(() => {
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
 
-  if (cooldown > 0) {
-    timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
-  }
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    }
 
-  return () => {
-    if (timer) clearTimeout(timer);
-  };
-}, [cooldown]);
-
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [cooldown]);
 
   useEffect(() => {
     if (!visible) {
@@ -61,7 +60,10 @@ useEffect(() => {
       setCooldown(resendCooldownSeconds);
     } catch (err) {
       console.warn("Resend failed", err);
-      Alert.alert("Error", "No pudimos reenviar el correo. Intentá de nuevo más tarde.");
+      Alert.alert(
+        "Error",
+        "No pudimos reenviar el correo. Intentá de nuevo más tarde.",
+      );
     } finally {
       setLoading(false);
     }
@@ -76,7 +78,7 @@ useEffect(() => {
       android: ["mailto:"],
     }) as string[] | undefined;
 
-    // Primero intento mailto 
+    // Primero intento mailto
     Linking.canOpenURL(emailUrl)
       .then((supported) => {
         if (supported) {
@@ -98,39 +100,71 @@ useEffect(() => {
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <View style={{
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.4)",
-        justifyContent: "center",
-        paddingHorizontal: Spacing.lg,
-      }}>
-        <View style={{
-          backgroundColor: colors.cardBg,
-          borderRadius: 12,
-          padding: Spacing.xl,
-          shadowColor: "#000",
-          shadowOpacity: 0.12,
-          shadowRadius: 10,
-          elevation: 8,
-        }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.4)",
+          justifyContent: "center",
+          paddingHorizontal: Spacing.lg,
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: colors.cardBg,
+            borderRadius: 12,
+            padding: Spacing.xl,
+            shadowColor: "#000",
+            shadowOpacity: 0.12,
+            shadowRadius: 10,
+            elevation: 8,
+          }}
+        >
           <View style={{ alignItems: "center", marginBottom: Spacing.md }}>
             {/* Icono */}
             <Mail width={48} height={48} color={colors.brandCommon} />
           </View>
 
-          <Text style={{ fontSize: 16, fontWeight: "600", color: colors.textDefault, textAlign: "center", marginBottom: Spacing.sm }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: fonts.robotoBold,
+              color: colors.textDefault,
+              textAlign: "center",
+              marginBottom: Spacing.sm,
+            }}
+          >
             Te enviamos un correo
           </Text>
 
-          <Text style={{ fontSize: 14, color: colors.textMuted, textAlign: "center", marginBottom: Spacing.md }}>
+          <Text
+            style={{
+              fontSize: 14,
+              color: colors.textMuted,
+              textAlign: "center",
+              marginBottom: Spacing.md,
+            }}
+          >
             Enviamos un link a: {"\n"}
-            <Text style={{ color: colors.brandCommon, fontWeight: '500' }}>
-                {email}
+            <Text
+              style={{
+                color: colors.brandCommon,
+                fontFamily: fonts.robotoMedium,
+              }}
+            >
+              {email}
             </Text>
           </Text>
 
-          <Text style={{ fontSize: 13, color: colors.textMuted, textAlign: "center", marginBottom: Spacing.md }}>
-            Tocá el link en tu correo para entrar a la app. El link expira en breve por seguridad.
+          <Text
+            style={{
+              fontSize: 13,
+              color: colors.textMuted,
+              textAlign: "center",
+              marginBottom: Spacing.md,
+            }}
+          >
+            Tocá el link en tu correo para entrar a la app. El link expira en
+            breve por seguridad.
           </Text>
 
           <View style={{ marginTop: Spacing.sm }}>
@@ -145,7 +179,14 @@ useEffect(() => {
               }}
               accessibilityLabel="Abrir correo"
             >
-              <Text style={{ color: colors.textOnColor, fontWeight: "600" }}>Abrir correo</Text>
+              <Text
+                style={{
+                  color: colors.textOnColor,
+                  fontFamily: fonts.robotoBold,
+                }}
+              >
+                Abrir correo
+              </Text>
             </Pressable>
 
             <Pressable
@@ -165,8 +206,15 @@ useEffect(() => {
               {loading ? (
                 <ActivityIndicator />
               ) : (
-                <Text style={{ color: colors.textDefault, fontWeight: "600" }}>
-                  {cooldown > 0 ? `Reenviar en ${cooldown}s` : "Reenviar correo"}
+                <Text
+                  style={{
+                    color: colors.textDefault,
+                    fontFamily: fonts.robotoBold,
+                  }}
+                >
+                  {cooldown > 0
+                    ? `Reenviar en ${cooldown}s`
+                    : "Reenviar correo"}
                 </Text>
               )}
             </Pressable>

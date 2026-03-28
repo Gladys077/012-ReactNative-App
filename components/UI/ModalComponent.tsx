@@ -2,16 +2,10 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import useModal from "@/hooks/useModal";
 import React from "react";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View
-} from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function ModalComponent() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const { visible, type, options, closeModal } = useModal();
 
   if (!visible || !options) return null;
@@ -53,7 +47,7 @@ export default function ModalComponent() {
             <Text
               style={{
                 fontSize: FontSizes.md,
-                fontFamily: "Roboto-Medium",
+                fontFamily: fonts.robotoMedium,
                 color: colors.textDefault,
                 marginBottom: Spacing.md,
               }}
@@ -67,7 +61,7 @@ export default function ModalComponent() {
             <Text
               style={{
                 fontSize: FontSizes.btn,
-                fontFamily: "Roboto-Regular",
+                fontFamily: fonts.robotoRegular,
                 color: colors.textDefault,
                 marginBottom: Spacing.xxl,
               }}
@@ -88,7 +82,7 @@ export default function ModalComponent() {
               <Pressable onPress={handleCancel}>
                 <Text
                   style={{
-                    fontFamily: "Roboto-Medium",
+                    fontFamily: fonts.robotoMedium,
                     fontSize: FontSizes.btn,
                     color: colors.brandCommon,
                     textTransform: "uppercase",
@@ -102,7 +96,7 @@ export default function ModalComponent() {
             <Pressable onPress={handleConfirm}>
               <Text
                 style={{
-                  fontFamily: "Roboto-Medium",
+                  fontFamily: fonts.robotoMedium,
                   fontSize: FontSizes.btn,
                   color: colors.brandCommon,
                   textTransform: "uppercase",

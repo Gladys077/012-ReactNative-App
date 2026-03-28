@@ -40,7 +40,7 @@ export default function CardRespVendedorBase({
   onVerNota,
   children,
 }: CardRespVendedorBaseProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
     <View
@@ -68,7 +68,7 @@ export default function CardRespVendedorBase({
         <View style={{ flex: 1 }}>
           <Text
             style={{
-              fontFamily: "Roboto-Medium",
+              fontFamily: fonts.robotoMedium,
               fontSize: FontSizes.md,
               color: colors.textDefault,
               marginBottom: 4,
@@ -81,7 +81,7 @@ export default function CardRespVendedorBase({
             <EstrellaReputacion rating={rating} size={14} />
             <Text
               style={{
-                fontFamily: "Roboto-Regular",
+                fontFamily: fonts.robotoRegular,
                 fontSize: FontSizes.sm,
                 color: colors.textMuted,
               }}

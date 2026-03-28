@@ -9,7 +9,7 @@ type PedidoNumeroProps = {
 };
 
 const PedidoNumero = ({ numero, centered = false }: PedidoNumeroProps) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
     <View
@@ -23,7 +23,7 @@ const PedidoNumero = ({ numero, centered = false }: PedidoNumeroProps) => {
           styles.text,
           {
             color: colors.textDefault,
-            fontFamily: "Roboto-Medium",
+            fontFamily: fonts.robotoRegular,
             fontSize: FontSizes.base,
           },
         ]}
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
 });
 
 export default PedidoNumero;
-
 
 // MODO DE USO:
 // <PedidoNumero numero={12345} />

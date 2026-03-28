@@ -13,25 +13,30 @@ interface TipsBottomSheetProps {
 
 const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
   ({ onClose }, ref) => {
-    const { colors } = useTheme();
+    const { colors, fonts } = useTheme();
     const { user } = useAuthContext();
 
     const role = user?.role || "buyer";
-    const title = role === "buyer" ? "Tips para hacer tu pedido" : "Tips para tus respuestas";
+    const title =
+      role === "buyer"
+        ? "Tips para hacer tu pedido"
+        : "Tips para tus respuestas";
 
     const tips =
       role === "buyer"
         ? [
             "Escribe tu pedido en forma de lista, como el ejemplo.",
             "Especifica cantidades.",
-            "Incluye las marcas, si tienes alguna preferencia."
+            "Incluye las marcas, si tienes alguna preferencia.",
           ]
         : [
-            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)"
+            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
           ];
 
-    const colorRole = role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
-    const bgSoft = role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
+    const colorRole =
+      role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
+    const bgSoft =
+      role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
 
     const snapPoints = useMemo(() => ["30%"], []);
 
@@ -45,7 +50,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
           opacity={0.5}
         />
       ),
-      []
+      [],
     );
 
     // Estado para controlar la rotación del chevron
@@ -79,7 +84,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
 
     const rotateInterpolate = rotateAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: ["0deg", "180deg"]
+      outputRange: ["0deg", "180deg"],
     });
 
     return (
@@ -98,12 +103,19 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             backgroundColor: colors.bgPressed,
             marginBottom: Spacing.sm,
             marginTop: Spacing.lg,
-            height: 48
+            height: 48,
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TipLamparita width={24} height={24} color={colorRole} />
-            <Text style={{ color: colorRole, fontSize: FontSizes.base, fontWeight: "regular", marginLeft: 4 }}>
+            <Text
+              style={{
+                color: colorRole,
+                fontSize: FontSizes.base,
+                fontFamily: fonts.robotoRegular,
+                marginLeft: 4,
+              }}
+            >
               {title}
             </Text>
           </View>
@@ -124,13 +136,13 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             borderTopLeftRadius: BorderRadius.xl,
             borderTopRightRadius: BorderRadius.xl,
             borderWidth: 1,
-            borderColor: bgSoft
+            borderColor: bgSoft,
           }}
           handleIndicatorStyle={{ backgroundColor: colorRole }}
           style={{
             width: "100%",
             maxWidth: 500,
-            alignSelf: "center"
+            alignSelf: "center",
           }}
         >
           <ScrollView
@@ -138,16 +150,27 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
             contentContainerStyle={{
               paddingHorizontal: Spacing.lg,
               paddingBottom: Spacing.xl,
-              paddingTop: Spacing.md
+              paddingTop: Spacing.md,
             }}
           >
             {tips.map((tip, index) => (
               <View
                 key={index}
-                style={{ flexDirection: "row", alignItems: "flex-start", marginBottom: 12, gap: Spacing.sm }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  marginBottom: 12,
+                  gap: Spacing.sm,
+                }}
               >
                 <Check width={18} height={18} fill={colorRole} />
-                <Text style={{ fontSize: FontSizes.base, color: colors.textDefault, flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: FontSizes.base,
+                    color: colors.textDefault,
+                    flex: 1,
+                  }}
+                >
                   {tip}
                 </Text>
               </View>
@@ -156,7 +179,7 @@ const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
         </BottomSheetModal>
       </>
     );
-  }
+  },
 );
 
 TipsBottomSheet.displayName = "TipsBottomSheet";

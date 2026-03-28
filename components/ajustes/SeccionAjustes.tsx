@@ -9,23 +9,23 @@ interface SeccionAjustesProps {
 }
 
 const SeccionAjustes = ({ titulo, children }: SeccionAjustesProps) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
     <View
-      className="w-full"
       style={{
+        width: "100%",
         paddingTop: Spacing.lg,
       }}
       accessibilityLabel={`Sección ${titulo}`}
     >
       <Text
-        className="font-Roboto-Bold"
         style={{
+          fontFamily: fonts.robotoBold,
           color: colors.textMuted,
           fontSize: FontSizes.sm,
           marginBottom: Spacing.sm,
-          textTransform: "uppercase", 
+          textTransform: "uppercase",
           letterSpacing: 1.5,
         }}
       >

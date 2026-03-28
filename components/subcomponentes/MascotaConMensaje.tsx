@@ -14,7 +14,7 @@ export default function MascotaConMensaje({
   varianteBg = "message",
   posicion = "left",
 }: MascotaConMensajeProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   // Mapeo de variantes a colores de fondo
   const bgColors = {
@@ -92,7 +92,7 @@ export default function MascotaConMensaje({
 
         <Text
           style={{
-            fontFamily: "Roboto-Regular",
+            fontFamily: fonts.robotoRegular,
             fontSize: FontSizes.sm,
             color: textColors[varianteBg],
             lineHeight: 20,

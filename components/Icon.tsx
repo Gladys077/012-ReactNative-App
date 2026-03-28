@@ -6,7 +6,6 @@ interface IconProps {
   icon: ComponentType<SvgProps>;
   size?: "sm" | "md" | "lg" | number;
   color?: "black" | "gray" | "orange" | "blue";
-  className?: string; 
 }
 
 const sizeMap = {
@@ -26,19 +25,14 @@ export const Icon = ({
   icon: IconComponent,
   size = "md",
   color = "black",
-  className,
 }: IconProps) => {
-  const dimension = typeof size === "string" ? sizeMap[size] ?? sizeMap.md : size;
+  const dimension =
+    typeof size === "string" ? (sizeMap[size] ?? sizeMap.md) : size;
   const fillColor = colorMap[color] ?? colorMap.black;
 
   return (
     <View>
-      <IconComponent
-        width={dimension}
-        height={dimension}
-        fill={fillColor}
-        className={className}
-      />
+      <IconComponent width={dimension} height={dimension} fill={fillColor} />
     </View>
   );
 };

@@ -8,7 +8,7 @@ import Button from "../UI/Button/Button";
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
 interface CardRespuestaVendedorProps {
-  respuestaId: string | number; 
+  respuestaId: string | number;
   vendedorNombre: string;
   rating: number;
   precio: number;
@@ -33,11 +33,10 @@ export default function CardRespuestaVendedor({
   onVerNota,
   onFinishCronometro,
 }: CardRespuestaVendedorProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   // const { openModal } = useModal();
 
-
-  const handleConfirmarRechazo  = () => {
+  const handleConfirmarRechazo = () => {
     Vibration.vibrate(300);
     //  openModal("confirm", {
     //     title: "Rechazar presupuesto",
@@ -46,21 +45,20 @@ export default function CardRespuestaVendedor({
     //     confirmText: "Sí, rechazar",
     //     onConfirm: () => onRechazar(respuestaId),
     //   });
-     Alert.alert(
-          "Rechazar presupuesto",
-          "Si confirmas, este presupuesto se eliminará y no podrás recuperarlo.",
-          [
-            { text: "Volver", style: "cancel" },
-            {
-              text: "Sí, rechazar",
-              style: "destructive",
-              onPress: () => onRechazar(respuestaId),
-            },
-          ],
-          { cancelable: true }
-        );
+    Alert.alert(
+      "Rechazar presupuesto",
+      "Si confirmas, este presupuesto se eliminará y no podrás recuperarlo.",
+      [
+        { text: "Volver", style: "cancel" },
+        {
+          text: "Sí, rechazar",
+          style: "destructive",
+          onPress: () => onRechazar(respuestaId),
+        },
+      ],
+      { cancelable: true },
+    );
   };
-  
 
   return (
     <CardRespVendedorBase
@@ -86,7 +84,7 @@ export default function CardRespuestaVendedor({
 
         <Text
           style={{
-            fontFamily: "Roboto-Medium",
+            fontFamily: fonts.robotoMedium,
             fontSize: FontSizes.sm,
             color: colors.textDefault,
           }}
@@ -98,7 +96,7 @@ export default function CardRespuestaVendedor({
       <View style={{ alignItems: "flex-end" }}>
         <Text
           style={{
-            fontFamily: "Roboto-Bold",
+            fontFamily: fonts.robotoBold,
             fontSize: FontSizes.xl,
             color: colors.textDefault,
           }}
@@ -119,6 +117,7 @@ export default function CardRespuestaVendedor({
           <Button
             variant="secondary"
             height="md"
+            width="full"
             onPress={handleConfirmarRechazo}
           >
             Rechazar
@@ -130,13 +129,13 @@ export default function CardRespuestaVendedor({
             variant="primary"
             section="buyer"
             height="md"
+            width="full"
             onPress={() => onAceptar(respuestaId)}
           >
             Aceptar
           </Button>
         </View>
       </View>
-
     </CardRespVendedorBase>
   );
 }

@@ -3,7 +3,7 @@ import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Alert, Animated, FlatList, Pressable, Text, View } from 'react-native';
+import { Alert, Animated, FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../components/UI/Button/Button";
 import { BorderRadius, FontSizes } from "../../constants/Tokens";
@@ -23,11 +23,15 @@ export function sanitizeRubros(lista: RubroConfig[]): RubroConfig[] {
   }));
 }
 
-
 export interface Rubro {
   label: string;
   value: string;
-  IconComponent: React.ComponentType<{ width: number; height: number; color?: string; fill?: string }>;
+  IconComponent: React.ComponentType<{
+    width: number;
+    height: number;
+    color?: string;
+    fill?: string;
+  }>;
   color: string;
   iconColor: string;
 }
@@ -43,7 +47,8 @@ type Props = {
 };
 
 const STORAGE_KEY = "rubrosVendedorGuardados";
-const SELECTED_KEY = (section: "seller" | "buyer") => `selectedRubros_${section}`;
+const SELECTED_KEY = (section: "seller" | "buyer") =>
+  `selectedRubros_${section}`;
 
 export default function SelectRubros({
   label,
@@ -52,9 +57,9 @@ export default function SelectRubros({
   placeholder = "Selecciona tu/s rubro/s",
   section = "seller",
   borderColor,
-  borderRadius
+  borderRadius,
 }: Props) {
-  const { colors, mode } = useTheme();
+  const { colors, mode, fonts } = useTheme();
   const sheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ["75%"], []);
   const allowAddNew = section === "seller";
@@ -95,13 +100,15 @@ export default function SelectRubros({
 
           // Sanitizamos los rubros personalizados que vienen rotos del storage
           const rubrosSanitizados = sanitizeRubros(rubrosGuardados);
- 
+
           // Combinamos base + personalizados sanitizados
           const combinados = [...rubrosVendedor, ...rubrosSanitizados];
-          
+
           setRubrosInternos(combinados);
 
-          const storedSelected = await AsyncStorage.getItem(SELECTED_KEY(section));
+          const storedSelected = await AsyncStorage.getItem(
+            SELECTED_KEY(section),
+          );
           if (storedSelected) {
             const parsed = JSON.parse(storedSelected);
             setSelectedValues(parsed);
@@ -112,13 +119,13 @@ export default function SelectRubros({
         }
       };
       loadRubros();
-    }, [section])
+    }, [section]),
   );
 
   const saveRubros = async (rubros: Rubro[]) => {
     try {
       const personalizados = rubros.filter(
-        (r) => !rubrosVendedor.some((base) => base.value === r.value)
+        (r) => !rubrosVendedor.some((base) => base.value === r.value),
       );
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(personalizados));
     } catch (error) {
@@ -142,7 +149,7 @@ export default function SelectRubros({
 
   const toggleRubro = (value: string) => {
     setSelectedValues((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
     );
   };
 
@@ -206,21 +213,27 @@ export default function SelectRubros({
         pressBehavior="close"
       />
     ),
-    []
+    [],
   );
-// para debbug
+  // para debbug
   console.log("rubrosInternos", rubrosInternos);
   rubrosInternos.forEach((r) => {
     if (!r.IconComponent) {
       console.warn("Rubro sin IconComponent:", r.value);
     }
   });
-// fin debbug
+  // fin debbug
 
   return (
     <View>
       {label ? (
-        <Text style={{ color: colors.textDefault, fontSize: FontSizes.btn, marginBottom: 4 }}>
+        <Text
+          style={{
+            color: colors.textDefault,
+            fontSize: FontSizes.btn,
+            marginBottom: 4,
+          }}
+        >
           {label}
         </Text>
       ) : null}
@@ -241,7 +254,8 @@ export default function SelectRubros({
         <Text
           style={{
             flex: 1,
-            color: selectedValues.length > 0 ? colors.textDefault : colors.textMuted,
+            color:
+              selectedValues.length > 0 ? colors.textDefault : colors.textMuted,
           }}
         >
           {selectedValues.length > 0
@@ -266,48 +280,139 @@ export default function SelectRubros({
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
         onDismiss={handleCancel}
       >
-        <View style={{ flex: 1, backgroundColor: colors.background, width: "100%", maxWidth: 500, alignSelf: "center" }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.background,
+            width: "100%",
+            maxWidth: 500,
+            alignSelf: "center",
+          }}
+        >
           <FlatList
             data={rubrosInternos}
             keyExtractor={(item) => item.value}
             ListHeaderComponent={
-              <View style={{ paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12 }}>
-                <Text style={{ color: colors.textDefault, fontSize: FontSizes.base, fontWeight: "700" }}>
-                  {allowAddNew ? "Selecciona uno o más rubros" : "Selecciona el/los rubro/s"}
+              <View
+                style={{
+                  paddingHorizontal: 20,
+                  paddingTop: 20,
+                  paddingBottom: 12,
+                }}
+              >
+                <Text
+                  style={{
+                    color: colors.textDefault,
+                    fontSize: FontSizes.base,
+                    fontFamily: fonts.robotoBold,
+                  }}
+                >
+                  {allowAddNew
+                    ? "Selecciona uno o más rubros"
+                    : "Selecciona el/los rubro/s"}
                 </Text>
               </View>
             }
             renderItem={({ item }) => (
-              <RubroItem rubro={item} isSelected={selectedValues.includes(item.value)} onToggle={toggleRubro} />
+              <RubroItem
+                rubro={item}
+                isSelected={selectedValues.includes(item.value)}
+                onToggle={toggleRubro}
+              />
             )}
             ListFooterComponent={
-              allowAddNew
-                ? agregando
-                  ? <NuevoRubroInput value={nuevoRubro} onChange={setNuevoRubro} onAdd={agregarNuevoRubro} onCancel={() => { setAgregando(false); setNuevoRubro(""); }} />
-                  : (
-                    <Pressable onPress={() => setAgregando(true)} style={{ flexDirection: "row", alignItems: "center", padding: 12, borderRadius: 12, marginBottom: 16, backgroundColor: "transparent" }}>
-                      <View style={{ width: 44, height: 44, borderRadius: 22, justifyContent: "center", alignItems: "center", marginRight: 12, backgroundColor: mode === "dark" ? "#4A5568" : "#b4bbc5" }}>
-                        <MasBlanca width={24} height={24} color={mode === "dark" ? "#CBD5E0" : "#9CA3AF"} />
-                      </View>
-                      <Text style={{ flex: 1, color: colors.textMuted, fontSize: FontSizes.base }}>
-                        Nuevo Rubro
-                      </Text>
-                    </Pressable>
-                  )
-                : null
+              allowAddNew ? (
+                agregando ? (
+                  <NuevoRubroInput
+                    value={nuevoRubro}
+                    onChange={setNuevoRubro}
+                    onAdd={agregarNuevoRubro}
+                    onCancel={() => {
+                      setAgregando(false);
+                      setNuevoRubro("");
+                    }}
+                  />
+                ) : (
+                  <Pressable
+                    onPress={() => setAgregando(true)}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      padding: 12,
+                      borderRadius: 12,
+                      marginBottom: 16,
+                      backgroundColor: "transparent",
+                    }}
+                  >
+                    <View
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 22,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginRight: 12,
+                        backgroundColor:
+                          mode === "dark" ? "#4A5568" : "#b4bbc5",
+                      }}
+                    >
+                      <MasBlanca
+                        width={24}
+                        height={24}
+                        color={mode === "dark" ? "#CBD5E0" : "#9CA3AF"}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        flex: 1,
+                        color: colors.textMuted,
+                        fontSize: FontSizes.base,
+                      }}
+                    >
+                      Nuevo Rubro
+                    </Text>
+                  </Pressable>
+                )
+              ) : null
             }
             contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
           />
 
-          <SafeAreaView edges={["bottom"]} style={{ paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", paddingBottom: 12 }}>
+          <SafeAreaView
+            edges={["bottom"]}
+            style={{
+              paddingHorizontal: 20,
+              paddingTop: 8,
+              backgroundColor: colors.background,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingBottom: 12,
+              }}
+            >
               <View style={{ flex: 1, marginRight: 8 }}>
-                <Button variant="secondary" section="common" width="auto" onPress={handleCancel}>Cancelar</Button>
+                <Button
+                  variant="secondary"
+                  section="common"
+                  width="auto"
+                  onPress={handleCancel}
+                >
+                  Cancelar
+                </Button>
               </View>
               <View style={{ flex: 1 }}>
-                <Button variant="primary" section="common" width="auto" onPress={guardarCambios}>Guardar</Button>
+                <Button
+                  variant="primary"
+                  section="common"
+                  width="auto"
+                  onPress={guardarCambios}
+                >
+                  Guardar
+                </Button>
               </View>
-              
             </View>
           </SafeAreaView>
         </View>

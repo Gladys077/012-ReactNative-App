@@ -23,7 +23,7 @@ const PagoTransferencia: React.FC<Props> = ({
   errorComprobante,
   onComprobanteChange,
 }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   // estado local comprobante + importe
   const [comprobante, setComprobante] = useState<{
@@ -91,7 +91,7 @@ const PagoTransferencia: React.FC<Props> = ({
     >
       <Text
         style={{
-          fontFamily: "Roboto-Bold",
+          fontFamily: fonts.robotoBold,
           fontSize: FontSizes.sm,
           color: colors.textDefault,
           textDecorationLine: "underline",
@@ -123,7 +123,7 @@ const PagoTransferencia: React.FC<Props> = ({
           <Text
             style={{
               fontSize: FontSizes.sm,
-              fontFamily: "Roboto-Bold",
+              fontFamily: fonts.robotoBold,
               color: colors.textDefault,
             }}
           >
@@ -152,7 +152,9 @@ const PagoTransferencia: React.FC<Props> = ({
         }}
       >
         Entidad:{" "}
-        <Text style={{ color: colors.textDefault, fontFamily: "Roboto-Bold" }}>
+        <Text
+          style={{ color: colors.textDefault, fontFamily: fonts.robotoBold }}
+        >
           {entidad || "Mercado Pago"}
         </Text>
       </Text>
@@ -165,7 +167,9 @@ const PagoTransferencia: React.FC<Props> = ({
         }}
       >
         Titular:{" "}
-        <Text style={{ color: colors.textDefault, fontFamily: "Roboto-Bold" }}>
+        <Text
+          style={{ color: colors.textDefault, fontFamily: fonts.robotoBold }}
+        >
           {titular || "Juan Pérez"}
         </Text>
       </Text>
@@ -243,7 +247,7 @@ const PagoTransferencia: React.FC<Props> = ({
             marginTop: 6,
             color: colors.textError,
             fontSize: FontSizes.xs,
-            fontFamily: "Roboto-Regular",
+            fontFamily: fonts.robotoRegular,
           }}
         >
           {errorComprobante}

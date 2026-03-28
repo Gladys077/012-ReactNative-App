@@ -9,8 +9,12 @@ interface Props {
   errorImporte?: string;
 }
 
-const PagoEfectivo: React.FC<Props> = ({ importe, onCambiarImporte, errorImporte }) => {
-  const { colors } = useTheme();
+const PagoEfectivo: React.FC<Props> = ({
+  importe,
+  onCambiarImporte,
+  errorImporte,
+}) => {
+  const { colors, fonts } = useTheme();
 
   return (
     <View
@@ -29,7 +33,8 @@ const PagoEfectivo: React.FC<Props> = ({ importe, onCambiarImporte, errorImporte
           marginBottom: Spacing.sm,
         }}
       >
-        Si abona en efectivo, indique con cuánto abonará, así llevamos el vuelto. ¡Gracias!
+        Si abona en efectivo, indique con cuánto abonará, así llevamos el
+        vuelto. ¡Gracias!
       </Text>
 
       <TextInput
@@ -57,7 +62,7 @@ const PagoEfectivo: React.FC<Props> = ({ importe, onCambiarImporte, errorImporte
             marginTop: 6,
             color: colors.textError,
             fontSize: FontSizes.xs,
-            fontFamily: "Roboto-Regular",
+            fontFamily: fonts.robotoRegular,
           }}
         >
           {errorImporte}

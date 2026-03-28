@@ -29,7 +29,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
   style,
   children,
 }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
   const animacion = useRef(new Animated.Value(0)).current;
 
@@ -82,7 +82,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
       >
         <Text
           style={{
-            fontFamily: "Roboto-Medium",
+            fontFamily: fonts.robotoMedium,
             fontSize: FontSizes.sm,
             color: colorTexto || colors.textDefault,
             marginRight: 8,
@@ -120,8 +120,9 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
 
 export default ToggleExpandir;
 
-//MODO DE USO: en CardPedidoVerRespuestas 
-{/* <ToggleExpandir
+//MODO DE USO: en CardPedidoVerRespuestas
+{
+  /* <ToggleExpandir
   textoMostrar="Mostrar respuestas recibidas"
   textoOcultar="Ocultar respuestas recibidas"
   colorTexto={colors.brandBuyer}
@@ -146,4 +147,5 @@ export default ToggleExpandir;
       ))}
     </View>
   )}
-</ToggleExpandir> */}
+</ToggleExpandir> */
+}

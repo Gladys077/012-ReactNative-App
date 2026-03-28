@@ -1,12 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  View
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { CambiarContraseña } from "../../components/icons";
 import Button from "../../components/UI/Button/Button";
 import { InputField } from "../../components/UI/InputField";
@@ -28,7 +23,11 @@ export default function CambiarContraseñaScreen() {
   });
 
   const handleSave = () => {
-    const newErrors = { currentPassword: "", newPassword: "", confirmPassword: "" };
+    const newErrors = {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    };
     let hasError = false;
 
     if (!password.trim()) {
@@ -37,7 +36,8 @@ export default function CambiarContraseñaScreen() {
     }
 
     if (newPassword.length < 6) {
-      newErrors.newPassword = "La nueva contraseña debe tener al menos 6 caracteres";
+      newErrors.newPassword =
+        "La nueva contraseña debe tener al menos 6 caracteres";
       hasError = true;
     }
 
@@ -77,7 +77,11 @@ export default function CambiarContraseñaScreen() {
           >
             {/* Icono */}
             <View style={{ alignItems: "center", marginVertical: Spacing.xl }}>
-              <CambiarContraseña width={100} height={100}  color={colors.textDefault}/>
+              <CambiarContraseña
+                width={100}
+                height={100}
+                color={colors.textDefault}
+              />
             </View>
 
             {/* Inputs */}
@@ -99,7 +103,7 @@ export default function CambiarContraseñaScreen() {
                 value={newPassword}
                 onChangeText={setNewPassword}
                 secureTextEntry
-                showPasswordToggle 
+                showPasswordToggle
                 error={errors.newPassword}
               />
             </View>
@@ -117,8 +121,14 @@ export default function CambiarContraseñaScreen() {
             </View>
 
             {/* Botones */}
-            <View className="flex-row justify-between mt-4">
-              <View className="flex-1 mr-2">
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 16,
+              }}
+            >
+              <View style={{ flex: 1, marginRight: 8 }}>
                 <Button
                   variant="secondary"
                   section="common"
@@ -129,7 +139,7 @@ export default function CambiarContraseñaScreen() {
                 </Button>
               </View>
 
-              <View className="flex-1">
+              <View style={{ flex: 1 }}>
                 <Button
                   variant="primary"
                   section="common"

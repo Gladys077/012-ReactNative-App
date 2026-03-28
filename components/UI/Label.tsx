@@ -8,7 +8,7 @@ interface LabelProps {
   subtext?: string;
   className?: string;
   subtextStyle?: TextStyle; // prop para color/estilo dinámico (si es error: rojo)
-  noMarginTop?: boolean;  
+  noMarginTop?: boolean;
 }
 
 export default function Label({
@@ -16,24 +16,31 @@ export default function Label({
   required = false,
   icon,
   subtext,
-  className = "",
   subtextStyle,
   noMarginTop = false,
 }: LabelProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
-    <View className={`flex flex-col ${noMarginTop ? "" : "mt-4"} ${className}`}>
+    <View style={{ flexDirection: "column", marginTop: noMarginTop ? 0 : 16 }}>
       {children && (
-        <View className="flex-row items-center gap-1">
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
           <Text
-            style={{ color: colors.textDefault, fontSize: 14, fontFamily: "Roboto_500Medium" }}
+            style={{
+              color: colors.textDefault,
+              fontSize: 14,
+              fontFamily: fonts.robotoMedium,
+            }}
           >
             {children}
           </Text>
           {required && (
             <Text
-              style={{ color: colors.textError, fontSize: 12, fontFamily: "Roboto_500Medium" }}
+              style={{
+                color: colors.textError,
+                fontSize: 12,
+                fontFamily: fonts.robotoMedium,
+              }}
             >
               *
             </Text>
@@ -47,7 +54,7 @@ export default function Label({
           style={{
             color: colors.textMuted,
             fontSize: 12,
-            fontFamily: "Roboto_400Regular",
+            fontFamily: fonts.robotoRegular,
             ...subtextStyle,
           }}
         >

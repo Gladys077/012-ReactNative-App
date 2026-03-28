@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Carrito, TiendaIcon } from "../../components/icons";
 import RoleButton from "../../components/UI/Button/RolButton";
 import { Spacing } from "../../constants/Tokens";
@@ -8,8 +9,8 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function ElegirRolScreen() {
-  const { colors } = useTheme();
-  const { switchRole } = useAuthContext(); 
+  const { colors, fonts } = useTheme();
+  const { switchRole } = useAuthContext();
   const router = useRouter();
 
   const handleSelectRole = (role: "buyer" | "seller") => {
@@ -79,7 +80,7 @@ export default function ElegirRolScreen() {
                 <Text
                   style={{
                     color: colors.textMuted,
-                    fontWeight: "bold",
+                    fontFamily: fonts.robotoBold,
                     fontSize: 14,
                   }}
                 >
@@ -92,7 +93,7 @@ export default function ElegirRolScreen() {
               style={{
                 color: colors.textDefault,
                 fontSize: 24,
-                fontWeight: "bold",
+                fontFamily: fonts.robotoBold,
                 marginTop: Spacing.md,
                 marginBottom: Spacing.sm,
               }}

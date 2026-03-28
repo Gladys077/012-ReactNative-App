@@ -33,7 +33,7 @@ const EstadoPedido = () => {
   /*
     const fetchPedidos = async () => {
       try {
-        const response = await fetch("https://tu-api.com/pedidos");
+        const response = await fetch("https://api.com/pedidos");
         const data: Pedido[] = await response.json();
         setPedidos(data);
       } catch (error) {
@@ -284,8 +284,12 @@ const EstadoPedido = () => {
   if (loading) {
     return (
       <View
-        className="flex-1 justify-center items-center"
-        style={{ backgroundColor: colors.background }}
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: colors.background,
+        }}
       >
         <ActivityIndicator size="large" color={colors.brandBuyer} />
       </View>
@@ -299,9 +303,9 @@ const EstadoPedido = () => {
   };
 
   return (
-    <View className="flex-1" style={{ backgroundColor: colors.background }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
-        className="flex-1"
+        style={{ flex: 1 }}
         contentContainerStyle={{
           padding: Spacing.md,
           paddingTop: Spacing.xl,
@@ -316,7 +320,7 @@ const EstadoPedido = () => {
               case "Ver respuestas": {
                 return (
                   <CardPedidoVerRespuestas
-                    key={pedido.id} // solo para q React identifiq cada elemento dentro de una lista (.map) y optimice el renderizado -no se pasa como prop.
+                    key={pedido.id} // solo para q React identifiq c/elemento dentro de una lista (.map) y optimice el renderizado -no se pasa como prop.
                     pedidoId={pedido.id} // prop del interior del componente
                     numeroPedido={pedido.numeroPedido}
                     cantidadRespuestas={pedido.respuestas?.length || 0}

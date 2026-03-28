@@ -22,7 +22,7 @@ interface Props {
 
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
   ({ numeroPedido, items = [], snapPoints = ["40%", "70%"] }, ref) => {
-    const { colors } = useTheme();
+    const { colors, fonts } = useTheme();
     const sheetRef = useRef<BottomSheetModal>(null);
 
     // Métodos expuestos al padre
@@ -41,13 +41,13 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
         backgroundStyle={{ backgroundColor: colors.brandBuyerSoft }}
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
-        <View style={{ padding: Spacing.lg, flex: 1}}>
+        <View style={{ padding: Spacing.lg, flex: 1 }}>
           {/* Header */}
           {numeroPedido && (
             <Text
               style={{
                 fontSize: FontSizes.md,
-                fontFamily: "Roboto-Bold",
+                fontFamily: fonts.robotoBold,
                 color: colors.textDefault,
                 marginBottom: Spacing.sm,
               }}
@@ -88,7 +88,7 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
         </View>
       </BottomSheetModal>
     );
-  }
+  },
 );
 
 BottomSheetVerPedido.displayName = "BottomSheetVerPedido";

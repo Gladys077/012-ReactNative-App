@@ -3,21 +3,21 @@ import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
-import { Spacing } from '../../constants/Tokens';
+import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function PerfilScreen() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const router = useRouter();
 
   // TODO: VER CON LIO. Por ahora datos del usuario simulados
@@ -135,7 +135,6 @@ export default function PerfilScreen() {
         // Si NO elige rubros, simplemente vuelve a donde estaba
         router.back();
       }
-
     } catch (err) {
       console.log("Error al conectar al servidor:", err);
     }
@@ -163,10 +162,8 @@ export default function PerfilScreen() {
               alignSelf: "center",
             }}
           >
-
             {/* Form Section */}
             <View style={{ marginBottom: Spacing.xxl }}>
-
               {/* Inputs */}
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
@@ -236,15 +233,26 @@ export default function PerfilScreen() {
                 />
               </View>
 
-                  <LineaDivisoria/>
+              <LineaDivisoria />
 
-              <View >
-                <Text style={{fontSize: 11, color: colors.statusLavenderDot, fontWeight: "600", textTransform: "uppercase", marginTop: 18 }}>
-                  ¿Deseas vender u ofrecer algún servicio?</Text>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: colors.statusLavenderDot,
+                    fontFamily: fonts.robotoBold,
+                    textTransform: "uppercase",
+                    marginTop: 18,
+                  }}
+                >
+                  ¿Deseas vender u ofrecer algún servicio?
+                </Text>
               </View>
 
               {/* Select Rubros */}
-              <View style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}>
+              <View
+                style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
+              >
                 <SelectRubros
                   label="Selecciona tu/s rubro/s"
                   section="seller"
@@ -256,11 +264,21 @@ export default function PerfilScreen() {
               {/* --- Datos para recibir pagos por transferencia --- */}
               {rubros.length > 0 && (
                 <>
-                  <View style={{ marginTop: Spacing.lg, marginBottom: Spacing.xxl, borderWidth: 3, borderRadius: 24, borderColor: colors.cardBg , padding: 16, paddingBottom: 4 }}>
+                  <View
+                    style={{
+                      marginTop: Spacing.lg,
+                      marginBottom: Spacing.xxl,
+                      borderWidth: 3,
+                      borderRadius: 24,
+                      borderColor: colors.cardBg,
+                      padding: 16,
+                      paddingBottom: 4,
+                    }}
+                  >
                     <Text
                       style={{
                         color: colors.textDefault,
-                        fontWeight: "600",
+                        fontFamily: fonts.robotoBold,
                         marginBottom: Spacing.sm,
                       }}
                     >
@@ -273,49 +291,55 @@ export default function PerfilScreen() {
                         fontSize: 12,
                       }}
                     >
-                      Estos datos le llegarán a tus clientes cuando elijan abonarte por transferencia.
+                      Estos datos le llegarán a tus clientes cuando elijan
+                      abonarte por transferencia.
                     </Text>
-                  
 
-                  {/* Alias */}
-                  <View style={{ marginBottom: Spacing.xl }}>
-                    <InputField
-                      label="Alias"
-                      value={alias}
-                      onChangeText={setAlias}
-                      editable
-                      error={errors.alias}
-                    />
-                  </View>
+                    {/* Alias */}
+                    <View style={{ marginBottom: Spacing.xl }}>
+                      <InputField
+                        label="Alias"
+                        value={alias}
+                        onChangeText={setAlias}
+                        editable
+                        error={errors.alias}
+                      />
+                    </View>
 
-                  {/* Banco */}
-                  <View style={{ marginBottom: Spacing.xl }}>
-                    <InputField
-                      label="Banco o billetera virtual"
-                      value={banco}
-                      onChangeText={setBanco}
-                      editable
-                      error={errors.banco}
-                    />
-                  </View>
+                    {/* Banco */}
+                    <View style={{ marginBottom: Spacing.xl }}>
+                      <InputField
+                        label="Banco o billetera virtual"
+                        value={banco}
+                        onChangeText={setBanco}
+                        editable
+                        error={errors.banco}
+                      />
+                    </View>
 
-                  {/* Titular */}
-                  <View style={{ marginBottom: Spacing.xxl }}>
-                    <InputField
-                      label="Titular"
-                      value={titular}
-                      onChangeText={setTitular}
-                      editable
-                      error={errors.titular}
-                    />
-                  </View>
+                    {/* Titular */}
+                    <View style={{ marginBottom: Spacing.xxl }}>
+                      <InputField
+                        label="Titular"
+                        value={titular}
+                        onChangeText={setTitular}
+                        editable
+                        error={errors.titular}
+                      />
+                    </View>
                   </View>
                 </>
               )}
 
               {/* Botones */}
-              <View className="flex-row justify-between mt-4">
-                <View className="flex-1 mr-2">
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 16,
+                }}
+              >
+                <View style={{ flex: 1, marginRight: 8 }}>
                   <Button
                     variant="secondary"
                     section="common"
@@ -326,7 +350,7 @@ export default function PerfilScreen() {
                   </Button>
                 </View>
 
-                <View className="flex-1">
+                <View style={{ flex: 1 }}>
                   <Button
                     variant="primary"
                     section="common"
@@ -337,7 +361,6 @@ export default function PerfilScreen() {
                   </Button>
                 </View>
               </View>
-
             </View>
           </View>
         </ScrollView>

@@ -18,7 +18,7 @@ interface Props {
   nombreNegocio: string;
   rating: number;
   precio: number;
-  
+
   nota: string | undefined;
   duracionCronometro: number;
   timestampRespuesta: number;
@@ -28,13 +28,16 @@ interface Props {
   titular: string;
 
   direccion: string;
-  
+
   problema: ProblemaPago;
 
   onVerPedido: () => void;
   onVerMensajes: () => void;
   onVerNota: (nota: string) => void;
-  onFinishCronometro: (pedidoId: string | number, respuestaId: string | number) => void;
+  onFinishCronometro: (
+    pedidoId: string | number,
+    respuestaId: string | number,
+  ) => void;
 
   onEnviarCorreccion: (data: {
     comprobante?: { uri: string; name: string };
@@ -67,25 +70,28 @@ export default function CardErrorPagoDireccion(props: Props) {
     onCancelarPedido,
   } = props;
 
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
-  const [comprobante, setComprobante] =
-    useState<{ uri: string; name: string } | null>(null);
+  const [comprobante, setComprobante] = useState<{
+    uri: string;
+    name: string;
+  } | null>(null);
 
   const [direccionState, setDireccionState] = useState(direccion);
   const [editandoDireccion, setEditandoDireccion] = useState(
-    problema === "direccion" || problema === "ambos"
+    problema === "direccion" || problema === "ambos",
   );
 
   const puedeEditarComprobante =
     problema === "comprobante" || problema === "ambos";
 
-  const puedeEditarDireccion =
-    problema === "direccion" || problema === "ambos";
+  const puedeEditarDireccion = problema === "direccion" || problema === "ambos";
 
   const handleEnviar = () => {
     onEnviarCorreccion({
-      comprobante: puedeEditarComprobante ? comprobante ?? undefined : undefined,
+      comprobante: puedeEditarComprobante
+        ? (comprobante ?? undefined)
+        : undefined,
       direccion: puedeEditarDireccion ? direccionState : undefined,
     });
   };
@@ -102,18 +108,24 @@ export default function CardErrorPagoDireccion(props: Props) {
       timestampRespuesta={timestampRespuesta}
       tipoCronometro="pagar"
       onVerNota={onVerNota}
-      onFinishCronometro={() => { onFinishCronometro?.(pedidoId, respuestaId);  }}
+      onFinishCronometro={() => {
+        onFinishCronometro?.(pedidoId, respuestaId);
+      }}
     >
       {/* Ver pedido + Mensajes */}
       <View style={{ flexDirection: "row", gap: Spacing.lg }}>
-        <VerBottomSheet onPress={onVerPedido} iconPosition="left" variant="buyer" />
+        <VerBottomSheet
+          onPress={onVerPedido}
+          iconPosition="left"
+          variant="buyer"
+        />
 
         <Pressable onPress={onVerMensajes}>
           <Text
             style={{
               fontSize: FontSizes.sm,
               color: colors.brandBuyer,
-              fontFamily: "Roboto-Medium",
+              fontFamily: fonts.robotoMedium,
             }}
           >
             Mensajes
@@ -141,16 +153,22 @@ export default function CardErrorPagoDireccion(props: Props) {
       <DireccionEntrega
         direccion={direccionState}
         editable={puedeEditarDireccion && editandoDireccion}
-        onEditarDireccion={() => puedeEditarDireccion && setEditandoDireccion(true)}
+        onEditarDireccion={() =>
+          puedeEditarDireccion && setEditandoDireccion(true)
+        }
         onCambiarDireccion={setDireccionState}
         onGuardarDireccion={() => setEditandoDireccion(false)}
         errorDireccion={
-          puedeEditarDireccion ? "La dirección es incorrecta o incompleta." : undefined
+          puedeEditarDireccion
+            ? "La dirección es incorrecta o incompleta."
+            : undefined
         }
       />
 
       {/* Acciones */}
-      <View style={{ flexDirection: "row", gap: Spacing.md, marginTop: Spacing.xl }}>
+      <View
+        style={{ flexDirection: "row", gap: Spacing.md, marginTop: Spacing.xl }}
+      >
         <Pressable
           onPress={onCancelarPedido}
           style={{
@@ -161,9 +179,7 @@ export default function CardErrorPagoDireccion(props: Props) {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: FontSizes.btn }}>
-            Cancelar pedido
-          </Text>
+          <Text style={{ fontSize: FontSizes.btn }}>Cancelar pedido</Text>
         </Pressable>
 
         <Pressable
@@ -179,7 +195,7 @@ export default function CardErrorPagoDireccion(props: Props) {
           <Text
             style={{
               fontSize: FontSizes.btn,
-              fontFamily: "Roboto-Bold",
+              fontFamily: fonts.robotoBold,
               color: colors.textDefault,
             }}
           >

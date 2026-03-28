@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../components/UI/Button/Button";
 import { InputField } from "../../components/UI/InputField";
 import { Spacing } from "../../constants/Tokens";
@@ -27,26 +28,45 @@ export default function OlvideContrasena() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingTop: Spacing.lg }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+        paddingTop: Spacing.lg,
+      }}
+    >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1}}
+        contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ flex: 1,
-                    paddingHorizontal: Spacing.xl,
-                    marginTop: Spacing.xxl,
-                    paddingTop: Spacing.xxl,
-                    maxWidth: 500,
-                    width: "100%",
-                    alignSelf: "center" }}>
-        
-          <Text style={{ color: colors.textDefault, fontSize: 18, marginBottom: Spacing.xxl, fontWeight: "500",
-                    alignSelf: "center" }}>
-            Ingresa tu correo y te enviaremos un link para restablecer tu contraseña
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: Spacing.xl,
+            marginTop: Spacing.xxl,
+            paddingTop: Spacing.xxl,
+            maxWidth: 500,
+            width: "100%",
+            alignSelf: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: colors.textDefault,
+              fontSize: 18,
+              marginBottom: Spacing.xxl,
+              fontWeight: "500",
+              alignSelf: "center",
+            }}
+          >
+            Ingresa tu correo y te enviaremos un link para restablecer tu
+            contraseña
           </Text>
 
           {submitted ? (
-            <Text style={{ color: colors.textDefault, marginVertical: Spacing.md }}>
+            <Text
+              style={{ color: colors.textDefault, marginVertical: Spacing.md }}
+            >
               ¡Listo! Revisa tu correo para restablecer tu contraseña.
             </Text>
           ) : (
@@ -58,10 +78,10 @@ export default function OlvideContrasena() {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 required
-            error={error ? error : undefined}
+                error={error ? error : undefined}
               />
 
-              <View style={{ marginTop: Spacing.xxl}}>
+              <View style={{ marginTop: Spacing.xxl }}>
                 <Button section="common" width="full" onPress={handleSubmit}>
                   Enviar link de recuperación
                 </Button>

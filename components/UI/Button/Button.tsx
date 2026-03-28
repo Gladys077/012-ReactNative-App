@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   iconPosition = "left",
   styleAdd,
 }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const Icon = icon;
 
   ///Alturas
@@ -48,12 +48,11 @@ const Button: React.FC<ButtonProps> = ({
     typeof height === "string" ? heightClasses[height] || 48 : height;
 
   // Ancho
-  const widthClasses = {
-    auto: 'w-auto',
-    half: 'w-1/2',
-    full: 'w-full',
+  const widthMap: Record<string, ViewStyle> = {
+    auto: { alignSelf: "flex-start" },
+    half: { width: "50%" },
+    full: { width: "100%" },
   };
-
 
   // colores según variant + sección (usa useTheme)
   const sectionBgMap = {
@@ -71,10 +70,18 @@ const Button: React.FC<ButtonProps> = ({
 
   const containerColors =
     variant === "primary"
-      ? { backgroundColor: primaryBg, borderColor: "transparent", textColor: primaryTextColor, iconColor: primaryTextColor }
-      : { backgroundColor: secondaryBg, borderColor: secondaryBorder, textColor: secondaryTextColor, iconColor: secondaryTextColor };
-
-
+      ? {
+          backgroundColor: primaryBg,
+          borderColor: "transparent",
+          textColor: primaryTextColor,
+          iconColor: primaryTextColor,
+        }
+      : {
+          backgroundColor: secondaryBg,
+          borderColor: secondaryBorder,
+          textColor: secondaryTextColor,
+          iconColor: secondaryTextColor,
+        };
 
   // ===== botón estilos base (inline, Android-friendly)
   const baseButtonStyle: ViewStyle = {
@@ -84,7 +91,8 @@ const Button: React.FC<ButtonProps> = ({
     height: resolvedHeight,
     // widthClasses[width],
     borderWidth: variant === "secondary" ? 1 : 0,
-    borderColor: variant === "secondary" ? containerColors.borderColor : "transparent",
+    borderColor:
+      variant === "secondary" ? containerColors.borderColor : "transparent",
     justifyContent: "center",
     // Sombra nativa (uso tokens.shadows para control)
     ...shadows.md,
@@ -93,7 +101,11 @@ const Button: React.FC<ButtonProps> = ({
 
   // Se aplica al btn principal (caja EXTERIOR del btn). Si pasamos styleAdd, lo respetamos (se aplica al final)
   // Define: Bg, height, width, border, shadow, opacity y estilo adicionales (styleAdd)
-  const combinedButtonStyle = StyleSheet.flatten([baseButtonStyle, widthClasses, styleAdd]) as ViewStyle;
+  const combinedButtonStyle = StyleSheet.flatten([
+    baseButtonStyle,
+    widthMap[width],
+    styleAdd,
+  ]) as ViewStyle;
 
   // contenido: layout horizontal con icon + texto (estilos que se aplican DENTRO del btn)
   const contentStyle: ViewStyle = {
@@ -105,14 +117,22 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <View style={[{ marginTop: Spacing.lg }, ]}>
-      <Pressable onPress={onPress} disabled={disabled} style={({ pressed }) => ({ transform: [{ scale: pressed ? 0.97 : 1 }] })}>
+    <View style={[{ marginTop: Spacing.lg }]}>
+      <Pressable
+        onPress={onPress}
+        disabled={disabled}
+        style={({ pressed }) => ({
+          transform: [{ scale: pressed ? 0.97 : 1 }],
+        })}
+      >
         {({ pressed }) => (
           <View
             style={[
               combinedButtonStyle,
-              // efecto pressed (ligero darken) 
-              pressed ? { opacity: 0.95, transform: [{ scale: 0.97 }] } : undefined,
+              // efecto pressed (ligero darken)
+              pressed
+                ? { opacity: 0.95, transform: [{ scale: 0.97 }] }
+                : undefined,
             ]}
           >
             <View style={contentStyle}>
@@ -129,7 +149,7 @@ const Button: React.FC<ButtonProps> = ({
                 style={{
                   color: containerColors.textColor,
                   fontSize: 14,
-                  fontWeight: "500",
+                  fontFamily: fonts.robotoMedium,
                 }}
               >
                 {children}

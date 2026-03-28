@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
@@ -10,23 +11,35 @@ type NuevoRubroInputProps = {
   onCancel: () => void;
 };
 
-export default function NuevoRubroInput({ 
-  value, 
-  onChange, 
+export default function NuevoRubroInput({
+  value,
+  onChange,
   onAdd,
-  onCancel 
+  onCancel,
 }: NuevoRubroInputProps) {
-  const { colors, mode } = useTheme();
-  
+  const { colors, fonts, mode } = useTheme();
+
   return (
-    <View 
-      className="flex-row items-center p-3 rounded-xl"
-      style={{ backgroundColor: mode === 'dark' ? '#2D3748' : '#F9FAFB' }}
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 12,
+        borderRadius: BorderRadius.xl,
+        backgroundColor: mode === "dark" ? "#2D3748" : "#F9FAFB",
+      }}
     >
       {/* Círculo con icono */}
-      <View 
-        className="w-9 h-9 rounded-full items-center justify-center mr-3"
-        style={{ backgroundColor: mode === 'dark' ? '#4A5568' : '#E5E7EB' }}
+      <View
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: BorderRadius.full,
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: 12,
+          backgroundColor: mode === "dark" ? "#4A5568" : "#E5E7EB",
+        }}
       >
         <TiendaIcon width={18} height={18} color={colors.textMuted} />
       </View>
@@ -36,8 +49,7 @@ export default function NuevoRubroInput({
         placeholder="Nombre del nuevo rubro"
         value={value}
         onChangeText={onChange}
-        className="flex-1 text-base"
-        style={{ color: colors.textDefault }}
+        style={{ flex: 1, fontSize: 16, color: colors.textDefault }}
         placeholderTextColor={colors.textMuted}
         autoFocus
         onSubmitEditing={onAdd}
@@ -45,28 +57,55 @@ export default function NuevoRubroInput({
       />
 
       {/* Botones de acción */}
-      <View className="flex-row gap-2 ml-2">
+      <View
+        style={{
+          flexDirection: "row",
+          gap: Spacing.sm,
+          marginLeft: Spacing.sm,
+        }}
+      >
         {/* Botón confirmar */}
         <Pressable
           onPress={onAdd}
           disabled={!value.trim()}
-          className="w-8 h-8 rounded-full items-center justify-center"
           style={{
+            width: 32,
+            height: 32,
+            borderRadius: BorderRadius.full,
+            alignItems: "center",
+            justifyContent: "center",
             backgroundColor: value.trim() ? colors.brandSeller : colors.border,
           }}
         >
-          <Text className="text-white font-bold text-sm">✓</Text>
+          <Text
+            style={{
+              color: "white",
+              fontFamily: fonts.robotoBold,
+              fontSize: 14,
+            }}
+          >
+            ✓
+          </Text>
         </Pressable>
 
         {/* Botón cancelar */}
         <Pressable
           onPress={onCancel}
-          className="w-8 h-8 rounded-full items-center justify-center"
-          style={{ backgroundColor: colors.border }}
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: BorderRadius.full,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: colors.border,
+          }}
         >
-          <Text 
-            className="font-bold text-sm"
-            style={{ color: colors.textMuted }}
+          <Text
+            style={{
+              fontFamily: fonts.robotoBold,
+              fontSize: 14,
+              color: colors.textMuted,
+            }}
           >
             ✕
           </Text>

@@ -12,7 +12,12 @@ import {
   Lupa$,
 } from "../icons";
 
-type EstadoPedido = | "Pago" | "Verificacion" | "Preparacion" | "EnCamino" | "Entregado";
+type EstadoPedido =
+  | "Pago"
+  | "Verificacion"
+  | "Preparacion"
+  | "EnCamino"
+  | "Entregado";
 
 interface LineaEstadoPedidoProps {
   estadoActual: EstadoPedido;
@@ -29,7 +34,7 @@ const ESTADOS_ORDEN: EstadoPedido[] = [
 export default function LineaEstadoPedido({
   estadoActual,
 }: LineaEstadoPedidoProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const estadoActualIndex = ESTADOS_ORDEN.indexOf(estadoActual);
 
   /**
@@ -64,11 +69,20 @@ export default function LineaEstadoPedido({
 
   return (
     <View style={{ paddingVertical: Spacing.md }}>
-      <View className="relative flex-row items-center justify-between">
+      <View
+        style={{
+          position: "relative",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         {/* Línea base */}
         <View
-          className="absolute left-0 right-0"
           style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
             height: 3,
             backgroundColor: colors.textSecondaryBorder,
             top: 24,
@@ -86,9 +100,7 @@ export default function LineaEstadoPedido({
             top: 24,
             left: 0,
             borderRadius: 2,
-            width: `${
-              (estadoActualIndex / (ESTADOS_ORDEN.length - 1)) * 100
-            }%`,
+            width: `${(estadoActualIndex / (ESTADOS_ORDEN.length - 1)) * 100}%`,
           }}
         />
 
@@ -109,13 +121,13 @@ export default function LineaEstadoPedido({
                   borderColor: completado
                     ? colors.brandBuyer
                     : activo
-                    ? colors.brandBuyer
-                    : colors.textSecondaryBorder,
+                      ? colors.brandBuyer
+                      : colors.textSecondaryBorder,
                   backgroundColor: completado
                     ? colors.success
                     : activo
-                    ? colors.fondoCirculoActivo
-                    : colors.fondoCirculo,
+                      ? colors.fondoCirculoActivo
+                      : colors.fondoCirculo,
                   justifyContent: "center",
                   alignItems: "center",
                 }}
@@ -126,7 +138,7 @@ export default function LineaEstadoPedido({
               {/* Label */}
               <Text
                 style={{
-                  fontFamily: "Roboto-Medium",
+                  fontFamily: fonts.robotoMedium,
                   fontSize: FontSizes.xxs,
                   color: colors.textDefault,
                   marginTop: Spacing.sm,
@@ -136,10 +148,10 @@ export default function LineaEstadoPedido({
                 {estado === "Verificacion"
                   ? "Verificación"
                   : estado === "Preparacion"
-                  ? "Preparación"
-                  : estado === "EnCamino"
-                  ? "En Camino"
-                  : estado}
+                    ? "Preparación"
+                    : estado === "EnCamino"
+                      ? "En Camino"
+                      : estado}
               </Text>
             </View>
           );

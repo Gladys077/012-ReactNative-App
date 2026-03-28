@@ -54,7 +54,7 @@ export default function CardVendedorPagoDireccion({
   onVerNota,
   onFinishCronometro,
 }: CardVendedorPagoDireccionProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const [formaPago, setFormaPago] = useState<"transferencia" | "efectivo">(
     "transferencia",
@@ -138,7 +138,7 @@ export default function CardVendedorPagoDireccion({
         <NotaDelVendedor nota={nota} onVerNota={onVerNota} />
         <Text
           style={{
-            fontFamily: "Roboto-Medium",
+            fontFamily: fonts.robotoRegular,
             fontSize: FontSizes.sm,
             color: colors.textDefault,
           }}
@@ -151,7 +151,7 @@ export default function CardVendedorPagoDireccion({
       <View style={{ alignItems: "flex-end" }}>
         <Text
           style={{
-            fontFamily: "Roboto-Bold",
+            fontFamily: fonts.robotoBold,
             fontSize: FontSizes.xl,
             color: colors.textDefault,
           }}

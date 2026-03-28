@@ -1,6 +1,6 @@
 import * as React from "react";
-import Svg, { Mask, Path, G } from "react-native-svg";
 import type { SvgProps } from "react-native-svg";
+import Svg, { G, Mask, Path } from "react-native-svg";
 const SvgGoogleLogo = (props: SvgProps) => (
   <Svg
     width={24}
@@ -8,7 +8,8 @@ const SvgGoogleLogo = (props: SvgProps) => (
     fill={props.color || "currentColor"}
     viewBox="0 0 20 20"
     {...props}
-   color={props.color}>
+    color={props.color}
+  >
     <Mask
       id="GoogleLogo_svg__a"
       width={5}
@@ -36,9 +37,7 @@ const SvgGoogleLogo = (props: SvgProps) => (
       x={10}
       y={8}
       maskUnits="userSpaceOnUse"
-      style={{
-        maskType: "luminance",
-      }}
+      maskType="luminance"
     >
       <Path
         fillRule="evenodd"

@@ -1,41 +1,41 @@
 export const Colors = {
   light: {
     // Textos
-    textDefault: '#374151',    // gray-700
-    textMuted: '#6b7280',      // gray-500  
-    textError: '#ef4444',      // red-500
-    textOnColor: '#ffffff',
+    textDefault: "#374151", // gray-700
+    textMuted: "#6b7280", // gray-500
+    textError: "#ef4444", // red-500
+    textOnColor: "#ffffff",
 
     // Botones secundarios
-    textSecondaryBg: '#dadbdc',
-    textSecondaryBorder: '#a7a7a7',
+    textSecondaryBg: "#dadbdc",
+    textSecondaryBorder: "#a7a7a7",
 
     // Primarios por rol
-    brandCommon: '#5a32ea',  // violet-600
-    brandBuyer: '#2563eb',   // blue-600
-    brandSeller: '#ea580c',  // orange-600
+    brandCommon: "#5a32ea", // violet-600
+    brandBuyer: "#2563eb", // blue-600
+    brandSeller: "#ea580c", // orange-600
 
     // Error
-    errorSoft: "fcc7c7",
+    errorSoft: "#fcc7c7",
     error: "#ef4444",
-    
+
     // Para fondos suaves
-    tipsColorBuyer: '#1D4ED8', // blue-700
+    tipsColorBuyer: "#1D4ED8", // blue-700
 
     // Bordes cards dentro de las cards del comprador
-    borderTopBottom: '#72a5cf', // 
+    borderTopBottom: "#72a5cf", //
 
     // Superficies
-    headerFooterBg: 'rgba(255,255,255,0.8)',
-    cardBg: '#ffffff',
-    background: '#ededed', // gray-100
-    border: '#E5E7EB',
-    bgPressed: '#f3f4f6',     // color al presionar (gris-100)
+    headerFooterBg: "rgba(255,255,255,0.8)",
+    cardBg: "#ffffff",
+    background: "#ededed", // gray-100
+    border: "#E5E7EB",
+    bgPressed: "#f3f4f6", // color al presionar (gris-100)
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
     fondoCirculoActivo: "#c5e2fa", // celeste
-    success: '#059669', // green-400 (verde esmeralda)
+    success: "#059669", // green-400 (verde esmeralda)
 
     //para TipsBottomSheet
     brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
@@ -65,50 +65,48 @@ export const Colors = {
     statusTurquoiseDot: "#046963",
     statusLavenderBg: "#E0E7FF",
     statusLavenderDot: "#4F46E5",
-    statusCanceledBg: "#F8D7DA", 
-    statusCanceledDot: "#C82333", 
-    
+    statusCanceledBg: "#F8D7DA",
+    statusCanceledDot: "#C82333",
+
     // Reloj
-    relojBuyer: '#0730a3', // azul oscuro
-    relojSeller: '#ba480d', //naranja oscuro
-    relojTiempoTerminado: '#f79e94' //rojo suave (salmón)
-
-
+    relojBuyer: "#0730a3", // azul oscuro
+    relojSeller: "#ba480d", //naranja oscuro
+    relojTiempoTerminado: "#f79e94", //rojo suave (salmón)
   },
   dark: {
     // Textos
-    textDefault: '#ECEDEE',
-    textMuted: '#9ca3af',       // gray-400
-    textError: '#f87171',       // red-400
-    textOnColor: '#ffffff',
+    textDefault: "#ECEDEE",
+    textMuted: "#9ca3af", // gray-400
+    textError: "#f87171", // red-400
+    textOnColor: "#ffffff",
 
     // Botones secundarios
-    textSecondaryBg: '#636363',
-    textSecondaryBorder: '#a7a7a7',
+    textSecondaryBg: "#636363",
+    textSecondaryBorder: "#a7a7a7",
 
     // Primarios por rol
-    brandCommon: '#8b5cf6',   // violet-500
-    brandBuyer: '#52a0fa',    // blue-500
-    brandSeller: '#ed6728',   // orange-500
+    brandCommon: "#8b5cf6", // violet-500
+    brandBuyer: "#52a0fa", // blue-500
+    brandSeller: "#ed6728", // orange-500
 
     // Para fondos suaves
-    tipsColorBuyer: '#64B5F6', // blue-400
+    tipsColorBuyer: "#64B5F6", // blue-400
 
     // Bordes cards dentro de las cards del comprador
-    borderTopBottom: '#72a5cf', // 
+    borderTopBottom: "#72a5cf", //
 
     // Superficies
-    headerFooterBg: 'rgba(17,24,39,.9)',
-    cardBg: '#374151',          // gray-700
-    background: '#1f2937', // gray-800
-    border: '#374151', // gray-700
-    bgPressed: '#3f3f46',       // zinc-700 
+    headerFooterBg: "rgba(17,24,39,.9)",
+    cardBg: "#374151", // gray-700
+    background: "#1f2937", // gray-800
+    border: "#374151", // gray-700
+    bgPressed: "#3f3f46", // zinc-700
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
     fondoCirculoActivo: "#a8d0f0", // celeste
-    success: '#10b981', // green (verde esmeralda más brillante)
-    
+    success: "#10b981", // green (verde esmeralda más brillante)
+
     //para TipsBottomSheet
     brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave
     brandSellerSoft: "#78350F", //ambar-900 = fondo suave
@@ -138,27 +136,26 @@ export const Colors = {
     statusLavenderBg: "#312E81",
     statusLavenderDot: "#A5B4FC",
     statusCanceledBg: "#4A1F24",
-    statusCanceledDot: "#F5B3BA", 
-
+    statusCanceledDot: "#F5B3BA",
 
     // Reloj
-    relojBuyer: '#6ce5f5',
-    relojSeller: '#f7d4c1',
-    relojTiempoTerminado: '#57312d'
+    relojBuyer: "#6ce5f5",
+    relojSeller: "#f7d4c1",
+    relojTiempoTerminado: "#57312d",
   },
 } as const;
 
 // Helpers
 //getColorByRole devuelve el color direct en HEX para usar en style={{color: ...}} o en props de SVGs
 export const getColorByRole = (
-  role: 'buyer' | 'seller',
-  theme: 'light' | 'dark' = 'light'
+  role: "buyer" | "seller",
+  theme: "light" | "dark" = "light",
 ): string => {
   const themeColors = Colors[theme];
   switch (role) {
-    case 'buyer':
+    case "buyer":
       return themeColors.brandBuyer;
-    case 'seller':
+    case "seller":
       return themeColors.brandSeller;
     default:
       return themeColors.brandCommon;
@@ -166,34 +163,14 @@ export const getColorByRole = (
 };
 
 // Texto de botón secundario
-export const getSecondaryTextColor = (theme: 'light' | 'dark' = 'light'): string => {
+export const getSecondaryTextColor = (
+  theme: "light" | "dark" = "light",
+): string => {
   return Colors[theme].textDefault;
 };
 
-export const getSecondaryBgColor = (theme: 'light' | 'dark' = 'light'): string => {
+export const getSecondaryBgColor = (
+  theme: "light" | "dark" = "light",
+): string => {
   return Colors[theme].textSecondaryBg;
 };
-
-// Helper para obtener colores Tailwind equivalentes
-// devuelve la clase Tailwind para usar en className
-export const getTailwindColorByRole = (role: 'buyer' | 'seller' , isDark: boolean = false): string => {
-  const suffix = isDark ? '-dark' : '';
-  switch (role) {
-    case 'buyer':
-      return `brand-buyer${suffix}`;
-    case 'seller': 
-      return `brand-seller${suffix}`;
-    default:
-      return `brand-common${suffix}`;
-  }
-};
-
-//Helper para clases Tailwind dinámicas
-export const getTailwindClass = (
-  role: 'buyer' | 'seller',
-  property: 'text' | 'bg' | 'border' = 'text',
-  isDark: boolean = false
-): string => {
-  return `${property}-${getTailwindColorByRole(role, isDark)}`;
-};
-

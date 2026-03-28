@@ -38,7 +38,7 @@ export default function Cronometro({
 }: CronometroProps) {
   console.log("[Cronometro]", { id, tipo });
 
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const [tiempoRestante, setTiempoRestante] = useState(duracionInicial * 60); // segs
   const finRef = useRef<number | null>(null);
@@ -158,10 +158,10 @@ export default function Cronometro({
               ? colors.textError
               : estilos[tipo].texto,
             paddingVertical: Spacing.md,
+            alignItems: "center",
           },
           animatedStyle,
         ]}
-        className="items-center"
       >
         <CronometroDisplay
           tipo={tipo}

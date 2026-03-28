@@ -21,7 +21,7 @@ const RoleButton = ({
   icon,
   onPress,
 }: RoleButtonProps) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const iconColor =
     section === "buyer" ? colors.brandBuyer : colors.brandSeller;
 
@@ -82,7 +82,7 @@ const RoleButton = ({
           <Text
             style={{
               color: colors.textOnColor,
-              fontWeight: "bold",
+              fontFamily: fonts.robotoBold,
               fontSize: 14,
               marginBottom: 2,
             }}
@@ -120,3 +120,5 @@ const RoleButton = ({
 };
 
 export default RoleButton;
+
+//Este es para la page "Inicio-ElegirRol", para crear cada btn grande.

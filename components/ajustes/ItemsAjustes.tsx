@@ -20,15 +20,17 @@ const ItemsAjustes = ({
   deshabilitado = false,
   iconStyle,
 }: ItemsAjustesProps) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const esInteractivo = typeof onPress === "function" && !deshabilitado;
 
   return (
     <Pressable
       onPress={esInteractivo ? onPress : undefined}
       disabled={!esInteractivo}
-      className="flex-row items-center rounded-2xl"
       style={{
+        flexDirection: "row",
+        alignItems: "center",
+        borderRadius: 16,
         gap: Spacing.sm,
         paddingHorizontal: Spacing.md,
         minHeight: 48,
@@ -38,12 +40,14 @@ const ItemsAjustes = ({
     >
       {({ pressed }) => (
         <View
-          className="flex-row items-center rounded-2xl flex-1"
           style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderRadius: 16,
+            flex: 1,
             backgroundColor: pressed ? colors.bgPressed : "transparent",
           }}
         >
-          {/* Ícono */}
           <Icon
             width={26}
             height={26}
@@ -51,11 +55,10 @@ const ItemsAjustes = ({
             fill={colors.textDefault}
           />
 
-          {/* Textos */}
           <View style={{ marginTop: 4, marginLeft: Spacing.lg }}>
             <Text
-              className="font-Robotoo-Medium"
               style={{
+                fontFamily: fonts.robotoMedium,
                 fontSize: FontSizes.base,
                 color: colors.textDefault,
               }}

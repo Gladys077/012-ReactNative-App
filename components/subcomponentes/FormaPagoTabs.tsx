@@ -9,15 +9,14 @@ interface Props {
 }
 
 const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
-        <View style={{ marginBottom: 16 }}>
-
-    {/* Título Forma de Pago */}
+    <View style={{ marginBottom: 16 }}>
+      {/* Título Forma de Pago */}
       <Text
         style={{
-          fontFamily: "Roboto-Bold",
+          fontFamily: fonts.robotoBold,
           fontSize: FontSizes.base,
           color: colors.textDefault,
           textAlign: "center",
@@ -30,55 +29,20 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
         FORMA DE PAGO
       </Text>
 
-    {/* Selector de forma de pago (tabs) */}
-    <View style={{ flexDirection: "row",
+      {/* Selector de forma de pago (tabs) */}
+      <View
+        style={{
+          flexDirection: "row",
           borderRadius: BorderRadius.md,
           padding: 8,
           // marginBottom: Spacing.lg,
-          gap: 8 }}>
-
-      {/* -----Tranferencia----- */}
-      <Pressable
-        onPress={() => setFormaPago("transferencia")}
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingVertical: Spacing.sm,
-          borderRadius: BorderRadius.sm,
-          gap: 10,
-          borderBottomWidth:
-            formaPago === "transferencia" ? 4 : 0, 
-          borderColor: 
-            formaPago === "transferencia" ? colors.brandBuyer : "transparent"
+          gap: 8,
         }}
       >
-        <View
+        {/* -----Tranferencia----- */}
+        <Pressable
+          onPress={() => setFormaPago("transferencia")}
           style={{
-            width: 18,
-            height: 18,
-            borderRadius: 9,
-            borderWidth: formaPago === "transferencia" ? 5 : 2,
-            borderColor: formaPago === "transferencia" ? colors.textDefault : colors.textMuted,
-          }}
-        />
-        <Text
-          style={{
-            fontFamily: "Roboto-Regular",
-            fontSize: FontSizes.xs,
-            color:
-              formaPago === "transferencia" ? colors.textDefault : colors.textMuted,
-          }}
-        >
-          Transferencia
-        </Text>
-      </Pressable>
-
-      {/* -----Efectivo contra entrega----- */}
-      <Pressable
-        onPress={() => setFormaPago("efectivo")}
-         style={{
             flex: 1,
             flexDirection: "column",
             alignItems: "center",
@@ -86,10 +50,51 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
             paddingVertical: Spacing.sm,
             borderRadius: BorderRadius.sm,
             gap: 10,
-            borderBottomWidth:
-              formaPago === "efectivo" ? 4 : 0, 
-            borderColor: 
-              formaPago === "efectivo" ? colors.brandBuyer : "transparent"
+            borderBottomWidth: formaPago === "transferencia" ? 4 : 0,
+            borderColor:
+              formaPago === "transferencia" ? colors.brandBuyer : "transparent",
+          }}
+        >
+          <View
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: 9,
+              borderWidth: formaPago === "transferencia" ? 5 : 2,
+              borderColor:
+                formaPago === "transferencia"
+                  ? colors.textDefault
+                  : colors.textMuted,
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: fonts.robotoRegular,
+              fontSize: FontSizes.xs,
+              color:
+                formaPago === "transferencia"
+                  ? colors.textDefault
+                  : colors.textMuted,
+            }}
+          >
+            Transferencia
+          </Text>
+        </Pressable>
+
+        {/* -----Efectivo contra entrega----- */}
+        <Pressable
+          onPress={() => setFormaPago("efectivo")}
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingVertical: Spacing.sm,
+            borderRadius: BorderRadius.sm,
+            gap: 10,
+            borderBottomWidth: formaPago === "efectivo" ? 4 : 0,
+            borderColor:
+              formaPago === "efectivo" ? colors.brandBuyer : "transparent",
           }}
         >
           <View
@@ -98,21 +103,26 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
               height: 18,
               borderRadius: 9,
               borderWidth: formaPago === "efectivo" ? 5 : 2,
-              borderColor: formaPago === "efectivo" ? colors.textDefault : colors.textMuted,
+              borderColor:
+                formaPago === "efectivo"
+                  ? colors.textDefault
+                  : colors.textMuted,
             }}
           />
           <Text
             style={{
-              fontFamily: "Roboto-Regular",
+              fontFamily: fonts.robotoRegular,
               fontSize: FontSizes.xs,
-              color: formaPago === "efectivo" ? colors.textDefault : colors.textMuted,
+              color:
+                formaPago === "efectivo"
+                  ? colors.textDefault
+                  : colors.textMuted,
             }}
           >
             Efectivo contra entrega
-
-        </Text>
-      </Pressable>
-    </View>
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 };

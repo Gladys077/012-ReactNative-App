@@ -10,8 +10,11 @@ type NotaDelVendedorProps = {
   onVerNota?: (nota: string) => void;
 };
 
-const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({ nota, onVerNota }) => {
-  const { colors } = useTheme();
+const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({
+  nota,
+  onVerNota,
+}) => {
+  const { colors, fonts } = useTheme();
   const hayNota = nota && nota.trim() !== "";
 
   if (hayNota) {
@@ -26,7 +29,7 @@ const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({ nota, onVerNota }) =>
       >
         <Text
           style={{
-            fontFamily: "Roboto-Bold",
+            fontFamily: fonts.robotoBold,
             fontSize: FontSizes.sm,
             color: colors.brandBuyer,
             textDecorationLine: "underline",
@@ -52,7 +55,7 @@ const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({ nota, onVerNota }) =>
     <View>
       <Text
         style={{
-          fontFamily: "Roboto-Regular",
+          fontFamily: fonts.robotoRegular,
           fontSize: FontSizes.sm,
           color: colors.textMuted,
         }}

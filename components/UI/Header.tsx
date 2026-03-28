@@ -1,6 +1,7 @@
 import { useNavigation } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FontSizes } from "../../constants/Tokens";
 import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { Carrito, Monedas, TiendaIcon, Volver } from "../icons";
@@ -21,7 +22,7 @@ export default function Header({
 }: HeaderProps) {
   const navigation = useNavigation();
   const { user } = useAuthContext();
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   if (!user) return null;
   const isSeller = user.role === "seller";
@@ -40,23 +41,29 @@ export default function Header({
         style={{
           backgroundColor: colors.headerFooterBg,
           borderBottomColor: colors.border,
-          minHeight: 56, 
+          borderBottomWidth: 1,
+          minHeight: 56,
           width: "100%",
           maxWidth: 500,
           alignSelf: "center",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
+          paddingHorizontal: 12,
+          gap: 16,
         }}
-        className="flex-row items-center justify-between px-3 border-b gap-4"
       >
-        
         {/* Lado izquierdo */}
         {leftContent ? (
           leftContent
         ) : showBackArrow ? (
           <Pressable
-            className="h-11 w-11 items-center justify-center"
+            style={{
+              height: 44,
+              width: 44,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onPress={() => navigation.goBack()}
           >
             <Volver width={24} height={24} fill={colors.textDefault} />
@@ -74,8 +81,13 @@ export default function Header({
 
         {/* Título */}
         <Text
-          className="flex-1 mr-3.5 text-lg font-Roboto-Medium"
-          style={{ color: colors.textDefault }}
+          style={{
+            flex: 1,
+            marginRight: 14,
+            fontSize: FontSizes.md,
+            fontFamily: fonts.robotoMedium,
+            color: colors.textDefault,
+          }}
           numberOfLines={1}
           ellipsizeMode="tail"
         >
@@ -86,7 +98,7 @@ export default function Header({
         {rightContent ? (
           rightContent
         ) : isSeller ? (
-          <View className="flex-row items-center">
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Monedas
               width={22}
               height={22}
@@ -94,8 +106,11 @@ export default function Header({
               strokeWidth={1}
             />
             <Text
-              className="ml-2 font-Roboto-Medium"
-              style={{ color: colors.textDefault }}
+              style={{
+                marginLeft: 8,
+                fontFamily: fonts.robotoMedium,
+                color: colors.textDefault,
+              }}
             >
               {user.credits ?? 0}
             </Text>

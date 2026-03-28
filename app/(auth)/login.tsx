@@ -1,12 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../components/UI/Button/Button";
 import ButtonGoogle from "../../components/UI/Button/ButtonGoogle";
 import { InputField } from "../../components/UI/InputField";
@@ -14,7 +9,7 @@ import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function LoginScreen() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -31,7 +26,7 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    router.push("/registro"); // debe ir a la page registro 
+    router.push("/registro"); // debe ir a la page registro
   };
 
   return (
@@ -83,7 +78,7 @@ export default function LoginScreen() {
                 <Text
                   style={{
                     color: colors.textOnColor,
-                    fontWeight: "bold",
+                    fontFamily: fonts.robotoBold,
                     fontSize: 14,
                   }}
                 >
@@ -96,7 +91,7 @@ export default function LoginScreen() {
               style={{
                 color: colors.textDefault,
                 fontSize: 24,
-                fontWeight: "bold",
+                fontFamily: fonts.robotoBold,
                 marginBottom: Spacing.sm,
               }}
             >
@@ -131,22 +126,22 @@ export default function LoginScreen() {
               />
 
               {/* Forgot Password Link */}
-            <Pressable
-              onPress={() => router.push("/olvideContrasena")}    
-              style={{ alignSelf: "flex-end", marginTop: Spacing.sm }}
-            >
-              {({ pressed }) => (
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: colors.brandCommon,
-                    opacity: pressed ? 0.7 : 1,
-                  }}
-                >
-                  ¿Olvidaste tu contraseña?
-                </Text>
-              )}
-            </Pressable>
+              <Pressable
+                onPress={() => router.push("/olvideContrasena")}
+                style={{ alignSelf: "flex-end", marginTop: Spacing.sm }}
+              >
+                {({ pressed }) => (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.brandCommon,
+                      opacity: pressed ? 0.7 : 1,
+                    }}
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </Text>
+                )}
+              </Pressable>
             </View>
 
             {/* Login Button */}
@@ -188,9 +183,7 @@ export default function LoginScreen() {
             </View>
 
             {/* Google Button */}
-            <ButtonGoogle onLogin={handleGoogleLogin}>
-              Google
-            </ButtonGoogle>
+            <ButtonGoogle onLogin={handleGoogleLogin}>Google</ButtonGoogle>
           </View>
 
           {/* Register Link */}
@@ -208,7 +201,7 @@ export default function LoginScreen() {
               {({ pressed }) => (
                 <Text
                   style={{
-                    fontWeight: "500",
+                    fontFamily: fonts.robotoMedium,
                     fontSize: 14,
                     color: colors.brandCommon,
                     opacity: pressed ? 0.7 : 1,
@@ -224,6 +217,5 @@ export default function LoginScreen() {
     </SafeAreaView>
   );
 }
-
 
 //TODO: INGRESAR CON GOOGLE, CONECTAR CON BACKEND

@@ -13,18 +13,17 @@ type InputFieldProps = {
   iconRight?: React.ReactNode;
   placeholder?: string;
   value: string;
-  onChangeText: (text: string) => void; // función obligatoria: actualiza el valor del input cada vez que cambia
+  onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   error?: string;
-  className?: string;
-  accessibilityLabel?: string; // texto que describe el campo para lectores de pantalla (mejora accesibilidad)
+  accessibilityLabel?: string;
   showPasswordToggle?: boolean;
   height?: "sm" | "md" | "lg";
   editable?: boolean;
-  style?: any; // permite sobrescribir o extender estilos del input desde fuera (ej: borderColor dinámico)
-  onFocus?: () => void; // se llama cuando el input gana foco (ej: para resaltar el borde o limpiar errores)
-  onBlur?: () => void; // se llama cuando el input pierde foco (ej: validar o quitar resaltado)
+  style?: any;
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 export const InputField = ({
@@ -39,7 +38,6 @@ export const InputField = ({
   secureTextEntry = false,
   keyboardType = "default",
   error,
-  className = "",
   accessibilityLabel,
   showPasswordToggle = false,
   height = "lg",
@@ -52,7 +50,6 @@ export const InputField = ({
 
   const heightStyles = { sm: 40, md: 48, lg: 56 };
 
-  // Validación automática
   useEffect(() => {
     if (!value && required) {
       setLocalError("Este campo es obligatorio");
@@ -69,34 +66,36 @@ export const InputField = ({
   }, [value, required, keyboardType]);
 
   return (
-    <View className="w-full">
-      {label && (
-        <Label required={required}>
-          {label}
-        </Label>
-      )}
+    <View style={{ width: "100%" }}>
+      {label && <Label required={required}>{label}</Label>}
 
-      <View className="relative">
-        {/* Icono izquierdo (por ejemplo, Mail, User, etc.) */}
+      <View style={{ position: "relative" }}>
+        {/* Icono izquierdo */}
         {icon && (
-          <View className="absolute left-4 top-1/2 -translate-y-1/2">
+          <View
+            style={{
+              position: "absolute",
+              left: 16,
+              top: "50%",
+              marginTop: -12,
+              zIndex: 1,
+            }}
+          >
             {icon}
           </View>
         )}
 
         <TextInput
-        className={[
-          "w-full rounded-xl border",
-          icon ? "pl-10" : "px-4", // deja espacio si hay ícono a la izquierda
-          className,
-        ].join(" ")}          
-        style={{
+          style={{
+            width: "100%",
             height: heightStyles[height],
             borderRadius: BorderRadius.pillBtn,
+            borderWidth: 1,
             backgroundColor: colors.cardBg,
             borderColor: localError ? colors.textError : colors.border,
             color: colors.textDefault,
             paddingVertical: 0,
+            paddingLeft: icon ? 40 : 16,
             paddingRight: showPasswordToggle || iconRight ? 40 : 16,
           }}
           placeholder={placeholder}
@@ -105,15 +104,20 @@ export const InputField = ({
           onChangeText={onChangeText}
           secureTextEntry={hidden}
           keyboardType={keyboardType}
-          editable={editable !== false} 
+          editable={editable}
           accessibilityLabel={accessibilityLabel || label || placeholder}
         />
 
-        {/* Icono para mostrar/ocultar contraseña */}
+        {/* Toggle mostrar/ocultar contraseña */}
         {showPasswordToggle && secureTextEntry && (
           <Pressable
-            className="absolute right-4 top-1/2 -translate-y-1/2"
             onPress={() => setHidden(!hidden)}
+            style={{
+              position: "absolute",
+              right: 16,
+              top: "50%",
+              marginTop: -12,
+            }}
           >
             {hidden ? (
               <Invisible width={24} height={24} color={colors.textMuted} />
@@ -123,9 +127,16 @@ export const InputField = ({
           </Pressable>
         )}
 
-        {/* Icono derecho general (por ejemplo, EditPencil) */}
+        {/* Icono derecho general */}
         {!showPasswordToggle && iconRight && (
-          <View className="absolute right-4 top-1/2 -translate-y-1/2">
+          <View
+            style={{
+              position: "absolute",
+              right: 16,
+              top: "50%",
+              marginTop: -12,
+            }}
+          >
             {iconRight}
           </View>
         )}

@@ -68,7 +68,7 @@ export default function CardErrorPagoDireccion({
   onEnviarCorreccion,
   onCancelarPedido,
 }: Props) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const [formaPago, setFormaPago] = useState<FormaPago>(formaPagoInicial);
 
@@ -132,7 +132,7 @@ export default function CardErrorPagoDireccion({
             style={{
               fontSize: FontSizes.sm,
               color: colors.brandBuyer,
-              fontFamily: "Roboto-Medium",
+              fontFamily: fonts.robotoMedium,
             }}
           >
             Mensajes
@@ -210,7 +210,7 @@ export default function CardErrorPagoDireccion({
           <Text
             style={{
               fontSize: FontSizes.btn,
-              fontFamily: "Roboto-Regular",
+              fontFamily: fonts.robotoRegular,
               color: colors.textOnColor,
             }}
           >

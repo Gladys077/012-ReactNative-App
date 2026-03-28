@@ -21,11 +21,9 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
   onPress,
   style,
 }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
-  const color =
-    variant === "buyer" ? colors.brandBuyer : colors.brandSeller;
-
+  const color = variant === "buyer" ? colors.brandBuyer : colors.brandSeller;
 
   return (
     <Pressable
@@ -41,7 +39,7 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
     >
       <Text
         style={{
-          fontFamily: "Roboto-Medium",
+          fontFamily: fonts.robotoMedium,
           color: colors.brandBuyer,
           fontSize: FontSizes.base,
           marginHorizontal: 4,
@@ -62,19 +60,23 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
 export default VerBottomSheet;
 
 //MODO DE USO:
-{/* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer"/>
+{
+  /* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer"/>
 
 <VerBottomSheet
   label="Ver detalle"
   iconPosition="left"
   icon={MiOtroIcono}
   onPress={() => console.log("clic")}
-/> */}
+/> */
+}
 
-// Para seller: 
-{/* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="seller" /> */}
+// Para seller:
+{
+  /* <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="seller" /> */
+}
 
 // Con icono a la izquierda:
-{/* <VerBottomSheet iconSide="left" label="Ver detalle" variant="buyer" /> */}
-
-
+{
+  /* <VerBottomSheet iconSide="left" label="Ver detalle" variant="buyer" /> */
+}

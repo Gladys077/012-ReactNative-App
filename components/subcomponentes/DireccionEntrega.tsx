@@ -6,11 +6,11 @@ import { EditPencil, Ubicacion } from "../icons";
 
 interface Props {
   direccion: string;
-  editable: boolean;               // viene desde el padre
-  onEditarDireccion: () => void;   // btn EDITAR
+  editable: boolean; // viene desde el padre
+  onEditarDireccion: () => void; // btn EDITAR
   onCambiarDireccion: (text: string) => void; // mientras escribe
-  onGuardarDireccion: () => void;  // btn GUARDAR
-  errorDireccion?: string; 
+  onGuardarDireccion: () => void; // btn GUARDAR
+  errorDireccion?: string;
   disable?: boolean;
 }
 
@@ -22,7 +22,7 @@ const DireccionEntrega: React.FC<Props> = ({
   onGuardarDireccion,
   errorDireccion,
 }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   return (
     <View
@@ -50,7 +50,7 @@ const DireccionEntrega: React.FC<Props> = ({
 
         <Text
           style={{
-            fontFamily: "Roboto-Medium",
+            fontFamily: fonts.robotoMedium,
             fontSize: FontSizes.sm,
             color: colors.textDefault,
             flex: 1,
@@ -63,7 +63,12 @@ const DireccionEntrega: React.FC<Props> = ({
         {!editable ? (
           <Pressable
             onPress={onEditarDireccion}
-            style={{ flexDirection: "row", alignItems: "center", gap: 4, padding: 4 }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 4,
+              padding: 4,
+            }}
           >
             <EditPencil width={16} height={16} fill={colors.brandBuyer} />
           </Pressable>
@@ -74,7 +79,7 @@ const DireccionEntrega: React.FC<Props> = ({
           >
             <Text
               style={{
-                fontFamily: "Roboto-Bold",
+                fontFamily: fonts.robotoBold,
                 fontSize: FontSizes.sm,
                 color: colors.brandBuyer,
               }}
