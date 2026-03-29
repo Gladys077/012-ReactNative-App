@@ -16,6 +16,7 @@ export default function CambiarContraseñaScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Validaciones
   const [errors, setErrors] = useState({
     currentPassword: "",
     newPassword: "",
@@ -31,7 +32,12 @@ export default function CambiarContraseñaScreen() {
     let hasError = false;
 
     if (!password.trim()) {
-      newErrors.currentPassword = "Por favor ingresa tu contraseña actual";
+      newErrors.currentPassword = "Por favor ingresa tu contraseña actual.";
+      hasError = true;
+    }
+
+    if (!newPassword.trim()) {
+      newErrors.newPassword = "Por favor ingresa tu nueva contraseña.";
       hasError = true;
     }
 
@@ -93,6 +99,7 @@ export default function CambiarContraseñaScreen() {
                 onChangeText={setPassword}
                 secureTextEntry // arranca como password
                 showPasswordToggle // activa el ojito
+                error={errors.currentPassword}
               />
             </View>
 
@@ -132,7 +139,7 @@ export default function CambiarContraseñaScreen() {
                 <Button
                   variant="secondary"
                   section="common"
-                  width="auto"
+                  width="full"
                   onPress={() => router.back()}
                 >
                   Cancelar
@@ -143,7 +150,7 @@ export default function CambiarContraseñaScreen() {
                 <Button
                   variant="primary"
                   section="common"
-                  width="auto"
+                  width="full"
                   onPress={handleSave} // TODO: lógica de guardar. VER CON LIO
                 >
                   Guardar

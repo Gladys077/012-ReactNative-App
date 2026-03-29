@@ -104,7 +104,7 @@ export default function PerfilScreen() {
 
     // -----------------> GUARDAR EN EL BACKEND - VER CON LIO <------------- //
     try {
-      const resp = await fetch("https://TU_BACKEND.com/api/user/update", {
+      const resp = await fetch("https://api/user/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -168,6 +168,7 @@ export default function PerfilScreen() {
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
                   label="Nombre y apellido"
+                  placeholder="Escribe tu nombre y apellido"
                   value={name}
                   onChangeText={setName}
                   editable
@@ -187,6 +188,7 @@ export default function PerfilScreen() {
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
                   label="Correo electrónico"
+                  placeholder="Escribe tu email"
                   value={email}
                   editable={false}
                   onChangeText={() => {}}
@@ -197,6 +199,7 @@ export default function PerfilScreen() {
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
                   label="Dirección"
+                  placeholder="Escribe tu dirección"
                   value={address}
                   onChangeText={setAddress}
                   editable
@@ -216,6 +219,7 @@ export default function PerfilScreen() {
               <View style={{ marginBottom: Spacing.xxl }}>
                 <InputField
                   label="Celular"
+                  placeholder="Escribe tu nombre y apellido"
                   value={cellular}
                   onChangeText={setCellular}
                   editable
@@ -343,7 +347,7 @@ export default function PerfilScreen() {
                   <Button
                     variant="secondary"
                     section="common"
-                    width="auto"
+                    width="full"
                     onPress={() => router.back()}
                   >
                     Cancelar
@@ -354,7 +358,7 @@ export default function PerfilScreen() {
                   <Button
                     variant="primary"
                     section="common"
-                    width="auto"
+                    width="full"
                     onPress={handleSave}
                   >
                     Guardar

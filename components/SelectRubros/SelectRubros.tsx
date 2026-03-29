@@ -61,7 +61,7 @@ export default function SelectRubros({
 }: Props) {
   const { colors, mode, fonts } = useTheme();
   const sheetRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["75%"], []);
+  const snapPoints = useMemo(() => ["60%", "90%"], []);
   const allowAddNew = section === "seller";
 
   const [selectedValues, setSelectedValues] = useState<string[]>(selected);
@@ -142,9 +142,11 @@ export default function SelectRubros({
   };
 
   const handlePresentModal = () => {
-    sheetRef.current?.present();
-    animateChevron(true);
     setIsOpen(true);
+    animateChevron(true);
+    setTimeout(() => {
+      sheetRef.current?.present();
+    }, 50);
   };
 
   const toggleRubro = (value: string) => {
@@ -215,14 +217,6 @@ export default function SelectRubros({
     ),
     [],
   );
-  // para debbug
-  console.log("rubrosInternos", rubrosInternos);
-  rubrosInternos.forEach((r) => {
-    if (!r.IconComponent) {
-      console.warn("Rubro sin IconComponent:", r.value);
-    }
-  });
-  // fin debbug
 
   return (
     <View>
@@ -274,6 +268,7 @@ export default function SelectRubros({
       <BottomSheetModal
         ref={sheetRef}
         snapPoints={snapPoints}
+        enableDynamicSizing={false}
         backdropComponent={renderBackdrop}
         enablePanDownToClose
         backgroundStyle={{ backgroundColor: colors.background }}
@@ -295,6 +290,7 @@ export default function SelectRubros({
             ListHeaderComponent={
               <View
                 style={{
+                  flex: 1,
                   paddingHorizontal: 20,
                   paddingTop: 20,
                   paddingBottom: 12,
@@ -393,11 +389,11 @@ export default function SelectRubros({
                 paddingBottom: 12,
               }}
             >
-              <View style={{ flex: 1, marginRight: 8 }}>
+              <View style={{ flex: 1, marginRight: 8, width: "100%" }}>
                 <Button
                   variant="secondary"
                   section="common"
-                  width="auto"
+                  width="full"
                   onPress={handleCancel}
                 >
                   Cancelar
@@ -407,7 +403,7 @@ export default function SelectRubros({
                 <Button
                   variant="primary"
                   section="common"
-                  width="auto"
+                  width="full"
                   onPress={guardarCambios}
                 >
                   Guardar

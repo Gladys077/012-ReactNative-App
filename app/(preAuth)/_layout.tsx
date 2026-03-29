@@ -2,11 +2,10 @@ import "react-native-reanimated";
 
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot, useSegments } from "expo-router";
 import { View } from "react-native";
 import Header from "../../components/UI/Header";
-
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function PreAuthLayout() {
   const { colors } = useTheme();
@@ -30,8 +29,7 @@ export default function PreAuthLayout() {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      {" "}
+    <BottomSheetModalProvider>
       <View style={{ flex: 1, backgroundColor: colors.background }}>
         <Header showBackArrow title={getTitleByPage()} />
 
@@ -47,6 +45,6 @@ export default function PreAuthLayout() {
           <Slot />
         </View>
       </View>
-    </GestureHandlerRootView>
+    </BottomSheetModalProvider>
   );
 }
