@@ -1,5 +1,5 @@
 import { useTheme } from "@/context/ThemeContext";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
 import { BorderRadius } from "../../constants/Tokens";
 import { Invisible, Visible } from "../icons";
@@ -46,24 +46,7 @@ export const InputField = ({
   const { colors } = useTheme();
 
   const [hidden, setHidden] = useState(secureTextEntry);
-  const [localError, setLocalError] = useState<string>("");
-
   const heightStyles = { sm: 40, md: 48, lg: 56 };
-
-  useEffect(() => {
-    if (!value && required) {
-      setLocalError("Este campo es obligatorio");
-    } else if (keyboardType === "email-address") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (value && !emailRegex.test(value)) {
-        setLocalError("Debe ser un correo válido");
-      } else {
-        setLocalError("");
-      }
-    } else {
-      setLocalError("");
-    }
-  }, [value, required, keyboardType]);
 
   return (
     <View style={{ width: "100%" }}>
@@ -92,7 +75,7 @@ export const InputField = ({
             borderRadius: BorderRadius.pillBtn,
             borderWidth: 1,
             backgroundColor: colors.cardBg,
-            borderColor: localError ? colors.textError : colors.border,
+            borderColor: error ? colors.textError : colors.border,
             color: colors.textDefault,
             paddingVertical: 0,
             paddingLeft: icon ? 40 : 16,
@@ -142,11 +125,11 @@ export const InputField = ({
         )}
       </View>
 
-      {(subtext || error || localError) && (
+      {(subtext || error) && (
         <Label
-          subtext={error ?? localError ?? subtext}
+          subtext={error ?? subtext}
           subtextStyle={{
-            color: error || localError ? colors.textError : colors.textMuted,
+            color: error ? colors.textError : colors.textMuted,
           }}
           noMarginTop
         />

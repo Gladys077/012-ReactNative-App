@@ -5,6 +5,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot, useSegments } from "expo-router";
 import { View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import Header from "../../components/UI/Header";
 
 export default function PreAuthLayout() {
@@ -29,22 +30,24 @@ export default function PreAuthLayout() {
   };
 
   return (
-    <BottomSheetModalProvider>
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
-        <Header showBackArrow title={getTitleByPage()} />
+    <SafeAreaProvider>
+      <BottomSheetModalProvider>
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+          <Header showBackArrow title={getTitleByPage()} />
 
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: Spacing.xl,
-            maxWidth: 500,
-            width: "100%",
-            alignSelf: "center",
-          }}
-        >
-          <Slot />
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: Spacing.xl,
+              maxWidth: 500,
+              width: "100%",
+              alignSelf: "center",
+            }}
+          >
+            <Slot />
+          </View>
         </View>
-      </View>
-    </BottomSheetModalProvider>
+      </BottomSheetModalProvider>
+    </SafeAreaProvider>
   );
 }

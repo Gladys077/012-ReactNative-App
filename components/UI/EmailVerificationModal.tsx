@@ -103,9 +103,12 @@ export default function EmailVerificationModal({
       <View
         style={{
           flex: 1,
-          backgroundColor: "rgba(0,0,0,0.4)",
+          backgroundColor: "rgba(0,0,0,0.8)",
           justifyContent: "center",
-          paddingHorizontal: Spacing.lg,
+          paddingHorizontal: Spacing.xxl,
+          maxWidth: 500,
+          alignContent: "center",
+          alignSelf: "center",
         }}
       >
         <View

@@ -1,27 +1,14 @@
-import { useTheme } from "@/context/ThemeContext";
-import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Alert, Animated, FlatList, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Button from "../../components/UI/Button/Button";
-import { BorderRadius, FontSizes } from "../../constants/Tokens";
-import { FlechaAbajo, MasBlanca, TiendaIcon } from "../icons";
+import { BorderRadius, FontSizes, Spacing } from "../../constants/Tokens";
+import { useTheme } from "../../context/ThemeContext";
+import { Chevron, MasBlanca, TiendaIcon } from "../icons";
 import NuevoRubroInput from "./NuevoRubroInput";
 import { rubroColorPalette } from "./rubroColors";
 import RubroItem from "./RubroItem";
 import { RubroConfig, rubrosVendedor } from "./rubrosConfig";
-
-// Limpieza y validación: Asegura que todos los rubros —incluidos los cargados desde AsyncStorage— tengan icono y colores válidos
-export function sanitizeRubros(lista: RubroConfig[]): RubroConfig[] {
-  return lista.map((r: RubroConfig) => ({
-    ...r,
-    IconComponent: r.IconComponent ?? TiendaIcon,
-    color: r.color ?? "#CFD8DC",
-    iconColor: r.iconColor ?? "#607D8B",
-  }));
-}
 
 export interface Rubro {
   label: string;
@@ -36,19 +23,29 @@ export interface Rubro {
   iconColor: string;
 }
 
+// Repara los rubros personalizados que vienen de AsyncStorage:
+// como JSON no puede guardar funciones, el IconComponent llega undefined.
+// Esta función lo reemplaza con TiendaIcon y completa color e iconColor si faltan.
+export function repararRubros(lista: RubroConfig[]): RubroConfig[] {
+  return lista.map((r) => ({
+    ...r,
+    IconComponent: r.IconComponent ?? TiendaIcon,
+    color: r.color ?? "#CFD8DC",
+    iconColor: r.iconColor ?? "#607D8B",
+  }));
+}
+
 type Props = {
-  label: string;
+  label?: string;
   selected: string[];
   onChange: (values: string[]) => void;
   placeholder?: string;
   section?: "seller" | "buyer";
   borderColor?: string;
-  borderRadius?: number;
 };
 
 const STORAGE_KEY = "rubrosVendedorGuardados";
-const SELECTED_KEY = (section: "seller" | "buyer") =>
-  `selectedRubros_${section}`;
+const SELECTED_KEY = (section: string) => `selectedRubros_${section}`;
 
 export default function SelectRubros({
   label,
@@ -57,19 +54,16 @@ export default function SelectRubros({
   placeholder = "Selecciona tu/s rubro/s",
   section = "seller",
   borderColor,
-  borderRadius,
 }: Props) {
-  const { colors, mode, fonts } = useTheme();
-  const sheetRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ["60%", "90%"], []);
+  const { colors, mode } = useTheme();
   const allowAddNew = section === "seller";
 
-  const [selectedValues, setSelectedValues] = useState<string[]>(selected);
+  const [isOpen, setIsOpen] = useState(false);
   const [rubrosInternos, setRubrosInternos] = useState<Rubro[]>([]);
+  const [selectedValues, setSelectedValues] = useState<string[]>(selected);
   const [nuevoRubro, setNuevoRubro] = useState("");
   const [agregando, setAgregando] = useState(false);
 
-  const [isOpen, setIsOpen] = useState(false);
   const rotateAnim = useMemo(() => new Animated.Value(0), []);
 
   const animateChevron = (open: boolean) => {
@@ -87,24 +81,19 @@ export default function SelectRubros({
 
   useFocusEffect(
     useCallback(() => {
-      if (section !== "seller") {
-        setRubrosInternos(rubrosVendedor);
-        setSelectedValues(selected);
-        return;
-      }
-
       const loadRubros = async () => {
         try {
+          if (section !== "seller") {
+            setRubrosInternos(rubrosVendedor);
+            setSelectedValues(selected);
+            return;
+          }
           const stored = await AsyncStorage.getItem(STORAGE_KEY);
-          const rubrosGuardados: Rubro[] = stored ? JSON.parse(stored) : [];
-
-          // Sanitizamos los rubros personalizados que vienen rotos del storage
-          const rubrosSanitizados = sanitizeRubros(rubrosGuardados);
-
-          // Combinamos base + personalizados sanitizados
-          const combinados = [...rubrosVendedor, ...rubrosSanitizados];
-
-          setRubrosInternos(combinados);
+          const rubrosGuardados: RubroConfig[] = stored
+            ? JSON.parse(stored)
+            : [];
+          const rubrosReparados = repararRubros(rubrosGuardados);
+          setRubrosInternos([...rubrosVendedor, ...rubrosReparados]);
 
           const storedSelected = await AsyncStorage.getItem(
             SELECTED_KEY(section),
@@ -122,31 +111,10 @@ export default function SelectRubros({
     }, [section]),
   );
 
-  const saveRubros = async (rubros: Rubro[]) => {
-    try {
-      const personalizados = rubros.filter(
-        (r) => !rubrosVendedor.some((base) => base.value === r.value),
-      );
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(personalizados));
-    } catch (error) {
-      console.error("Error guardando rubros:", error);
-    }
-  };
-
-  const saveSelectedRubros = async (values: string[]) => {
-    try {
-      await AsyncStorage.setItem(SELECTED_KEY(section), JSON.stringify(values));
-    } catch (error) {
-      console.error("Error guardando rubros seleccionados:", error);
-    }
-  };
-
-  const handlePresentModal = () => {
-    setIsOpen(true);
-    animateChevron(true);
-    setTimeout(() => {
-      sheetRef.current?.present();
-    }, 50);
+  const toggleOpen = () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    animateChevron(next);
   };
 
   const toggleRubro = (value: string) => {
@@ -160,9 +128,7 @@ export default function SelectRubros({
     if (!trimmed) return;
 
     const valor = trimmed.toLowerCase().replace(/\s+/g, "-");
-    const yaExiste = rubrosInternos.some((r) => r.value === valor);
-
-    if (yaExiste) {
+    if (rubrosInternos.some((r) => r.value === valor)) {
       Alert.alert("Atención", "Ese rubro ya existe");
       setNuevoRubro("");
       setAgregando(false);
@@ -179,70 +145,62 @@ export default function SelectRubros({
       color,
       iconColor,
     };
-
     const actualizados = [...rubrosInternos, nuevo];
     setRubrosInternos(actualizados);
-    setSelectedValues([...selectedValues, valor]);
-    await saveRubros(actualizados);
+    setSelectedValues((prev) => [...prev, valor]);
+
+    try {
+      const personalizados = actualizados.filter(
+        (r) => !rubrosVendedor.some((base) => base.value === r.value),
+      );
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(personalizados));
+    } catch (error) {
+      console.error("Error guardando rubros:", error);
+    }
     setNuevoRubro("");
     setAgregando(false);
   };
 
-  const guardarCambios = async () => {
-    onChange(selectedValues);
-    if (section === "seller") await saveSelectedRubros(selectedValues);
-    setTimeout(() => sheetRef.current?.dismiss(), 50);
-    animateChevron(false);
-    setIsOpen(false);
+  const handleGuardar = async () => {
+    try {
+      if (section === "seller") {
+        await AsyncStorage.setItem(
+          SELECTED_KEY(section),
+          JSON.stringify(selectedValues),
+        );
+      }
+      onChange(selectedValues);
+    } catch (error) {
+      console.error("Error guardando selección:", error);
+    }
+    toggleOpen();
   };
 
-  const handleCancel = () => {
+  const handleCancelar = () => {
     setSelectedValues(selected);
     setNuevoRubro("");
     setAgregando(false);
-    sheetRef.current?.dismiss();
-    animateChevron(false);
-    setIsOpen(false);
+    toggleOpen();
   };
 
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}
-        opacity={0.5}
-        pressBehavior="close"
-      />
-    ),
-    [],
-  );
-
   return (
-    <View>
-      {label ? (
-        <Text
-          style={{
-            color: colors.textDefault,
-            fontSize: FontSizes.btn,
-            marginBottom: 4,
-          }}
-        >
-          {label}
-        </Text>
-      ) : null}
-
+    <View
+      style={{
+        borderRadius: BorderRadius.xl,
+        overflow: "hidden",
+        borderWidth: 1,
+        borderColor: borderColor || colors.inputBorder,
+      }}
+    >
+      {/* Header del acordeón */}
       <Pressable
-        onPress={isOpen ? handleCancel : handlePresentModal}
+        onPress={toggleOpen}
         style={{
-          borderWidth: 1,
-          borderColor: borderColor || colors.inputBorder,
-          backgroundColor: colors.cardBg,
-          borderRadius: borderRadius || BorderRadius.pillBtn,
-          padding: 18,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
+          padding: 18,
+          backgroundColor: colors.cardBg,
         }}
       >
         <Text
@@ -250,6 +208,7 @@ export default function SelectRubros({
             flex: 1,
             color:
               selectedValues.length > 0 ? colors.textDefault : colors.textMuted,
+            fontSize: FontSizes.base,
           }}
         >
           {selectedValues.length > 0
@@ -259,56 +218,17 @@ export default function SelectRubros({
                 .join(", ")
             : placeholder}
         </Text>
-
         <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-          <FlechaAbajo width={18} height={18} color={colors.textMuted} />
+          <Chevron width={18} height={18} color={colors.textMuted} />
         </Animated.View>
       </Pressable>
 
-      <BottomSheetModal
-        ref={sheetRef}
-        snapPoints={snapPoints}
-        enableDynamicSizing={false}
-        backdropComponent={renderBackdrop}
-        enablePanDownToClose
-        backgroundStyle={{ backgroundColor: colors.background }}
-        handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
-        onDismiss={handleCancel}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: colors.background,
-            width: "100%",
-            maxWidth: 500,
-            alignSelf: "center",
-          }}
-        >
+      {/* Lista expandible */}
+      {isOpen && (
+        <View style={{ backgroundColor: colors.background }}>
           <FlatList
             data={rubrosInternos}
             keyExtractor={(item) => item.value}
-            ListHeaderComponent={
-              <View
-                style={{
-                  flex: 1,
-                  paddingHorizontal: 20,
-                  paddingTop: 20,
-                  paddingBottom: 12,
-                }}
-              >
-                <Text
-                  style={{
-                    color: colors.textDefault,
-                    fontSize: FontSizes.base,
-                    fontFamily: fonts.robotoBold,
-                  }}
-                >
-                  {allowAddNew
-                    ? "Selecciona uno o más rubros"
-                    : "Selecciona el/los rubro/s"}
-                </Text>
-              </View>
-            }
             renderItem={({ item }) => (
               <RubroItem
                 rubro={item}
@@ -336,15 +256,14 @@ export default function SelectRubros({
                       alignItems: "center",
                       padding: 12,
                       borderRadius: 12,
-                      marginBottom: 16,
-                      backgroundColor: "transparent",
+                      marginBottom: 8,
                     }}
                   >
                     <View
                       style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: 22,
+                        width: 36,
+                        height: 36,
+                        borderRadius: 18,
                         justifyContent: "center",
                         alignItems: "center",
                         marginRight: 12,
@@ -353,14 +272,13 @@ export default function SelectRubros({
                       }}
                     >
                       <MasBlanca
-                        width={24}
-                        height={24}
+                        width={20}
+                        height={20}
                         color={mode === "dark" ? "#CBD5E0" : "#9CA3AF"}
                       />
                     </View>
                     <Text
                       style={{
-                        flex: 1,
                         color: colors.textMuted,
                         fontSize: FontSizes.base,
                       }}
@@ -371,48 +289,42 @@ export default function SelectRubros({
                 )
               ) : null
             }
-            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 16 }}
+            contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 8 }}
           />
 
-          <SafeAreaView
-            edges={["bottom"]}
+          {/* Botones */}
+          <View
             style={{
-              paddingHorizontal: 20,
-              paddingTop: 8,
-              backgroundColor: colors.background,
+              flexDirection: "row",
+              gap: Spacing.md,
+              padding: 12,
+              borderTopWidth: 1,
+              borderTopColor: colors.border,
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingBottom: 12,
-              }}
-            >
-              <View style={{ flex: 1, marginRight: 8, width: "100%" }}>
-                <Button
-                  variant="secondary"
-                  section="common"
-                  width="full"
-                  onPress={handleCancel}
-                >
-                  Cancelar
-                </Button>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button
-                  variant="primary"
-                  section="common"
-                  width="full"
-                  onPress={guardarCambios}
-                >
-                  Guardar
-                </Button>
-              </View>
+            {/* <View style={{ flex: 1 }}>
+              <Button
+                variant="secondary"
+                section="common"
+                width="full"
+                onPress={handleCancelar}
+              >
+                Cancelar
+              </Button>
             </View>
-          </SafeAreaView>
+            <View style={{ flex: 1 }}>
+              <Button
+                variant="primary"
+                section="common"
+                width="full"
+                onPress={handleGuardar}
+              >
+                Guardar
+              </Button>
+            </View> */}
+          </View>
         </View>
-      </BottomSheetModal>
+      )}
     </View>
   );
 }

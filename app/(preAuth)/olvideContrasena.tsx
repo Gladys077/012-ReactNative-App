@@ -14,16 +14,23 @@ export default function OlvideContrasena() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [submitted, setSubmitted] = useState(false);
+  const [touched, setTouched] = useState(false);
 
   const handleSubmit = () => {
-    if (!email || !email.includes("@")) {
+    setTouched(true);
+
+    if (!email) {
+      setError("Este campo es obligatorio");
+      return;
+    }
+
+    if (!email.includes("@")) {
       setError("Por favor ingresa un correo válido");
       return;
     }
 
     setError(undefined);
     // TODO: VER CON LIO el envío de mail de recuperación
-    console.log("Enviar email de recuperación a:", email);
     setSubmitted(true);
   };
 
@@ -50,19 +57,6 @@ export default function OlvideContrasena() {
             alignSelf: "center",
           }}
         >
-          <Text
-            style={{
-              color: colors.textDefault,
-              fontSize: 18,
-              marginBottom: Spacing.xxl,
-              fontWeight: "500",
-              alignSelf: "center",
-            }}
-          >
-            Ingresa tu correo y te enviaremos un link para restablecer tu
-            contraseña
-          </Text>
-
           {submitted ? (
             <Text
               style={{ color: colors.textDefault, marginVertical: Spacing.md }}
@@ -71,14 +65,32 @@ export default function OlvideContrasena() {
             </Text>
           ) : (
             <>
+              <Text
+                style={{
+                  color: colors.textDefault,
+                  fontSize: 18,
+                  marginBottom: Spacing.xxl,
+                  fontWeight: "500",
+                  alignSelf: "center",
+                }}
+              >
+                Ingresa tu correo y te enviaremos un link para restablecer tu
+                contraseña
+              </Text>
+
               <InputField
                 label="Correo electrónico"
                 placeholder="nombre@ejemplo.com"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                  setEmail(text);
+
+                  // limpia error mientras escribe
+                  if (error) setError(undefined);
+                }}
                 keyboardType="email-address"
                 required
-                error={error ? error : undefined}
+                error={touched ? error : undefined}
               />
 
               <View style={{ marginTop: Spacing.xxl }}>
@@ -99,6 +111,21 @@ export default function OlvideContrasena() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Modal de verificación de email */}
+      {/* <EmailVerificationModal
+        visible={showModal}
+        email={email}
+        onClose={() => setShowModal(false)}
+        onGoToLogin={async () => {
+          setShowModal(false);
+          await router.push("/(auth)/login");
+        }}
+        onResend={async () => {
+          console.log("Correo reenviado");
+          return;
+        }}
+      /> */}
     </SafeAreaView>
   );
 }

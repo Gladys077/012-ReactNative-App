@@ -1,7 +1,16 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import SelectRubros from "../../components/SelectRubros/SelectRubros";
+import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
 import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
@@ -9,7 +18,7 @@ import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
 export default function RegistroScreen() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -18,108 +27,120 @@ export default function RegistroScreen() {
   const [cellular, setCellular] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [nameError, setNameError] = useState<string | undefined>(undefined);
-  const [emailError, setEmailError] = useState<string | undefined>(undefined);
-  const [addressError, setAddressError] = useState<string | undefined>(
-    undefined,
-  );
-  const [cellularError, setCellularError] = useState<string | undefined>(
-    undefined,
-  );
-  const [passwordError, setPasswordError] = useState<string | undefined>(
-    undefined,
-  );
-  const [confirmPasswordError, setConfirmPasswordError] = useState<
-    string | undefined
-  >(undefined);
-
+  const [rubros, setRubros] = useState<string[]>([]);
+  const [isSeller, setIsSeller] = useState(false);
+  const [alias, setAlias] = useState("");
+  const [banco, setBanco] = useState("");
+  const [titular, setTitular] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const handleRegister = () => {
-    setNameError(undefined);
-    setAddressError(undefined);
-    setCellularError(undefined);
-    setEmailError(undefined);
-    setPasswordError(undefined);
-    setConfirmPasswordError(undefined);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    address: "",
+    cellular: "",
+    password: "",
+    confirmPassword: "",
+    alias: "",
+    banco: "",
+    titular: "",
+  });
 
+  const handleRegister = () => {
+    const newErrors = {
+      name: "",
+      email: "",
+      address: "",
+      cellular: "",
+      password: "",
+      confirmPassword: "",
+      alias: "",
+      banco: "",
+      titular: "",
+    };
     let hasError = false;
 
     if (!name.trim()) {
+      newErrors.name = "Por favor ingresa tu nombre y apellido";
       hasError = true;
-      setNameError("Por favor ingresa tu nombre y apellido");
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      newErrors.email = "Por favor ingresa un correo válido";
       hasError = true;
-      setEmailError("Por favor ingresa un correo válido");
     }
 
     if (!address.trim()) {
+      newErrors.address = "Por favor ingresa tu dirección";
       hasError = true;
-      setAddressError("Por favor ingresa tu dirección");
     }
 
     if (!cellular.trim()) {
+      newErrors.cellular = "Por favor ingresa tu número de celular";
       hasError = true;
-      setCellularError("Por favor ingresa tu número de celular");
     } else if (!/^\d+$/.test(cellular)) {
+      newErrors.cellular = "El celular solo puede contener números";
       hasError = true;
-      setCellularError("El celular solo puede contener números");
     }
 
     if (!password) {
+      newErrors.password = "Por favor ingresa una contraseña";
       hasError = true;
-      setPasswordError("Por favor ingresa una contraseña");
     }
 
     if (!confirmPassword) {
+      newErrors.confirmPassword = "Por favor confirma tu contraseña";
       hasError = true;
-      setConfirmPasswordError("Por favor confirma tu contraseña");
     }
 
     if (password && confirmPassword && password !== confirmPassword) {
+      newErrors.confirmPassword = "Las contraseñas no coinciden";
       hasError = true;
-      setConfirmPasswordError("Las contraseñas no coinciden");
     }
 
+    if (isSeller) {
+      if (!alias.trim()) {
+        newErrors.alias = "Ingresa tu alias bancario";
+        hasError = true;
+      }
+      if (!banco.trim()) {
+        newErrors.banco = "Ingresa el banco";
+        hasError = true;
+      }
+      if (!titular.trim()) {
+        newErrors.titular = "Ingresa el nombre del titular";
+        hasError = true;
+      }
+    }
+
+    setErrors(newErrors);
     if (hasError) return;
 
-    // Simula el envío de correo y muestra el modal
     setShowModal(true);
-    //  router.push("/(auth)/login");
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"} // mueve el contenido al aparecer el teclado (behavior="height" en android funciona como padding)
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled" // permite tocar btns sin cerrar teclado
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
           <View
             style={{
               flex: 1,
-              justifyContent: "center",
-              paddingHorizontal: Spacing.lg,
+              paddingHorizontal: Spacing.xxl,
               paddingBottom: Spacing.xl,
               maxWidth: 500,
               width: "100%",
               alignSelf: "center",
             }}
           >
-            {/* Form Section */}
             <View style={{ marginBottom: Spacing.xxl }}>
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
@@ -127,7 +148,7 @@ export default function RegistroScreen() {
                   placeholder="Nombre y apellido"
                   value={name}
                   onChangeText={setName}
-                  error={nameError}
+                  error={errors.name}
                 />
               </View>
 
@@ -138,7 +159,7 @@ export default function RegistroScreen() {
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
-                  error={emailError}
+                  error={errors.email}
                 />
               </View>
 
@@ -148,7 +169,7 @@ export default function RegistroScreen() {
                   placeholder="Dirección"
                   value={address}
                   onChangeText={setAddress}
-                  error={addressError}
+                  error={errors.address}
                 />
               </View>
 
@@ -159,7 +180,7 @@ export default function RegistroScreen() {
                   value={cellular}
                   onChangeText={setCellular}
                   keyboardType="phone-pad"
-                  error={cellularError}
+                  error={errors.cellular}
                 />
               </View>
 
@@ -171,7 +192,7 @@ export default function RegistroScreen() {
                   onChangeText={setPassword}
                   secureTextEntry
                   showPasswordToggle
-                  error={passwordError}
+                  error={errors.password}
                 />
               </View>
 
@@ -183,9 +204,110 @@ export default function RegistroScreen() {
                   onChangeText={setConfirmPassword}
                   secureTextEntry
                   showPasswordToggle
-                  error={confirmPasswordError}
+                  error={errors.confirmPassword}
                 />
               </View>
+
+              <LineaDivisoria />
+
+              {/* Checkbox vendedor */}
+              <Pressable
+                onPress={() => setIsSeller((prev) => !prev)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderWidth: 1.5,
+                    borderColor: colors.textDefault,
+                    marginRight: 8,
+                    marginBottom: 6,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: isSeller
+                      ? colors.brandCommon
+                      : "transparent",
+                  }}
+                />
+                <h4 style={{ color: colors.textDefault, marginLeft: 8 }}>
+                  Deseo vender u ofrecer servicios
+                </h4>
+              </Pressable>
+
+              {/* Rubros */}
+              {isSeller && (
+                <View
+                  style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
+                >
+                  <SelectRubros
+                    label="Selecciona tu/s rubro/s"
+                    section="seller"
+                    selected={rubros}
+                    onChange={setRubros}
+                  />
+                </View>
+              )}
+
+              {/* Datos bancarios */}
+              {isSeller && (
+                <View
+                  style={{
+                    marginTop: Spacing.lg,
+                    marginBottom: Spacing.xxl,
+                    borderWidth: 3,
+                    borderRadius: 24,
+                    borderColor: colors.cardBg,
+                    padding: 16,
+                    paddingBottom: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: colors.textDefault,
+                      fontFamily: fonts.robotoBold,
+                      marginBottom: Spacing.sm,
+                    }}
+                  >
+                    Datos bancarios
+                  </Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 12 }}>
+                    Estos datos le llegarán a tus clientes cuando elijan
+                    abonarte por transferencia.
+                  </Text>
+
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Alias"
+                      value={alias}
+                      onChangeText={setAlias}
+                      editable
+                      error={errors.alias}
+                    />
+                  </View>
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Banco o billetera virtual"
+                      value={banco}
+                      onChangeText={setBanco}
+                      editable
+                      error={errors.banco}
+                    />
+                  </View>
+                  <View style={{ marginBottom: Spacing.xxl }}>
+                    <InputField
+                      label="Titular"
+                      value={titular}
+                      onChangeText={setTitular}
+                      editable
+                      error={errors.titular}
+                    />
+                  </View>
+                </View>
+              )}
 
               <Button section="common" width="full" onPress={handleRegister}>
                 Registrarse
@@ -195,7 +317,6 @@ export default function RegistroScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {/* Modal */}
       <EmailVerificationModal
         visible={showModal}
         email={email}
@@ -206,7 +327,6 @@ export default function RegistroScreen() {
         }}
         onResend={async () => {
           console.log("Correo reenviado");
-          // TODO: Ver con LIO, algo para reenviar el correo
           return;
         }}
       />

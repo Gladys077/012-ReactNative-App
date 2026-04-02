@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   Text,
   View,
@@ -11,7 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
-import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
@@ -26,6 +26,9 @@ export default function PerfilScreen() {
   const [address, setAddress] = useState("");
   const [cellular, setCellular] = useState("");
   const [rubros, setRubros] = useState<string[]>([]);
+
+  // Si desea vender
+  const [isSeller, setIsSeller] = useState(false);
 
   // Datos para cobrar x transferencia
   const [alias, setAlias] = useState("");
@@ -63,11 +66,11 @@ export default function PerfilScreen() {
       newErrors.name = "Por favor ingresa tu nombre y apellido";
       hasError = true;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      newErrors.email = "Correo inválido";
-      hasError = true;
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!emailRegex.test(email)) {
+    //   newErrors.email = "Correo inválido";
+    //   hasError = true;
+    // }
     if (!address.trim()) {
       newErrors.address = "Por favor ingresa tu dirección";
       hasError = true;
@@ -154,9 +157,10 @@ export default function PerfilScreen() {
           <View
             style={{
               flex: 1,
-              justifyContent: "center",
+              // justifyContent: "center",
               paddingHorizontal: Spacing.lg,
               paddingBottom: Spacing.xl,
+              paddingTop: Spacing.xl,
               maxWidth: 500,
               width: "100%",
               alignSelf: "center",
@@ -239,34 +243,50 @@ export default function PerfilScreen() {
 
               <LineaDivisoria />
 
-              <View>
-                <Text
+              <Pressable
+                onPress={() => setIsSeller((prev) => !prev)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: Spacing.lg,
+                }}
+              >
+                <View
                   style={{
-                    fontSize: 11,
-                    color: colors.statusLavenderDot,
-                    fontFamily: fonts.robotoBold,
-                    textTransform: "uppercase",
-                    marginTop: 18,
+                    width: 18,
+                    height: 18,
+                    borderWidth: 1.5,
+                    borderColor: colors.textDefault,
+                    marginRight: 8,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: isSeller
+                      ? colors.brandCommon
+                      : "transparent",
                   }}
-                >
-                  ¿Deseas vender u ofrecer algún servicio?
+                ></View>
+
+                <Text style={{ color: colors.textDefault }}>
+                  También deseo vender
                 </Text>
-              </View>
+              </Pressable>
 
               {/* Select Rubros */}
-              <View
-                style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
-              >
-                <SelectRubros
-                  label="Selecciona tu/s rubro/s"
-                  section="seller"
-                  selected={rubros}
-                  onChange={setRubros}
-                />
-              </View>
+              {isSeller && (
+                <View
+                  style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
+                >
+                  <SelectRubros
+                    label="Selecciona tu/s rubro/s"
+                    section="seller"
+                    selected={rubros}
+                    onChange={setRubros}
+                  />
+                </View>
+              )}
 
               {/* --- Datos para recibir pagos por transferencia --- */}
-              {rubros.length > 0 && (
+              {isSeller && (
                 <>
                   <View
                     style={{
@@ -369,21 +389,6 @@ export default function PerfilScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-
-      {/* Modal de verificación de email */}
-      <EmailVerificationModal
-        visible={showModal}
-        email={email}
-        onClose={() => setShowModal(false)}
-        onGoToLogin={async () => {
-          setShowModal(false);
-          await router.push("/(auth)/login");
-        }}
-        onResend={async () => {
-          console.log("Correo reenviado");
-          return;
-        }}
-      />
     </SafeAreaView>
   );
 }
