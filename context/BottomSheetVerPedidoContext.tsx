@@ -1,7 +1,13 @@
 import BottomSheetVerPedido, {
   BottomSheetVerPedidoRef,
 } from "@/components/subcomponentes/BottomSheetVerPedido";
-import React, { createContext, useCallback, useContext, useRef, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 
 interface PedidoData {
   numeroPedido?: number | string;
@@ -22,19 +28,18 @@ export const BottomSheetVerPedidoProvider = ({
   children: React.ReactNode;
 }) => {
   const sheetRef = useRef<BottomSheetVerPedidoRef>(null);
-  const [pedidoData, setPedidoData] = useState<PedidoData>({
-    numeroPedido: undefined,
-    items: [],
-  });
+  const [pedidoData, setPedidoData] = useState<PedidoData>({});
+  const [isVisible, setIsVisible] = useState(false);
 
   const openBottomSheetVerPedido = useCallback((data: PedidoData) => {
-  setPedidoData(data);
-  setTimeout(() => sheetRef.current?.present(), 50);
-}, []);
+    setPedidoData(data);
+    setIsVisible(true);
+  }, []);
 
-const closeBottomSheetVerPedido = useCallback(() => {
-  sheetRef.current?.dismiss();
-}, []);
+  const closeBottomSheetVerPedido = useCallback(() => {
+    setIsVisible(false);
+    setPedidoData({});
+  }, []);
 
   return (
     <BottomSheetVerPedidoContext.Provider
@@ -42,11 +47,12 @@ const closeBottomSheetVerPedido = useCallback(() => {
     >
       {children}
 
-      {/* El único BottomSheet global */}
       <BottomSheetVerPedido
         ref={sheetRef}
         numeroPedido={pedidoData.numeroPedido}
         items={pedidoData.items}
+        isVisible={isVisible}
+        onClose={closeBottomSheetVerPedido}
       />
     </BottomSheetVerPedidoContext.Provider>
   );
@@ -56,21 +62,8 @@ export const useBottomSheetVerPedido = () => {
   const context = useContext(BottomSheetVerPedidoContext);
   if (!context) {
     throw new Error(
-      "useBottomSheetVerPedido debe usarse dentro de BottomSheetVerPedidoProvider"
+      "useBottomSheetVerPedido debe usarse dentro de BottomSheetVerPedidoProvider",
     );
   }
   return context;
 };
-
-
-/* 
- * Contexto global que gestiona el BottomSheetVerPedido.
- * 
- * Permite abrir y cerrar un único BottomSheet compartido en toda la app,
- * evitando tener uno por cada CardPedidoEnEspera.
- * 
- * - `openBottomSheetVerPedido(data)` → muestra el detalle del pedido recibido.
- * - `closeBottomSheetVerPedido()` → cierra el BottomSheet.
- * 
- * Este contexto debe envolver el árbol principal de navegación (por ejemplo, en layout o _app.tsx).
- */

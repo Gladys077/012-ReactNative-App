@@ -1,9 +1,8 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -15,27 +14,20 @@ import {
 import { Enviar } from "../../components/icons";
 import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
-import TipsBottomSheet from "../../components/TipsBottomSheet";
+import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
 import Button from "../../components/UI/Button/Button";
 
 const NuevoPedido = () => {
   const { colors, fonts } = useTheme();
 
   const [selectedRubros, setSelectedRubros] = useState<string[]>([]);
-  // Se usará más adelante cuando carguemos los rubros dinámicamente desde la BBDD
   const [rubrosDisponibles, setRubrosDisponibles] = useState(rubrosVendedor);
-  const [pedidoTexto, setPedidoTexto] = useState(""); // Guarda el nuevo pedido
+  const [pedidoTexto, setPedidoTexto] = useState("");
   const [errors, setErrors] = useState<{ rubros?: string; pedido?: string }>(
     {},
-  ); // Errores
+  );
+  const [tipsOpen, setTipsOpen] = useState(false); // ← estado del sheet
 
-  // referencia al BottomSheet
-  const tipsRef = useRef<BottomSheetModal>(null);
-
-  const openTips = () => tipsRef.current?.present();
-  const closeTips = () => tipsRef.current?.dismiss();
-
-  // Carga rubros desde AsyncStorage al iniciar
   useEffect(() => {
     const loadRubros = async () => {
       try {
@@ -52,7 +44,6 @@ const NuevoPedido = () => {
     loadRubros();
   }, []);
 
-  // Valida cuando cambia la selección de rubros
   const handleChange = (values: string[]) => {
     setSelectedRubros(values);
     if (values.length > 0 && errors.rubros) {
@@ -60,7 +51,6 @@ const NuevoPedido = () => {
     }
   };
 
-  // Valida cuando escribe en el textarea
   const handleTextChange = (text: string) => {
     setPedidoTexto(text);
     if (text.trim().length > 0 && errors.pedido) {
@@ -68,7 +58,6 @@ const NuevoPedido = () => {
     }
   };
 
-  // Guardado: ejemplo usando AsyncStorage (REEMPLAZAR por fetch - VER CON LIO)
   const PEDIDO_STORAGE_KEY = "pedidoBorrador";
 
   const savePedidoLocal = async (payload: {
@@ -79,59 +68,42 @@ const NuevoPedido = () => {
     try {
       const existing = await AsyncStorage.getItem(PEDIDO_STORAGE_KEY);
       const list = existing ? JSON.parse(existing) : [];
-      list.unshift(payload); // agrego al comienzo
+      list.unshift(payload);
       await AsyncStorage.setItem(PEDIDO_STORAGE_KEY, JSON.stringify(list));
     } catch (err) {
       console.error("Error guardando pedido local:", err);
     }
   };
 
-  // Validación al presionar el botón
   const handleSubmit = async () => {
     const newErrors: { rubros?: string; pedido?: string } = {};
-
     if (selectedRubros.length === 0) {
       newErrors.rubros = "Por favor, selecciona al menos un rubro.";
     }
     if (!pedidoTexto.trim()) {
       newErrors.pedido = "Describe brevemente tu pedido.";
     }
-
     setErrors(newErrors);
-
-    // Si no hay errores, continuar
     if (Object.keys(newErrors).length === 0) {
-      // payload listo para enviar
       const payload = {
         rubros: selectedRubros,
         texto: pedidoTexto.trim(),
         createdAt: new Date().toISOString(),
       };
-
-      // Ejemplo: guardo localmente antes de enviar
       await savePedidoLocal(payload);
-
-      // TODO: Aquí iría la llamada al backend - VER CON LIO
-      // await api.post('/pedidos', payload)
-
-      // Limpio el formulario o navego según flow
       setSelectedRubros([]);
       setPedidoTexto("");
       setErrors({});
-      tipsRef.current?.dismiss?.();
-
+      setTipsOpen(false);
       console.log("Pedido guardado/enviado:", payload);
-      // show toast / navegar / etc.
     }
   };
 
-  const FooterHeight = 130;
-
   return (
-    //KeyboardAvoidingView evita q el teclado oculte los campos de textInputs cuando el usuairo los está usando.
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: colors.background }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       <ScrollView
         style={{ flex: 1 }}
@@ -140,11 +112,10 @@ const NuevoPedido = () => {
           paddingTop: Spacing.xl,
           gap: Spacing.xl,
           flexGrow: 1,
-          paddingBottom: FooterHeight,
+          paddingBottom: Spacing.xl,
         }}
-        keyboardShouldPersistTaps="handled" // Evita q el teclado bloquee toques (taps)
+        keyboardShouldPersistTaps="always"
       >
-        {/* Título */}
         <Text
           style={{
             color: colors.textDefault,
@@ -155,7 +126,6 @@ const NuevoPedido = () => {
           ¿Qué necesitas comprar?
         </Text>
 
-        {/* Selector de rubro versión buyer */}
         <View
           style={{
             backgroundColor: colors.cardBg,
@@ -183,7 +153,6 @@ const NuevoPedido = () => {
           )}
         </View>
 
-        {/* ------ Subtítulo + Textarea de descripción + Tips + Btn principal ------- */}
         <View
           style={{
             backgroundColor: colors.cardBg,
@@ -194,14 +163,12 @@ const NuevoPedido = () => {
             paddingBottom: Spacing.xxl,
           }}
         >
-          {/* Subtítulo */}
           <Text
             style={{ paddingBottom: Spacing.md, color: colors.textDefault }}
           >
             Escribe tu pedido:
           </Text>
 
-          {/* Textarea */}
           <TextInput
             placeholder={`Ejemplo:\n- 1K manzana\n- 2 paquetes de harina (prefiero marca Blancaflor)\n- 1 Litro de aceite`}
             placeholderTextColor={colors.textMuted}
@@ -221,7 +188,6 @@ const NuevoPedido = () => {
             }}
           />
 
-          {/* ----> Error debajo del textarea */}
           {errors.pedido && (
             <Text
               style={{
@@ -234,10 +200,12 @@ const NuevoPedido = () => {
             </Text>
           )}
 
-          {/* Tips BottomSheet */}
-          <TipsBottomSheet ref={tipsRef} onClose={closeTips} />
+          {/* Solo el botón — dentro del ScrollView */}
+          <TipsButton
+            isOpen={tipsOpen}
+            onPress={() => setTipsOpen((prev) => !prev)}
+          />
 
-          {/* Botón principal */}
           <Button
             section="buyer"
             width="full"
@@ -250,14 +218,8 @@ const NuevoPedido = () => {
           </Button>
         </View>
 
-        {/* Línea para cambiar de sección */}
         <View style={{ alignItems: "center", marginVertical: 8 }}>
-          <Text
-            style={{
-              fontSize: FontSizes.base,
-              color: colors.textMuted,
-            }}
-          >
+          <Text style={{ fontSize: FontSizes.base, color: colors.textMuted }}>
             ¿Deseas vender?{"  "}
             <Link
               href="/vendedor/homeVendedor"
@@ -272,6 +234,9 @@ const NuevoPedido = () => {
           </Text>
         </View>
       </ScrollView>
+
+      {/* El sheet — FUERA del ScrollView, se renderiza sobre toda la pantalla */}
+      <TipsSheet isOpen={tipsOpen} onClose={() => setTipsOpen(false)} />
     </KeyboardAvoidingView>
   );
 };

@@ -101,7 +101,13 @@ export default function ElegirRolScreen() {
               ¡Hola! 👋
             </Text>
 
-            <Text style={{ color: colors.textMuted, fontSize: 14 }}>
+            <Text
+              style={{
+                color: colors.textMuted,
+                fontSize: 16,
+                marginBottom: Spacing.lg,
+              }}
+            >
               ¿Cómo deseas comenzar?
             </Text>
           </View>
@@ -112,7 +118,7 @@ export default function ElegirRolScreen() {
               section="buyer"
               icon={Carrito}
               title="Comprador"
-              subtitle="Haz tu pedido y elige la mejor opción"
+              subtitle="Haz tu pedido y elige entre las respuestas, la mejor opción."
               onPress={() => handleSelectRole("buyer")}
             />
 

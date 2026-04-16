@@ -24,24 +24,22 @@ export interface Respuesta {
 export interface Pedido {
   id: string | number;
   numeroPedido: number;
-  direccionComprador: string;
   estado: EstadoPedidoActual;
+  rubros?: string[];
   textoPedido: string;
 
   respuestasRecibidas?: number;
   duracionCronometro?: number;
-  
-  respuestas?: Respuesta[];
-  respuestaSeleccionada?: Respuesta;
+  direccionComprador: string;
 
   formaPago?: "transferencia" | "efectivo";
 
-  // SOLO cuando estado === "A resolver"
   problemaPago?: {
     comprobante: boolean;
     direccion: boolean;
   };
 
+  respuestas?: Respuesta[];
+  respuestaSeleccionada?: Respuesta;
   expandido?: boolean;
-
 }

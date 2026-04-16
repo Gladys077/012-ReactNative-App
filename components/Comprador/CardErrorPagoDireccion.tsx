@@ -1,14 +1,17 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-import DireccionEntrega from "@/components/subcomponentes/DireccionEntrega";
+import ChatModal from "@/components/Chat/ChatModal";
 import LineaDivisoria from "@/components/subcomponentes/LineaDivisoria";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
 import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
+import { Chat } from "../icons";
 import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
+import AttentionRebote from "../UI/Animations/AttentionRebote";
+import Button from "../UI/Button/Button";
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
 type FormaPago = "transferencia" | "efectivo";
@@ -70,6 +73,8 @@ export default function CardErrorPagoDireccion({
 }: Props) {
   const { colors, fonts } = useTheme();
 
+  const [chatVisible, setChatVisible] = useState(false);
+
   const [formaPago, setFormaPago] = useState<FormaPago>(formaPagoInicial);
 
   const [comprobante, setComprobante] = useState<{
@@ -95,7 +100,7 @@ export default function CardErrorPagoDireccion({
 
   const [editandoDireccion, setEditandoDireccion] = useState(hayErrorDireccion);
 
-  const handleEnviar = () => {
+  const handleEnviar = (respuestaId?: string | number) => {
     onEnviarCorreccion({
       formaPago,
       comprobante:
@@ -119,24 +124,57 @@ export default function CardErrorPagoDireccion({
       // duracionCronometro={0} // no se muestra visualmente
       onVerNota={onVerNota}
     >
+      {/* Modal del chat  */}
+      <ChatModal
+        visible={chatVisible}
+        onClose={() => setChatVisible(false)}
+        pedidoId={pedidoId}
+        vendedorNombre={nombreNegocio}
+        vendedorAlias={titular}
+      />
+
       {/* Acciones superiores */}
-      <View style={{ flexDirection: "row", gap: Spacing.lg }}>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: Spacing.lg,
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <VerBottomSheet
           onPress={onVerPedido}
           iconPosition="left"
           variant="buyer"
         />
 
-        <Pressable onPress={onVerMensajes}>
+        <Pressable
+          onPress={() => setChatVisible(true)}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 6,
+          }}
+        >
           <Text
             style={{
               fontSize: FontSizes.sm,
-              color: colors.brandBuyer,
+              color: colors.brandSeller,
               fontFamily: fonts.robotoMedium,
+              textDecorationLine: "underline",
             }}
           >
-            Mensajes
+            Mensaje
           </Text>
+          <AttentionRebote>
+            <Chat
+              width={20}
+              height={20}
+              stroke={colors.brandSeller}
+              strokeWidth={1.5}
+              fill={"antiquewhite"}
+            />
+          </AttentionRebote>
         </Pressable>
       </View>
 
@@ -164,8 +202,8 @@ export default function CardErrorPagoDireccion({
         />
       )}
 
-      {/* Dirección */}
-      <DireccionEntrega
+      {/* Dirección - sólo permitimos editar la dirección si el vendedor lo marcó como dirección errónea */}
+      {/* <DireccionEntrega
         direccion={direccionState}
         editable={hayErrorDireccion && editandoDireccion}
         onEditarDireccion={() =>
@@ -174,49 +212,38 @@ export default function CardErrorPagoDireccion({
         onCambiarDireccion={setDireccionState}
         onGuardarDireccion={() => setEditandoDireccion(false)}
         errorDireccion={errorDireccion}
-      />
+      /> */}
 
-      {/* Acciones */}
+      {/* Btns: Rechazar - Aceptar */}
       <View
         style={{
           flexDirection: "row",
           gap: Spacing.md,
-          marginTop: Spacing.xl,
+          marginTop: Spacing.md,
         }}
       >
-        <Pressable
-          onPress={onCancelarPedido}
-          style={{
-            flex: 1,
-            paddingVertical: Spacing.md,
-            borderRadius: BorderRadius.md,
-            backgroundColor: colors.textSecondaryBg,
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: FontSizes.btn }}>Cancelar pedido</Text>
-        </Pressable>
-
-        <Pressable
-          onPress={handleEnviar}
-          style={{
-            flex: 1,
-            paddingVertical: Spacing.md,
-            borderRadius: BorderRadius.md,
-            backgroundColor: colors.brandBuyer,
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: FontSizes.btn,
-              fontFamily: fonts.robotoRegular,
-              color: colors.textOnColor,
-            }}
+        <View style={{ flex: 1 }}>
+          <Button
+            variant="secondary"
+            height="md"
+            width="full"
+            onPress={onCancelarPedido}
           >
-            Enviar comprobante
-          </Text>
-        </Pressable>
+            Cancelar pedido
+          </Button>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <Button
+            variant="primary"
+            section="buyer"
+            height="md"
+            width="full"
+            onPress={() => handleEnviar(respuestaId)}
+          >
+            Enviar datos
+          </Button>
+        </View>
       </View>
     </CardRespVendedorBase>
   );

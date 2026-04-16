@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useMemo, useState } from "react";
-import { Alert, Animated, FlatList, Pressable, Text, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, Animated, Pressable, Text, View } from "react-native";
 import { BorderRadius, FontSizes, Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 import { Chevron, MasBlanca, TiendaIcon } from "../icons";
@@ -111,6 +111,10 @@ export default function SelectRubros({
     }, [section]),
   );
 
+  useEffect(() => {
+    setSelectedValues(selected);
+  }, [selected]);
+
   const toggleOpen = () => {
     const next = !isOpen;
     setIsOpen(next);
@@ -118,9 +122,12 @@ export default function SelectRubros({
   };
 
   const toggleRubro = (value: string) => {
-    setSelectedValues((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
-    );
+    const nextValues = selectedValues.includes(value)
+      ? selectedValues.filter((v) => v !== value)
+      : [...selectedValues, value];
+
+    setSelectedValues(nextValues);
+    onChange(nextValues); //Esto envía los datos a NuevoPedido.tsx al instante
   };
 
   const agregarNuevoRubro = async () => {
@@ -225,73 +232,65 @@ export default function SelectRubros({
 
       {/* Lista expandible */}
       {isOpen && (
-        <View style={{ backgroundColor: colors.background }}>
-          <FlatList
-            data={rubrosInternos}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => (
-              <RubroItem
-                rubro={item}
-                isSelected={selectedValues.includes(item.value)}
-                onToggle={toggleRubro}
+        <View style={{ paddingHorizontal: 12, paddingBottom: 8 }}>
+          {rubrosInternos.map((item) => (
+            <RubroItem
+              key={item.value}
+              rubro={item}
+              isSelected={selectedValues.includes(item.value)}
+              onToggle={toggleRubro}
+            />
+          ))}
+          {allowAddNew ? (
+            agregando ? (
+              <NuevoRubroInput
+                value={nuevoRubro}
+                onChange={setNuevoRubro}
+                onAdd={agregarNuevoRubro}
+                onCancel={() => {
+                  setAgregando(false);
+                  setNuevoRubro("");
+                }}
               />
-            )}
-            ListFooterComponent={
-              allowAddNew ? (
-                agregando ? (
-                  <NuevoRubroInput
-                    value={nuevoRubro}
-                    onChange={setNuevoRubro}
-                    onAdd={agregarNuevoRubro}
-                    onCancel={() => {
-                      setAgregando(false);
-                      setNuevoRubro("");
-                    }}
+            ) : (
+              <Pressable
+                onPress={() => setAgregando(true)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 12,
+                  borderRadius: 12,
+                  marginBottom: 8,
+                }}
+              >
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 18,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 12,
+                    backgroundColor: mode === "dark" ? "#4A5568" : "#b4bbc5",
+                  }}
+                >
+                  <MasBlanca
+                    width={20}
+                    height={20}
+                    color={mode === "dark" ? "#CBD5E0" : "#9CA3AF"}
                   />
-                ) : (
-                  <Pressable
-                    onPress={() => setAgregando(true)}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      padding: 12,
-                      borderRadius: 12,
-                      marginBottom: 8,
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: 18,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginRight: 12,
-                        backgroundColor:
-                          mode === "dark" ? "#4A5568" : "#b4bbc5",
-                      }}
-                    >
-                      <MasBlanca
-                        width={20}
-                        height={20}
-                        color={mode === "dark" ? "#CBD5E0" : "#9CA3AF"}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: colors.textMuted,
-                        fontSize: FontSizes.base,
-                      }}
-                    >
-                      Nuevo Rubro
-                    </Text>
-                  </Pressable>
-                )
-              ) : null
-            }
-            contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 8 }}
-          />
-
+                </View>
+                <Text
+                  style={{
+                    color: colors.textMuted,
+                    fontSize: FontSizes.base,
+                  }}
+                >
+                  Nuevo Rubro
+                </Text>
+              </Pressable>
+            )
+          ) : null}
           {/* Botones */}
           <View
             style={{

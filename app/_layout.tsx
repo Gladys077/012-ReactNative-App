@@ -1,17 +1,15 @@
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { Platform, StatusBar as RNStatusBar, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AuthProvider } from "@/context/AuthContext";
 import { ModalProvider } from "@/context/ModalContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import * as NavigationBar from "expo-navigation-bar";
 import { StatusBar } from "expo-status-bar";
+import * as SystemUI from "expo-system-ui";
 
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/UI/ModalComponent";
 
 SplashScreen.preventAutoHideAsync();
@@ -21,44 +19,23 @@ function ThemedStatusBar() {
   const { mode, colors } = useTheme();
 
   useEffect(() => {
-    const setNavColor = async () => {
+    const setColors = async () => {
       try {
-        // Definimos color de fondo del NavigationBar
-        await NavigationBar.setBackgroundColorAsync(colors.background);
-
-        // Ajuste del color de íconos según tema
-        await NavigationBar.setButtonStyleAsync(
-          mode === "dark" ? "light" : "dark",
-        );
-
-        // Efecto suave (solo visual)
-        // NavigationBar.setVisibilityAsync("visible");
+        // Controla el color de fondo del sistema (edge-to-edge compatible)
+        await SystemUI.setBackgroundColorAsync(colors.background);
       } catch (error) {
-        console.warn("Error configurando NavigationBar:", error);
+        console.warn("Error configurando SystemUI:", error);
       }
     };
-
-    // Ejecutar la función asíncrona; no devolver JSX desde useEffect
-    setNavColor();
+    setColors();
   }, [mode, colors]);
 
   return (
-    <>
-      {/* Fondo detrás del StatusBar */}
-      {Platform.OS === "android" && (
-        <View
-          style={{
-            height: RNStatusBar.currentHeight,
-            backgroundColor: colors.background,
-          }}
-        />
-      )}
-      <StatusBar
-        style={mode === "dark" ? "light" : "dark"}
-        backgroundColor={colors.background}
-        translucent={false}
-      />
-    </>
+    <StatusBar
+      style={mode === "dark" ? "light" : "dark"}
+      backgroundColor="transparent"
+      translucent={true}
+    />
   );
 }
 
@@ -84,22 +61,31 @@ const RootLayout = () => {
 
   if (!fontsLoaded && !error) return null;
 
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <ModalProvider>
-          <AuthProvider>
-            <ModalComponent />
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <BottomSheetModalProvider>
+  const AppContent = () => {
+    const { colors } = useTheme();
+    return (
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <ModalProvider>
+            <AuthProvider>
+              <SafeAreaView
+                style={{ flex: 1, backgroundColor: colors.background }}
+              >
                 <ThemedStatusBar />
+                <ModalComponent />
                 <Slot />
-              </BottomSheetModalProvider>
-            </GestureHandlerRootView>
-          </AuthProvider>
-        </ModalProvider>
-      </ThemeProvider>
-    </SafeAreaProvider>
+              </SafeAreaView>
+            </AuthProvider>
+          </ModalProvider>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    );
+  };
+
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 };
 

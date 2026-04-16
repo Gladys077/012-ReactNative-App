@@ -1,10 +1,9 @@
 import React, { ComponentType } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
-import { Spacing } from "../../../constants/Tokens";
+import { BorderRadius, shadows, Spacing } from "../../../constants/Tokens";
 import { useTheme } from "../../../context/ThemeContext";
 import { FlechaDerecha } from "../../icons";
-import Button from "./Button";
 
 interface RoleButtonProps {
   icon: ComponentType<SvgProps>;
@@ -18,107 +17,72 @@ const RoleButton = ({
   title,
   subtitle,
   section,
-  icon,
+  icon: Icon,
   onPress,
 }: RoleButtonProps) => {
   const { colors, fonts } = useTheme();
+
+  const bgColor = section === "buyer" ? colors.brandBuyer : colors.brandSeller;
   const iconColor =
     section === "buyer" ? colors.brandBuyer : colors.brandSeller;
 
   return (
-    <Button
-      section={section}
-      variant="primary"
-      width="full"
-      height="xxl"
+    <Pressable
       onPress={onPress}
+      style={({ pressed }) => ({
+        backgroundColor: bgColor,
+        borderRadius: BorderRadius.pillBtn,
+        height: 120,
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: Spacing.xl,
+        marginVertical: Spacing.sm,
+        opacity: pressed ? 0.92 : 1,
+        transform: [{ scale: pressed ? 0.97 : 1 }],
+        ...shadows.md,
+      })}
     >
+      {/* Círculo con ícono */}
       <View
         style={{
-          flexDirection: "row",
+          width: 50,
+          height: 50,
+          borderRadius: 24,
+          backgroundColor: colors.cardBg,
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "center",
+          marginRight: Spacing.md,
         }}
       >
-        {/* === Columna 1: círculo con ícono === */}
-        <View
-          style={{
-            width: 56, // ancho fijo de columna izquierda
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: Spacing.xl,
-          }}
-        >
-          <View
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-              backgroundColor: colors.cardBg,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {icon &&
-              React.createElement(icon, {
-                fill: iconColor,
-                stroke: colors.textSecondaryBorder,
-                height: 28,
-                width: 28,
-              })}
-          </View>
-        </View>
-
-        {/* === Columna 2: textos === */}
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            paddingHorizontal: Spacing.md,
-            paddingTop: Spacing.xl,
-            height: 80,
-          }}
-        >
-          <Text
-            style={{
-              color: colors.textOnColor,
-              fontFamily: fonts.robotoBold,
-              fontSize: 14,
-              marginBottom: 2,
-            }}
-            numberOfLines={1}
-          >
-            {title}
-          </Text>
-          <Text
-            style={{
-              color: colors.textOnColor,
-              fontSize: 12,
-              opacity: 0.9,
-            }}
-            numberOfLines={2}
-          >
-            {subtitle}
-          </Text>
-        </View>
-
-        {/* === Columna 3: flecha === */}
-        <View
-          style={{
-            width: 32, // ancho fijo de columna derecha
-            alignItems: "center",
-            justifyContent: "center",
-            paddingRight: 20,
-            paddingTop: Spacing.xl,
-          }}
-        >
-          <FlechaDerecha fill={colors.textOnColor} height={24} width={24} />
-        </View>
+        {Icon && <Icon width={30} height={30} fill={iconColor} />}
       </View>
-    </Button>
+
+      {/* Textos */}
+      <View style={{ flex: 1, paddingHorizontal: Spacing.md }}>
+        <Text
+          style={{
+            color: colors.textOnColor,
+            fontFamily: fonts.robotoBold,
+            fontSize: 16,
+            marginBottom: 2,
+          }}
+          numberOfLines={1}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{ color: colors.textOnColor, fontSize: 13, opacity: 0.9 }}
+          numberOfLines={2}
+        >
+          {subtitle}
+        </Text>
+      </View>
+
+      {/* Flecha */}
+      <FlechaDerecha fill={colors.textOnColor} height={24} width={24} />
+    </Pressable>
   );
 };
 
 export default RoleButton;
-
-//Este es para la page "Inicio-ElegirRol", para crear cada btn grande.

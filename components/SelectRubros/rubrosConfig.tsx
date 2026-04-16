@@ -4,16 +4,21 @@ import {
   Libro,
   Limpieza,
   Rotiseria,
-  Verduleria
+  Verduleria,
 } from "@/components/icons";
 import React from "react";
 
 export interface RubroConfig {
   label: string;
   value: string;
-  IconComponent: React.ComponentType<{ width: number; height: number; color?: string; fill?: string }>;
-  color: string;      // fondo del círculo
-  iconColor: string;  // color del ícono
+  IconComponent: React.ComponentType<{
+    width: number;
+    height: number;
+    color?: string;
+    fill?: string;
+  }>;
+  color: string; // fondo del círculo
+  iconColor: string; // color del ícono
 }
 
 // Rubros predeterminados (acá deberían agregarse más en el futuro - por ahora cada nuevo rubro tendrá un icono de tiendaIcon)
@@ -22,7 +27,7 @@ export const rubrosVendedor: RubroConfig[] = [
     label: "Almacén",
     value: "almacen",
     IconComponent: CanastaAlmacen,
-    color: "#FFE0B2",    
+    color: "#FFE0B2",
     iconColor: "#FB8C00",
   },
   {
@@ -56,6 +61,20 @@ export const rubrosVendedor: RubroConfig[] = [
   {
     label: "Librería",
     value: "libreria",
+    IconComponent: Libro,
+    color: "#FFF9C4",
+    iconColor: "#F9A825",
+  },
+  {
+    label: "Plomería",
+    value: "plomeria",
+    IconComponent: Carne,
+    color: "#FFCDD2",
+    iconColor: "#D32F2F",
+  },
+  {
+    label: "Electricista",
+    value: "electricista",
     IconComponent: Libro,
     color: "#FFF9C4",
     iconColor: "#F9A825",

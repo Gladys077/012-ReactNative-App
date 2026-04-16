@@ -2,186 +2,168 @@ import Check from "@/components/icons/Check";
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
-import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useCallback, useMemo, useState } from "react";
-import { Animated, Pressable, ScrollView, Text, View } from "react-native";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import React, { useCallback, useMemo, useRef } from "react";
+import { Animated, Pressable, Text, View } from "react-native";
 import { FlechaAbajo, TipLamparita } from "./icons";
 
-interface TipsBottomSheetProps {
-  onClose?: () => void;
+// Hook interno para compartir lógica de animación y colores
+export function useTipsBottomSheet() {
+  const { user } = useAuthContext();
+  const { colors, fonts } = useTheme();
+
+  const role = user?.role || "buyer";
+  const title =
+    role === "buyer" ? "Tips para hacer tu pedido" : "Tips para tus respuestas";
+  const tips =
+    role === "buyer"
+      ? [
+          "Escribe tu pedido en forma de lista, como el ejemplo.",
+          "Especifica cantidades.",
+          "Incluye las marcas, si tienes alguna preferencia.",
+        ]
+      : [
+          "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
+        ];
+  const colorRole =
+    role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
+  const bgSoft =
+    role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
+
+  return { colors, fonts, title, tips, colorRole, bgSoft };
 }
 
-const TipsBottomSheet = forwardRef<BottomSheetModal, TipsBottomSheetProps>(
-  ({ onClose }, ref) => {
-    const { colors, fonts } = useTheme();
-    const { user } = useAuthContext();
+// Botón que va DENTRO del ScrollView
+interface TipsButtonProps {
+  isOpen: boolean;
+  onPress: () => void;
+}
 
-    const role = user?.role || "buyer";
-    const title =
-      role === "buyer"
-        ? "Tips para hacer tu pedido"
-        : "Tips para tus respuestas";
+export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
+  const { colors, fonts, title, colorRole } = useTipsBottomSheet();
+  const rotateAnim = useMemo(() => new Animated.Value(0), []);
 
-    const tips =
-      role === "buyer"
-        ? [
-            "Escribe tu pedido en forma de lista, como el ejemplo.",
-            "Especifica cantidades.",
-            "Incluye las marcas, si tienes alguna preferencia.",
-          ]
-        : [
-            "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración'. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
-          ];
+  const rotateInterpolate = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "180deg"],
+  });
 
-    const colorRole =
-      role === "buyer" ? colors.tipsColorBuyer : colors.brandSeller;
-    const bgSoft =
-      role === "buyer" ? colors.brandBuyerSoft : colors.brandSellerSoft;
+  // Animación del chevron
+  React.useEffect(() => {
+    Animated.timing(rotateAnim, {
+      toValue: isOpen ? 1 : 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [isOpen]);
 
-    const snapPoints = useMemo(() => ["30%"], []);
-
-    const renderBackdrop = useCallback(
-      (props: any) => (
-        <BottomSheetBackdrop
-          {...props}
-          appearsOnIndex={0}
-          disappearsOnIndex={-1}
-          pressBehavior="close"
-          opacity={0.5}
-        />
-      ),
-      [],
-    );
-
-    // Estado para controlar la rotación del chevron
-    const [isOpen, setIsOpen] = useState(false);
-    const rotateAnim = useMemo(() => new Animated.Value(0), []);
-
-    const animateChevron = (open: boolean) => {
-      Animated.timing(rotateAnim, {
-        toValue: open ? 1 : 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    };
-
-    const openTips = () => {
-      if (ref && "current" in ref) {
-        ref.current?.present?.();
-        animateChevron(true);
-        setIsOpen(true);
-      }
-    };
-
-    const closeTips = () => {
-      if (ref && "current" in ref) {
-        ref.current?.dismiss?.();
-        animateChevron(false);
-        setIsOpen(false);
-      }
-      onClose?.();
-    };
-
-    const rotateInterpolate = rotateAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["0deg", "180deg"],
-    });
-
-    return (
-      <>
-        {/* Botón fuera del BottomSheet */}
-        <Pressable
-          onPress={isOpen ? closeTips : openTips}
+  return (
+    <Pressable
+      onPress={onPress}
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        paddingVertical: Spacing.lg,
+        paddingHorizontal: Spacing.xl,
+        borderRadius: BorderRadius.md,
+        backgroundColor: colors.bgPressed,
+        marginBottom: Spacing.sm,
+        marginTop: Spacing.lg,
+        height: 48,
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TipLamparita width={24} height={24} color={colorRole} />
+        <Text
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            paddingVertical: Spacing.lg,
-            paddingHorizontal: Spacing.xl,
-            borderRadius: BorderRadius.md,
-            backgroundColor: colors.bgPressed,
-            marginBottom: Spacing.sm,
-            marginTop: Spacing.lg,
-            height: 48,
+            color: colorRole,
+            fontSize: FontSizes.base,
+            fontFamily: fonts.robotoRegular,
+            marginLeft: 4,
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TipLamparita width={24} height={24} color={colorRole} />
-            <Text
-              style={{
-                color: colorRole,
-                fontSize: FontSizes.base,
-                fontFamily: fonts.robotoRegular,
-                marginLeft: 4,
-              }}
-            >
-              {title}
-            </Text>
-          </View>
+          {title}
+        </Text>
+      </View>
+      <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+        <FlechaAbajo width={18} height={18} color={colorRole} />
+      </Animated.View>
+    </Pressable>
+  );
+}
 
-          <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <FlechaAbajo width={18} height={18} color={colorRole} />
-          </Animated.View>
-        </Pressable>
+// Sheet que va FUERA del ScrollView
+interface TipsSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-        {/* BottomSheet con la lista de tips */}
-        <BottomSheetModal
-          ref={ref}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}
-          onDismiss={closeTips}
-          backgroundStyle={{
-            backgroundColor: bgSoft,
-            borderTopLeftRadius: BorderRadius.xl,
-            borderTopRightRadius: BorderRadius.xl,
-            borderWidth: 1,
-            borderColor: bgSoft,
-          }}
-          handleIndicatorStyle={{ backgroundColor: colorRole }}
-          style={{
-            width: "100%",
-            maxWidth: 500,
-            alignSelf: "center",
-          }}
-        >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingHorizontal: Spacing.lg,
-              paddingBottom: Spacing.xl,
-              paddingTop: Spacing.md,
+export function TipsSheet({ isOpen, onClose }: TipsSheetProps) {
+  const { colors, tips, colorRole, bgSoft } = useTipsBottomSheet();
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ["45%"], []);
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+        opacity={0.5}
+      />
+    ),
+    [],
+  );
+
+  if (!isOpen) return null;
+
+  return (
+    <BottomSheet
+      ref={bottomSheetRef}
+      index={0}
+      snapPoints={snapPoints}
+      onClose={onClose}
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{ backgroundColor: bgSoft }}
+      handleIndicatorStyle={{ backgroundColor: colorRole }}
+      enablePanDownToClose
+    >
+      <BottomSheetView
+        style={{
+          paddingHorizontal: Spacing.lg,
+          paddingBottom: Spacing.xl,
+          paddingTop: Spacing.md,
+        }}
+      >
+        {tips.map((tip, index) => (
+          <View
+            key={index}
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              marginBottom: 12,
+              gap: Spacing.sm,
             }}
           >
-            {tips.map((tip, index) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "flex-start",
-                  marginBottom: 12,
-                  gap: Spacing.sm,
-                }}
-              >
-                <Check width={18} height={18} fill={colorRole} />
-                <Text
-                  style={{
-                    fontSize: FontSizes.base,
-                    color: colors.textDefault,
-                    flex: 1,
-                  }}
-                >
-                  {tip}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
-        </BottomSheetModal>
-      </>
-    );
-  },
-);
-
-TipsBottomSheet.displayName = "TipsBottomSheet";
-
-export default TipsBottomSheet;
+            <Check width={18} height={18} fill={colorRole} />
+            <Text
+              style={{
+                fontSize: FontSizes.base,
+                color: colors.textDefault,
+                flex: 1,
+              }}
+            >
+              {tip}
+            </Text>
+          </View>
+        ))}
+      </BottomSheetView>
+    </BottomSheet>
+  );
+}

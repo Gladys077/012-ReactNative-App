@@ -1,6 +1,6 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import React, { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -11,38 +11,51 @@ export type BottomSheetVerPedidoRef = {
 
 interface Item {
   id: string | number;
-  label: string; // texto libre del pedido
+  label: string;
 }
 
 interface Props {
   numeroPedido?: number | string;
   items?: Item[];
   snapPoints?: string[];
+  isVisible: boolean;
+  onClose: () => void;
 }
 
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
-  ({ numeroPedido, items = [], snapPoints = ["40%", "70%"] }, ref) => {
+  (
+    {
+      numeroPedido,
+      items = [],
+      snapPoints = ["40%", "70%"],
+      isVisible,
+      onClose,
+    },
+    ref,
+  ) => {
     const { colors, fonts } = useTheme();
-    const sheetRef = useRef<BottomSheetModal>(null);
+    const sheetRef = useRef<BottomSheet>(null);
 
-    // Métodos expuestos al padre
     useImperativeHandle(ref, () => ({
-      present: () => sheetRef.current?.present(),
-      dismiss: () => sheetRef.current?.dismiss(),
+      present: () => sheetRef.current?.snapToIndex(0),
+      dismiss: () => sheetRef.current?.close(),
     }));
 
     const _snapPoints = useMemo(() => snapPoints, [snapPoints]);
 
+    if (!isVisible) return null;
+
     return (
-      <BottomSheetModal
+      <BottomSheet
         ref={sheetRef}
         index={0}
         snapPoints={_snapPoints}
+        onClose={onClose}
+        enablePanDownToClose
         backgroundStyle={{ backgroundColor: colors.brandBuyerSoft }}
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
-        <View style={{ padding: Spacing.lg, flex: 1 }}>
-          {/* Header */}
+        <BottomSheetView style={{ padding: Spacing.lg, flex: 1 }}>
           {numeroPedido && (
             <Text
               style={{
@@ -56,7 +69,6 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
             </Text>
           )}
 
-          {/* Lista scrolleable */}
           <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
             {items.length > 0 ? (
               items.map((it) => (
@@ -85,8 +97,8 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
               </Text>
             )}
           </ScrollView>
-        </View>
-      </BottomSheetModal>
+        </BottomSheetView>
+      </BottomSheet>
     );
   },
 );

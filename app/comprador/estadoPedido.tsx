@@ -17,8 +17,6 @@ import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso"
 import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 
-// COMPONENTE PRINCIPAL
-
 const EstadoPedido = () => {
   const { colors } = useTheme();
   const { openBottomSheetVerPedido } = useBottomSheetVerPedido();
@@ -310,7 +308,7 @@ const EstadoPedido = () => {
           padding: Spacing.md,
           paddingTop: Spacing.xl,
           gap: Spacing.xxl,
-          paddingBottom: 120,
+          paddingBottom: Spacing.xl,
         }}
         showsVerticalScrollIndicator={false}
       >

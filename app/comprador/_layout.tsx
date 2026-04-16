@@ -30,12 +30,10 @@ export default function CompradorLayout() {
   const showBackArrow = currentPage !== "nuevoPedido";
 
   return (
+    <BottomSheetVerPedidoProvider>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <Header title={getTitleByPage()} showBackArrow={showBackArrow} />
 
-
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <Header title={getTitleByPage()} showBackArrow={showBackArrow} />
-
-      <BottomSheetVerPedidoProvider>
         <View
           style={{
             flex: 1,
@@ -47,9 +45,11 @@ export default function CompradorLayout() {
         >
           <Slot />
         </View>
-      </BottomSheetVerPedidoProvider>
-      <Footer />
-    </View>
-
+        {/* View aislante para el footer */}
+        <View style={{ width: "100%" }}>
+          <Footer />
+        </View>
+      </View>
+    </BottomSheetVerPedidoProvider>
   );
 }

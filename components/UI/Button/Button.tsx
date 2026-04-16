@@ -94,6 +94,7 @@ const Button: React.FC<ButtonProps> = ({
     borderColor:
       variant === "secondary" ? containerColors.borderColor : "transparent",
     justifyContent: "center",
+    alignItems: "center",
     // Sombra nativa (uso tokens.shadows para control)
     ...shadows.md,
     opacity: disabled ? 0.6 : 1,
@@ -113,7 +114,6 @@ const Button: React.FC<ButtonProps> = ({
     alignItems: "center",
     justifyContent: "center",
     gap: 8 as any, // RN no soporta gap en todas las versiones; en caso de problemas reemplazar con margin
-    paddingHorizontal: 4,
   };
 
   return (
@@ -150,6 +150,8 @@ const Button: React.FC<ButtonProps> = ({
                   color: containerColors.textColor,
                   fontSize: 14,
                   fontFamily: fonts.robotoMedium,
+                  textAlign: "center",
+                  flexShrink: 1, // Esto ayuda si el texto es muy largo para que no rompa el botón
                 }}
               >
                 {children}
