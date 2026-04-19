@@ -6,10 +6,13 @@ import { Pedido } from "@/types/pedidos";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, View } from "react-native";
 import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
+import CardPedidoCompletado from "../../components/Comprador/CardPedidoCompletado";
+import CardPedidoEnCamino from "../../components/Comprador/CardPedidoEnCamino";
 import CardPedidoEnPreparacion from "../../components/Comprador/CardPedidoEnPreparacion";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
+import CardPedidoRecibido from "../../components/Comprador/CardPedidoRecibido";
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
@@ -52,6 +55,7 @@ const EstadoPedido = () => {
         textoPedido: `3 paltas (una madura y dos para comer ahora)
           1 kilo de pan casero integral
           1 litro de leche descremada`,
+        fechaSeleccion: new Date().toISOString(),
       },
       {
         id: 2,
@@ -60,8 +64,8 @@ const EstadoPedido = () => {
         estado: "Ver respuestas",
         respuestasRecibidas: 2,
         duracionCronometro: 30,
-        textoPedido: `Revisión de cañerías del baño. 
-  Traer soplete y materiales básicos.`,
+        textoPedido: `Revisión de cañerías del baño. Traer soplete y materiales básicos.`,
+        fechaSeleccion: new Date().toISOString(),
         respuestas: [
           {
             id: "v1",
@@ -96,6 +100,7 @@ const EstadoPedido = () => {
         respuestasRecibidas: 0,
         duracionCronometro: 30,
         textoPedido: `200 Sandwichs de miga de jamón y queso`,
+        fechaSeleccion: new Date().toISOString(),
         respuestas: [
           {
             id: "v3",
@@ -117,6 +122,7 @@ const EstadoPedido = () => {
         respuestasRecibidas: 0,
         duracionCronometro: 30,
         textoPedido: `200 Sandwichs de miga de jamón y queso`,
+        fechaSeleccion: new Date().toISOString(),
         respuestas: [
           {
             id: "v3",
@@ -152,6 +158,55 @@ const EstadoPedido = () => {
         },
         respuestasRecibidas: 0,
         textoPedido: "Pedido con problema en el pago",
+        fechaSeleccion: new Date().toISOString(),
+        respuestaSeleccionada: {
+          id: "v5",
+          vendedorNombre: "Minimarket Juan",
+          alias: "MINIMARKETJUAN",
+          entidad: "Mercado Pago",
+          titular: "Juan Pérez",
+          rating: 4.0,
+          precio: 4150,
+        },
+      },
+
+      {
+        id: 6,
+        numeroPedido: 2560,
+        direccionComprador: "Av. Corrientes 1234",
+        estado: "En camino",
+        formaPago: "transferencia",
+        problemaPago: {
+          comprobante: true,
+          direccion: false,
+        },
+        respuestasRecibidas: 0,
+        textoPedido: "Pedido con problema en el pago",
+        fechaSeleccion: new Date().toISOString(),
+        respuestaSeleccionada: {
+          id: "v5",
+          vendedorNombre: "Minimarket Juan",
+          alias: "MINIMARKETJUAN",
+          entidad: "Mercado Pago",
+          titular: "Juan Pérez",
+          rating: 4.0,
+          precio: 4150,
+        },
+      },
+
+      {
+        id: 7,
+        numeroPedido: 2444,
+        direccionComprador: "Av. Corrientes 1234",
+        estado: "Pedido recibido",
+        formaPago: "transferencia",
+        problemaPago: {
+          comprobante: true,
+          direccion: false,
+        },
+        respuestasRecibidas: 0,
+        textoPedido: "Pedido con problema en el pago",
+        fechaSeleccion: new Date().toISOString(),
         respuestaSeleccionada: {
           id: "v5",
           vendedorNombre: "Minimarket Juan",
@@ -177,7 +232,7 @@ const EstadoPedido = () => {
     if (!pedido) return;
 
     openBottomSheetVerPedido({
-      numeroPedido: pedido.numeroPedido,
+      fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],
     });
   };
@@ -459,6 +514,62 @@ const EstadoPedido = () => {
                         ),
                       );
                     }}
+                  />
+                );
+              }
+
+              case "En camino": {
+                const r = pedido.respuestaSeleccionada;
+                if (!r) return null;
+
+                return (
+                  <CardPedidoEnCamino
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    fechaSeleccion={pedido.fechaSeleccion}
+                    vendedorNombre={r.vendedorNombre}
+                    rating={r.rating}
+                    telefono={r.telefono}
+                    direccion={pedido.direccionComprador}
+                    onVerPedido={handleVerPedido}
+                  />
+                );
+              }
+
+              case "Pedido recibido": {
+                const r = pedido.respuestaSeleccionada;
+                if (!r) return null;
+
+                return (
+                  <CardPedidoRecibido
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    fechaSeleccion={pedido.fechaSeleccion}
+                    vendedorNombre={r.vendedorNombre}
+                    rating={r.rating}
+                    telefono={r.telefono}
+                    onVerPedido={handleVerPedido}
+                    onEnviarCalificacion={(data) => {
+                      console.log("TODO: enviar calificación al backend", data);
+                      // Transition a completado
+                      setPedidos((prev) =>
+                        prev.map((p) =>
+                          p.id === pedido.id
+                            ? { ...p, estado: "Completado" }
+                            : p,
+                        ),
+                      );
+                    }}
+                  />
+                );
+              }
+
+              case "Completado": {
+                return (
+                  <CardPedidoCompletado
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    fechaSeleccion={pedido.fechaSeleccion}
                   />
                 );
               }

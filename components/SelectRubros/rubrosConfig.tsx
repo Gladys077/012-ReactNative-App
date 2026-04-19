@@ -72,11 +72,4 @@ export const rubrosVendedor: RubroConfig[] = [
     color: "#FFCDD2",
     iconColor: "#D32F2F",
   },
-  {
-    label: "Electricista",
-    value: "electricista",
-    IconComponent: Libro,
-    color: "#FFF9C4",
-    iconColor: "#F9A825",
-  },
 ];

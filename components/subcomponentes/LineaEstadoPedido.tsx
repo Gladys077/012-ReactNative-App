@@ -17,10 +17,11 @@ type EstadoPedido =
   | "Verificacion"
   | "Preparacion"
   | "EnCamino"
-  | "Entregado";
+  | "Recibido";
 
 interface LineaEstadoPedidoProps {
   estadoActual: EstadoPedido;
+  todosCompletados?: boolean;
 }
 
 const ESTADOS_ORDEN: EstadoPedido[] = [
@@ -28,21 +29,19 @@ const ESTADOS_ORDEN: EstadoPedido[] = [
   "Verificacion",
   "Preparacion",
   "EnCamino",
-  "Entregado",
+  "Recibido",
 ];
 
 export default function LineaEstadoPedido({
   estadoActual,
+  todosCompletados,
 }: LineaEstadoPedidoProps) {
   const { colors, fonts } = useTheme();
   const estadoActualIndex = ESTADOS_ORDEN.indexOf(estadoActual);
 
-  /**
-   * Devuelve el ícono correspondiente según el estado
-   */
   const obtenerIcono = (estado: EstadoPedido, index: number) => {
-    const completado = index < estadoActualIndex;
-    const activo = index === estadoActualIndex;
+    const completado = todosCompletados || index < estadoActualIndex;
+    const activo = !todosCompletados && index === estadoActualIndex;
     const size = 28;
 
     if (completado) {
@@ -60,7 +59,7 @@ export default function LineaEstadoPedido({
         return <ClipboardSolid width={size} height={size} stroke={color} />;
       case "EnCamino":
         return <EnCaminoSolid width={30} height={30} stroke={color} />;
-      case "Entregado":
+      case "Recibido":
         return <Entregado width={size} height={size} stroke={color} />;
       default:
         return null;
@@ -106,8 +105,8 @@ export default function LineaEstadoPedido({
 
         {/* Estados */}
         {ESTADOS_ORDEN.map((estado, index) => {
-          const completado = index < estadoActualIndex;
-          const activo = index === estadoActualIndex;
+          const completado = todosCompletados || index < estadoActualIndex;
+          const activo = !todosCompletados && index === estadoActualIndex;
 
           return (
             <View key={estado} style={{ alignItems: "center", zIndex: 2 }}>

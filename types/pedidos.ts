@@ -6,6 +6,7 @@ export type EstadoPedidoActual =
   | "A resolver"
   | "En preparación"
   | "En camino"
+  | "Pedido recibido"
   | "Pedido entregado"
   | "Completado";
 

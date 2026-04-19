@@ -2,7 +2,7 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
-import { Check } from "../icons";
+import { Check, Telephone, Ubicacion } from "../icons";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
 import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -128,16 +128,29 @@ export default function CardCompradorEnPreparacion({
 
       {/* Dirección */}
       <View style={{ gap: Spacing.xs }}>
-        <Text
+        <View
           style={{
-            fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.sm,
-            color: colors.textDefault,
-            marginBottom: Spacing.md,
+            flexDirection: "row",
+            gap: Spacing.md,
+            alignItems: "center",
           }}
         >
-          📍 Dirección de entrega
-        </Text>
+          <Ubicacion
+            width={16}
+            height={16}
+            fill={colors.textDefault}
+            // stroke={colors.textDefault}
+          />
+          <Text
+            style={{
+              fontFamily: fonts.robotoBold,
+              fontSize: FontSizes.sm,
+              color: colors.textDefault,
+            }}
+          >
+            Dirección de entrega
+          </Text>
+        </View>
         <View
           style={{
             borderWidth: 1,
@@ -155,30 +168,43 @@ export default function CardCompradorEnPreparacion({
             {direccion}
           </Text>
         </View>
-        <Text
+        {/* <Text
           style={{
             fontSize: FontSizes.xs,
             color: colors.textMuted,
           }}
         >
           Tiempo de entrega máximo: 1 hora
-        </Text>
+        </Text> */}
       </View>
 
       <LineaDivisoria />
 
       {/* Contacto vendedor */}
       <View style={{ gap: Spacing.xs }}>
-        <Text
+        <View
           style={{
-            fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.sm,
-            color: colors.textDefault,
-            marginBottom: Spacing.md,
+            flexDirection: "row",
+            gap: Spacing.md,
+            alignItems: "center",
           }}
         >
-          📞 Contacto con el vendedor
-        </Text>
+          <Telephone
+            width={16}
+            height={16}
+            fill={colors.textDefault}
+            // stroke={colors.textDefault}
+          />
+          <Text
+            style={{
+              fontFamily: fonts.robotoBold,
+              fontSize: FontSizes.sm,
+              color: colors.textDefault,
+            }}
+          >
+            Contacto con el vendedor
+          </Text>
+        </View>
         <View
           style={{
             borderWidth: 1,
@@ -189,7 +215,7 @@ export default function CardCompradorEnPreparacion({
         >
           <Text
             style={{
-              fontSize: FontSizes.sm,
+              fontSize: 14,
               color: colors.textDefault,
             }}
           >

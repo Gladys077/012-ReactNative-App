@@ -10,7 +10,7 @@ import React, {
 } from "react";
 
 interface PedidoData {
-  numeroPedido?: number | string;
+  fechaSeleccion?: string;
   items?: { id: string | number; label: string }[];
 }
 

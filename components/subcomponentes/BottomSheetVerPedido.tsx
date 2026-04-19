@@ -15,7 +15,7 @@ interface Item {
 }
 
 interface Props {
-  numeroPedido?: number | string;
+  fechaSeleccion?: string;
   items?: Item[];
   snapPoints?: string[];
   isVisible: boolean;
@@ -25,7 +25,7 @@ interface Props {
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
   (
     {
-      numeroPedido,
+      fechaSeleccion,
       items = [],
       snapPoints = ["40%", "70%"],
       isVisible,
@@ -56,7 +56,7 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
         <BottomSheetView style={{ padding: Spacing.lg, flex: 1 }}>
-          {numeroPedido && (
+          {fechaSeleccion && (
             <Text
               style={{
                 fontSize: FontSizes.md,
@@ -65,7 +65,12 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
                 marginBottom: Spacing.sm,
               }}
             >
-              Pedido #{numeroPedido}
+              {new Date(fechaSeleccion).toLocaleString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </Text>
           )}
 

@@ -4,12 +4,11 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { View } from "react-native";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
-import CardRespVendPedEnPrep from "./CardRespVendPedEnPrep";
+import CardRespVendPedEnCamino from "./CardRespVendPedEnCamino";
 
-interface CardPedidoEnPreparacionProps {
+interface CardPedidoEnCaminoProps {
   pedidoId: string | number;
   fechaSeleccion?: string;
-  fechaConfirmacion?: string;
   vendedorNombre: string;
   rating: number;
   telefono?: string;
@@ -17,30 +16,29 @@ interface CardPedidoEnPreparacionProps {
   onVerPedido: (id: string | number) => void;
 }
 
-export default function CardPedidoEnPreparacion({
+export default function CardPedidoEnCamino({
   pedidoId,
   fechaSeleccion,
-  fechaConfirmacion,
   vendedorNombre,
   rating,
   telefono,
   direccion,
   onVerPedido,
-}: CardPedidoEnPreparacionProps) {
+}: CardPedidoEnCaminoProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(true);
 
   return (
     <CardPedidoBase
       fechaSeleccion={fechaSeleccion}
-      estado="En preparación"
+      estado="En camino"
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
       textoMostrar="Mostrar detalles"
       textoOcultar="Ocultar detalles"
       mostrarMascota
-      mascotaMensaje="¡Buenas noticias! Tu pago fue confirmado y tu pedido está siendo preparado."
+      mascotaMensaje="¡Tu pedido ya va en camino!"
       mascotaVariante="success"
       mostrarDivisor
       elevation={expandido ? 0 : 5}
@@ -52,18 +50,17 @@ export default function CardPedidoEnPreparacion({
             borderRadius: BorderRadius.md,
           }}
         >
-          <CardRespVendPedEnPrep
+          <CardRespVendPedEnCamino
             vendedorNombre={vendedorNombre}
             rating={rating}
             telefono={telefono}
             direccion={direccion}
-            fechaConfirmacion={fechaConfirmacion}
             onVerPedido={() => onVerPedido(pedidoId)}
           />
         </View>
       }
     >
-      <LineaEstadoPedido estadoActual="Preparacion" />
+      <LineaEstadoPedido estadoActual="EnCamino" />
     </CardPedidoBase>
   );
 }
