@@ -102,7 +102,7 @@ export default function CardErrorPagoDireccion({
 
     // Valida antes de enviar
     if (hayErrorComprobante && !comprobante) return;
-    if (hayErrorDireccion && !direccionState.trim()) return;
+    // if (hayErrorDireccion && !direccionState.trim()) return;
 
     onEnviarCorreccion({
       formaPago,
@@ -111,7 +111,7 @@ export default function CardErrorPagoDireccion({
           ? (comprobante ?? undefined)
           : undefined,
       importeEfectivo: formaPago === "efectivo" ? importeEfectivo : undefined,
-      direccion: hayErrorDireccion ? direccionState : undefined,
+      // direccion: hayErrorDireccion ? direccionState : undefined,
     });
   };
 

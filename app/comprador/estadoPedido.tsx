@@ -6,6 +6,7 @@ import { Pedido } from "@/types/pedidos";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, View } from "react-native";
 import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
+import CardPedidoEnPreparacion from "../../components/Comprador/CardPedidoEnPreparacion";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
@@ -108,37 +109,37 @@ const EstadoPedido = () => {
           },
         ],
       },
-      // {
-      //   id: 4,
-      //   numeroPedido: 2550,
-      //   direccionComprador: "Calle 50, nro 90",
-      //   estado: "Pago en revisión",
-      //   respuestasRecibidas: 0,
-      //   duracionCronometro: 30,
-      //   textoPedido: `200 Sandwichs de miga de jamón y queso`,
-      //   respuestas: [
-      //     {
-      //       id: "v3",
-      //       vendedorNombre: "Minimarket Pedro",
-      //       alias: "SANDWICHERIAEXPRESS",
-      //       entidad: "Mercado Pago",
-      //       titular: "Pedro Pascal",
-      //       rating: 4.8,
-      //       precio: 25000,
-      //       duracionCronometro: 0,
-      //     },
-      //   ],
-      //   respuestaSeleccionada: {
-      //     id: "v3",
-      //     vendedorNombre: "Minimarket Pedro",
-      //     alias: "SANDWICHERIAEXPRESS",
-      //     entidad: "Mercado Pago",
-      //     titular: "Pedro Pascal",
-      //     rating: 4.8,
-      //     precio: 25000,
-      //     duracionCronometro: 0,
-      //   },
-      // },
+      {
+        id: 4,
+        numeroPedido: 2550,
+        direccionComprador: "Calle 50, nro 90",
+        estado: "En preparación",
+        respuestasRecibidas: 0,
+        duracionCronometro: 30,
+        textoPedido: `200 Sandwichs de miga de jamón y queso`,
+        respuestas: [
+          {
+            id: "v3",
+            vendedorNombre: "Minimarket Pedro",
+            alias: "SANDWICHERIAEXPRESS",
+            entidad: "Mercado Pago",
+            titular: "Pedro Pascal",
+            rating: 4.8,
+            precio: 25000,
+            duracionCronometro: 0,
+          },
+        ],
+        respuestaSeleccionada: {
+          id: "v3",
+          vendedorNombre: "Minimarket Pedro",
+          alias: "SANDWICHERIAEXPRESS",
+          entidad: "Mercado Pago",
+          titular: "Pedro Pascal",
+          rating: 4.8,
+          precio: 25000,
+          duracionCronometro: 0,
+        },
+      },
       {
         id: 5,
         numeroPedido: 2560,
@@ -396,6 +397,25 @@ const EstadoPedido = () => {
                     timestampRespuesta={0}
                     tieneProblema={false}
                     estado={"Pago y dirección"}
+                  />
+                );
+              }
+
+              case "En preparación": {
+                const r = pedido.respuestaSeleccionada;
+                if (!r) return null;
+
+                return (
+                  <CardPedidoEnPreparacion
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    fechaSeleccion={pedido.fechaSeleccion}
+                    fechaConfirmacion={pedido.fechaConfirmacion}
+                    vendedorNombre={r.vendedorNombre}
+                    rating={r.rating}
+                    telefono={r.telefono}
+                    direccion={pedido.direccionComprador}
+                    onVerPedido={handleVerPedido}
                   />
                 );
               }

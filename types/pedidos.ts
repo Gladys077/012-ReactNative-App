@@ -16,6 +16,7 @@ export interface Respuesta {
   entidad?: string;
   titular?: string;
   rating: number;
+  telefono?: string;
   precio: number;
   nota?: string;
   duracionCronometro?: number;
@@ -45,4 +46,7 @@ export interface Pedido {
   respuestas?: Respuesta[];
   respuestaSeleccionada?: Respuesta;
   expandido?: boolean;
+
+  fechaConfirmacion?: string;
+  telefono?: string;
 }
