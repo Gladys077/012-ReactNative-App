@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -84,19 +84,21 @@ const NuevoPedido = () => {
       newErrors.pedido = "Describe brevemente tu pedido.";
     }
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      const payload = {
-        rubros: selectedRubros,
-        texto: pedidoTexto.trim(),
-        createdAt: new Date().toISOString(),
-      };
-      await savePedidoLocal(payload);
-      setSelectedRubros([]);
-      setPedidoTexto("");
-      setErrors({});
-      setTipsOpen(false);
-      console.log("Pedido guardado/enviado:", payload);
-    }
+    if (Object.keys(newErrors).length > 0) return;
+
+    const payload = {
+      rubros: selectedRubros,
+      texto: pedidoTexto.trim(),
+      createdAt: new Date().toISOString(),
+    };
+    await savePedidoLocal(payload);
+
+    setSelectedRubros([]);
+    setPedidoTexto("");
+    setErrors({});
+    setTipsOpen(false);
+
+    router.push("/comprador/estadoPedido");
   };
 
   return (

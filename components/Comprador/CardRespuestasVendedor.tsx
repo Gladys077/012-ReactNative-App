@@ -49,7 +49,7 @@ export default function CardRespuestaVendedor({
       "Rechazar presupuesto",
       "Si confirmas, este presupuesto se eliminará y no podrás recuperarlo.",
       [
-        { text: "Volver", style: "cancel" },
+        { text: "Cancelar  ", style: "cancel" },
         {
           text: "Sí, rechazar",
           style: "destructive",

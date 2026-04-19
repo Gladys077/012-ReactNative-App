@@ -8,11 +8,10 @@ import CardErrorPagoDireccion from "./CardErrorPagoDireccion";
 
 type FormaPago = "transferencia" | "efectivo";
 
-
 interface CardPedidoAResolverProps {
   pedidoId: string | number;
   respuestaId: string | number;
-  numeroPedido: number;
+  fechaSeleccion?: string;
 
   nombreNegocio: string;
   rating: number;
@@ -24,20 +23,28 @@ interface CardPedidoAResolverProps {
   nota?: string;
 
   formaPagoInicial: FormaPago;
-  
+
   problemaPago: {
     comprobante: boolean;
     direccion: boolean;
   };
 
   onVerPedido?: (id: string | number) => void;
-  onVerNota?: (nota: string) => void; 
+  onVerNota?: (nota: string) => void;
+
+  onCancelarPedido: () => void;
+  onEnviarCorreccion: (data: {
+    formaPago: FormaPago;
+    comprobante?: { uri: string; name: string };
+    importeEfectivo?: string;
+    direccion?: string;
+  }) => void;
 }
 
 export default function CardPedidoAResolver({
   pedidoId,
   respuestaId,
-  numeroPedido,
+  fechaSeleccion,
   precio,
   nombreNegocio,
   rating,
@@ -50,14 +57,16 @@ export default function CardPedidoAResolver({
   problemaPago,
   onVerPedido,
   onVerNota,
+  onCancelarPedido,
+  onEnviarCorreccion,
 }: CardPedidoAResolverProps) {
-     const [expandido, setExpandido] = useState(false);
+  const [expandido, setExpandido] = useState(false);
 
   return (
     <CardPedidoBase
-      numeroPedido={numeroPedido}
+      fechaSeleccion={fechaSeleccion}
       estado="A resolver"
-      expandido={expandido} 
+      expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
       textoMostrar="Mostrar detalle"
@@ -84,25 +93,17 @@ export default function CardPedidoAResolver({
             problemaPago={problemaPago}
             onVerPedido={() => onVerPedido?.(pedidoId)}
             onVerMensajes={() => {
-              console.log("Abrir chat comprador ↔ vendedor");
+              console.log("Abrir chat comprador - vendedor");
             }}
             onVerNota={(nota) => onVerNota?.(nota)}
-            onEnviarCorreccion={(data) => {
-              console.log("Corrección enviada:", data);
-            }}
-            onCancelarPedido={() => {
-              console.log("Cancelar pedido", pedidoId);
-            }}
-            
+            onEnviarCorreccion={(data) => onEnviarCorreccion(data)}
+            onCancelarPedido={onCancelarPedido}
           />
         </View>
       }
-
-        >
+    >
       {/* Línea de tiempo */}
-            <LineaEstadoPedido estadoActual="Verificacion" />
-      
-      
+      <LineaEstadoPedido estadoActual="Verificacion" />
     </CardPedidoBase>
   );
 }

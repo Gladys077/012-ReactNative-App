@@ -7,11 +7,12 @@ import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardPedidoBase from "./CardPedidoBase";
 import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
-interface CardPedidoPagarProps {
+interface CardPedidoPagoYDireccionProps {
   pedidoId: string | number;
   respuestaId: string | number;
-  numeroPedido: number;
+  fechaSeleccion?: string;
   estado: EtiqEstadoType;
+  expandidoInicial?: boolean;
   precio: number;
   nombreNegocio: string;
   rating: number;
@@ -24,15 +25,27 @@ interface CardPedidoPagarProps {
   timestampRespuesta: number;
   onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
-  onVerNota?: (nota: string) => void; 
-  onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
+  onVerNota?: (nota: string) => void;
+  onFinishCronometro?: (
+    pedidoId: string | number,
+    respuestaId: string | number,
+  ) => void;
+  onCancelarPedido?: () => void;
+  onEnviarDatos?: (payload: {
+    pedidoId: string | number;
+    formaPago: "transferencia" | "efectivo";
+    comprobante: { uri: string; name: string } | null;
+    importeEfectivo: string;
+    direccion: string;
+  }) => void;
 }
 
-export default function CardPedidoPagar({
+export default function CardPedidoPagoYDireccion({
   pedidoId,
   respuestaId,
-  numeroPedido,
+  fechaSeleccion,
   estado,
+  expandidoInicial = true,
   precio,
   nombreNegocio,
   rating,
@@ -47,13 +60,15 @@ export default function CardPedidoPagar({
   onEditarDireccion,
   onVerNota,
   onFinishCronometro,
-}: CardPedidoPagarProps) {
+  onCancelarPedido,
+  onEnviarDatos,
+}: CardPedidoPagoYDireccionProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(false);
+  const [expandido, setExpandido] = useState(expandidoInicial);
 
   return (
     <CardPedidoBase
-      numeroPedido={numeroPedido}
+      fechaSeleccion={fechaSeleccion}
       estado="Pago y dirección"
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
@@ -94,14 +109,14 @@ export default function CardPedidoPagar({
             onFinishCronometro={(pedidoId, respuestaId) => {
               console.log("Tiempo terminado", pedidoId, respuestaId);
             }}
+            onCancelarPedido={() => onCancelarPedido?.()}
+            onEnviarDatos={onEnviarDatos}
           />
         </View>
       }
     >
       {/* Línea de tiempo */}
       <LineaEstadoPedido estadoActual="Pago" />
-
-
     </CardPedidoBase>
   );
 }

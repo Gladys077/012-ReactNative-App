@@ -7,6 +7,7 @@ import ChatModal from "@/components/Chat/ChatModal";
 import LineaDivisoria from "@/components/subcomponentes/LineaDivisoria";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
 import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
+import { alertaCancelarPedido } from "../../utils/alertas";
 import { Chat } from "../icons";
 import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
@@ -84,23 +85,25 @@ export default function CardErrorPagoDireccion({
 
   const [importeEfectivo, setImporteEfectivo] = useState("");
 
-  const [direccionState, setDireccionState] = useState(direccion);
+  // const [direccionState, setDireccionState] = useState(direccion);
 
   const hayErrorComprobante = !!problemaPago?.comprobante;
   const hayErrorDireccion = !!problemaPago?.direccion;
 
+  const [intentoEnviar, setIntentoEnviar] = useState(false);
+
   const errorComprobante =
-    hayErrorComprobante && !comprobante
+    intentoEnviar && hayErrorComprobante && !comprobante
       ? "Carga el comprobante correcto."
       : undefined;
 
-  const errorDireccion = hayErrorDireccion
-    ? "La dirección es incorrecta o incompleta."
-    : undefined;
+  const handleEnviar = () => {
+    setIntentoEnviar(true);
 
-  const [editandoDireccion, setEditandoDireccion] = useState(hayErrorDireccion);
+    // Valida antes de enviar
+    if (hayErrorComprobante && !comprobante) return;
+    if (hayErrorDireccion && !direccionState.trim()) return;
 
-  const handleEnviar = (respuestaId?: string | number) => {
     onEnviarCorreccion({
       formaPago,
       comprobante:
@@ -227,7 +230,7 @@ export default function CardErrorPagoDireccion({
             variant="secondary"
             height="md"
             width="full"
-            onPress={onCancelarPedido}
+            onPress={() => alertaCancelarPedido(onCancelarPedido)}
           >
             Cancelar pedido
           </Button>
@@ -239,7 +242,7 @@ export default function CardErrorPagoDireccion({
             section="buyer"
             height="md"
             width="full"
-            onPress={() => handleEnviar(respuestaId)}
+            onPress={handleEnviar}
           >
             Enviar datos
           </Button>

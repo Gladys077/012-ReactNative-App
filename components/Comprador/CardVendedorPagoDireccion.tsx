@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Text, View } from "react-native";
 import { FontSizes, Spacing } from "../../constants/Tokens";
+import { alertaCancelarPedido } from "../../utils/alertas";
 import Button from "../UI/Button/Button";
 import DireccionEntrega from "../subcomponentes/DireccionEntrega";
 import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
@@ -16,16 +17,21 @@ import CardRespVendedorBase from "./CardRespVendedorBase";
 interface CardVendedorPagoDireccionProps {
   pedidoId: string | number;
   respuestaId: string | number;
+
   nombreNegocio: string;
   rating: number;
   precio: number;
   nota?: string | undefined;
+
   duracionCronometro: number;
   timestampRespuesta: number;
+
   alias: string;
   entidad: string;
   titular: string;
+
   direccion: string;
+
   onEditarDireccion: () => void;
   onVerPedido: () => void;
   onVerNota: (nota: string) => void;
@@ -34,6 +40,15 @@ interface CardVendedorPagoDireccionProps {
     respuestaId: string | number,
   ) => void;
   comprobante?: { uri: string; name: string } | null; // <-- lo toma PagoTransferencia
+
+  onCancelarPedido: () => void;
+  onEnviarDatos?: (payload: {
+    pedidoId: string | number;
+    formaPago: "transferencia" | "efectivo";
+    comprobante: { uri: string; name: string } | null;
+    importeEfectivo: string;
+    direccion: string;
+  }) => void;
 }
 
 export default function CardVendedorPagoDireccion({
@@ -53,6 +68,9 @@ export default function CardVendedorPagoDireccion({
   onVerPedido,
   onVerNota,
   onFinishCronometro,
+
+  onCancelarPedido,
+  onEnviarDatos,
 }: CardVendedorPagoDireccionProps) {
   const { colors, fonts } = useTheme();
 
@@ -105,6 +123,15 @@ export default function CardVendedorPagoDireccion({
     }
 
     if (!valid) return;
+
+    // Envía datos al padre (que los mandará al backend) onEnviarDatos?.({}) es lo mismo q if (onEnviarDatos) {onEnviarDatos({ formaPago, direccion }); }
+    onEnviarDatos?.({
+      pedidoId,
+      formaPago,
+      comprobante,
+      importeEfectivo,
+      direccion: direccionState,
+    });
 
     onFinishCronometro?.(pedidoId, respuestaId);
   };
@@ -229,12 +256,42 @@ export default function CardVendedorPagoDireccion({
         errorDireccion={errorDireccion}
       />
 
+      {/* Btns: Rechazar - Aceptar */}
+      <View
+        style={{
+          flexDirection: "row",
+          gap: Spacing.md,
+          marginTop: Spacing.md,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <Button
+            variant="secondary"
+            height="md"
+            width="full"
+            onPress={() => alertaCancelarPedido(onCancelarPedido)}
+          >
+            Cancelar pedido
+          </Button>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <Button
+            variant="primary"
+            section="buyer"
+            height="md"
+            width="full"
+            onPress={() => handleEnviar()}
+          >
+            Enviar datos
+          </Button>
+        </View>
+      </View>
       {/* Botón principal */}
-      <Button
+      {/* <Button
         section="buyer"
         width="full"
         variant="primary"
-        // icon={Enviar}
         iconPosition="left"
         onPress={handleEnviar}
       >
@@ -243,7 +300,7 @@ export default function CardVendedorPagoDireccion({
             ? "Enviar información"
             : "Confirmar pago en efectivo"}
         </Text>
-      </Button>
+      </Button> */}
     </CardRespVendedorBase>
   );
 }

@@ -10,7 +10,6 @@ import CardRespuestaVendedor from "./CardRespuestasVendedor";
 
 interface CardPedidoVerRespuestasProps {
   pedidoId: string | number;
-  numeroPedido: number;
   cantidadRespuestas: number;
   estado: EtiqEstadoType;
   expandido?: boolean;
@@ -35,7 +34,6 @@ interface CardPedidoVerRespuestasProps {
 
 export default function CardPedidoVerRespuestas({
   pedidoId,
-  numeroPedido,
   cantidadRespuestas,
   estado,
   expandido = false,
@@ -85,14 +83,7 @@ export default function CardPedidoVerRespuestas({
     );
 
   return (
-    // <View
-    //   style={{
-    //     backgroundColor: colors.cardBg,
-    //     borderRadius: BorderRadius.lg,
-    //   }}
-    // >
     <CardPedidoBase
-      numeroPedido={numeroPedido}
       estado={estado}
       expandido={expandido}
       onToggleExpandir={onToggleExpandir}

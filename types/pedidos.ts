@@ -23,7 +23,10 @@ export interface Respuesta {
 
 export interface Pedido {
   id: string | number;
-  numeroPedido: number;
+  numeroPedido?: number;
+
+  fechaSeleccion?: string; // <-- para mostrar "hace X minutos" o fecha exacta, ver con LIO
+
   estado: EstadoPedidoActual;
   rubros?: string[];
   textoPedido: string;

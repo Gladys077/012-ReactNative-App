@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoPagoEnRevisionProps {
   pedidoId: string | number;
+  fechaSeleccion?: string;
   respuestaId: string | number;
-  numeroPedido: number;
   estado: EtiqEstadoType;
   tieneProblema?: boolean;
   precio: number;
@@ -25,33 +26,41 @@ interface CardPedidoPagoEnRevisionProps {
   onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
   onVerNota?: (nota: string) => void; // ← AGREGÁ ESTO
-  onFinishCronometro?: (pedidoId: string | number, respuestaId: string | number) => void;
+  onFinishCronometro?: (
+    pedidoId: string | number,
+    respuestaId: string | number,
+  ) => void;
 }
 
 export default function CardPedidoPagoEnRevision({
   pedidoId,
   respuestaId,
-  numeroPedido,
   estado,
   tieneProblema,
+  fechaSeleccion,
+  onVerPedido,
 }: CardPedidoPagoEnRevisionProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(false);
 
+  // const horaFormateada = fechaSeleccion
+  //   ? new Date(fechaSeleccion).toLocaleTimeString("es-AR", {
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     })
+  //   : null;
+
   return (
     <CardPedidoBase
-      numeroPedido={numeroPedido}
+      fechaSeleccion={fechaSeleccion} // Para identificar el pedido y diferenciarlo de otros
       estado="Pago en revisión"
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
-
       // SOLO SI HAY PROBLEMA
       mostrarToggle={tieneProblema}
       mostrarDivisor={tieneProblema}
-
       textoMostrar="Mostrar detalles"
       textoOcultar="Ocultar detalles"
-
       mostrarMascota
       mascotaMensaje={
         tieneProblema
@@ -59,9 +68,7 @@ export default function CardPedidoPagoEnRevision({
           : "Estamos verificando tu pago. Esto puede tardar unos minutos."
       }
       mascotaVariante={tieneProblema ? "attention" : "message"}
-
       elevation={expandido ? 0 : 5}
-
       contenidoExpandible={
         <View
           style={{
@@ -74,8 +81,27 @@ export default function CardPedidoPagoEnRevision({
         </View>
       }
     >
-      {/* Estado visual del pedido */}
+      {/* Estado del pedido */}
       <LineaEstadoPedido estadoActual="Verificacion" />
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          marginTop: Spacing.sm,
+        }}
+      >
+        {/* {horaFormateada && (
+          <Text style={{ fontSize: FontSizes.sm, color: colors.textMuted }}>
+            Pedido a las {horaFormateada}
+          </Text>
+        )} */}
+        <VerBottomSheet
+          onPress={() => onVerPedido?.(pedidoId)}
+          variant="buyer"
+        />
+      </View>
     </CardPedidoBase>
   );
 }

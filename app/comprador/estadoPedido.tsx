@@ -4,18 +4,11 @@ import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
 import { Pedido } from "@/types/pedidos";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  Text,
-  Vibration,
-  View,
-} from "react-native";
+import { ActivityIndicator, Alert, ScrollView, Text, View } from "react-native";
 import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
 import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso";
-import CardPedidoPagar from "../../components/Comprador/CardPedidoPagar";
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
+import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
@@ -115,37 +108,37 @@ const EstadoPedido = () => {
           },
         ],
       },
-      {
-        id: 4,
-        numeroPedido: 2550,
-        direccionComprador: "Calle 50, nro 90",
-        estado: "Pago en revisión",
-        respuestasRecibidas: 0,
-        duracionCronometro: 30,
-        textoPedido: `200 Sandwichs de miga de jamón y queso`,
-        respuestas: [
-          {
-            id: "v3",
-            vendedorNombre: "Minimarket Pedro",
-            alias: "SANDWICHERIAEXPRESS",
-            entidad: "Mercado Pago",
-            titular: "Pedro Pascal",
-            rating: 4.8,
-            precio: 25000,
-            duracionCronometro: 0,
-          },
-        ],
-        respuestaSeleccionada: {
-          id: "v3",
-          vendedorNombre: "Minimarket Pedro",
-          alias: "SANDWICHERIAEXPRESS",
-          entidad: "Mercado Pago",
-          titular: "Pedro Pascal",
-          rating: 4.8,
-          precio: 25000,
-          duracionCronometro: 0,
-        },
-      },
+      // {
+      //   id: 4,
+      //   numeroPedido: 2550,
+      //   direccionComprador: "Calle 50, nro 90",
+      //   estado: "Pago en revisión",
+      //   respuestasRecibidas: 0,
+      //   duracionCronometro: 30,
+      //   textoPedido: `200 Sandwichs de miga de jamón y queso`,
+      //   respuestas: [
+      //     {
+      //       id: "v3",
+      //       vendedorNombre: "Minimarket Pedro",
+      //       alias: "SANDWICHERIAEXPRESS",
+      //       entidad: "Mercado Pago",
+      //       titular: "Pedro Pascal",
+      //       rating: 4.8,
+      //       precio: 25000,
+      //       duracionCronometro: 0,
+      //     },
+      //   ],
+      //   respuestaSeleccionada: {
+      //     id: "v3",
+      //     vendedorNombre: "Minimarket Pedro",
+      //     alias: "SANDWICHERIAEXPRESS",
+      //     entidad: "Mercado Pago",
+      //     titular: "Pedro Pascal",
+      //     rating: 4.8,
+      //     precio: 25000,
+      //     duracionCronometro: 0,
+      //   },
+      // },
       {
         id: 5,
         numeroPedido: 2560,
@@ -190,23 +183,23 @@ const EstadoPedido = () => {
 
   // Btn para cancelar el pedido completo (perdería todas las respuestas de los vendedores)
   const handleCancelarPedido = (id: number | string) => {
-    Vibration.vibrate(300);
-    Alert.alert(
-      "Cancelar pedido",
-      "¿Querés cancelar este pedido?",
-      [
-        { text: "No", style: "cancel" },
-        {
-          text: "Sí",
-          style: "destructive",
-          onPress: () => confirmarCancelacion(id),
-        },
-      ],
-      { cancelable: true },
-    );
-  };
+    //   Vibration.vibrate(300);
+    //   Alert.alert(
+    //     "Cancelar pedido",
+    //     "¿Quieres cancelar este pedido?",
+    //     [
+    //       { text: "No", style: "cancel" },
+    //       {
+    //         text: "Sí",
+    //         style: "destructive",
+    //         onPress: () => confirmarCancelacion(id),
+    //       },
+    //     ],
+    //     { cancelable: true },
+    //   );
+    // };
 
-  const confirmarCancelacion = (id: number | string) => {
+    // const confirmarCancelacion = (id: number | string) => {
     setPedidos((prev) => prev.filter((pedido) => pedido.id !== id));
     console.log(`Pedido ${id} cancelado correctamente`);
   };
@@ -232,6 +225,8 @@ const EstadoPedido = () => {
             ...pedido,
             estado: "Pago y dirección",
             respuestaSeleccionada,
+            expandido: true, // Expande la card al aceptar una respuesta
+            fechaSeleccion: new Date().toISOString(), // <---- LIO lo reemplazará (fecha/hora del momento en el q el comprador elije uno de los presupuestos)
           };
         }
         return pedido;
@@ -320,7 +315,6 @@ const EstadoPedido = () => {
                   <CardPedidoVerRespuestas
                     key={pedido.id} // solo para q React identifiq c/elemento dentro de una lista (.map) y optimice el renderizado -no se pasa como prop.
                     pedidoId={pedido.id} // prop del interior del componente
-                    numeroPedido={pedido.numeroPedido}
                     cantidadRespuestas={pedido.respuestas?.length || 0}
                     estado="Ver respuestas"
                     expandido={pedido.expandido || false}
@@ -343,10 +337,10 @@ const EstadoPedido = () => {
                 if (!r) return null; // Evita error si aún no hay respuesta seleccionada
 
                 return (
-                  <CardPedidoPagar
+                  <CardPedidoPagoYDireccion
                     key={pedido.id}
                     pedidoId={pedido.id}
-                    numeroPedido={pedido.numeroPedido}
+                    fechaSeleccion={pedido.fechaSeleccion}
                     estado="Pago y dirección"
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
@@ -362,6 +356,17 @@ const EstadoPedido = () => {
                     onFinishCronometro={handleFinishCronometro}
                     respuestaId={""}
                     timestampRespuesta={0}
+                    onEnviarDatos={(payload) => {
+                      console.log("TODO: enviar al backend", payload);
+                      setPedidos((prev) =>
+                        prev.map((p) =>
+                          p.id === pedido.id
+                            ? { ...p, estado: "Pago en revisión" }
+                            : p,
+                        ),
+                      );
+                    }}
+                    onCancelarPedido={() => handleCancelarPedido(pedido.id)}
                   />
                 );
               }
@@ -374,8 +379,7 @@ const EstadoPedido = () => {
                   <CardPedidoPagoEnRevision
                     key={pedido.id}
                     pedidoId={pedido.id}
-                    numeroPedido={pedido.numeroPedido}
-                    estado="Pago en revisión"
+                    fechaSeleccion={pedido.fechaSeleccion}
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
@@ -391,6 +395,7 @@ const EstadoPedido = () => {
                     respuestaId={""}
                     timestampRespuesta={0}
                     tieneProblema={false}
+                    estado={"Pago y dirección"}
                   />
                 );
               }
@@ -405,7 +410,7 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     respuestaId={r.id}
-                    numeroPedido={pedido.numeroPedido}
+                    fechaSeleccion={pedido.fechaSeleccion}
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
@@ -418,6 +423,22 @@ const EstadoPedido = () => {
                     problemaPago={pedido.problemaPago}
                     onVerPedido={() => handleVerPedido(pedido.id)}
                     onVerNota={handleVerNota}
+                    onCancelarPedido={() => handleCancelarPedido(pedido.id)} // ← agregar
+                    onEnviarCorreccion={(data) => {
+                      console.log("TODO: enviar corrección al backend", data);
+                      // TODO: incluir mensajes cuando Lionel defina el sistema de mensajería
+                      setPedidos((prev) =>
+                        prev.map((p) =>
+                          p.id === pedido.id
+                            ? {
+                                ...p,
+                                estado: "Pago en revisión",
+                                problemaPago: undefined,
+                              }
+                            : p,
+                        ),
+                      );
+                    }}
                   />
                 );
               }
@@ -428,7 +449,6 @@ const EstadoPedido = () => {
                   <CardPedidoEnProceso
                     key={pedido.id}
                     pedidoId={pedido.id}
-                    numeroPedido={pedido.numeroPedido}
                     estado="En proceso"
                     respuestasRecibidas={pedido.respuestasRecibidas}
                     duracionCronometro={60}

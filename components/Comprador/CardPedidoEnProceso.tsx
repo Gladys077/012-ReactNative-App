@@ -2,6 +2,7 @@ import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
+import { alertaCancelarPedido } from "../../utils/alertas";
 import Cronometro from "../Cronometro/Cronometro";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaDivisoria from "../subcomponentes/LineaDivisoria";
@@ -12,18 +13,16 @@ import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {
   pedidoId: string | number;
-  numeroPedido: number;
   estado: EtiqEstadoType;
   respuestasRecibidas?: number;
   duracionCronometro: number; // en minutos
   onFinishCronometro?: () => void;
-  onCancelarPedido?: () => void;
+  onCancelarPedido: () => void;
   onVerPedido?: (id: string | number) => void;
 }
 
 export default function CardPedidoEnProceso({
   pedidoId,
-  numeroPedido,
   estado,
   respuestasRecibidas = 0,
   duracionCronometro,
@@ -36,11 +35,7 @@ export default function CardPedidoEnProceso({
     "Pasado este tiempo si no recibe respuesta, se eliminará el pedido.";
 
   return (
-    <CardPedidoBase
-      numeroPedido={numeroPedido}
-      estado="En proceso"
-      elevation={5}
-    >
+    <CardPedidoBase estado="En proceso" elevation={5}>
       {/* Respuestas recibidas (si hay) */}
       {respuestasRecibidas > 0 && (
         <RespuestasRecibidas cantidad={respuestasRecibidas} />
@@ -103,7 +98,7 @@ export default function CardPedidoEnProceso({
           variant="secondary"
           height="md"
           width="auto"
-          onPress={onCancelarPedido}
+          onPress={() => alertaCancelarPedido(onCancelarPedido)}
         >
           Cancelar pedido
         </Button>

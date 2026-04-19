@@ -1,15 +1,18 @@
-import { BorderRadius, Spacing } from "@/constants/Tokens";
+import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { View, ViewStyle } from "react-native";
-import EtiqEstadoDelPedido, { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
+import { Text, View, ViewStyle } from "react-native";
+import EtiqEstadoDelPedido, {
+  EtiqEstadoType,
+} from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import MascotaConMensaje from "../subcomponentes/MascotaConMensaje";
 import PedidoNumero from "../subcomponentes/PedidoNumero";
 import ToggleExpandir from "../subcomponentes/ToggleExpandir";
 
 interface CardPedidoBaseProps {
-  numeroPedido: number;
+  numeroPedido?: number;
+  fechaSeleccion?: string;
   estado: EtiqEstadoType;
   children?: React.ReactNode;
   expandido?: boolean;
@@ -29,6 +32,7 @@ interface CardPedidoBaseProps {
 
 export default function CardPedidoBase({
   numeroPedido,
+  fechaSeleccion,
   estado,
   children,
   expandido = false,
@@ -64,24 +68,35 @@ export default function CardPedidoBase({
       ]}
     >
       {/* HEADER: número de pedido + estado (si existe) */}
-      {(numeroPedido !== undefined || estado) && (
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 8,
-            
-          }}
-        >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 8,
+        }}
+      >
+        {/* Lado izquierdo: número, fecha, o placeholder vacío */}
+        <View>
           {numeroPedido !== undefined && <PedidoNumero numero={numeroPedido} />}
-          {estado && <EtiqEstadoDelPedido estado={estado} />}
+          {fechaSeleccion !== undefined && (
+            <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
+              {new Date(fechaSeleccion).toLocaleString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+          )}
         </View>
-      )}
+
+        {/* Lado derecho: siempre la etiqueta de estado */}
+        {estado && <EtiqEstadoDelPedido estado={estado} />}
+      </View>
 
       {/* CONTENIDO PERSONALIZADO */}
       {children}
-
 
       {/* MASCOTA OPCIONAL */}
       {mostrarMascota && mascotaMensaje && (
@@ -91,7 +106,7 @@ export default function CardPedidoBase({
           posicion={mascotaPosicion}
         />
       )}
-      
+
       {/* SEPARADOR OPCIONAL */}
       {mostrarDivisor && <LineaDivisoria />}
 
@@ -105,7 +120,6 @@ export default function CardPedidoBase({
         />
       )}
 
-      
       {/* AQUÍ VA EL CONTENIDO EXPANDIBLE, DESPUÉS DE TODO */}
       {expandido && contenidoExpandible}
     </View>
