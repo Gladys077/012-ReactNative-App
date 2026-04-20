@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CambiarContraseña } from "../../components/icons";
 import Button from "../../components/UI/Button/Button";
 import { InputField } from "../../components/UI/InputField";
+import Toast from "../../components/UI/Toast";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -15,6 +16,8 @@ export default function CambiarContraseñaScreen() {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [toastVisible, setToastVisible] = useState(false);
 
   // Validaciones
   const [errors, setErrors] = useState({
@@ -57,6 +60,8 @@ export default function CambiarContraseñaScreen() {
 
     console.log("Contraseña cambiada correctamente");
     // TODO: lógica real de cambio de contraseña (API, etc.) VER CON LIO
+
+    setToastVisible(true);
   };
 
   return (
@@ -160,6 +165,16 @@ export default function CambiarContraseñaScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Toast
+        mensaje="¡Perfil guardado!"
+        visible={toastVisible}
+        variante="success"
+        onOcultar={() => {
+          setToastVisible(false);
+          router.back();
+        }}
+      />
     </SafeAreaView>
   );
 }

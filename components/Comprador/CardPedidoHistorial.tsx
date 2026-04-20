@@ -151,7 +151,7 @@ export default function CardHistorialComprador({
           </Text>
 
           {/* Remover card */}
-          <Pressable onPress={handleEliminar}>
+          <Pressable onPress={handleEliminar} style={{ padding: Spacing.sm }}>
             <Remove width={26} height={26} fill={colors.textError} />
           </Pressable>
         </View>

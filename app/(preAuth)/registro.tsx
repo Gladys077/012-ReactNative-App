@@ -233,9 +233,9 @@ export default function RegistroScreen() {
                       : "transparent",
                   }}
                 />
-                <h4 style={{ color: colors.textDefault, marginLeft: 8 }}>
+                <Text style={{ color: colors.textDefault, marginLeft: 8 }}>
                   Deseo vender u ofrecer servicios
-                </h4>
+                </Text>
               </Pressable>
 
               {/* Rubros */}

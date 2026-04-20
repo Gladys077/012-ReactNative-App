@@ -13,6 +13,7 @@ import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
 import { InputField } from "../../components/UI/InputField";
+import Toast from "../../components/UI/Toast";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -20,26 +21,18 @@ export default function PerfilScreen() {
   const { colors, fonts } = useTheme();
   const router = useRouter();
 
-  // TODO: VER CON LIO. Por ahora datos del usuario simulados
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [cellular, setCellular] = useState("");
   const [rubros, setRubros] = useState<string[]>([]);
-
-  // Si desea vender
   const [isSeller, setIsSeller] = useState(false);
-
-  // Datos para cobrar x transferencia
   const [alias, setAlias] = useState("");
   const [banco, setBanco] = useState("");
   const [titular, setTitular] = useState("");
-
-  // Estados de edición
   const [editingField, setEditingField] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
 
-  // Validaciones
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -50,7 +43,7 @@ export default function PerfilScreen() {
     titular: "",
   });
 
-  const handleSave = async () => {
+  const handleSave = () => {
     let hasError = false;
     const newErrors = {
       name: "",
@@ -66,11 +59,6 @@ export default function PerfilScreen() {
       newErrors.name = "Por favor ingresa tu nombre y apellido";
       hasError = true;
     }
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!emailRegex.test(email)) {
-    //   newErrors.email = "Correo inválido";
-    //   hasError = true;
-    // }
     if (!address.trim()) {
       newErrors.address = "Por favor ingresa tu dirección";
       hasError = true;
@@ -79,8 +67,6 @@ export default function PerfilScreen() {
       newErrors.cellular = "Por favor ingresa tu número de celular";
       hasError = true;
     }
-
-    // Validaciones extra SOLO si elige rubros (o sea: si quiere vender)
     if (rubros.length > 0) {
       if (!alias.trim()) {
         newErrors.alias = "Ingresa tu alias bancario";
@@ -99,48 +85,10 @@ export default function PerfilScreen() {
     setErrors(newErrors);
     if (hasError) return;
 
-    // Si cambia email -> modal de verificación
-    if (email !== "maria@mail.com") {
-      setShowModal(true);
-      return;
-    }
+    // TODO: VER CON LIO — conectar al backend cuando esté listo
+    // fetch("https://api/user/update", { method: "PUT", ... })
 
-    // -----------------> GUARDAR EN EL BACKEND - VER CON LIO <------------- //
-    try {
-      const resp = await fetch("https://api/user/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          address,
-          cellular,
-          rubros,
-          alias,
-          banco,
-          titular,
-        }),
-      });
-
-      if (!resp.ok) {
-        console.log("Error del servidor:", await resp.text());
-        return;
-      }
-
-      console.log("Datos actualizados correctamente");
-
-      // 2) REDIRECCIÓN AUTOMÁTICA SOLO SI ELIGE RUBROS
-      if (rubros.length > 0) {
-        await router.replace("/(auth)/elegirRol");
-      } else {
-        // Si NO elige rubros, simplemente vuelve a donde estaba
-        router.back();
-      }
-    } catch (err) {
-      console.log("Error al conectar al servidor:", err);
-    }
+    setToastVisible(true);
   };
 
   return (
@@ -157,7 +105,6 @@ export default function PerfilScreen() {
           <View
             style={{
               flex: 1,
-              // justifyContent: "center",
               paddingHorizontal: Spacing.lg,
               paddingBottom: Spacing.xl,
               paddingTop: Spacing.xl,
@@ -166,9 +113,7 @@ export default function PerfilScreen() {
               alignSelf: "center",
             }}
           >
-            {/* Form Section */}
             <View style={{ marginBottom: Spacing.xxl }}>
-              {/* Inputs */}
               <View style={{ marginBottom: Spacing.xl }}>
                 <InputField
                   label="Nombre y apellido"
@@ -223,7 +168,7 @@ export default function PerfilScreen() {
               <View style={{ marginBottom: Spacing.xxl }}>
                 <InputField
                   label="Celular"
-                  placeholder="Escribe tu nombre y apellido"
+                  placeholder="Escribe tu celular"
                   value={cellular}
                   onChangeText={setCellular}
                   editable
@@ -264,14 +209,12 @@ export default function PerfilScreen() {
                       ? colors.brandCommon
                       : "transparent",
                   }}
-                ></View>
-
+                />
                 <Text style={{ color: colors.textDefault }}>
                   También deseo vender
                 </Text>
               </Pressable>
 
-              {/* Select Rubros */}
               {isSeller && (
                 <View
                   style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
@@ -285,77 +228,62 @@ export default function PerfilScreen() {
                 </View>
               )}
 
-              {/* --- Datos para recibir pagos por transferencia --- */}
               {isSeller && (
-                <>
-                  <View
+                <View
+                  style={{
+                    marginTop: Spacing.lg,
+                    marginBottom: Spacing.xxl,
+                    borderWidth: 3,
+                    borderRadius: 24,
+                    borderColor: colors.cardBg,
+                    padding: 16,
+                    paddingBottom: 4,
+                  }}
+                >
+                  <Text
                     style={{
-                      marginTop: Spacing.lg,
-                      marginBottom: Spacing.xxl,
-                      borderWidth: 3,
-                      borderRadius: 24,
-                      borderColor: colors.cardBg,
-                      padding: 16,
-                      paddingBottom: 4,
+                      color: colors.textDefault,
+                      fontFamily: fonts.robotoBold,
+                      marginBottom: Spacing.sm,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: colors.textDefault,
-                        fontFamily: fonts.robotoBold,
-                        marginBottom: Spacing.sm,
-                      }}
-                    >
-                      Datos bancarios
-                    </Text>
+                    Datos bancarios
+                  </Text>
+                  <Text style={{ color: colors.textMuted, fontSize: 12 }}>
+                    Estos datos le llegarán a tus clientes cuando elijan
+                    abonarte por transferencia.
+                  </Text>
 
-                    <Text
-                      style={{
-                        color: colors.textMuted,
-                        fontSize: 12,
-                      }}
-                    >
-                      Estos datos le llegarán a tus clientes cuando elijan
-                      abonarte por transferencia.
-                    </Text>
-
-                    {/* Alias */}
-                    <View style={{ marginBottom: Spacing.xl }}>
-                      <InputField
-                        label="Alias"
-                        value={alias}
-                        onChangeText={setAlias}
-                        editable
-                        error={errors.alias}
-                      />
-                    </View>
-
-                    {/* Banco */}
-                    <View style={{ marginBottom: Spacing.xl }}>
-                      <InputField
-                        label="Banco o billetera virtual"
-                        value={banco}
-                        onChangeText={setBanco}
-                        editable
-                        error={errors.banco}
-                      />
-                    </View>
-
-                    {/* Titular */}
-                    <View style={{ marginBottom: Spacing.xxl }}>
-                      <InputField
-                        label="Titular"
-                        value={titular}
-                        onChangeText={setTitular}
-                        editable
-                        error={errors.titular}
-                      />
-                    </View>
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Alias"
+                      value={alias}
+                      onChangeText={setAlias}
+                      editable
+                      error={errors.alias}
+                    />
                   </View>
-                </>
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <InputField
+                      label="Banco o billetera virtual"
+                      value={banco}
+                      onChangeText={setBanco}
+                      editable
+                      error={errors.banco}
+                    />
+                  </View>
+                  <View style={{ marginBottom: Spacing.xxl }}>
+                    <InputField
+                      label="Titular"
+                      value={titular}
+                      onChangeText={setTitular}
+                      editable
+                      error={errors.titular}
+                    />
+                  </View>
+                </View>
               )}
 
-              {/* Botones */}
               <View
                 style={{
                   flexDirection: "row",
@@ -368,12 +296,11 @@ export default function PerfilScreen() {
                     variant="secondary"
                     section="common"
                     width="full"
-                    onPress={() => router.back()}
+                    onPress={() => router.replace("/(auth)/elegirRol")}
                   >
                     Cancelar
                   </Button>
                 </View>
-
                 <View style={{ flex: 1 }}>
                   <Button
                     variant="primary"
@@ -389,6 +316,16 @@ export default function PerfilScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Toast
+        mensaje="¡Perfil guardado!"
+        visible={toastVisible}
+        variante="success"
+        onOcultar={() => {
+          setToastVisible(false);
+          router.back();
+        }}
+      />
     </SafeAreaView>
   );
 }
