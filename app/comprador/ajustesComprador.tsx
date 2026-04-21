@@ -78,7 +78,6 @@ const AjustesCompradorScreen = () => {
         style={{
           flex: 1,
           backgroundColor: colors.background,
-          paddingVertical: Spacing.lg,
           paddingHorizontal: Spacing.xs,
         }}
         showsVerticalScrollIndicator={false}

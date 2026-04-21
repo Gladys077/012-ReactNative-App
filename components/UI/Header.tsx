@@ -2,7 +2,6 @@ import { useNavigation } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontSizes } from "../../constants/Tokens";
-import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import { Carrito, Monedas, TiendaIcon, Volver } from "../icons";
 
@@ -11,113 +10,110 @@ type HeaderProps = {
   showBackArrow?: boolean;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
-  onBackPress?: () => void;
+  variant?: "buyer" | "seller" | "neutral";
+  credits?: number;
 };
 
 export default function Header({
   title,
   showBackArrow,
+  variant = "neutral",
+  credits,
   leftContent,
   rightContent,
 }: HeaderProps) {
-  const navigation = useNavigation();
-  const { user } = useAuthContext();
   const { colors, fonts } = useTheme();
-
-  if (!user) return null;
-  const isSeller = user.role === "seller";
-
-  // Título dinámico por rol
-  let displayTitle = title ?? "";
-  if (!displayTitle) {
-    if (!isSeller) displayTitle = "Mi pedido";
-    else displayTitle = user.commerceName || "Mi negocio";
-  }
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView edges={["left", "right"]}>
-      {/*Este View se extiende hacia arriba y pinta el fondo detrás de la hora/batería.*/}
       <View
         style={{
           backgroundColor: colors.headerFooterBg,
           borderBottomColor: colors.border,
           borderBottomWidth: 1,
           minHeight: 56,
-          width: "100%",
-          maxWidth: 500,
-          alignSelf: "center",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingHorizontal: 12,
-          gap: 16,
+          paddingHorizontal: 16,
         }}
       >
-        {/* Lado izquierdo */}
-        {leftContent ? (
-          leftContent
-        ) : showBackArrow ? (
-          <Pressable
-            style={{
-              height: 44,
-              width: 44,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => navigation.goBack()}
-          >
-            <Volver width={24} height={24} fill={colors.textDefault} />
-          </Pressable>
-        ) : isSeller ? (
-          <TiendaIcon width={24} height={24} fill={colors.brandSeller} />
-        ) : (
-          <Carrito
-            width={24}
-            height={24}
-            fill={colors.brandBuyer}
-            stroke={colors.textDefault}
-          />
-        )}
-
-        {/* Título */}
-        <Text
+        {/* LADO IZQUIERDO */}
+        <View
           style={{
+            flexDirection: "row",
+            alignItems: "center",
             flex: 1,
-            marginRight: 14,
-            fontSize: FontSizes.md,
-            fontFamily: fonts.robotoMedium,
-            color: colors.textDefault,
+            gap: 12,
           }}
-          numberOfLines={1}
-          ellipsizeMode="tail"
         >
-          {displayTitle}
-        </Text>
-
-        {/* Lado derecho */}
-        {rightContent ? (
-          rightContent
-        ) : isSeller ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Monedas
-              width={22}
-              height={22}
-              fill={colors.brandSeller}
-              strokeWidth={1}
-            />
-            <Text
-              style={{
-                marginLeft: 8,
-                fontFamily: fonts.robotoMedium,
-                color: colors.textDefault,
-              }}
+          {/* Contenido personalizado */}
+          {leftContent ? (
+            leftContent
+          ) : showBackArrow ? (
+            /* Flecha Volver */
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={{ padding: 8 }}
             >
-              {user.credits ?? 0}
-            </Text>
-          </View>
-        ) : (
-          <View style={{ width: 44 }} /> // placeholder
-        )}
+              <Volver width={24} height={24} fill={colors.textDefault} />
+            </Pressable>
+          ) : (
+            /* Iconos de rol (solo si no hay flecha) */
+            <>
+              {variant === "seller" && (
+                <TiendaIcon width={28} height={28} fill={colors.brandSeller} />
+              )}
+              {variant === "buyer" && (
+                <Carrito
+                  width={24}
+                  height={24}
+                  fill={colors.brandBuyer}
+                  stroke={colors.textDefault}
+                />
+              )}
+            </>
+          )}
+
+          <Text
+            style={{
+              fontSize: FontSizes.md,
+              fontFamily: fonts.robotoMedium,
+              color: colors.textDefault,
+            }}
+            numberOfLines={1}
+          >
+            {title}
+          </Text>
+        </View>
+
+        {/* LADO DERECHO */}
+        <View style={{ marginLeft: 16 }}>
+          {/* Contenido personalizado */}
+          {rightContent ? (
+            rightContent
+          ) : variant === "seller" ? (
+            /* Monedas automáticas para vendedor */
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Monedas width={24} height={24} fill={colors.brandSeller} />
+              <Text
+                style={{
+                  fontSize: FontSizes.md,
+                  fontFamily: fonts.robotoMedium,
+                  color: colors.textDefault,
+                }}
+              >
+                {credits ?? 0} {/* Si credits es undefined, se mostrará 0 */}
+              </Text>
+            </View>
+          ) : (
+            /* Placeholder para mantener equilibrio visual si no hay nada */
+            <View style={{ width: 24 }} />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );

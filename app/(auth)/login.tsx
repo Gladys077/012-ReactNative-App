@@ -26,7 +26,7 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    router.push("/registro"); // debe ir a la page registro
+    router.push("/registro");
   };
 
   return (
@@ -34,7 +34,7 @@ export default function LoginScreen() {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        paddingTop: Spacing.lg,
+        // paddingTop: Spacing.lg,
       }}
     >
       <ScrollView
@@ -46,7 +46,7 @@ export default function LoginScreen() {
             flex: 1,
             paddingHorizontal: Spacing.xl,
             marginTop: Spacing.lg,
-            paddingTop: Spacing.lg,
+            // paddingTop: Spacing.lg,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
@@ -134,7 +134,7 @@ export default function LoginScreen() {
                   <Text
                     style={{
                       fontSize: 12,
-                      color: colors.brandCommon,
+                      color: colors.statusPurpleDot,
                       opacity: pressed ? 0.7 : 1,
                     }}
                   >
@@ -154,7 +154,8 @@ export default function LoginScreen() {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                marginVertical: Spacing.xxl,
+                marginTop: Spacing.xxl,
+                marginBottom: Spacing.xl,
               }}
             >
               <View
@@ -203,7 +204,7 @@ export default function LoginScreen() {
                   style={{
                     fontFamily: fonts.robotoMedium,
                     fontSize: 14,
-                    color: colors.brandCommon,
+                    color: colors.statusPurpleDot,
                     opacity: pressed ? 0.7 : 1,
                   }}
                 >

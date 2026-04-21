@@ -3,12 +3,12 @@ import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
 import EtiqEstadoDelPedido, {
-  EtiqEstadoType,
+    EtiqEstadoType,
 } from "../subcomponentes/EtiqEstadoDelPedido";
-import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import MascotaConMensaje from "../subcomponentes/MascotaConMensaje";
 import PedidoNumero from "../subcomponentes/PedidoNumero";
 import ToggleExpandir from "../subcomponentes/ToggleExpandir";
+import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardPedidoBaseProps {
   numeroPedido?: number;

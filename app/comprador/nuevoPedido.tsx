@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -16,6 +16,7 @@ import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
 import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
 import Button from "../../components/UI/Button/Button";
+import { useAuthContext } from "../../context/AuthContext";
 
 const NuevoPedido = () => {
   const { colors, fonts } = useTheme();
@@ -59,6 +60,8 @@ const NuevoPedido = () => {
   };
 
   const PEDIDO_STORAGE_KEY = "pedidoBorrador";
+
+  const { switchRole } = useAuthContext();
 
   const savePedidoLocal = async (payload: {
     rubros: string[];
@@ -105,7 +108,7 @@ const NuevoPedido = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: colors.background }}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 10}
     >
       <ScrollView
         style={{ flex: 1 }}
@@ -114,7 +117,7 @@ const NuevoPedido = () => {
           paddingTop: Spacing.xl,
           gap: Spacing.xl,
           flexGrow: 1,
-          paddingBottom: Spacing.xl,
+          paddingBottom: Spacing.xxl,
         }}
         keyboardShouldPersistTaps="always"
       >
@@ -223,8 +226,11 @@ const NuevoPedido = () => {
         <View style={{ alignItems: "center", marginVertical: 8 }}>
           <Text style={{ fontSize: FontSizes.base, color: colors.textMuted }}>
             ¿Deseas vender?{"  "}
-            <Link
-              href="/vendedor/homeVendedor"
+            <Text
+              onPress={() => {
+                switchRole("seller");
+                router.push("/vendedor/homeVendedor");
+              }}
               style={{
                 color: colors.brandBuyer,
                 textDecorationLine: "underline",
@@ -232,7 +238,7 @@ const NuevoPedido = () => {
               }}
             >
               Sí, quiero vender
-            </Link>
+            </Text>
           </Text>
         </View>
       </ScrollView>

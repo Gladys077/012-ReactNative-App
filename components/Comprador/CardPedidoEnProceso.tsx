@@ -5,10 +5,10 @@ import { Text, View } from "react-native";
 import { alertaCancelarPedido } from "../../utils/alertas";
 import Cronometro from "../Cronometro/Cronometro";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
-import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import LinkFraseIcon from "../subcomponentes/VerBottomSheet";
 import Button from "../UI/Button/Button";
+import LineaDivisoria from "../UI/LineaDivisoria";
 import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {

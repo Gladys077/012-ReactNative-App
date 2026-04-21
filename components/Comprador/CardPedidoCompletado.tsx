@@ -1,7 +1,6 @@
 import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { router } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { Animated, Image, Text } from "react-native";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
@@ -12,7 +11,7 @@ interface CardPedidoCompletadoProps {
   onDesaparecer?: () => void;
 }
 
-const DURACION_MS = 10000;
+const DURACION_MS = 5000;
 
 export default function CardPedidoCompletado({
   pedidoId,
@@ -30,7 +29,7 @@ export default function CardPedidoCompletado({
     }).start(() => {
       onDesaparecer?.();
       // TODO: guardar en historial en backend
-      router.push("/comprador/historialComprador");
+      // router.push("/comprador/historialComprador");
     });
   }, []);
 

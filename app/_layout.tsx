@@ -38,6 +38,26 @@ function ThemedStatusBar() {
     />
   );
 }
+const AppContent = () => {
+  const { colors } = useTheme();
+  return (
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ModalProvider>
+          <AuthProvider>
+            <SafeAreaView
+              style={{ flex: 1, backgroundColor: colors.background }}
+            >
+              <ThemedStatusBar />
+              <ModalComponent />
+              <Slot />
+            </SafeAreaView>
+          </AuthProvider>
+        </ModalProvider>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
+  );
+};
 
 const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
@@ -51,7 +71,6 @@ const RootLayout = () => {
 
   useEffect(() => {
     if (error) {
-      console.error("Font loading error:", error);
       SplashScreen.hideAsync();
     }
     if (fontsLoaded) {
@@ -60,27 +79,6 @@ const RootLayout = () => {
   }, [fontsLoaded, error]);
 
   if (!fontsLoaded && !error) return null;
-
-  const AppContent = () => {
-    const { colors } = useTheme();
-    return (
-      <SafeAreaProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <ModalProvider>
-            <AuthProvider>
-              <SafeAreaView
-                style={{ flex: 1, backgroundColor: colors.background }}
-              >
-                <ThemedStatusBar />
-                <ModalComponent />
-                <Slot />
-              </SafeAreaView>
-            </AuthProvider>
-          </ModalProvider>
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    );
-  };
 
   return (
     <ThemeProvider>

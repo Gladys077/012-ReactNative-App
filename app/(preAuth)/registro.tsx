@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
-import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
+import EmailVerificationModal from "../../components/subcomponentes/EmailVerificationModal";
 import Button from "../../components/UI/Button/Button";
-import EmailVerificationModal from "../../components/UI/EmailVerificationModal";
 import { InputField } from "../../components/UI/InputField";
+import LineaDivisoria from "../../components/UI/LineaDivisoria";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -134,7 +134,7 @@ export default function RegistroScreen() {
           <View
             style={{
               flex: 1,
-              paddingHorizontal: Spacing.xxl,
+              paddingHorizontal: Spacing.xl,
               paddingBottom: Spacing.xl,
               maxWidth: 500,
               width: "100%",
@@ -142,7 +142,7 @@ export default function RegistroScreen() {
             }}
           >
             <View style={{ marginBottom: Spacing.xxl }}>
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.md }}>
                 <InputField
                   label="Nombre y apellido"
                   placeholder="Nombre y apellido"
@@ -152,7 +152,7 @@ export default function RegistroScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.md }}>
                 <InputField
                   label="Correo electrónico"
                   placeholder="nombre@ejemplo.com"
@@ -163,7 +163,7 @@ export default function RegistroScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.md }}>
                 <InputField
                   label="Dirección"
                   placeholder="Dirección"
@@ -173,7 +173,7 @@ export default function RegistroScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.md }}>
                 <InputField
                   label="Celular"
                   placeholder="Celular"
@@ -184,7 +184,7 @@ export default function RegistroScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xl }}>
+              <View style={{ marginBottom: Spacing.md }}>
                 <InputField
                   label="Contraseña"
                   placeholder="Introduzca su contraseña"
@@ -196,7 +196,7 @@ export default function RegistroScreen() {
                 />
               </View>
 
-              <View style={{ marginBottom: Spacing.xxl }}>
+              <View style={{ marginBottom: Spacing.lg }}>
                 <InputField
                   label="Confirmar Contraseña"
                   placeholder="Confirme su contraseña"
@@ -216,6 +216,7 @@ export default function RegistroScreen() {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
+                  marginVertical: Spacing.md,
                 }}
               >
                 <View
@@ -224,8 +225,7 @@ export default function RegistroScreen() {
                     height: 18,
                     borderWidth: 1.5,
                     borderColor: colors.textDefault,
-                    marginRight: 8,
-                    marginBottom: 6,
+                    marginRight: 4,
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: isSeller
@@ -256,8 +256,7 @@ export default function RegistroScreen() {
               {isSeller && (
                 <View
                   style={{
-                    marginTop: Spacing.lg,
-                    marginBottom: Spacing.xxl,
+                    marginBottom: Spacing.xl,
                     borderWidth: 3,
                     borderRadius: 24,
                     borderColor: colors.cardBg,
@@ -279,7 +278,7 @@ export default function RegistroScreen() {
                     abonarte por transferencia.
                   </Text>
 
-                  <View style={{ marginBottom: Spacing.xl }}>
+                  <View style={{ marginBottom: Spacing.lg }}>
                     <InputField
                       label="Alias"
                       value={alias}
@@ -288,7 +287,7 @@ export default function RegistroScreen() {
                       error={errors.alias}
                     />
                   </View>
-                  <View style={{ marginBottom: Spacing.xl }}>
+                  <View style={{ marginBottom: Spacing.lg }}>
                     <InputField
                       label="Banco o billetera virtual"
                       value={banco}

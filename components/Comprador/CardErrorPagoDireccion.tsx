@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import ChatModal from "@/components/Chat/ChatModal";
-import LineaDivisoria from "@/components/subcomponentes/LineaDivisoria";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
 import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
+import LineaDivisoria from "@/components/UI/LineaDivisoria";
 import { alertaCancelarPedido } from "../../utils/alertas";
 import { Chat } from "../icons";
 import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
@@ -88,7 +88,7 @@ export default function CardErrorPagoDireccion({
   // const [direccionState, setDireccionState] = useState(direccion);
 
   const hayErrorComprobante = !!problemaPago?.comprobante;
-  const hayErrorDireccion = !!problemaPago?.direccion;
+  // const hayErrorDireccion = !!problemaPago?.direccion;
 
   const [intentoEnviar, setIntentoEnviar] = useState(false);
 

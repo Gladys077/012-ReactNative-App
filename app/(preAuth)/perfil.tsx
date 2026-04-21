@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
-import LineaDivisoria from "../../components/subcomponentes/LineaDivisoria";
 import Button from "../../components/UI/Button/Button";
 import { InputField } from "../../components/UI/InputField";
+import LineaDivisoria from "../../components/UI/LineaDivisoria";
 import Toast from "../../components/UI/Toast";
 import { Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";

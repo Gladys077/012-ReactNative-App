@@ -145,7 +145,7 @@ export default function CambiarContraseñaScreen() {
                   variant="secondary"
                   section="common"
                   width="full"
-                  onPress={() => router.back()}
+                  onPress={() => router.replace("/(auth)/elegirRol")}
                 >
                   Cancelar
                 </Button>
@@ -167,7 +167,7 @@ export default function CambiarContraseñaScreen() {
       </KeyboardAvoidingView>
 
       <Toast
-        mensaje="¡Perfil guardado!"
+        mensaje="¡Cambio de contraseña efectuado!"
         visible={toastVisible}
         variante="success"
         onOcultar={() => {

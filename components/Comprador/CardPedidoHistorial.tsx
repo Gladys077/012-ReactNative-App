@@ -3,8 +3,8 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { Remove } from "../icons";
-import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
+import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardHistorialCompradorProps {
   id: string | number;

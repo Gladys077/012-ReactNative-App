@@ -1,12 +1,15 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import React from "react";
+import { Text, View } from "react-native";
+import { useTheme } from "../../context/ThemeContext";
 
 const HomeVendedor = () => {
+  const { colors, fonts } = useTheme();
+
   return (
     <View>
-      <Text>HomeVendedor</Text>
+      <Text style={{ color: colors.textDefault }}>HomeVendedor</Text>
     </View>
-  )
-}
+  );
+};
 
-export default HomeVendedor
+export default HomeVendedor;

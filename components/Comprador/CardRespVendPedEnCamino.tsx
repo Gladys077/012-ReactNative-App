@@ -4,8 +4,8 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 import { Telephone, Ubicacion } from "../icons";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
-import LineaDivisoria from "../subcomponentes/LineaDivisoria";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
+import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardRespVendPedEnCaminoProps {
   vendedorNombre: string;
