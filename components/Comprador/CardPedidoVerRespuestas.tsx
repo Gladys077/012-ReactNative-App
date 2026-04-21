@@ -1,7 +1,8 @@
 import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { Respuesta } from "@/types/pedidos";
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
+// import { useTheme } from "../../context/ThemeContext";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -36,8 +37,6 @@ export default function CardPedidoVerRespuestas({
   pedidoId,
   cantidadRespuestas,
   estado,
-  expandido = false,
-  onToggleExpandir,
   onVerPedido,
   respuestas = [],
   onAceptarRespuesta,
@@ -56,8 +55,7 @@ export default function CardPedidoVerRespuestas({
         }}
       >
         {respuestas
-          // Filtra respuestas sin cronómetro y además "enseña" a TypeScript
-          // que las que pasan este filtro tienen duracionCronometro: number
+          // Filtra respuestas sin cronómetro y las que pasan este filtro tienen duracionCronometro: number
           .filter(
             (r): r is Respuesta & { duracionCronometro: number } =>
               r.duracionCronometro !== undefined,
@@ -82,12 +80,14 @@ export default function CardPedidoVerRespuestas({
       </View>
     );
 
+  const [expandido, setExpandido] = useState(true);
+
   return (
     <CardPedidoBase
       estado={estado}
       expandido={expandido}
-      onToggleExpandir={onToggleExpandir}
-      mostrarToggle={!!onToggleExpandir}
+      onToggleExpandir={() => setExpandido(!expandido)}
+      mostrarToggle
       textoMostrar="Mostrar respuestas recibidas"
       textoOcultar="Ocultar respuestas recibidas"
       mostrarDivisor
@@ -103,6 +103,5 @@ export default function CardPedidoVerRespuestas({
       {/* Botón ver pedido */}
       <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer" />
     </CardPedidoBase>
-    // </View>
   );
 }

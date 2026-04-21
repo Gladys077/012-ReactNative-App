@@ -287,20 +287,6 @@ export default function CardVendedorPagoDireccion({
           </Button>
         </View>
       </View>
-      {/* Botón principal */}
-      {/* <Button
-        section="buyer"
-        width="full"
-        variant="primary"
-        iconPosition="left"
-        onPress={handleEnviar}
-      >
-        <Text>
-          {formaPago === "transferencia"
-            ? "Enviar información"
-            : "Confirmar pago en efectivo"}
-        </Text>
-      </Button> */}
     </CardRespVendedorBase>
   );
 }

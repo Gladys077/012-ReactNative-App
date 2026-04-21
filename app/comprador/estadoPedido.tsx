@@ -157,7 +157,7 @@ const EstadoPedido = () => {
           direccion: false,
         },
         respuestasRecibidas: 0,
-        textoPedido: "Pedido con problema en el pago",
+        textoPedido: "Pan Lactal, 1 kilo de queso rallado, 2 litros de leche",
         fechaSeleccion: new Date().toISOString(),
         respuestaSeleccionada: {
           id: "v5",

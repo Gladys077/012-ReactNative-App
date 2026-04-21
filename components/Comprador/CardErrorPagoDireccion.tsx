@@ -101,8 +101,8 @@ export default function CardErrorPagoDireccion({
     setIntentoEnviar(true);
 
     // Valida antes de enviar
-    if (hayErrorComprobante && !comprobante) return;
-    // if (hayErrorDireccion && !direccionState.trim()) return;
+    if (formaPago === "transferencia" && hayErrorComprobante && !comprobante)
+      return;
 
     onEnviarCorreccion({
       formaPago,

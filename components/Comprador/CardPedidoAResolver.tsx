@@ -60,7 +60,7 @@ export default function CardPedidoAResolver({
   onCancelarPedido,
   onEnviarCorreccion,
 }: CardPedidoAResolverProps) {
-  const [expandido, setExpandido] = useState(false);
+  const [expandido, setExpandido] = useState(true);
 
   return (
     <CardPedidoBase

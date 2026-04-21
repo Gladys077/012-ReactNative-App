@@ -4,7 +4,6 @@ import React from "react";
 import { Alert, Linking, ScrollView, View } from "react-native";
 
 import { Spacing } from "@/constants/Tokens";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ItemsAjustes from "../../components/ajustes/ItemsAjustes";
 import SeccionAjustes from "../../components/ajustes/SeccionAjustes";
 import {
@@ -48,7 +47,7 @@ const AjustesVendedorScreen = () => {
 
   // Abrir cliente de correo
   const handleOpenMail = async () => {
-    const email = "soporte@tudominio.com";
+    const email = "soporte@Nuestrodominio.com";
     const subject = "Consulta sobre la app";
     const body = "Hola, necesito ayuda con...";
     const mailtoURL = `mailto:${email}?subject=${encodeURIComponent(
@@ -68,7 +67,7 @@ const AjustesVendedorScreen = () => {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: colors.background,
@@ -88,7 +87,7 @@ const AjustesVendedorScreen = () => {
             flex: 1,
             justifyContent: "center",
             paddingHorizontal: Spacing.lg,
-            paddingBottom: Spacing.xl,
+            // paddingBottom: Spacing.xl,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
@@ -165,7 +164,7 @@ const AjustesVendedorScreen = () => {
           <View style={{ height: Spacing.xl }} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

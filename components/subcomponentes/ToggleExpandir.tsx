@@ -60,7 +60,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
 
   const rotacion = animacion.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
+    outputRange: ["180deg", "0deg"],
   });
 
   const altura = animacion.interpolate({
@@ -89,7 +89,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
             letterSpacing: 0.3,
           }}
         >
-          {expandido ? textoOcultar : textoMostrar}
+          {expandido ? textoMostrar : textoOcultar}
         </Text>
 
         <Animated.View style={{ transform: [{ rotate: rotacion }] }}>
