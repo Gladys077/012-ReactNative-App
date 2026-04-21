@@ -551,7 +551,7 @@ const EstadoPedido = () => {
                     onVerPedido={handleVerPedido}
                     onEnviarCalificacion={(data) => {
                       console.log("TODO: enviar calificación al backend", data);
-                      // Transition a completado
+                      // Transicion a completado
                       setPedidos((prev) =>
                         prev.map((p) =>
                           p.id === pedido.id
@@ -570,6 +570,11 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     fechaSeleccion={pedido.fechaSeleccion}
+                    onDesaparecer={() =>
+                      setPedidos((prev) =>
+                        prev.filter((p) => p.id !== pedido.id),
+                      )
+                    }
                   />
                 );
               }
