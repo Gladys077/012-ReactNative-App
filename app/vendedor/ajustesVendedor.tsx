@@ -71,6 +71,7 @@ const AjustesVendedorScreen = () => {
       style={{
         flex: 1,
         backgroundColor: colors.background,
+        paddingHorizontal: Spacing.xl,
       }}
     >
       <ScrollView

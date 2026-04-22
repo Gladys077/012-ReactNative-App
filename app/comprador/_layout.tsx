@@ -14,11 +14,11 @@ export default function CompradorLayout() {
   const getTitleByPage = () => {
     switch (currentPage) {
       case "nuevoPedido":
-        return "Nuevo Pedido";
+        return "Nuevo pedido";
       case "estadoPedido":
-        return "Estado del Pedido";
+        return "Estado del pedido";
       case "historialComprador":
-        return "Historial";
+        return "Historial de compras";
       case "ajustesComprador":
         return "Ajustes";
       default:

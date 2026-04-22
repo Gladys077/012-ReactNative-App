@@ -19,6 +19,9 @@ export const Colors = {
     errorSoft: "#fcc7c7",
     error: "#ef4444",
 
+    //Badges
+    badge: "#870808",
+
     // Para fondos suaves
     tipsColorBuyer: "#1D4ED8", // blue-700
 
@@ -88,6 +91,13 @@ export const Colors = {
     brandCommon: "#8b5cf6", // violet-500
     brandBuyer: "#52a0fa", // blue-500
     brandSeller: "#ed6728", // orange-500
+
+    // Error
+    errorSoft: "#fcc7c7",
+    error: "#ef4444",
+
+    //Badges
+    badge: "#870808",
 
     // Para fondos suaves
     tipsColorBuyer: "#64B5F6", // blue-400

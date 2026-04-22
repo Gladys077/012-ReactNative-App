@@ -42,8 +42,10 @@ export default function VendedorLayout() {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: Spacing.xl,
-          paddingVertical: Spacing.lg,
+          // paddingHorizontal: Spacing.xl,
+          // paddingVertical: Spacing.lg,
+          paddingTop: Spacing.xs,
+          paddingBottom: Spacing.lg,
           maxWidth: 500,
           width: "100%",
           alignSelf: "center",

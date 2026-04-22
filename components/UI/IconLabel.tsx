@@ -56,12 +56,12 @@ const Badge = ({
         position: "absolute",
         top: -offset,
         right: -offset,
-        backgroundColor: colors.textError,
+        backgroundColor: colors.error,
         borderRadius: 9999,
         minWidth: 8,
         height: 16,
         paddingHorizontal: 4,
-        borderWidth: 1,
+        borderWidth: 0.8,
         borderColor: colors.textOnColor,
         alignItems: "center",
         justifyContent: "center",
@@ -69,10 +69,10 @@ const Badge = ({
     >
       <Text
         style={{
-          color: "#fff",
-          fontSize: 10,
+          color: "#f6f6f6",
+          fontSize: 11,
           fontWeight: "bold",
-          lineHeight: 12,
+          lineHeight: 11,
         }}
       >
         {count}
@@ -135,10 +135,9 @@ export const IconLabel = ({
         };
       case "menuVendedor":
         return {
-          padding: 12,
+          paddingVertical: 12,
+          paddingHorizontal: 16,
           alignItems: "center" as const,
-          borderRadius: 12,
-          backgroundColor: colors.cardBg,
         };
       case "pendientes":
         return { padding: 8, alignItems: "center" as const };
