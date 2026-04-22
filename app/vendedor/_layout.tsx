@@ -17,7 +17,7 @@ export default function VendedorLayout() {
   const getTitleByPage = () => {
     switch (currentPage) {
       case "homeVendedor":
-        return "Mi LayoutVendedor";
+        return "Mi Negocio";
       // return user?.commerceName || "Mi negocio";
       case "historialVendedor":
         return "Historial de ventas";
@@ -43,6 +43,7 @@ export default function VendedorLayout() {
         style={{
           flex: 1,
           paddingHorizontal: Spacing.xl,
+          paddingVertical: Spacing.lg,
           maxWidth: 500,
           width: "100%",
           alignSelf: "center",
