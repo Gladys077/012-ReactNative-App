@@ -20,7 +20,10 @@ export const Colors = {
     error: "#ef4444",
 
     //Badges
-    badge: "#870808",
+    badge: "#b30606",
+
+    //Background SubMenuPendientes
+    bgSubMenuPendientes: "#f7d3c8", // ambar-50
 
     // Para fondos suaves
     tipsColorBuyer: "#1D4ED8", // blue-700
@@ -97,7 +100,10 @@ export const Colors = {
     error: "#ef4444",
 
     //Badges
-    badge: "#870808",
+    badge: "#b30606",
+
+    //Background SubMenuPendientes
+    bgSubMenuPendientes: "#504d4b62", // ambar-50
 
     // Para fondos suaves
     tipsColorBuyer: "#64B5F6", // blue-400

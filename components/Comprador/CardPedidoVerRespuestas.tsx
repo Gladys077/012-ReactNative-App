@@ -3,10 +3,10 @@ import { Respuesta } from "@/types/pedidos";
 import React, { useState } from "react";
 import { View } from "react-native";
 // import { useTheme } from "../../context/ThemeContext";
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
-import CardPedidoBase from "./CardPedidoBase";
 import CardRespuestaVendedor from "./CardRespuestasVendedor";
 
 interface CardPedidoVerRespuestasProps {
@@ -88,8 +88,8 @@ export default function CardPedidoVerRespuestas({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Mostrar respuestas recibidas"
-      textoOcultar="Ocultar respuestas recibidas"
+      textoMostrar="Ocultar respuestas recibidas"
+      textoOcultar="Mostrar respuestas recibidas"
       mostrarDivisor
       mostrarMascota={expandido}
       mascotaMensaje="Para continuar, elige uno de los presupuestos recibidos."

@@ -1,3 +1,4 @@
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
@@ -5,7 +6,6 @@ import { View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
-import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoPagoEnRevisionProps {
   pedidoId: string | number;

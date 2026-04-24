@@ -1,0 +1,152 @@
+import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { useTheme } from "@/context/ThemeContext";
+import React from "react";
+import { Text, View, ViewStyle } from "react-native";
+import EstrellaUnica from "../../subcomponentes/EstrellaUnica";
+import EtiqEstadoDelPedido, {
+  EtiqEstadoType,
+} from "../../subcomponentes/EtiqEstadoDelPedido";
+import TiempoAceptacion from "../../subcomponentes/TiempoAceptacion";
+import ToggleExpandir from "../../subcomponentes/ToggleExpandir";
+import LineaDivisoria from "../../UI/LineaDivisoria";
+
+interface CardVendedorBaseProps {
+  fechaSeleccion?: string;
+  estado: EtiqEstadoType;
+  compradorNombre?: string;
+  compradorRating?: number;
+  precio?: number;
+  children?: React.ReactNode;
+  contenidoExpandible?: React.ReactNode;
+  style?: ViewStyle;
+  elevation?: number;
+}
+
+export default function CardVendedorBase({
+  fechaSeleccion,
+  estado,
+  compradorNombre,
+  compradorRating,
+  precio,
+  children,
+  contenidoExpandible,
+  style,
+  elevation,
+}: CardVendedorBaseProps) {
+  const { colors, fonts } = useTheme();
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: colors.cardBg,
+          borderRadius: BorderRadius.lg,
+          padding: Spacing.xl,
+          gap: Spacing.md,
+          elevation: elevation ?? 3,
+        },
+        style,
+      ]}
+    >
+      {/* HEADER: fecha + estado */}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoRegular,
+            color: colors.textMuted,
+          }}
+        >
+          {fechaSeleccion
+            ? new Date(fechaSeleccion).toLocaleString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : ""}
+        </Text>
+        <EtiqEstadoDelPedido estado={estado} />
+      </View>
+
+      {/* NOMBRE + RATING */}
+      {compradorNombre && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: FontSizes.md,
+              fontFamily: fonts.robotoBold,
+              color: colors.textDefault,
+              flex: 1,
+            }}
+          >
+            {compradorNombre}
+          </Text>
+          {compradorRating !== undefined && (
+            <EstrellaUnica rating={compradorRating} />
+          )}
+        </View>
+      )}
+
+      {/* TIEMPO DESDE ACEPTACIÓN */}
+      <TiempoAceptacion fechaSeleccion={fechaSeleccion} />
+
+      {/* TOGGLE VER MÁS / VER MENOS */}
+      <ToggleExpandir
+        textoMostrar="Ver más"
+        textoOcultar="Ver menos"
+        colorTexto={colors.brandSeller}
+      >
+        {contenidoExpandible}
+      </ToggleExpandir>
+
+      <LineaDivisoria />
+
+      {/* TOTAL */}
+      {precio !== undefined && (
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: Spacing.sm,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: FontSizes.md,
+              fontFamily: fonts.robotoRegular,
+              color: colors.textMuted,
+            }}
+          >
+            Total:
+          </Text>
+          <Text
+            style={{
+              fontSize: FontSizes.lg,
+              fontFamily: fonts.robotoBold,
+              color: colors.textDefault,
+            }}
+          >
+            $ {precio.toLocaleString("es-AR")}
+          </Text>
+        </View>
+      )}
+
+      {/* CONTENIDO EXTRA (botones, etc.) */}
+      {children}
+    </View>
+  );
+}

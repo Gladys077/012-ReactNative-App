@@ -1,4 +1,4 @@
-import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
@@ -38,8 +38,8 @@ export default function CardPedidoRecibido({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Califica al vendedor"
-      textoOcultar="Ocultar"
+      textoMostrar="Ocultar"
+      textoOcultar="Califica al vendedor"
       mostrarMascota
       mascotaMensaje="¡Listo! Pedido entregado. Recuerda calificar al vendedor."
       mascotaVariante="success"

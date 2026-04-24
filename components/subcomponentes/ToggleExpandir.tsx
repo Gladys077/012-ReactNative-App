@@ -89,7 +89,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
             letterSpacing: 0.3,
           }}
         >
-          {expandido ? textoMostrar : textoOcultar}
+          {expandido ? textoOcultar : textoMostrar}
         </Text>
 
         <Animated.View style={{ transform: [{ rotate: rotacion }] }}>

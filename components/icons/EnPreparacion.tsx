@@ -2,7 +2,7 @@ import * as React from "react";
 import type { SvgProps } from "react-native-svg";
 import Svg, { Path } from "react-native-svg";
 
-const EnPreparacionSolid = (props: SvgProps) => (
+const EnPreparacion = (props: SvgProps) => (
   <Svg
     width={props.width ?? 24}
     height={props.height ?? 24}
@@ -28,4 +28,4 @@ const EnPreparacionSolid = (props: SvgProps) => (
   </Svg>
 );
 
-export default EnPreparacionSolid;
+export default EnPreparacion;

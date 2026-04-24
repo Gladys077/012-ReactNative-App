@@ -97,7 +97,6 @@ export interface Respuesta {
 
 // ─── Pedido ───────────────────────────────────────────────────────────────────
 export interface Pedido {
-  fechaConfirmacion: string | undefined;
   id: string | number;
 
   estadoSistema: EstadoSistema; // fuente real

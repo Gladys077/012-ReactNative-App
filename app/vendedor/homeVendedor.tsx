@@ -60,8 +60,6 @@ const HomeVendedor = () => {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: Spacing.xl,
-          paddingBottom: Spacing.lg,
         }}
       >
         {renderTab()}

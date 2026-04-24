@@ -1,4 +1,4 @@
-import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { Spacing } from "../../constants/Tokens";
@@ -69,8 +69,8 @@ export default function CardPedidoAResolver({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Mostrar detalle"
-      textoOcultar="Ocultar detalles"
+      textoMostrar="Ocultar detalle"
+      textoOcultar="Mostrar detalles"
       mostrarMascota
       mascotaMensaje="Revisa el mensaje del vendedor y elige qué quieres hacer."
       mascotaVariante="attention"

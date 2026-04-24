@@ -1,10 +1,10 @@
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
-import CardPedidoBase from "./CardPedidoBase";
 import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
 interface CardPedidoPagoYDireccionProps {
@@ -73,8 +73,8 @@ export default function CardPedidoPagoYDireccion({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Mostrar detalles"
-      textoOcultar="Ocultar detalles"
+      textoMostrar="Ocultar detalles"
+      textoOcultar="Mostrar detalles"
       mostrarMascota
       mascotaMensaje="Elegí tu forma de pago y confirmá la dirección de entrega. ¡Gracias!"
       mascotaVariante="message"

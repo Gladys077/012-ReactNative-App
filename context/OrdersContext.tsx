@@ -178,7 +178,8 @@ interface OrdersContextValue {
   updatePedido: (id: string | number, cambios: Partial<Pedido>) => void;
   getPedidoById: (id: string | number) => Pedido | undefined;
   moverAHistorial: (id: string | number) => void;
-  removePedidoHistorial: (id: string | number) => void;
+  removePedidoHistorial: (id: string | number) => void; //este saca el pedido de la page "estado Pedido" (cuando se califica) y lo guarda en el historial
+  removePedido: (id: string | number) => void; //este saca el pedido completamente, sin guardarlo en el historial (ejemplo: cuando se cancela un pedido antes de aceptar una oferta -si es comprador- o antes de pasarle presupuesto -si es del lado del vendedor-))
 }
 
 const OrdersContext = createContext<OrdersContextValue | undefined>(undefined);
@@ -227,6 +228,10 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     setHistorial((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
+  const removePedido = useCallback((id: string | number) => {
+    setPedidos((prev) => prev.filter((p) => p.id !== id));
+  }, []);
+
   return (
     <OrdersContext.Provider
       value={{
@@ -238,6 +243,7 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
         moverAHistorial,
         historial,
         removePedidoHistorial,
+        removePedido,
       }}
     >
       {children}

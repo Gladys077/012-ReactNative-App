@@ -1,3 +1,4 @@
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
@@ -9,7 +10,6 @@ import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import LinkFraseIcon from "../subcomponentes/VerBottomSheet";
 import Button from "../UI/Button/Button";
 import LineaDivisoria from "../UI/LineaDivisoria";
-import CardPedidoBase from "./CardPedidoBase";
 
 interface CardPedidoEnProcesoProps {
   pedidoId: string | number;

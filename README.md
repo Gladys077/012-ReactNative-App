@@ -165,7 +165,7 @@ const StatusIcon = ({ role, active, icon: Icon }) => {
 ## ⚡ TIPS PRO
 
 1. **Usa `getColorByRole()`** cuando necesitemos el color exacto
-2. **Usa `getTailwindClass()`** para clases CSS
+2. **No usamos NativeWind ni Tailwind para las clases CSS** (así evitamos problemas versiones y el motor RN)
 3. **Siempre importa desde `@/constants/Colors`**
 4. **En caso de duda, usa color directo** (siempre funciona)
 
@@ -181,3 +181,5 @@ const StatusIcon = ({ role, active, icon: Icon }) => {
 // ✅ Siempre funciona:
 <Text style={{ color: getColorByRole('seller') }}>Texto</Text>
 ```
+
+### 🥰 Las animaciones de la mascota tipeando y gif delivery son de LottieFile Free.

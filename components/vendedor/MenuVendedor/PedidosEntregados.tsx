@@ -13,10 +13,9 @@ const PedidosEntregados = ({ pedidos }: Props) => {
   return (
     <ScrollView
       contentContainerStyle={{
-        padding: Spacing.md,
-        paddingTop: Spacing.xl,
+        paddingHorizontal: Spacing.xl,
+        paddingVertical: Spacing.xl,
         gap: Spacing.lg,
-        paddingBottom: Spacing.xl,
       }}
       showsVerticalScrollIndicator={false}
     >

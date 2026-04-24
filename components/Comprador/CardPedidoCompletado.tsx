@@ -1,4 +1,4 @@
-import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect, useRef } from "react";
@@ -28,8 +28,6 @@ export default function CardPedidoCompletado({
       useNativeDriver: false,
     }).start(() => {
       onDesaparecer?.();
-      // TODO: guardar en historial en backend
-      // router.push("/comprador/historialComprador");
     });
   }, []);
 

@@ -1,4 +1,4 @@
-import CardPedidoBase from "@/components/Comprador/CardPedidoBase";
+import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
@@ -37,8 +37,8 @@ export default function CardPedidoEnPreparacion({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Mostrar detalles"
-      textoOcultar="Ocultar detalles"
+      textoMostrar="Ocultar detalles"
+      textoOcultar="Mostrar detalles"
       mostrarMascota
       mascotaMensaje="¡Buenas noticias! Tu pago fue confirmado y tu pedido está siendo preparado."
       mascotaVariante="success"
