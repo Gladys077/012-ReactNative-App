@@ -37,8 +37,8 @@ export default function CardPedidoEnPreparacion({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar detalles"
-      textoOcultar="Mostrar detalles"
+      textoMostrar="Mostrar detalles"
+      textoOcultar="Ocultar detalles"
       mostrarMascota
       mascotaMensaje="¡Buenas noticias! Tu pago fue confirmado y tu pedido está siendo preparado."
       mascotaVariante="success"

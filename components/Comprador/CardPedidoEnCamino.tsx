@@ -35,8 +35,8 @@ export default function CardPedidoEnCamino({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar detalles"
-      textoOcultar="Mostrar detalles"
+      textoMostrar="Mostrar detalles"
+      textoOcultar="Ocultar detalles"
       mostrarMascota
       mascotaMensaje="¡Tu pedido ya va en camino!"
       mascotaVariante="success"

@@ -13,6 +13,7 @@ import {
 import { FlechaAbajo } from "../icons";
 
 type ToggleExpandirProps = {
+  expandidoInicial?: boolean;
   textoMostrar?: string;
   textoOcultar?: string;
   colorTexto?: string;
@@ -22,6 +23,7 @@ type ToggleExpandirProps = {
 };
 
 const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
+  expandidoInicial = false,
   textoMostrar = "Mostrar contenido",
   textoOcultar = "Ocultar contenido",
   colorTexto,
@@ -30,8 +32,10 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
   children,
 }) => {
   const { colors, fonts } = useTheme();
-  const [expandido, setExpandido] = useState(false);
-  const animacion = useRef(new Animated.Value(0)).current;
+  const [expandido, setExpandido] = useState(expandidoInicial);
+  const animacion = useRef(
+    new Animated.Value(expandidoInicial ? 1 : 0),
+  ).current;
 
   useEffect(() => {
     if (
@@ -60,7 +64,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
 
   const rotacion = animacion.interpolate({
     inputRange: [0, 1],
-    outputRange: ["180deg", "0deg"],
+    outputRange: ["0deg", "180deg"],
   });
 
   const altura = animacion.interpolate({
@@ -119,33 +123,3 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
 };
 
 export default ToggleExpandir;
-
-//MODO DE USO: en CardPedidoVerRespuestas
-{
-  /* <ToggleExpandir
-  textoMostrar="Mostrar respuestas recibidas"
-  textoOcultar="Ocultar respuestas recibidas"
-  colorTexto={colors.brandBuyer}
-  onToggle={(estado) => console.log("expandido:", estado)}
->
-  {respuestas.length > 0 && (
-    <View style={{ gap: Spacing.xxl, marginTop: Spacing.sm }}>
-      {respuestas.map((respuesta) => (
-        <CardRespuestaVendedor
-          key={respuesta.id}
-          id={respuesta.id}
-          vendedorNombre={respuesta.vendedorNombre}
-          rating={respuesta.rating}
-          precio={respuesta.precio}
-          nota={respuesta.nota}
-          duracionCronometro={respuesta.duracionCronometro}
-          onAceptar={onAceptarRespuesta}
-          onCancelar={onCancelarRespuesta}
-          onVerNota={onVerNota}
-          onFinishCronometro={() => onFinishCronometro?.(respuesta.id)}
-        />
-      ))}
-    </View>
-  )}
-</ToggleExpandir> */
-}

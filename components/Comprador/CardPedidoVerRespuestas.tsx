@@ -80,7 +80,7 @@ export default function CardPedidoVerRespuestas({
       </View>
     );
 
-  const [expandido, setExpandido] = useState(true);
+  const [expandido, setExpandido] = useState(false);
 
   return (
     <CardPedidoBase
@@ -88,8 +88,8 @@ export default function CardPedidoVerRespuestas({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar respuestas recibidas"
-      textoOcultar="Mostrar respuestas recibidas"
+      textoMostrar="Mostrar respuestas recibidas"
+      textoOcultar="Ocultar respuestas recibidas"
       mostrarDivisor
       mostrarMascota={expandido}
       mascotaMensaje="Para continuar, elige uno de los presupuestos recibidos."

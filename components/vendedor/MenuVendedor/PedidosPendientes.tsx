@@ -3,6 +3,11 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
+import CardEnCamino from "../CardsVendedor/CardEnCamino";
+import CardEnPreparacion from "../CardsVendedor/CardEnPreparación";
+import CardListoParaEnviar from "../CardsVendedor/CardListoParaEnviar";
+import CardPagoPendiente from "../CardsVendedor/CardPagoPendiente";
+import CardPagoRecibido from "../CardsVendedor/CardPagoRecibido";
 import SubMenuPendientes, {
   estadoSistemaASubTab,
   SUB_TABS,
@@ -11,15 +16,91 @@ import SubMenuPendientes, {
 
 interface Props {
   pedidos: Pedido[];
+  onVerPedido: (id: string | number) => void;
+  onVerNota?: (nota: string) => void;
+  onPagoConfirmado: (id: string | number) => void;
+  onPagoRechazado: (id: string | number) => void;
+  onMensaje: (id: string | number) => void;
+  onListoParaEnviar: (id: string | number) => void;
+  onEntregado: (id: string | number) => void;
 }
 
-const PedidosPendientes = ({ pedidos }: Props) => {
+// ─── Renderer por subtab ──────────────────────────────────────────────────────
+
+function renderCard(
+  pedido: Pedido,
+  subTab: SubTabPendiente,
+  handlers: Omit<Props, "pedidos">,
+) {
+  const common = {
+    key: pedido.id,
+    pedidoId: pedido.id,
+    fechaSeleccion: pedido.fechaSeleccion,
+    compradorNombre: pedido.compradorNombre,
+    compradorRating: pedido.compradorRating,
+    textoPedido: pedido.textoPedido,
+    nota: pedido.respuestaSeleccionada?.nota,
+    precio: pedido.respuestaSeleccionada?.precio ?? 0,
+    direccionComprador: pedido.direccionComprador,
+    telefono: pedido.respuestaSeleccionada?.telefono,
+    onVerPedido: handlers.onVerPedido,
+    onVerNota: handlers.onVerNota,
+  };
+
+  switch (subTab) {
+    case "esperando_pago":
+      return <CardPagoPendiente {...common} />;
+
+    case "con_comprobante":
+      return (
+        <CardPagoRecibido
+          {...common}
+          onPagoConfirmado={handlers.onPagoConfirmado}
+          onPagoRechazado={handlers.onPagoRechazado}
+          onMensaje={handlers.onMensaje}
+        />
+      );
+
+    case "en_preparacion":
+      return (
+        <CardEnPreparacion
+          {...common}
+          onListoParaEnviar={handlers.onListoParaEnviar}
+        />
+      );
+
+    case "listo_para_enviar":
+      return (
+        <CardListoParaEnviar
+          {...common}
+          onListoParaEnviar={handlers.onListoParaEnviar}
+        />
+      );
+
+    case "en_camino":
+      return (
+        <CardEnCamino {...common} onListoParaEnviar={handlers.onEntregado} />
+      );
+  }
+}
+
+// ─── Componente ───────────────────────────────────────────────────────────────
+
+const PedidosPendientes = ({
+  pedidos,
+  onVerPedido,
+  onVerNota,
+  onPagoConfirmado,
+  onPagoRechazado,
+  onMensaje,
+  onListoParaEnviar,
+  onEntregado,
+}: Props) => {
   const { colors, fonts } = useTheme();
   const [subTabActivo, setSubTabActivo] = useState<SubTabPendiente | null>(
     null,
   );
 
-  // Pedidos filtrados por subtab activo
   const pedidosFiltrados = subTabActivo
     ? pedidos.filter(
         (p) => estadoSistemaASubTab[p.estadoSistema] === subTabActivo,
@@ -28,7 +109,16 @@ const PedidosPendientes = ({ pedidos }: Props) => {
 
   const labelSubTab = SUB_TABS.find((t) => t.key === subTabActivo)?.label ?? "";
 
-  // Vista de cards del subtab seleccionado
+  const handlers = {
+    onVerPedido,
+    onVerNota,
+    onPagoConfirmado,
+    onPagoRechazado,
+    onMensaje,
+    onListoParaEnviar,
+    onEntregado,
+  };
+
   if (subTabActivo !== null) {
     return (
       <View style={{ flex: 1 }}>
@@ -71,11 +161,10 @@ const PedidosPendientes = ({ pedidos }: Props) => {
               fontFamily: fonts.robotoRegular,
             }}
           >
-            {pedidosFiltrados.length}
+            ({pedidosFiltrados.length})
           </Text>
         </Pressable>
 
-        {/* Cards — placeholder hasta hacer las cards del vendedor */}
         <ScrollView
           contentContainerStyle={{
             padding: Spacing.md,
@@ -96,18 +185,13 @@ const PedidosPendientes = ({ pedidos }: Props) => {
               No hay pedidos en este estado.
             </Text>
           ) : (
-            pedidosFiltrados.map((p) => (
-              <Text key={p.id} style={{ color: colors.textDefault }}>
-                {p.compradorNombre} — {p.estadoSistema}
-              </Text>
-            ))
+            pedidosFiltrados.map((p) => renderCard(p, subTabActivo, handlers))
           )}
         </ScrollView>
       </View>
     );
   }
 
-  // Vista del submenú
   return (
     <SubMenuPendientes pedidos={pedidos} onSelectSubTab={setSubTabActivo} />
   );

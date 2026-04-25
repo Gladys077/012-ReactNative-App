@@ -69,8 +69,8 @@ export default function CardPedidoAResolver({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar detalle"
-      textoOcultar="Mostrar detalles"
+      textoMostrar="Mostrar detalle"
+      textoOcultar="Ocultar detalles"
       mostrarMascota
       mascotaMensaje="Revisa el mensaje del vendedor y elige qué quieres hacer."
       mascotaVariante="attention"

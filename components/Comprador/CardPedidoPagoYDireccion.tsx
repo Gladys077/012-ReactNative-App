@@ -73,8 +73,8 @@ export default function CardPedidoPagoYDireccion({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar detalles"
-      textoOcultar="Mostrar detalles"
+      textoMostrar="Mostrar detalles"
+      textoOcultar="Ocultar detalles"
       mostrarMascota
       mascotaMensaje="Elegí tu forma de pago y confirmá la dirección de entrega. ¡Gracias!"
       mascotaVariante="message"

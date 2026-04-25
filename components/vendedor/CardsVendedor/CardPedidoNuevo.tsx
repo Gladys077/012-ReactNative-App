@@ -5,6 +5,7 @@ import { Alert, Text, TextInput, View } from "react-native";
 import { Enviar } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import Button from "../../UI/Button/Button";
+import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
 interface CardPedidoNuevoProps {
@@ -14,7 +15,6 @@ interface CardPedidoNuevoProps {
   compradorRating?: number;
   textoPedido: string;
   estadoSistema: "nuevo" | "presupuestado";
-  // Datos ya enviados (cuando estadoSistema === "presupuestado")
   precioEnviado?: number;
   notaEnviada?: string;
   onEnviarPresupuesto: (
@@ -26,14 +26,15 @@ interface CardPedidoNuevoProps {
 }
 
 const ContenidoExpandible = ({
+  pedidoId,
   textoPedido,
   estadoSistema,
   precioEnviado,
   notaEnviada,
   onEnviarPresupuesto,
   onEliminarPedido,
-  pedidoId,
 }: {
+  pedidoId: string | number;
   textoPedido: string;
   estadoSistema: "nuevo" | "presupuestado";
   precioEnviado?: number;
@@ -44,9 +45,9 @@ const ContenidoExpandible = ({
     nota?: string,
   ) => void;
   onEliminarPedido: (pedidoId: string | number) => void;
-  pedidoId: string | number;
 }) => {
   const { colors, fonts } = useTheme();
+
   const [nota, setNota] = useState(notaEnviada ?? "");
   const [precio, setPrecio] = useState(
     precioEnviado ? String(precioEnviado) : "",
@@ -81,109 +82,171 @@ const ContenidoExpandible = ({
   };
 
   return (
-    <View style={{ gap: Spacing.md }}>
-      {/* Texto del pedido */}
-      <Text
+    <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
+      {/* Texto del pedido — fondo diferenciado */}
+      <View
         style={{
-          fontSize: FontSizes.sm,
-          fontFamily: fonts.robotoRegular,
-          color: colors.textDefault,
-          lineHeight: 22,
+          backgroundColor: colors.textSecondaryBg,
+          borderRadius: BorderRadius.md,
+          padding: Spacing.md,
         }}
       >
-        {textoPedido}
-      </Text>
-
-      {/* Nota del vendedor */}
-      <TextInput
-        placeholder="Nota del vendedor (opcional)"
-        placeholderTextColor={colors.textMuted}
-        value={nota}
-        onChangeText={setNota}
-        editable={!yaPresupuestado}
-        multiline
-        style={{
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: BorderRadius.md,
-          padding: Spacing.md,
-          fontSize: FontSizes.sm,
-          fontFamily: fonts.robotoRegular,
-          color: colors.textDefault,
-          backgroundColor: yaPresupuestado
-            ? colors.textSecondaryBg
-            : colors.cardBg,
-          minHeight: 60,
-          textAlignVertical: "top",
-        }}
-      />
-
-      {/* Input precio */}
-      <TextInput
-        placeholder="Total $"
-        placeholderTextColor={colors.textMuted}
-        value={precio}
-        onChangeText={(v) => {
-          setPrecio(v);
-          if (errorPrecio) setErrorPrecio("");
-        }}
-        editable={!yaPresupuestado}
-        keyboardType="numeric"
-        style={{
-          borderWidth: 1,
-          borderColor: errorPrecio
-            ? colors.textError
-            : yaPresupuestado
-              ? colors.border
-              : colors.brandSeller,
-          borderRadius: BorderRadius.md,
-          padding: Spacing.md,
-          fontSize: FontSizes.sm,
-          fontFamily: fonts.robotoRegular,
-          color: colors.textDefault,
-          backgroundColor: yaPresupuestado
-            ? colors.textSecondaryBg
-            : colors.cardBg,
-        }}
-      />
-      {errorPrecio !== "" && (
         <Text
           style={{
-            fontSize: FontSizes.xs,
-            color: colors.textError,
+            fontSize: FontSizes.sm,
             fontFamily: fonts.robotoRegular,
+            color: colors.textDefault,
+            lineHeight: 22,
           }}
         >
-          {errorPrecio}
+          {textoPedido}
         </Text>
-      )}
+      </View>
 
-      {/* Botones */}
-      <View style={{ flexDirection: "row", gap: Spacing.md }}>
-        {/* Eliminar — solo antes de presupuestar */}
-        {!yaPresupuestado && (
-          <Button
-            section="seller"
-            variant="secondary"
-            width="half"
-            onPress={handleEliminar}
-          >
-            Eliminar pedido
-          </Button>
-        )}
-
-        {/* Enviar precio / Precio enviado */}
-        <Button
-          section="seller"
-          variant="primary"
-          disabled={yaPresupuestado}
-          width={yaPresupuestado ? "full" : "half"}
-          icon={yaPresupuestado ? undefined : Enviar}
-          iconPosition="left"
-          onPress={yaPresupuestado ? undefined : handleEnviar}
+      {/* Label + Input nota */}
+      <View style={{ gap: Spacing.xs, marginVertical: Spacing.sm }}>
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoMedium,
+            color: colors.textOnColor,
+          }}
         >
-          {yaPresupuestado ? "✓  Precio enviado" : "Enviar precio"}
-        </Button>
+          Tu nota{" "}
+          <Text style={{ fontFamily: fonts.robotoRegular }}>(opcional)</Text>
+        </Text>
+        <TextInput
+          placeholder="Escribe aquí cualquier aclaración o detalle que quieras agregar a tu presupuesto."
+          placeholderTextColor={colors.textMuted}
+          value={nota}
+          onChangeText={setNota}
+          editable={!yaPresupuestado}
+          multiline
+          textAlignVertical="top"
+          style={{
+            borderWidth: 1,
+            borderColor: colors.inputBorder,
+            borderRadius: BorderRadius.md,
+            padding: Spacing.md,
+            fontSize: FontSizes.sm,
+            fontStyle: "italic",
+            fontFamily: fonts.robotoRegular,
+            color: colors.textDefault,
+            backgroundColor: yaPresupuestado
+              ? colors.textSecondaryBg
+              : colors.cardBg,
+            minHeight: 64,
+          }}
+        />
+      </View>
+
+      {/* Label + Input precio con prefijo $ */}
+      <View style={{ gap: Spacing.xs }}>
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoMedium,
+            color: colors.textOnColor,
+          }}
+        >
+          Tu precio
+        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: errorPrecio
+              ? colors.textError
+              : yaPresupuestado
+                ? colors.border
+                : colors.brandSeller,
+            borderRadius: BorderRadius.md,
+            backgroundColor: yaPresupuestado
+              ? colors.textSecondaryBg
+              : colors.cardBg,
+            paddingHorizontal: Spacing.md,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: FontSizes.md,
+              fontFamily: fonts.robotoBold,
+              color: colors.textDefault,
+              marginRight: Spacing.xs,
+            }}
+          >
+            $
+          </Text>
+          <TextInput
+            placeholder="0"
+            placeholderTextColor={colors.textMuted}
+            value={precio}
+            onChangeText={(v) => {
+              setPrecio(v);
+              if (errorPrecio) setErrorPrecio("");
+            }}
+            editable={!yaPresupuestado}
+            keyboardType="numeric"
+            textAlign="right"
+            style={{
+              flex: 1,
+              fontSize: FontSizes.md,
+              fontFamily: fonts.robotoBold,
+              color: colors.textDefault,
+              paddingVertical: Spacing.md,
+            }}
+          />
+        </View>
+        {errorPrecio !== "" && (
+          <Text
+            style={{
+              fontSize: FontSizes.xs,
+              color: colors.textError,
+              fontFamily: fonts.robotoRegular,
+            }}
+          >
+            {errorPrecio}
+          </Text>
+        )}
+      </View>
+
+      <LineaDivisoria />
+
+      {/* Botones — flex row para ocupar ancho completo */}
+      <View style={{ flexDirection: "row", gap: Spacing.md }}>
+        {!yaPresupuestado ? (
+          <>
+            <View style={{ flex: 1 }}>
+              <Button
+                section="seller"
+                variant="secondary"
+                width="full"
+                onPress={handleEliminar}
+              >
+                Eliminar pedido
+              </Button>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                section="seller"
+                variant="primary"
+                width="full"
+                icon={Enviar}
+                iconPosition="left"
+                onPress={handleEnviar}
+              >
+                Enviar precio
+              </Button>
+            </View>
+          </>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <Button section="seller" variant="primary" width="full" disabled>
+              ✓ Precio enviado
+            </Button>
+          </View>
+        )}
       </View>
     </View>
   );

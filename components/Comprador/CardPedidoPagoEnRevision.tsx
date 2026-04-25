@@ -41,7 +41,7 @@ export default function CardPedidoPagoEnRevision({
   onVerPedido,
 }: CardPedidoPagoEnRevisionProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(false);
+  const [expandido, setExpandido] = useState(true);
 
   // const horaFormateada = fechaSeleccion
   //   ? new Date(fechaSeleccion).toLocaleTimeString("es-AR", {

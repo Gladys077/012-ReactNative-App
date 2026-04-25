@@ -30,6 +30,7 @@ export const Colors = {
 
     // Bordes cards dentro de las cards del comprador
     borderTopBottom: "#72a5cf", //
+    borderTopBottomSeller: "#ed6728",
 
     // Superficies
     headerFooterBg: "rgba(255,255,255,0.8)",
@@ -108,8 +109,9 @@ export const Colors = {
     // Para fondos suaves
     tipsColorBuyer: "#64B5F6", // blue-400
 
-    // Bordes cards dentro de las cards del comprador
-    borderTopBottom: "#72a5cf", //
+    // Bordes cards dentro de las cards
+    borderTopBottom: "#72a5cf",
+    borderTopBottomSeller: "#ed6728",
 
     // Superficies
     headerFooterBg: "rgba(17,24,39,.9)",
@@ -128,7 +130,10 @@ export const Colors = {
     brandSellerSoft: "#78350F", //ambar-900 = fondo suave
 
     // Inputs (InputField)
-    inputBorder: "#333333",
+
+    // Inputs (InputField)
+    inputBorder: "#E0E0E0",
+    // inputBorder: "#333333",
 
     // EtiquetasEstadoDelPedido
     statusRedBg: "#7F1D1D",

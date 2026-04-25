@@ -1,6 +1,6 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
+import React, { useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
 import EstrellaUnica from "../../subcomponentes/EstrellaUnica";
 import EtiqEstadoDelPedido, {
@@ -34,6 +34,7 @@ export default function CardVendedorBase({
   elevation,
 }: CardVendedorBaseProps) {
   const { colors, fonts } = useTheme();
+  const [expandido, setExpandido] = useState(false);
 
   return (
     <View
@@ -41,9 +42,13 @@ export default function CardVendedorBase({
         {
           backgroundColor: colors.cardBg,
           borderRadius: BorderRadius.lg,
-          padding: Spacing.xl,
+          borderWidth: 1,
+          borderColor: colors.borderTopBottomSeller,
+          paddingHorizontal: Spacing.xl,
+          paddingVertical: Spacing.xxl,
           gap: Spacing.md,
-          elevation: elevation ?? 3,
+          elevation: elevation ?? 5,
+          marginBottom: Spacing.md,
         },
         style,
       ]}
@@ -81,7 +86,7 @@ export default function CardVendedorBase({
           style={{
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-between",
+            gap: Spacing.md,
           }}
         >
           <Text
@@ -89,7 +94,7 @@ export default function CardVendedorBase({
               fontSize: FontSizes.md,
               fontFamily: fonts.robotoBold,
               color: colors.textDefault,
-              flex: 1,
+              // flex: 1,
             }}
           >
             {compradorNombre}
@@ -105,14 +110,15 @@ export default function CardVendedorBase({
 
       {/* TOGGLE VER MÁS / VER MENOS */}
       <ToggleExpandir
-        textoMostrar="Ver más"
-        textoOcultar="Ver menos"
+        textoMostrar="Ver menos"
+        textoOcultar="Ver más"
         colorTexto={colors.brandSeller}
+        onToggle={(val) => setExpandido(val)}
       >
         {contenidoExpandible}
       </ToggleExpandir>
 
-      <LineaDivisoria />
+      {!expandido && <LineaDivisoria />}
 
       {/* TOTAL */}
       {precio !== undefined && (

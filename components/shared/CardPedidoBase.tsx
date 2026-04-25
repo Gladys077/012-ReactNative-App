@@ -3,7 +3,7 @@ import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View, ViewStyle } from "react-native";
 import EtiqEstadoDelPedido, {
-    EtiqEstadoType,
+  EtiqEstadoType,
 } from "../subcomponentes/EtiqEstadoDelPedido";
 import MascotaConMensaje from "../subcomponentes/MascotaConMensaje";
 import PedidoNumero from "../subcomponentes/PedidoNumero";
@@ -113,15 +113,15 @@ export default function CardPedidoBase({
       {/* TOGGLE OPCIONAL */}
       {mostrarToggle && onToggleExpandir && (
         <ToggleExpandir
+          expandidoInicial={expandido}
           textoMostrar={textoMostrar}
           textoOcultar={textoOcultar}
           colorTexto={colors.brandBuyer}
           onToggle={onToggleExpandir}
-        />
+        >
+          {contenidoExpandible}
+        </ToggleExpandir>
       )}
-
-      {/* AQUÍ VA EL CONTENIDO EXPANDIBLE, DESPUÉS DE TODO */}
-      {expandido && contenidoExpandible}
     </View>
   );
 }

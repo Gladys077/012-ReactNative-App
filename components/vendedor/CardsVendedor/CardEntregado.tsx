@@ -2,7 +2,7 @@ import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
-import { Entregado } from "../../icons";
+import { Estrella100 } from "../../icons";
 import DatosComprador from "../../subcomponentes/DatosComprador";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
@@ -11,7 +11,7 @@ import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
-interface CardEnPreparacionProps {
+interface CardPedidoEntregadoProps {
   pedidoId: string | number;
   fechaSeleccion?: string;
   compradorNombre?: string;
@@ -23,7 +23,7 @@ interface CardEnPreparacionProps {
   telefono?: string;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
-  onListoParaEnviar: (id: string | number) => void;
+  onCalificar: (id: string | number) => void;
 }
 
 const ContenidoExpandible = ({
@@ -35,7 +35,7 @@ const ContenidoExpandible = ({
   telefono,
   onVerPedido,
   onVerNota,
-  onListoParaEnviar,
+  onCalificar,
 }: {
   pedidoId: string | number;
   textoPedido: string;
@@ -45,7 +45,7 @@ const ContenidoExpandible = ({
   telefono?: string;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
-  onListoParaEnviar: (id: string | number) => void;
+  onCalificar: (id: string | number) => void;
 }) => {
   const { colors, fonts } = useTheme();
 
@@ -79,24 +79,24 @@ const ContenidoExpandible = ({
       {/* Datos del comprador */}
       <DatosComprador direccion={direccionComprador} telefono={telefono} />
 
-      {/* CTA Listo para enviar */}
+      {/* CTA Calificar */}
       <Button
         section="seller"
         variant="primary"
         width="full"
-        icon={Entregado}
+        icon={Estrella100}
         iconPosition="left"
-        onPress={() => onListoParaEnviar(pedidoId)}
+        onPress={() => onCalificar(pedidoId)}
       >
-        Entregado
+        Calificar
       </Button>
     </View>
   );
 };
 
-const ESTADO: EtiqEstadoType = "En camino";
+const ESTADO: EtiqEstadoType = "Entregado";
 
-export default function CardEnPreparacion({
+export default function CardPedidoEntregado({
   pedidoId,
   fechaSeleccion,
   compradorNombre,
@@ -108,8 +108,8 @@ export default function CardEnPreparacion({
   telefono,
   onVerPedido,
   onVerNota,
-  onListoParaEnviar,
-}: CardEnPreparacionProps) {
+  onCalificar,
+}: CardPedidoEntregadoProps) {
   return (
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}
@@ -127,7 +127,7 @@ export default function CardEnPreparacion({
           telefono={telefono}
           onVerPedido={onVerPedido}
           onVerNota={onVerNota}
-          onListoParaEnviar={onListoParaEnviar}
+          onCalificar={onCalificar}
         />
       }
     />

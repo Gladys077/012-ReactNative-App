@@ -3,9 +3,9 @@ import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
 import { Telephone } from "../icons";
+import CalificacionEstrellas from "../subcomponentes/CalificacionEstrellas";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
-import CalificacionEstrellas from "../UI/CalificacionEstrellas";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardRespVendPedRecibidoProps {

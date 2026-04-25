@@ -202,7 +202,7 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     fechaSeleccion={pedido.fechaSeleccion}
-                    fechaConfirmacion={pedido.fechaConfirmacion}
+                    // fechaConfirmacion={pedido.fechaConfirmacion}
                     vendedorNombre={r.vendedorNombre}
                     rating={r.rating}
                     telefono={r.telefono}

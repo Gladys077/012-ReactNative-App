@@ -2,7 +2,7 @@ import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
-import { EnCaminoOutline } from "../../icons";
+import { Entregado } from "../../icons";
 import DatosComprador from "../../subcomponentes/DatosComprador";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
@@ -11,7 +11,7 @@ import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
-interface CardListoParaEnviarProps {
+interface CardEnCaminoProps {
   pedidoId: string | number;
   fechaSeleccion?: string;
   compradorNombre?: string;
@@ -84,19 +84,19 @@ const ContenidoExpandible = ({
         section="seller"
         variant="primary"
         width="full"
-        icon={EnCaminoOutline}
+        icon={Entregado}
         iconPosition="left"
         onPress={() => onListoParaEnviar(pedidoId)}
       >
-        En Camino
+        Entregado
       </Button>
     </View>
   );
 };
 
-const ESTADO: EtiqEstadoType = "Listo. Enviar!";
+const ESTADO: EtiqEstadoType = "En camino";
 
-export default function CardListoParaEnviar({
+export default function CardEnCamino({
   pedidoId,
   fechaSeleccion,
   compradorNombre,
@@ -109,7 +109,7 @@ export default function CardListoParaEnviar({
   onVerPedido,
   onVerNota,
   onListoParaEnviar,
-}: CardListoParaEnviarProps) {
+}: CardEnCaminoProps) {
   return (
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}

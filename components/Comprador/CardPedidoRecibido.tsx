@@ -38,8 +38,8 @@ export default function CardPedidoRecibido({
       expandido={expandido}
       onToggleExpandir={() => setExpandido(!expandido)}
       mostrarToggle
-      textoMostrar="Ocultar"
-      textoOcultar="Califica al vendedor"
+      textoMostrar="Califica al vendedor"
+      textoOcultar="Ocultar"
       mostrarMascota
       mascotaMensaje="¡Listo! Pedido entregado. Recuerda calificar al vendedor."
       mascotaVariante="success"
