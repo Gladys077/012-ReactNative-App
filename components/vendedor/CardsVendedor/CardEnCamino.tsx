@@ -50,7 +50,7 @@ const ContenidoExpandible = ({
   const { colors, fonts } = useTheme();
 
   return (
-    <View style={{ gap: Spacing.md }}>
+    <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
       {/* Ver pedido */}
       <VerBottomSheet onPress={() => onVerPedido(pedidoId)} variant="seller" />
 

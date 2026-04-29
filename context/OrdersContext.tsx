@@ -107,6 +107,15 @@ const mockPedidos: Pedido[] = [
       rating: 4.0,
       precio: 4150,
     },
+    comprobantes: [
+      {
+        id: "c1",
+        uri: "https://picsum.photos/400/600",
+        fechaEnvio: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
+        estado: "rechazado",
+        motivoRechazo: "El monto no coincide con el total del pedido",
+      },
+    ],
   },
   {
     id: "6",
@@ -127,6 +136,27 @@ const mockPedidos: Pedido[] = [
       rating: 4.0,
       precio: 4250,
     },
+    comprobantes: [
+      {
+        id: "c2",
+        uri: "https://picsum.photos/400/601",
+        fechaEnvio: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
+        estado: "rechazado",
+        motivoRechazo: "Imagen borrosa, no se puede leer",
+      },
+      {
+        id: "c3",
+        uri: "https://picsum.photos/400/602",
+        fechaEnvio: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+        estado: "pendiente",
+      },
+      {
+        id: "c4",
+        uri: "https://picsum.photos/400/602",
+        fechaEnvio: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+        estado: "pendiente",
+      },
+    ],
   },
   {
     id: "7",

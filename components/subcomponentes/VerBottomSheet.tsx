@@ -40,19 +40,14 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
       <Text
         style={{
           fontFamily: fonts.robotoMedium,
-          color: colors.brandBuyer,
+          color,
           fontSize: FontSizes.base,
           marginHorizontal: 4,
         }}
       >
         {label}
       </Text>
-      <Icon
-        width={20}
-        height={20}
-        fill={colors.brandBuyer}
-        stroke={colors.brandBuyer}
-      />
+      <Icon width={20} height={20} fill={color} stroke={color} />
     </Pressable>
   );
 };

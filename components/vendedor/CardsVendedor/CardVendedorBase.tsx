@@ -108,18 +108,6 @@ export default function CardVendedorBase({
       {/* TIEMPO DESDE ACEPTACIÓN */}
       <TiempoAceptacion fechaSeleccion={fechaSeleccion} />
 
-      {/* TOGGLE VER MÁS / VER MENOS */}
-      <ToggleExpandir
-        textoMostrar="Ver menos"
-        textoOcultar="Ver más"
-        colorTexto={colors.brandSeller}
-        onToggle={(val) => setExpandido(val)}
-      >
-        {contenidoExpandible}
-      </ToggleExpandir>
-
-      {!expandido && <LineaDivisoria />}
-
       {/* TOTAL */}
       {precio !== undefined && (
         <View
@@ -128,6 +116,7 @@ export default function CardVendedorBase({
             justifyContent: "flex-end",
             alignItems: "center",
             gap: Spacing.sm,
+            paddingBottom: Spacing.md,
           }}
         >
           <Text
@@ -150,6 +139,19 @@ export default function CardVendedorBase({
           </Text>
         </View>
       )}
+
+      {/* TOGGLE VER MÁS / VER MENOS */}
+      <ToggleExpandir
+        textoMostrar="Ver más"
+        textoOcultar="Ver menos"
+        colorTexto={colors.brandSeller}
+        onToggle={(val) => setExpandido(val)}
+      >
+        <LineaDivisoria />
+        {contenidoExpandible}
+      </ToggleExpandir>
+
+      {!expandido && <LineaDivisoria />}
 
       {/* CONTENIDO EXTRA (botones, etc.) */}
       {children}

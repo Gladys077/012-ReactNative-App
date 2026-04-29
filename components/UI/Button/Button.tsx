@@ -97,7 +97,7 @@ const Button: React.FC<ButtonProps> = ({
     alignItems: "center",
     // Sombra nativa (uso tokens.shadows para control)
     ...shadows.md,
-    opacity: disabled ? 0.6 : 1,
+    opacity: disabled ? 0.4 : 1,
   };
 
   // Se aplica al btn principal (caja EXTERIOR del btn). Si pasamos styleAdd, lo respetamos (se aplica al final)

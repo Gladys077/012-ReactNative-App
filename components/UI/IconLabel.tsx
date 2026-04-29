@@ -180,7 +180,7 @@ export const IconLabel = ({
       <Text
         style={{
           color: getLabelColor(),
-          fontSize: FontSizes.xs,
+          fontSize: FontSizes.sm,
           fontFamily: active ? fonts.robotoMedium : fonts.robotoRegular,
           marginTop: 4,
           textAlign: "center",

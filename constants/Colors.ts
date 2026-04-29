@@ -1,7 +1,7 @@
 export const Colors = {
   light: {
     // Textos
-    textDefault: "#374151", // gray-700
+    textDefault: "#252c36", // gray-800
     textMuted: "#6b7280", // gray-500
     textError: "#ef4444", // red-500
     textOnColor: "#ffffff",

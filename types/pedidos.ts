@@ -32,7 +32,7 @@ export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   pago_enviado: "Pago en revisión",
   pago_rechazado: "A resolver",
   en_preparacion: "En preparación",
-  listo_para_enviar: "En preparación", // el comprador no ve este sub-estado
+  listo_para_enviar: "En preparación", // el comprador no ve este sub-estado "listo para enviar"
   en_camino: "En camino",
   entregado_pendiente_calif: "Pedido recibido",
   completado: "Completado",
@@ -95,6 +95,15 @@ export interface Respuesta {
   duracionCronometro?: number;
 }
 
+// ─── Comprobante de pago ──────────────────────────────────────────────────────
+export interface Comprobante {
+  id: string;
+  uri: string; // URI local o URL remota de la imagen/PDF
+  fechaEnvio: string; // ISO timestamp
+  estado: "pendiente" | "aprobado" | "rechazado";
+  motivoRechazo?: string; // solo si estado === "rechazado"
+}
+
 // ─── Pedido ───────────────────────────────────────────────────────────────────
 export interface Pedido {
   id: string | number;
@@ -113,6 +122,8 @@ export interface Pedido {
 
   // Pago
   formaPago?: "transferencia" | "efectivo";
+  comprobantes?: Comprobante[]; // ordenados por fechaEnvio asc (Lio, tené en cuenta que podríamos recibir más de un comprobante)
+
   problemaPago?: {
     comprobante: boolean;
     direccion: boolean;

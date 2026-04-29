@@ -66,7 +66,7 @@ const MenuVendedor = ({
           maxWidth: 500,
           alignSelf: "center",
           backgroundColor: colors.headerFooterBg,
-          paddingTop: Spacing.lg,
+          paddingTop: Spacing.md,
         }}
       >
         {TABS.map(({ key, label, Icon, badgeKey }) => {
@@ -89,7 +89,6 @@ const MenuVendedor = ({
                   backgroundColor: isActive
                     ? colors.brandSeller
                     : "transparent",
-                  marginTop: Spacing.xs,
                 }}
               />
             </View>

@@ -1,8 +1,11 @@
+// CardPagoRecibido.tsx
+
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { Chat, Comprobante, Enviar } from "../../icons";
+import ChatModal from "../../Chat/ChatModal";
+import { Cancel, Chat, Check, Comprobante, Enviar } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
@@ -20,196 +23,290 @@ interface CardPagoRecibidoProps {
   precio: number;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onVerComprobante: (id: string | number) => void;
   onPagoConfirmado: (id: string | number) => void;
   onPagoRechazado: (id: string | number) => void;
   onMensaje: (id: string | number) => void;
 }
 
-const CheckboxPagoCorrecto = ({
-  checked,
-  onToggle,
+type EstadoPago = "correcto" | "problema" | null;
+
+// ─── Toggle Segmentado ────────────────────────────────────────────────────────
+const ToggleVerificacionPago = ({
+  value,
+  onChange,
 }: {
-  checked: boolean;
-  onToggle: () => void;
+  value: EstadoPago;
+  onChange: (v: EstadoPago) => void;
 }) => {
   const { colors, fonts } = useTheme();
 
-  return (
-    <Pressable
-      onPress={onToggle}
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        gap: Spacing.sm,
-      }}
-    >
-      <View
+  const opcion = (
+    tipo: "correcto" | "problema",
+    icono: React.ReactNode,
+    label: string,
+    isFirst: boolean,
+  ) => {
+    const seleccionado = value === tipo;
+    return (
+      <Pressable
+        onPress={() => onChange(seleccionado ? null : tipo)}
         style={{
-          width: 24,
-          height: 24,
-          borderRadius: 4,
-          borderWidth: 2,
-          borderColor: checked ? colors.brandSeller : colors.border,
-          backgroundColor: checked ? colors.brandSeller : "transparent",
+          flex: 1,
+          flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
+          gap: Spacing.sm,
+          paddingVertical: Spacing.lg + 2,
+          backgroundColor: seleccionado
+            ? colors.brandSeller // naranja cuando está activo
+            : "transparent",
+          borderTopLeftRadius: isFirst ? BorderRadius.md : 0,
+          borderBottomLeftRadius: isFirst ? BorderRadius.md : 0,
+          borderTopRightRadius: isFirst ? 0 : BorderRadius.md,
+          borderBottomRightRadius: isFirst ? 0 : BorderRadius.md,
         }}
       >
-        {checked && (
-          <Text style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}>
-            ✓
-          </Text>
-        )}
-      </View>
-      <Text
-        style={{
-          fontSize: FontSizes.sm,
-          fontFamily: fonts.robotoMedium,
-          color: colors.textDefault,
-        }}
-      >
-        Pago correcto
-      </Text>
-    </Pressable>
+        {icono}
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoBold,
+            color: seleccionado ? colors.textDefault : colors.textOnColor,
+          }}
+        >
+          {label}
+        </Text>
+      </Pressable>
+    );
+  };
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        borderRadius: BorderRadius.md,
+        borderWidth: 1.5,
+        borderColor: colors.brandSeller,
+        overflow: "hidden",
+      }}
+    >
+      {opcion(
+        "correcto",
+        <Check
+          width={16}
+          height={16}
+          fill={value === "correcto" ? colors.textDefault : colors.textOnColor}
+        />,
+        "Pago Correcto",
+        true,
+      )}
+
+      {/* Divisor central */}
+      <View style={{ width: 1.5, backgroundColor: colors.brandSeller }} />
+
+      {opcion(
+        "problema",
+        <Cancel
+          width={16}
+          height={16}
+          stroke={
+            value === "problema" ? colors.textDefault : colors.textOnColor
+          }
+          strokeWidth={2}
+        />,
+        "Hay Problemas",
+        false,
+      )}
+    </View>
   );
 };
 
+// ─── Contenido Expandible ─────────────────────────────────────────────────────
 const ContenidoExpandible = ({
   pedidoId,
   textoPedido,
   nota,
   onVerPedido,
   onVerNota,
+  onVerComprobante,
   onPagoConfirmado,
   onPagoRechazado,
   onMensaje,
+  compradorNombre,
 }: {
   pedidoId: string | number;
   textoPedido: string;
   nota?: string;
+  compradorNombre?: string;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onVerComprobante: (id: string | number) => void;
   onPagoConfirmado: (id: string | number) => void;
   onPagoRechazado: (id: string | number) => void;
   onMensaje: (id: string | number) => void;
 }) => {
   const { colors, fonts } = useTheme();
-  const [pagoChecked, setPagoChecked] = useState(false);
+  const [estadoPago, setEstadoPago] = useState<EstadoPago>(null);
+  const [chatVisible, setChatVisible] = useState(false);
+
+  const handleToggle = (v: EstadoPago) => {
+    setEstadoPago(v);
+    if (v === "problema") onPagoRechazado(pedidoId);
+  };
 
   return (
-    <View style={{ gap: Spacing.md }}>
-      {/* Ver pedido */}
-      <VerBottomSheet onPress={() => onVerPedido(pedidoId)} variant="seller" />
+    <View
+      style={{
+        gap: Spacing.md,
+        backgroundColor: colors.background,
+        paddingHorizontal: Spacing.lg,
+        paddingBottom: Spacing.lg,
+      }}
+    >
+      {/* ── Cabecera sección ── */}
+      <Text
+        style={{
+          color: colors.textDefault,
+          backgroundColor: colors.background,
+          textAlign: "center",
+          fontSize: FontSizes.sm,
+          fontFamily: fonts.robotoBold,
+          letterSpacing: 1,
+          textTransform: "uppercase",
+          paddingVertical: 4,
+        }}
+      >
+        Verificar Pago
+      </Text>
 
-      <LineaDivisoria />
+      {/* ── Ver Comprobante ── */}
+      <Pressable
+        onPress={() => onVerComprobante(pedidoId)}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: Spacing.sm,
+          paddingVertical: Spacing.lg,
+          marginBottom: Spacing.md,
+          borderRadius: BorderRadius.md,
+          borderWidth: 1,
+          borderColor: colors.textDefault,
+          borderStyle: "dashed",
+        }}
+      >
+        <Comprobante width={24} height={24} fill={colors.brandSeller} />
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoBold,
+            color: colors.brandSeller,
+            letterSpacing: 0.5,
+          }}
+        >
+          Ver Comprobante
+        </Text>
+      </Pressable>
 
-      {/* Ver comprobante + Pago correcto */}
+      {/* ── Toggle SÍ / NO ── */}
+      <ToggleVerificacionPago value={estadoPago} onChange={handleToggle} />
+
+      {/* ── Aviso + Mensajes ── */}
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          backgroundColor: colors.cardBg,
+          borderRadius: BorderRadius.lg,
+          borderWidth: 1,
+          borderColor: colors.brandSeller,
+          padding: Spacing.lg,
+          gap: Spacing.md,
+          marginVertical: Spacing.md,
         }}
       >
-        {/* Ver comprobante */}
         <Pressable
-          onPress={() => console.log("TODO: abrir imagen comprobante")}
+          onPress={() => {
+            onMensaje(pedidoId);
+            setChatVisible(true);
+          }}
           style={{
-            flexDirection: "row",
             alignItems: "center",
-            gap: Spacing.sm,
-            backgroundColor: colors.textSecondaryBg,
-            borderRadius: BorderRadius.md,
-            padding: Spacing.md,
-            flex: 1,
-            marginRight: Spacing.md,
+            gap: 8,
+            flexDirection: "row",
           }}
         >
-          <Comprobante width={22} height={22} fill={colors.textDefault} />
           <Text
             style={{
+              flex: 1,
               fontSize: FontSizes.sm,
-              fontFamily: fonts.robotoMedium,
+              fontFamily: fonts.robotoRegular,
               color: colors.textDefault,
             }}
           >
-            Ver Comprobante
+            Si el importe no coincide, o existe algún problema envía un mensaje
+            al comprador.
           </Text>
+          <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <Chat
+              width={24}
+              height={24}
+              stroke={colors.textDefault}
+              strokeWidth={1.5}
+              fill="transparent"
+            />
+            <Text
+              style={{
+                fontSize: FontSizes.xs,
+                fontFamily: fonts.robotoMedium,
+                color: colors.textDefault,
+              }}
+            >
+              Mensajes
+            </Text>
+          </View>
         </Pressable>
-
-        {/* Checkbox pago correcto */}
-        <CheckboxPagoCorrecto
-          checked={pagoChecked}
-          onToggle={() => setPagoChecked((prev) => !prev)}
+        {/* ── Chat Modal ── */}
+        <ChatModal
+          visible={chatVisible}
+          onClose={() => setChatVisible(false)}
+          pedidoId={pedidoId}
+          vendedorNombre={compradorNombre ?? "Comprador"}
+          vendedorAlias=""
         />
       </View>
 
-      {/* Aviso + Mensajes */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: Spacing.md,
-        }}
-      >
-        <Text
-          style={{
-            flex: 1,
-            fontSize: FontSizes.xs,
-            fontFamily: fonts.robotoRegular,
-            color: colors.textMuted,
-            fontStyle: "italic",
-          }}
-        >
-          Si el importe no coincide, contacta al comprador desde el botón de
-          mensajes.
-        </Text>
-
-        <Pressable
-          onPress={() => onMensaje(pedidoId)}
-          style={{ alignItems: "center", gap: 4 }}
-        >
-          <Chat
-            width={22}
-            height={22}
-            stroke={colors.brandSeller}
-            strokeWidth={1.5}
-            fill="white"
-          />
-          <Text
-            style={{
-              fontSize: FontSizes.xs,
-              fontFamily: fonts.robotoMedium,
-              color: colors.brandSeller,
-            }}
-          >
-            Mensajes
-          </Text>
-        </Pressable>
-      </View>
-
-      {/* Nota del vendedor */}
+      {/* ── Nota del vendedor ── */}
       {nota && <NotaDelVendedor nota={nota} onVerNota={onVerNota} />}
+
+      {/* ── Ver pedido ── */}
+      <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
+        <VerBottomSheet
+          onPress={() => onVerPedido(pedidoId)}
+          variant="seller"
+        />
+      </View>
 
       <LineaDivisoria />
 
-      {/* CTA Pago Recibido */}
+      {/* ── CTA principal ── */}
       <Button
         section="seller"
         variant="primary"
         width="full"
         icon={Enviar}
         iconPosition="left"
-        disabled={!pagoChecked}
+        disabled={estadoPago !== "correcto"}
         onPress={() => onPagoConfirmado(pedidoId)}
       >
-        Pago Recibido
+        Confirmar Pago Recibido
       </Button>
     </View>
   );
 };
 
+// ─── Export principal ─────────────────────────────────────────────────────────
 const ESTADO: EtiqEstadoType = "Pago recibido";
 
 export default function CardPagoRecibido({
@@ -222,6 +319,7 @@ export default function CardPagoRecibido({
   precio,
   onVerPedido,
   onVerNota,
+  onVerComprobante,
   onPagoConfirmado,
   onPagoRechazado,
   onMensaje,
@@ -238,8 +336,10 @@ export default function CardPagoRecibido({
           pedidoId={pedidoId}
           textoPedido={textoPedido}
           nota={nota}
+          compradorNombre={compradorNombre}
           onVerPedido={onVerPedido}
           onVerNota={onVerNota}
+          onVerComprobante={onVerComprobante}
           onPagoConfirmado={onPagoConfirmado}
           onPagoRechazado={onPagoRechazado}
           onMensaje={onMensaje}

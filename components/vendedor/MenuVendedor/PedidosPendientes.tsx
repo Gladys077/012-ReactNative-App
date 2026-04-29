@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import CardEnCamino from "../CardsVendedor/CardEnCamino";
 import CardEnPreparacion from "../CardsVendedor/CardEnPreparación";
@@ -16,8 +16,11 @@ import SubMenuPendientes, {
 
 interface Props {
   pedidos: Pedido[];
+  subTabActivo: SubTabPendiente | null;
+  onSubTabChange: (subTab: SubTabPendiente | null) => void;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onVerComprobante: (id: string | number) => void;
   onPagoConfirmado: (id: string | number) => void;
   onPagoRechazado: (id: string | number) => void;
   onMensaje: (id: string | number) => void;
@@ -25,15 +28,26 @@ interface Props {
   onEntregado: (id: string | number) => void;
 }
 
+// Tipo específico para renderCard
+type CardHandlers = {
+  onVerPedido: (id: string | number) => void;
+  onVerNota?: (nota: string) => void;
+  onVerComprobante: (id: string | number) => void;
+  onPagoConfirmado: (id: string | number) => void;
+  onPagoRechazado: (id: string | number) => void;
+  onMensaje: (id: string | number) => void;
+  onListoParaEnviar: (id: string | number) => void;
+  onEntregado: (id: string | number) => void;
+};
+
 // ─── Renderer por subtab ──────────────────────────────────────────────────────
 
 function renderCard(
   pedido: Pedido,
   subTab: SubTabPendiente,
-  handlers: Omit<Props, "pedidos">,
+  handlers: CardHandlers,
 ) {
   const common = {
-    key: pedido.id,
     pedidoId: pedido.id,
     fechaSeleccion: pedido.fechaSeleccion,
     compradorNombre: pedido.compradorNombre,
@@ -49,12 +63,14 @@ function renderCard(
 
   switch (subTab) {
     case "esperando_pago":
-      return <CardPagoPendiente {...common} />;
+      return <CardPagoPendiente key={pedido.id} {...common} />;
 
     case "con_comprobante":
       return (
         <CardPagoRecibido
+          key={pedido.id}
           {...common}
+          onVerComprobante={handlers.onVerComprobante}
           onPagoConfirmado={handlers.onPagoConfirmado}
           onPagoRechazado={handlers.onPagoRechazado}
           onMensaje={handlers.onMensaje}
@@ -64,6 +80,7 @@ function renderCard(
     case "en_preparacion":
       return (
         <CardEnPreparacion
+          key={pedido.id}
           {...common}
           onListoParaEnviar={handlers.onListoParaEnviar}
         />
@@ -72,6 +89,7 @@ function renderCard(
     case "listo_para_enviar":
       return (
         <CardListoParaEnviar
+          key={pedido.id}
           {...common}
           onListoParaEnviar={handlers.onListoParaEnviar}
         />
@@ -79,7 +97,11 @@ function renderCard(
 
     case "en_camino":
       return (
-        <CardEnCamino {...common} onListoParaEnviar={handlers.onEntregado} />
+        <CardEnCamino
+          key={pedido.id}
+          {...common}
+          onListoParaEnviar={handlers.onEntregado}
+        />
       );
   }
 }
@@ -88,8 +110,11 @@ function renderCard(
 
 const PedidosPendientes = ({
   pedidos,
+  subTabActivo,
+  onSubTabChange,
   onVerPedido,
   onVerNota,
+  onVerComprobante,
   onPagoConfirmado,
   onPagoRechazado,
   onMensaje,
@@ -97,9 +122,6 @@ const PedidosPendientes = ({
   onEntregado,
 }: Props) => {
   const { colors, fonts } = useTheme();
-  const [subTabActivo, setSubTabActivo] = useState<SubTabPendiente | null>(
-    null,
-  );
 
   const pedidosFiltrados = subTabActivo
     ? pedidos.filter(
@@ -112,6 +134,7 @@ const PedidosPendientes = ({
   const handlers = {
     onVerPedido,
     onVerNota,
+    onVerComprobante,
     onPagoConfirmado,
     onPagoRechazado,
     onMensaje,
@@ -119,81 +142,75 @@ const PedidosPendientes = ({
     onEntregado,
   };
 
-  if (subTabActivo !== null) {
+  if (subTabActivo === null) {
     return (
-      <View style={{ flex: 1 }}>
-        {/* Título + botón volver */}
-        <Pressable
-          onPress={() => setSubTabActivo(null)}
-          style={({ pressed }) => ({
-            flexDirection: "row",
-            alignItems: "center",
-            gap: Spacing.sm,
-            paddingHorizontal: Spacing.lg,
-            paddingVertical: Spacing.md,
-            backgroundColor: pressed ? colors.textSecondaryBg : colors.cardBg,
-            borderBottomWidth: 1,
-            borderBottomColor: colors.border,
-          })}
-        >
-          <Text
-            style={{
-              color: colors.brandSeller,
-              fontSize: FontSizes.md,
-              fontFamily: fonts.robotoMedium,
-            }}
-          >
-            ←
-          </Text>
-          <Text
-            style={{
-              color: colors.textDefault,
-              fontSize: FontSizes.md,
-              fontFamily: fonts.robotoMedium,
-            }}
-          >
-            {labelSubTab}
-          </Text>
-          <Text
-            style={{
-              color: colors.textMuted,
-              fontSize: FontSizes.sm,
-              fontFamily: fonts.robotoRegular,
-            }}
-          >
-            ({pedidosFiltrados.length})
-          </Text>
-        </Pressable>
-
-        <ScrollView
-          contentContainerStyle={{
-            padding: Spacing.md,
-            gap: Spacing.lg,
-            paddingBottom: Spacing.xl,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          {pedidosFiltrados.length === 0 ? (
-            <Text
-              style={{
-                color: colors.textMuted,
-                fontSize: FontSizes.md,
-                textAlign: "center",
-                marginTop: Spacing.xl,
-              }}
-            >
-              No hay pedidos en este estado.
-            </Text>
-          ) : (
-            pedidosFiltrados.map((p) => renderCard(p, subTabActivo, handlers))
-          )}
-        </ScrollView>
-      </View>
+      <SubMenuPendientes pedidos={pedidos} onSelectSubTab={onSubTabChange} />
     );
   }
 
   return (
-    <SubMenuPendientes pedidos={pedidos} onSelectSubTab={setSubTabActivo} />
+    <View style={{ flex: 1 }}>
+      {/* Título informativo */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: Spacing.sm,
+          paddingHorizontal: Spacing.lg,
+          paddingTop: Spacing.lg,
+          paddingBottom: Spacing.md,
+          backgroundColor: colors.bgSubMenuPendientes,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.border,
+          marginBottom: Spacing.md,
+        }}
+      >
+        <Text
+          style={{
+            color: colors.textDefault,
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoMedium,
+            textTransform: "uppercase",
+          }}
+        >
+          {labelSubTab}
+        </Text>
+        <Text
+          style={{
+            color: colors.textDefault,
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoRegular,
+          }}
+        >
+          ({pedidosFiltrados.length})
+        </Text>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={{
+          padding: Spacing.md,
+          gap: Spacing.lg,
+          paddingBottom: Spacing.xl,
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        {pedidosFiltrados.length === 0 ? (
+          <Text
+            style={{
+              color: colors.textMuted,
+              fontSize: FontSizes.md,
+              textAlign: "center",
+              marginTop: Spacing.xl,
+            }}
+          >
+            No hay pedidos en este estado.
+          </Text>
+        ) : (
+          pedidosFiltrados.map((p) => renderCard(p, subTabActivo, handlers))
+        )}
+      </ScrollView>
+    </View>
   );
 };
 

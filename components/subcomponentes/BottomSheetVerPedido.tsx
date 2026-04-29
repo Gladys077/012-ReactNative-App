@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import React, { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 export type BottomSheetVerPedidoRef = {
@@ -20,20 +20,16 @@ interface Props {
   snapPoints?: string[];
   isVisible: boolean;
   onClose: () => void;
+  backgroundColor?: string;
 }
 
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
   (
-    {
-      fechaSeleccion,
-      items = [],
-      snapPoints = ["40%", "70%"],
-      isVisible,
-      onClose,
-    },
+    { fechaSeleccion, items = [], isVisible, onClose, backgroundColor },
     ref,
   ) => {
     const { colors, fonts } = useTheme();
+
     const sheetRef = useRef<BottomSheet>(null);
 
     useImperativeHandle(ref, () => ({
@@ -41,21 +37,21 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
       dismiss: () => sheetRef.current?.close(),
     }));
 
-    const _snapPoints = useMemo(() => snapPoints, [snapPoints]);
-
     if (!isVisible) return null;
 
     return (
       <BottomSheet
         ref={sheetRef}
         index={0}
-        snapPoints={_snapPoints}
+        enableDynamicSizing
         onClose={onClose}
         enablePanDownToClose
-        backgroundStyle={{ backgroundColor: colors.brandBuyerSoft }}
+        backgroundStyle={{
+          backgroundColor: backgroundColor ?? colors.brandBuyerSoft,
+        }}
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
-        <BottomSheetView style={{ padding: Spacing.lg, flex: 1 }}>
+        <BottomSheetView style={{ padding: Spacing.lg, paddingBottom: 36 }}>
           {fechaSeleccion && (
             <Text
               style={{

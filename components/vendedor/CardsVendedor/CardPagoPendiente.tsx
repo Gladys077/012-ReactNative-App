@@ -26,7 +26,7 @@ const ContenidoExpandible = ({
   const { colors, fonts } = useTheme();
 
   return (
-    <View style={{ gap: Spacing.md }}>
+    <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
       {/* Texto del pedido */}
       <Text
         style={{
@@ -34,6 +34,9 @@ const ContenidoExpandible = ({
           fontFamily: fonts.robotoRegular,
           color: colors.textDefault,
           lineHeight: 22,
+          backgroundColor: colors.textSecondaryBg,
+          borderRadius: BorderRadius.md,
+          padding: Spacing.md,
         }}
       >
         {textoPedido}
