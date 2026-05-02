@@ -10,6 +10,7 @@ export type EtiqEstadoType =
   | "Pago y dirección"
   | "Pago en revisión"
   | "A resolver"
+  | "Pago observado"
   | "En preparación"
   | "En camino"
   | "Pedido recibido"
@@ -17,7 +18,7 @@ export type EtiqEstadoType =
   | "Nuevo pedido"
   | "Presupuestado"
   | "Pago pendiente"
-  | "Pago recibido"
+  | "Revisar pago"
   | "Listo. Enviar!"
   | "Enviado"
   | "Entregado"
@@ -58,7 +59,11 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
     "Nuevo pedido": { bg: colors.statusOrangeBg, dot: colors.statusOrangeDot },
     Presupuestado: { bg: colors.statusMintBg, dot: colors.statusMintDot },
     "Pago pendiente": { bg: colors.statusRedBg, dot: colors.statusRedDot },
-    "Pago recibido": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
+    "Pago observado": {
+      bg: colors.statusOrangeBg,
+      dot: colors.statusOrangeDot,
+    },
+    "Revisar pago": { bg: colors.statusGreenBg, dot: colors.statusGreenDot },
     "Listo. Enviar!": {
       bg: colors.statusPurpleBg,
       dot: colors.statusPurpleDot,

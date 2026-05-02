@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-import type { EstadoSistema, Pedido } from "../types/pedidos";
+import type { EstadoSistema, Mensaje, Pedido } from "../types/pedidos";
 
 // ─── Mock ─────────────────────────────────────────────────────────────────────
 
@@ -9,6 +9,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "nuevo",
     textoPedido: `3 paltas (una madura y dos para comer ahora)\n1 kilo de pan casero integral\n1 litro de leche descremada`,
     direccionComprador: "Av. San Martín 1024",
+    celularComprador: 12341243,
     compradorNombre: "Juan Pérez",
     compradorRating: 4.5,
     respuestasRecibidas: 0,
@@ -20,6 +21,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "presupuestado",
     textoPedido: `Revisión de cañerías del baño. Traer soplete y materiales básicos.`,
     direccionComprador: "Av. SiempreViva 724",
+    celularComprador: 12341243,
     compradorNombre: "María García",
     compradorRating: 5,
     respuestasRecibidas: 2,
@@ -55,6 +57,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "aceptado_transferencia",
     textoPedido: `200 Sandwichs de miga de jamón y queso`,
     direccionComprador: "Calle 1, nro 933",
+    celularComprador: 12341243,
     compradorNombre: "Marcelo Andrade",
     compradorRating: 4.5,
     formaPago: "transferencia",
@@ -74,6 +77,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "en_preparacion",
     textoPedido: `200 Sandwichs de miga de jamón y queso`,
     direccionComprador: "Calle 50, nro 90",
+    celularComprador: 12341243,
     compradorNombre: "Laura Gómez",
     compradorRating: 4.2,
     formaPago: "efectivo",
@@ -90,9 +94,10 @@ const mockPedidos: Pedido[] = [
   },
   {
     id: "5",
-    estadoSistema: "pago_rechazado",
+    estadoSistema: "pago_observado",
     textoPedido: "Pan Lactal, 1 kilo de queso rallado, 2 litros de leche",
     direccionComprador: "Av. Corrientes 1234",
+    celularComprador: 12341243,
     compradorNombre: "Carlos Ruiz",
     compradorRating: 4.0,
     formaPago: "transferencia",
@@ -113,7 +118,15 @@ const mockPedidos: Pedido[] = [
         uri: "https://picsum.photos/400/600",
         fechaEnvio: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
         estado: "rechazado",
-        motivoRechazo: "El monto no coincide con el total del pedido",
+      },
+    ],
+    mensajes: [
+      {
+        id: "m1",
+        texto:
+          "El comprobante que me enviaste no cubre el importe total del pedido.",
+        remitenteId: "vendedor",
+        timestamp: new Date(Date.now() - 28 * 60 * 1000).toISOString(),
       },
     ],
   },
@@ -123,6 +136,7 @@ const mockPedidos: Pedido[] = [
     textoPedido:
       "1k Tomates\n1k Cebolla\n2k Papas\n1/2k Duraznos\n1k Pomelo\n1/2k Zanahorias",
     direccionComprador: "Av. Corrientes 1234",
+    celularComprador: 12341243,
     compradorNombre: "Ana Martínez",
     compradorRating: 4.8,
     formaPago: "transferencia",
@@ -142,17 +156,16 @@ const mockPedidos: Pedido[] = [
         uri: "https://picsum.photos/400/601",
         fechaEnvio: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
         estado: "rechazado",
-        motivoRechazo: "Imagen borrosa, no se puede leer",
       },
       {
         id: "c3",
-        uri: "https://picsum.photos/400/602",
+        uri: "https://picsum.photos/400/603",
         fechaEnvio: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
         estado: "pendiente",
       },
       {
         id: "c4",
-        uri: "https://picsum.photos/400/602",
+        uri: "https://picsum.photos/400/604",
         fechaEnvio: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
         estado: "pendiente",
       },
@@ -163,6 +176,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "en_camino",
     textoPedido: "Pedido de verduras varias",
     direccionComprador: "Av. Corrientes 1234",
+    celularComprador: 12341243,
     compradorNombre: "Roberto Silva",
     compradorRating: 3.9,
     formaPago: "transferencia",
@@ -182,6 +196,7 @@ const mockPedidos: Pedido[] = [
     estadoSistema: "entregado_pendiente_calif",
     textoPedido: "Pedido de lácteos",
     direccionComprador: "Av. Rivadavia 500",
+    celularComprador: 12341243,
     compradorNombre: "Sofía Torres",
     compradorRating: 4.6,
     formaPago: "efectivo",
@@ -208,8 +223,9 @@ interface OrdersContextValue {
   updatePedido: (id: string | number, cambios: Partial<Pedido>) => void;
   getPedidoById: (id: string | number) => Pedido | undefined;
   moverAHistorial: (id: string | number) => void;
-  removePedidoHistorial: (id: string | number) => void; //este saca el pedido de la page "estado Pedido" (cuando se califica) y lo guarda en el historial
-  removePedido: (id: string | number) => void; //este saca el pedido completamente, sin guardarlo en el historial (ejemplo: cuando se cancela un pedido antes de aceptar una oferta -si es comprador- o antes de pasarle presupuesto -si es del lado del vendedor-))
+  removePedidoHistorial: (id: string | number) => void;
+  removePedido: (id: string | number) => void;
+  agregarMensaje: (id: string | number, mensaje: Mensaje) => void;
 }
 
 const OrdersContext = createContext<OrdersContextValue | undefined>(undefined);
@@ -262,6 +278,20 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     setPedidos((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
+  // Agrega un mensaje al array mensajes del pedido
+  const agregarMensaje = useCallback(
+    (id: string | number, mensaje: Mensaje) => {
+      setPedidos((prev) =>
+        prev.map((p) =>
+          p.id === id
+            ? { ...p, mensajes: [...(p.mensajes ?? []), mensaje] }
+            : p,
+        ),
+      );
+    },
+    [],
+  );
+
   return (
     <OrdersContext.Provider
       value={{
@@ -274,6 +304,7 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
         historial,
         removePedidoHistorial,
         removePedido,
+        agregarMensaje,
       }}
     >
       {children}

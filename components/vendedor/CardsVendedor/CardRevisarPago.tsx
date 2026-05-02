@@ -1,11 +1,11 @@
-// CardPagoRecibido.tsx
-
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { useOrders } from "../../../context/OrdersContext";
+import { Mensaje } from "../../../types/pedidos";
 import ChatModal from "../../Chat/ChatModal";
-import { Cancel, Chat, Check, Comprobante, Enviar } from "../../icons";
+import { Cancel, Chat, Check, Comprobante } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
@@ -13,7 +13,7 @@ import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
-interface CardPagoRecibidoProps {
+interface CardRevisarPagoProps {
   pedidoId: string | number;
   fechaSeleccion?: string;
   compradorNombre?: string;
@@ -24,14 +24,12 @@ interface CardPagoRecibidoProps {
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
   onVerComprobante: (id: string | number) => void;
-  onPagoConfirmado: (id: string | number) => void;
-  onPagoRechazado: (id: string | number) => void;
-  onMensaje: (id: string | number) => void;
 }
 
 type EstadoPago = "correcto" | "problema" | null;
 
 // ─── Toggle Segmentado ────────────────────────────────────────────────────────
+
 const ToggleVerificacionPago = ({
   value,
   onChange,
@@ -58,9 +56,7 @@ const ToggleVerificacionPago = ({
           justifyContent: "center",
           gap: Spacing.sm,
           paddingVertical: Spacing.lg + 2,
-          backgroundColor: seleccionado
-            ? colors.brandSeller // naranja cuando está activo
-            : "transparent",
+          backgroundColor: seleccionado ? colors.brandSeller : "transparent",
           borderTopLeftRadius: isFirst ? BorderRadius.md : 0,
           borderBottomLeftRadius: isFirst ? BorderRadius.md : 0,
           borderTopRightRadius: isFirst ? 0 : BorderRadius.md,
@@ -72,7 +68,7 @@ const ToggleVerificacionPago = ({
           style={{
             fontSize: FontSizes.sm,
             fontFamily: fonts.robotoBold,
-            color: seleccionado ? colors.textDefault : colors.textOnColor,
+            color: seleccionado ? colors.textOnColor : colors.brandSeller,
           }}
         >
           {label}
@@ -96,26 +92,23 @@ const ToggleVerificacionPago = ({
         <Check
           width={16}
           height={16}
-          fill={value === "correcto" ? colors.textDefault : colors.textOnColor}
+          fill={value === "correcto" ? colors.textOnColor : colors.brandSeller}
         />,
         "Pago Correcto",
         true,
       )}
-
-      {/* Divisor central */}
       <View style={{ width: 1.5, backgroundColor: colors.brandSeller }} />
-
       {opcion(
         "problema",
         <Cancel
           width={16}
           height={16}
           stroke={
-            value === "problema" ? colors.textDefault : colors.textOnColor
+            value === "problema" ? colors.textOnColor : colors.brandSeller
           }
           strokeWidth={2}
         />,
-        "Hay Problemas",
+        "A Resolver",
         false,
       )}
     </View>
@@ -123,36 +116,62 @@ const ToggleVerificacionPago = ({
 };
 
 // ─── Contenido Expandible ─────────────────────────────────────────────────────
+
 const ContenidoExpandible = ({
   pedidoId,
   textoPedido,
   nota,
+  compradorNombre,
+  fechaSeleccion,
   onVerPedido,
   onVerNota,
   onVerComprobante,
-  onPagoConfirmado,
-  onPagoRechazado,
-  onMensaje,
-  compradorNombre,
 }: {
   pedidoId: string | number;
   textoPedido: string;
   nota?: string;
   compradorNombre?: string;
+  fechaSeleccion?: string;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
   onVerComprobante: (id: string | number) => void;
-  onPagoConfirmado: (id: string | number) => void;
-  onPagoRechazado: (id: string | number) => void;
-  onMensaje: (id: string | number) => void;
 }) => {
   const { colors, fonts } = useTheme();
+  const { updateEstado, agregarMensaje } = useOrders();
+
   const [estadoPago, setEstadoPago] = useState<EstadoPago>(null);
   const [chatVisible, setChatVisible] = useState(false);
 
-  const handleToggle = (v: EstadoPago) => {
-    setEstadoPago(v);
-    if (v === "problema") onPagoRechazado(pedidoId);
+  // Llamado desde ChatModal al enviar — mueve la card si hay problema
+  const handleMensajeEnviado = (texto: string) => {
+    if (!texto.trim()) return;
+
+    const nuevoMensaje: Mensaje = {
+      id: Date.now().toString(),
+      texto: texto.trim(),
+      remitenteId: "vendedor",
+      timestamp: new Date().toISOString(),
+    };
+
+    agregarMensaje(pedidoId, nuevoMensaje);
+
+    if (estadoPago === "problema") {
+      updateEstado(pedidoId, "pago_observado");
+      setChatVisible(false);
+    }
+  };
+
+  const handlePagoConfirmado = () => {
+    updateEstado(pedidoId, "en_preparacion");
+  };
+
+  const handleAccionPrincipal = () => {
+    if (estadoPago === "correcto") {
+      handlePagoConfirmado();
+    } else if (estadoPago === "problema") {
+      // Muevo la card a Pago Observado
+      updateEstado(pedidoId, "pago_observado");
+    }
   };
 
   return (
@@ -209,8 +228,8 @@ const ContenidoExpandible = ({
         </Text>
       </Pressable>
 
-      {/* ── Toggle SÍ / NO ── */}
-      <ToggleVerificacionPago value={estadoPago} onChange={handleToggle} />
+      {/* ── Toggle ── */}
+      <ToggleVerificacionPago value={estadoPago} onChange={setEstadoPago} />
 
       {/* ── Aviso + Mensajes ── */}
       <View
@@ -227,15 +246,8 @@ const ContenidoExpandible = ({
         }}
       >
         <Pressable
-          onPress={() => {
-            onMensaje(pedidoId);
-            setChatVisible(true);
-          }}
-          style={{
-            alignItems: "center",
-            gap: 8,
-            flexDirection: "row",
-          }}
+          onPress={() => setChatVisible(true)}
+          style={{ alignItems: "center", gap: 8, flexDirection: "row" }}
         >
           <Text
             style={{
@@ -245,7 +257,7 @@ const ContenidoExpandible = ({
               color: colors.textDefault,
             }}
           >
-            Si el importe no coincide, o existe algún problema envía un mensaje
+            Si el importe no coincide o existe algún problema, enviá un mensaje
             al comprador.
           </Text>
           <View style={{ flexDirection: "column", alignItems: "center" }}>
@@ -267,15 +279,18 @@ const ContenidoExpandible = ({
             </Text>
           </View>
         </Pressable>
-        {/* ── Chat Modal ── */}
-        <ChatModal
-          visible={chatVisible}
-          onClose={() => setChatVisible(false)}
-          pedidoId={pedidoId}
-          vendedorNombre={compradorNombre ?? "Comprador"}
-          vendedorAlias=""
-        />
       </View>
+
+      {/* ── Chat Modal ── */}
+      <ChatModal
+        visible={chatVisible}
+        onClose={() => setChatVisible(false)}
+        pedidoId={pedidoId}
+        fechaSeleccion={fechaSeleccion}
+        otroNombre={compradorNombre ?? "Comprador"}
+        rolActual="vendedor"
+        onMensajeEnviado={handleMensajeEnviado}
+      />
 
       {/* ── Nota del vendedor ── */}
       {nota && <NotaDelVendedor nota={nota} onVerNota={onVerNota} />}
@@ -291,25 +306,40 @@ const ContenidoExpandible = ({
       <LineaDivisoria />
 
       {/* ── CTA principal ── */}
+
       <Button
         section="seller"
-        variant="primary"
+        variant={"primary"}
         width="full"
-        icon={Enviar}
-        iconPosition="left"
-        disabled={estadoPago !== "correcto"}
-        onPress={() => onPagoConfirmado(pedidoId)}
+        disabled={estadoPago === null} // Solo deshabilitado si no eligió nada
+        onPress={handleAccionPrincipal}
+        styleAdd={
+          estadoPago === "problema"
+            ? {
+                backgroundColor: colors.brandSeller,
+                borderWidth: 2,
+                // borderColor: colors.brandSeller,
+                elevation: 0,
+                shadowOpacity: 0,
+              }
+            : {}
+        }
       >
-        Confirmar Pago Recibido
+        <Text>
+          {estadoPago === "problema"
+            ? "Mover a Pago Observado"
+            : "Confirmo Pago Correcto"}
+        </Text>
       </Button>
     </View>
   );
 };
 
 // ─── Export principal ─────────────────────────────────────────────────────────
-const ESTADO: EtiqEstadoType = "Pago recibido";
 
-export default function CardPagoRecibido({
+const ESTADO: EtiqEstadoType = "Revisar pago";
+
+export default function CardRevisarPago({
   pedidoId,
   fechaSeleccion,
   compradorNombre,
@@ -320,10 +350,7 @@ export default function CardPagoRecibido({
   onVerPedido,
   onVerNota,
   onVerComprobante,
-  onPagoConfirmado,
-  onPagoRechazado,
-  onMensaje,
-}: CardPagoRecibidoProps) {
+}: CardRevisarPagoProps) {
   return (
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}
@@ -337,12 +364,10 @@ export default function CardPagoRecibido({
           textoPedido={textoPedido}
           nota={nota}
           compradorNombre={compradorNombre}
+          fechaSeleccion={fechaSeleccion}
           onVerPedido={onVerPedido}
           onVerNota={onVerNota}
           onVerComprobante={onVerComprobante}
-          onPagoConfirmado={onPagoConfirmado}
-          onPagoRechazado={onPagoRechazado}
-          onMensaje={onMensaje}
         />
       }
     />

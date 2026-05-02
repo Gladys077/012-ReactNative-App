@@ -6,8 +6,9 @@ import type { Pedido } from "../../../types/pedidos";
 import CardEnCamino from "../CardsVendedor/CardEnCamino";
 import CardEnPreparacion from "../CardsVendedor/CardEnPreparación";
 import CardListoParaEnviar from "../CardsVendedor/CardListoParaEnviar";
+import CardPagoObservado from "../CardsVendedor/CardPagoObservado";
 import CardPagoPendiente from "../CardsVendedor/CardPagoPendiente";
-import CardPagoRecibido from "../CardsVendedor/CardPagoRecibido";
+import CardRevisarPago from "../CardsVendedor/CardRevisarPago";
 import SubMenuPendientes, {
   estadoSistemaASubTab,
   SUB_TABS,
@@ -65,18 +66,24 @@ function renderCard(
     case "esperando_pago":
       return <CardPagoPendiente key={pedido.id} {...common} />;
 
-    case "con_comprobante":
+    case "revisar_pago":
       return (
-        <CardPagoRecibido
+        <CardRevisarPago
           key={pedido.id}
           {...common}
           onVerComprobante={handlers.onVerComprobante}
-          onPagoConfirmado={handlers.onPagoConfirmado}
-          onPagoRechazado={handlers.onPagoRechazado}
-          onMensaje={handlers.onMensaje}
         />
       );
 
+    case "pago_observado":
+      return (
+        <CardPagoObservado
+          key={pedido.id}
+          {...common}
+          mensajes={pedido.mensajes}
+          onVerComprobante={handlers.onVerComprobante}
+        />
+      );
     case "en_preparacion":
       return (
         <CardEnPreparacion

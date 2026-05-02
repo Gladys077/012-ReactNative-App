@@ -77,7 +77,7 @@ export default function ComprobanteViewerModal({
                     color: colors.textMuted,
                   }}
                 >
-                  Intento {index + 1} ·{" "}
+                  Comprobante {index + 1} ·{" "}
                   {new Date(item.fechaEnvio).toLocaleTimeString("es-AR", {
                     hour: "2-digit",
                     minute: "2-digit",

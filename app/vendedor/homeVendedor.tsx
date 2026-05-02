@@ -15,7 +15,7 @@ import { SubTabPendiente } from "../../components/vendedor/MenuVendedor/SubMenuP
 import { useAuthContext } from "../../context/AuthContext";
 import { useBottomSheetVerPedido } from "../../context/BottomSheetVerPedidoContext";
 import { useOrders } from "../../context/OrdersContext";
-import { estadoSistemaATabVendedor } from "../../types/pedidos";
+import { Comprobante, estadoSistemaATabVendedor } from "../../types/pedidos";
 
 const HomeVendedor = () => {
   const { colors, fonts } = useTheme();

@@ -5,12 +5,13 @@ export type EstadoSistema =
   | "aceptado_efectivo"
   | "aceptado_transferencia"
   | "pago_enviado"
-  | "pago_rechazado"
+  | "pago_observado"
   | "en_preparacion"
   | "listo_para_enviar"
   | "en_camino"
   | "entregado_pendiente_calif"
-  | "completado";
+  | "completado"
+  | "cancelado";
 
 // ─── Lo que ve el COMPRADOR ───────────────────────────────────────────────────
 export type EstadoComprador =
@@ -30,12 +31,13 @@ export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   aceptado_efectivo: "En preparación",
   aceptado_transferencia: "Pago y dirección",
   pago_enviado: "Pago en revisión",
-  pago_rechazado: "A resolver",
+  pago_observado: "A resolver",
   en_preparacion: "En preparación",
   listo_para_enviar: "En preparación", // el comprador no ve este sub-estado "listo para enviar"
   en_camino: "En camino",
   entregado_pendiente_calif: "Pedido recibido",
   completado: "Completado",
+  cancelado: "Completado", // el comprador no necesita ver "cancelado"
 };
 
 // ─── Lo que ve el VENDEDOR ────────────────────────────────────────────────────
@@ -43,7 +45,8 @@ export type EstadoVendedor =
   | "Nuevo pedido"
   | "Presupuesto enviado"
   | "Esperando pago"
-  | "Con comprobante"
+  | "Pago observado"
+  | "Por verificar"
   | "En preparación"
   | "Listo para enviar"
   | "En camino"
@@ -55,13 +58,14 @@ export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
   presupuestado: "Presupuesto enviado",
   aceptado_efectivo: "En preparación",
   aceptado_transferencia: "Esperando pago",
-  pago_enviado: "Con comprobante",
-  pago_rechazado: "Esperando pago",
+  pago_enviado: "Por verificar",
+  pago_observado: "Pago observado",
   en_preparacion: "En preparación",
   listo_para_enviar: "Listo para enviar",
   en_camino: "En camino",
   entregado_pendiente_calif: "Entregado",
   completado: "Completado",
+  cancelado: "Completado", // se verá en historial con etiqueta propia
 };
 
 // ─── Tabs del menú vendedor ───────────────────────────────────────────────────
@@ -73,12 +77,13 @@ export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
   aceptado_efectivo: "pendientes",
   aceptado_transferencia: "pendientes",
   pago_enviado: "pendientes",
-  pago_rechazado: "pendientes",
+  pago_observado: "pendientes",
   en_preparacion: "pendientes",
   listo_para_enviar: "pendientes",
   en_camino: "pendientes",
   entregado_pendiente_calif: "entregados",
   completado: "entregados", // permanece en historial
+  cancelado: "entregados", // va al historial
 };
 
 // ─── Respuesta / Presupuesto del vendedor ─────────────────────────────────────
@@ -104,6 +109,14 @@ export interface Comprobante {
   motivoRechazo?: string; // solo si estado === "rechazado"
 }
 
+// ─── Mensaje de chat ──────────────────────────────────────────────────────────
+export interface Mensaje {
+  id: string;
+  texto: string;
+  remitenteId: "comprador" | "vendedor";
+  timestamp: string; // ISO string (serializable)
+}
+
 // ─── Pedido ───────────────────────────────────────────────────────────────────
 export interface Pedido {
   id: string | number;
@@ -119,6 +132,7 @@ export interface Pedido {
   compradorNombre?: string;
   compradorRating?: number;
   direccionComprador: string;
+  celularComprador: number;
 
   // Pago
   formaPago?: "transferencia" | "efectivo";
@@ -128,6 +142,9 @@ export interface Pedido {
     comprobante: boolean;
     direccion: boolean;
   };
+
+  // Chat — se usa cuando el vendedor marca "A resolver"
+  mensajes?: Mensaje[];
 
   // Presupuestos
   respuestasRecibidas?: number;

@@ -1,11 +1,12 @@
-import { FontSizes, Spacing } from "@/constants/Tokens";
+import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
-import { Text, View } from "react-native";
+import BottomSheet from "@gorhom/bottom-sheet";
+import React, { useRef, useState } from "react";
+import { View } from "react-native";
 import ListoParaEnviar from "../../icons/ListoParaEnviar";
+import BottomSheetVerPedido from "../../subcomponentes/BottomSheetVerPedido";
 import DatosComprador from "../../subcomponentes/DatosComprador";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
-import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
 import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
@@ -20,11 +21,28 @@ interface CardEnPreparacionProps {
   nota?: string;
   precio: number;
   direccionComprador?: string;
-  telefono?: string;
-  onVerPedido: (id: string | number) => void;
-  onVerNota?: (nota: string) => void;
+  celularComprador?: string;
   onListoParaEnviar: (id: string | number) => void;
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Convierte el textoPedido (string con \n) en items para el BottomSheet */
+const textoAItems = (texto: string, nota?: string) => {
+  const lineas = texto
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l, i) => ({ id: `item-${i}`, label: l }));
+
+  if (nota?.trim()) {
+    lineas.push({ id: "nota", label: `📝 Nota: ${nota.trim()}` });
+  }
+
+  return lineas;
+};
+
+// ─── Contenido Expandible ─────────────────────────────────────────────────────
 
 const ContenidoExpandible = ({
   pedidoId,
@@ -32,9 +50,8 @@ const ContenidoExpandible = ({
   nota,
   precio,
   direccionComprador,
-  telefono,
-  onVerPedido,
-  onVerNota,
+  celularComprador,
+  fechaSeleccion,
   onListoParaEnviar,
 }: {
   pedidoId: string | number;
@@ -42,44 +59,32 @@ const ContenidoExpandible = ({
   nota?: string;
   precio: number;
   direccionComprador?: string;
-  telefono?: string;
-  onVerPedido: (id: string | number) => void;
-  onVerNota?: (nota: string) => void;
+  celularComprador?: string;
+  fechaSeleccion?: string;
   onListoParaEnviar: (id: string | number) => void;
 }) => {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
+  const sheetRef = useRef<BottomSheet>(null);
+  const [sheetVisible, setSheetVisible] = useState(false);
+
+  const handleVerPedido = () => {
+    setSheetVisible(true);
+  };
 
   return (
-    <View style={{ gap: Spacing.md }}>
-      {/* Ver pedido */}
-      <VerBottomSheet onPress={() => onVerPedido(pedidoId)} variant="seller" />
+    <View style={{ gap: Spacing.md, paddingBottom: Spacing.md }}>
+      {/* Ver pedido → abre el BottomSheet con items + nota */}
+      <VerBottomSheet onPress={handleVerPedido} variant="seller" />
+
+      {/* Datos del comprador: dirección + teléfono */}
+      <DatosComprador
+        direccionComprador={direccionComprador}
+        celularComprador={celularComprador}
+      />
 
       <LineaDivisoria />
 
-      {/* Nota + precio en la misma fila */}
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <NotaDelVendedor nota={nota} onVerNota={onVerNota} />
-        <Text
-          style={{
-            fontSize: FontSizes.lg,
-            fontFamily: fonts.robotoBold,
-            color: colors.textDefault,
-          }}
-        >
-          $ {precio.toLocaleString("es-AR")}
-        </Text>
-      </View>
-
-      {/* Datos del comprador */}
-      <DatosComprador direccion={direccionComprador} telefono={telefono} />
-
-      {/* CTA Listo para enviar */}
+      {/* CTA */}
       <Button
         section="seller"
         variant="primary"
@@ -90,9 +95,21 @@ const ContenidoExpandible = ({
       >
         Listo para enviar
       </Button>
+
+      {/* BottomSheet — montado fuera del scroll de la card */}
+      <BottomSheetVerPedido
+        ref={sheetRef}
+        isVisible={sheetVisible}
+        onClose={() => setSheetVisible(false)}
+        fechaSeleccion={fechaSeleccion}
+        items={textoAItems(textoPedido, nota)}
+        backgroundColor={colors.cardBg}
+      />
     </View>
   );
 };
+
+// ─── Export principal ─────────────────────────────────────────────────────────
 
 const ESTADO: EtiqEstadoType = "En preparación";
 
@@ -105,9 +122,7 @@ export default function CardEnPreparacion({
   nota,
   precio,
   direccionComprador,
-  telefono,
-  onVerPedido,
-  onVerNota,
+  celularComprador,
   onListoParaEnviar,
 }: CardEnPreparacionProps) {
   return (
@@ -124,9 +139,8 @@ export default function CardEnPreparacion({
           nota={nota}
           precio={precio}
           direccionComprador={direccionComprador}
-          telefono={telefono}
-          onVerPedido={onVerPedido}
-          onVerNota={onVerNota}
+          celularComprador={celularComprador}
+          fechaSeleccion={fechaSeleccion}
           onListoParaEnviar={onListoParaEnviar}
         />
       }

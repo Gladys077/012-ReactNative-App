@@ -129,6 +129,34 @@ const EstadoPedido = () => {
                   />
                 );
 
+              case "Pago en revisión": {
+                const r = pedido.respuestaSeleccionada;
+                if (!r) return null;
+                return (
+                  <CardPedidoPagoEnRevision
+                    key={pedido.id}
+                    pedidoId={pedido.id}
+                    fechaSeleccion={pedido.fechaSeleccion}
+                    precio={r.precio}
+                    nombreNegocio={r.vendedorNombre}
+                    rating={r.rating}
+                    alias={r.alias ?? ""}
+                    entidad={r.entidad ?? ""}
+                    titular={r.titular ?? ""}
+                    direccion={pedido.direccionComprador}
+                    nota={r.nota}
+                    duracionCronometro={r.duracionCronometro}
+                    onVerPedido={() => handleVerPedido(pedido.id)}
+                    onEditarDireccion={() => console.log("Editar dirección")}
+                    onFinishCronometro={handleFinishCronometro}
+                    respuestaId={""}
+                    timestampRespuesta={0}
+                    tieneProblema={false}
+                    estado={"Pago y dirección"}
+                  />
+                );
+              }
+
               case "Pago y dirección": {
                 const r = pedido.respuestaSeleccionada;
                 if (!r) return null;
@@ -162,34 +190,6 @@ const EstadoPedido = () => {
                       updateEstado(pedido.id, siguiente);
                     }}
                     onCancelarPedido={() => handleCancelarPedido(pedido.id)}
-                  />
-                );
-              }
-
-              case "Pago en revisión": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoPagoEnRevision
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    precio={r.precio}
-                    nombreNegocio={r.vendedorNombre}
-                    rating={r.rating}
-                    alias={r.alias ?? ""}
-                    entidad={r.entidad ?? ""}
-                    titular={r.titular ?? ""}
-                    direccion={pedido.direccionComprador}
-                    nota={r.nota}
-                    duracionCronometro={r.duracionCronometro}
-                    onVerPedido={() => handleVerPedido(pedido.id)}
-                    onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={handleFinishCronometro}
-                    respuestaId={""}
-                    timestampRespuesta={0}
-                    tieneProblema={false}
-                    estado={"Pago y dirección"}
                   />
                 );
               }

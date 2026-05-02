@@ -1,4 +1,4 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Text, View } from "react-native";
@@ -6,13 +6,13 @@ import { Telephone, Ubicacion } from "../icons";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface DatosCompradorProps {
-  direccion?: string;
-  telefono?: string;
+  direccionComprador?: string;
+  celularComprador?: string;
 }
 
 export default function DatosComprador({
-  direccion,
-  telefono,
+  direccionComprador,
+  celularComprador,
 }: DatosCompradorProps) {
   const { colors, fonts } = useTheme();
 
@@ -31,7 +31,7 @@ export default function DatosComprador({
       </Text>
 
       {/* Dirección */}
-      {direccion && (
+      {direccionComprador && (
         <View style={{ gap: Spacing.xs }}>
           <View
             style={{
@@ -41,7 +41,7 @@ export default function DatosComprador({
             }}
           >
             <Ubicacion width={16} height={16} fill={colors.textDefault} />
-            <Text
+            {/* <Text
               style={{
                 fontFamily: fonts.robotoBold,
                 fontSize: FontSizes.sm,
@@ -49,8 +49,8 @@ export default function DatosComprador({
               }}
             >
               Dirección de entrega
-            </Text>
-          </View>
+            </Text> */}
+            {/* </View>
           <View
             style={{
               borderWidth: 1,
@@ -58,16 +58,16 @@ export default function DatosComprador({
               borderRadius: BorderRadius.md,
               padding: Spacing.md,
             }}
-          >
+          > */}
             <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
-              {direccion}
+              {direccionComprador}
             </Text>
           </View>
         </View>
       )}
 
       {/* Teléfono */}
-      {telefono && (
+      {celularComprador && (
         <View
           style={{
             flexDirection: "row",
@@ -77,7 +77,7 @@ export default function DatosComprador({
         >
           <Telephone width={16} height={16} fill={colors.textDefault} />
           <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
-            {telefono}
+            {celularComprador}
           </Text>
         </View>
       )}

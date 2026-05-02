@@ -2,15 +2,19 @@ import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import ConComprobante from "../../icons/ConComprobante";
-import EnCaminoOutline from "../../icons/EnCaminoOutline";
-import EnPreparacion from "../../icons/EnPreparacion";
-import ListoParaEnviar from "../../icons/ListoParaEnviar";
-import SinComprobante from "../../icons/SinComprobante";
+import {
+  EnCaminoOutline,
+  EnPreparacionNuevo,
+  EsperandoPago,
+  ListoParaEnviarNuevo,
+  PagoObservado,
+  RevisarPago,
+} from "../../icons";
 
 export type SubTabPendiente =
   | "esperando_pago"
-  | "con_comprobante"
+  | "revisar_pago"
+  | "pago_observado"
   | "en_preparacion"
   | "listo_para_enviar"
   | "en_camino";
@@ -52,9 +56,9 @@ const SubMenuItem = ({ Icon, label, badge, onPress }: SubMenuItemProps) => {
           <View
             style={{
               position: "absolute",
-              top: -8,
-              right: -4,
-              backgroundColor: colors.headerFooterBg,
+              top: -6,
+              right: -6,
+              backgroundColor: colors.badge,
               borderRadius: 9999,
               minWidth: 18,
               height: 20,
@@ -67,7 +71,7 @@ const SubMenuItem = ({ Icon, label, badge, onPress }: SubMenuItemProps) => {
           >
             <Text
               style={{
-                color: colors.textDefault,
+                color: colors.textOnColor,
                 fontSize: 11,
                 fontFamily: fonts.robotoMedium,
                 lineHeight: 12,
@@ -101,13 +105,14 @@ export const SUB_TABS: {
   label: string;
   Icon: React.ComponentType<any>;
 }[] = [
-  { key: "esperando_pago", label: "Esperando Pago", Icon: SinComprobante },
-  { key: "con_comprobante", label: "Con Comprobante", Icon: ConComprobante },
-  { key: "en_preparacion", label: "En Preparación", Icon: EnPreparacion },
+  { key: "esperando_pago", label: "Esperando Pago", Icon: EsperandoPago },
+  { key: "revisar_pago", label: "Revisar Pago", Icon: RevisarPago },
+  { key: "pago_observado", label: "Pago Observado", Icon: PagoObservado },
+  { key: "en_preparacion", label: "En Preparación", Icon: EnPreparacionNuevo },
   {
     key: "listo_para_enviar",
     label: "Listo Para Enviar",
-    Icon: ListoParaEnviar,
+    Icon: ListoParaEnviarNuevo,
   },
   { key: "en_camino", label: "En Camino", Icon: EnCaminoOutline },
 ];
@@ -117,8 +122,9 @@ export const estadoSistemaASubTab: Partial<
   Record<import("../../../types/pedidos").EstadoSistema, SubTabPendiente>
 > = {
   aceptado_transferencia: "esperando_pago",
-  pago_rechazado: "esperando_pago",
-  pago_enviado: "con_comprobante",
+  pago_enviado: "revisar_pago",
+  pago_observado: "pago_observado",
+  aceptado_efectivo: "en_preparacion",
   en_preparacion: "en_preparacion",
   listo_para_enviar: "listo_para_enviar",
   en_camino: "en_camino",

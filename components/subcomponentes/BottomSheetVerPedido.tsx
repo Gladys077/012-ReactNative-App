@@ -29,7 +29,6 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
     ref,
   ) => {
     const { colors, fonts } = useTheme();
-
     const sheetRef = useRef<BottomSheet>(null);
 
     useImperativeHandle(ref, () => ({
@@ -37,12 +36,13 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
       dismiss: () => sheetRef.current?.close(),
     }));
 
-    if (!isVisible) return null;
+    // Ya no hacemos early return — el sheet siempre está montado
+    // pero arranca cerrado (index={-1}) y solo se abre cuando se llama present()
 
     return (
       <BottomSheet
         ref={sheetRef}
-        index={0}
+        index={isVisible ? 0 : -1} // -1 = cerrado, 0 = abierto
         enableDynamicSizing
         onClose={onClose}
         enablePanDownToClose
