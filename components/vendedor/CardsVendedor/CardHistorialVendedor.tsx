@@ -88,8 +88,6 @@ export default function CardHistorialVendedor({
     );
   };
 
-  console.log("mensajesModal:", JSON.stringify(mensajesModal, null, 2));
-
   return (
     <View
       style={{

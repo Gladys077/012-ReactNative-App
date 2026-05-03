@@ -14,9 +14,6 @@ interface CardPedidoNuevoProps {
   compradorNombre?: string;
   compradorRating?: number;
   textoPedido: string;
-  estadoSistema: "nuevo" | "presupuestado";
-  precioEnviado?: number;
-  notaEnviada?: string;
   onEnviarPresupuesto: (
     pedidoId: string | number,
     precio: number,
@@ -28,17 +25,11 @@ interface CardPedidoNuevoProps {
 const ContenidoExpandible = ({
   pedidoId,
   textoPedido,
-  estadoSistema,
-  precioEnviado,
-  notaEnviada,
   onEnviarPresupuesto,
   onEliminarPedido,
 }: {
   pedidoId: string | number;
   textoPedido: string;
-  estadoSistema: "nuevo" | "presupuestado";
-  precioEnviado?: number;
-  notaEnviada?: string;
   onEnviarPresupuesto: (
     pedidoId: string | number,
     precio: number,
@@ -48,13 +39,9 @@ const ContenidoExpandible = ({
 }) => {
   const { colors, fonts } = useTheme();
 
-  const [nota, setNota] = useState(notaEnviada ?? "");
-  const [precio, setPrecio] = useState(
-    precioEnviado ? String(precioEnviado) : "",
-  );
+  const [nota, setNota] = useState("");
+  const [precio, setPrecio] = useState("");
   const [errorPrecio, setErrorPrecio] = useState("");
-
-  const yaPresupuestado = estadoSistema === "presupuestado";
 
   const handleEnviar = () => {
     const precioNum = parseFloat(precio.replace(",", "."));
@@ -83,7 +70,7 @@ const ContenidoExpandible = ({
 
   return (
     <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
-      {/* Texto del pedido — fondo diferenciado */}
+      {/* Texto del pedido */}
       <View
         style={{
           backgroundColor: colors.textSecondaryBg,
@@ -103,7 +90,7 @@ const ContenidoExpandible = ({
         </Text>
       </View>
 
-      {/* Label + Input nota */}
+      {/* Input nota */}
       <View style={{ gap: Spacing.xs, marginVertical: Spacing.sm }}>
         <Text
           style={{
@@ -120,7 +107,6 @@ const ContenidoExpandible = ({
           placeholderTextColor={colors.textMuted}
           value={nota}
           onChangeText={setNota}
-          editable={!yaPresupuestado}
           multiline
           textAlignVertical="top"
           style={{
@@ -132,15 +118,13 @@ const ContenidoExpandible = ({
             fontStyle: "italic",
             fontFamily: fonts.robotoRegular,
             color: colors.textDefault,
-            backgroundColor: yaPresupuestado
-              ? colors.textSecondaryBg
-              : colors.cardBg,
+            backgroundColor: colors.cardBg,
             minHeight: 64,
           }}
         />
       </View>
 
-      {/* Label + Input precio con prefijo $ */}
+      {/* Input precio */}
       <View style={{ gap: Spacing.xs }}>
         <Text
           style={{
@@ -156,15 +140,9 @@ const ContenidoExpandible = ({
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 1,
-            borderColor: errorPrecio
-              ? colors.textError
-              : yaPresupuestado
-                ? colors.border
-                : colors.brandSeller,
+            borderColor: errorPrecio ? colors.textError : colors.brandSeller,
             borderRadius: BorderRadius.md,
-            backgroundColor: yaPresupuestado
-              ? colors.textSecondaryBg
-              : colors.cardBg,
+            backgroundColor: colors.cardBg,
             paddingHorizontal: Spacing.md,
           }}
         >
@@ -186,7 +164,6 @@ const ContenidoExpandible = ({
               setPrecio(v);
               if (errorPrecio) setErrorPrecio("");
             }}
-            editable={!yaPresupuestado}
             keyboardType="numeric"
             textAlign="right"
             style={{
@@ -213,44 +190,36 @@ const ContenidoExpandible = ({
 
       <LineaDivisoria />
 
-      {/* Botones — flex row para ocupar ancho completo */}
+      {/* Botones */}
       <View style={{ flexDirection: "row", gap: Spacing.md }}>
-        {!yaPresupuestado ? (
-          <>
-            <View style={{ flex: 1 }}>
-              <Button
-                section="seller"
-                variant="secondary"
-                width="full"
-                onPress={handleEliminar}
-              >
-                Eliminar pedido
-              </Button>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Button
-                section="seller"
-                variant="primary"
-                width="full"
-                icon={Enviar}
-                iconPosition="left"
-                onPress={handleEnviar}
-              >
-                Enviar precio
-              </Button>
-            </View>
-          </>
-        ) : (
-          <View style={{ flex: 1 }}>
-            <Button section="seller" variant="primary" width="full" disabled>
-              ✓ Precio enviado
-            </Button>
-          </View>
-        )}
+        <View style={{ flex: 1 }}>
+          <Button
+            section="seller"
+            variant="secondary"
+            width="full"
+            onPress={handleEliminar}
+          >
+            Eliminar pedido
+          </Button>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Button
+            section="seller"
+            variant="primary"
+            width="full"
+            icon={Enviar}
+            iconPosition="left"
+            onPress={handleEnviar}
+          >
+            Enviar precio
+          </Button>
+        </View>
       </View>
     </View>
   );
 };
+
+const ESTADO: EtiqEstadoType = "Nuevo pedido";
 
 export default function CardPedidoNuevo({
   pedidoId,
@@ -258,28 +227,19 @@ export default function CardPedidoNuevo({
   compradorNombre,
   compradorRating,
   textoPedido,
-  estadoSistema,
-  precioEnviado,
-  notaEnviada,
   onEnviarPresupuesto,
   onEliminarPedido,
 }: CardPedidoNuevoProps) {
-  const estado: EtiqEstadoType =
-    estadoSistema === "presupuestado" ? "Presupuestado" : "Nuevo pedido";
-
   return (
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}
-      estado={estado}
+      estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
       contenidoExpandible={
         <ContenidoExpandible
           pedidoId={pedidoId}
           textoPedido={textoPedido}
-          estadoSistema={estadoSistema}
-          precioEnviado={precioEnviado}
-          notaEnviada={notaEnviada}
           onEnviarPresupuesto={onEnviarPresupuesto}
           onEliminarPedido={onEliminarPedido}
         />

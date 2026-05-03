@@ -5,6 +5,7 @@ import React from "react";
 import { ScrollView, Text } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import CardPedidoNuevo from "../CardsVendedor/CardPedidoNuevo";
+import CardPresupuestado from "../CardsVendedor/CardPresupuestado";
 
 interface Props {
   pedidos: Pedido[];
@@ -12,20 +13,19 @@ interface Props {
 
 const PedidosNuevos = ({ pedidos }: Props) => {
   const { colors } = useTheme();
-  const { updateEstado, updatePedido, removePedido } = useOrders();
+  const { updatePedido, removePedido } = useOrders();
 
   const handleEnviarPresupuesto = (
     pedidoId: string | number,
     precio: number,
     nota?: string,
   ) => {
-    // Guarda el presupuesto como respuesta del vendedor y cambia estado
     updatePedido(pedidoId, {
       estadoSistema: "presupuestado",
       respuestas: [
         {
           id: `v_${pedidoId}`,
-          vendedorNombre: "Mi Tienda", // TODO: dejamos eso o reemplazamos con datos reales del vendedor
+          vendedorNombre: "Mi Tienda",
           rating: 0,
           precio,
           nota,
@@ -61,21 +61,31 @@ const PedidosNuevos = ({ pedidos }: Props) => {
           No tenés pedidos nuevos.
         </Text>
       ) : (
-        pedidos.map((p) => (
-          <CardPedidoNuevo
-            key={p.id}
-            pedidoId={p.id}
-            fechaSeleccion={p.fechaSeleccion}
-            compradorNombre={p.compradorNombre}
-            compradorRating={p.compradorRating}
-            textoPedido={p.textoPedido}
-            estadoSistema={p.estadoSistema as "nuevo" | "presupuestado"}
-            precioEnviado={p.respuestas?.[0]?.precio}
-            notaEnviada={p.respuestas?.[0]?.nota}
-            onEnviarPresupuesto={handleEnviarPresupuesto}
-            onEliminarPedido={handleEliminarPedido}
-          />
-        ))
+        pedidos.map((p) =>
+          p.estadoSistema === "presupuestado" ? (
+            <CardPresupuestado
+              key={p.id}
+              pedidoId={p.id}
+              fechaSeleccion={p.fechaSeleccion}
+              compradorNombre={p.compradorNombre}
+              compradorRating={p.compradorRating}
+              textoPedido={p.textoPedido}
+              precioEnviado={p.respuestas?.[0]?.precio ?? 0}
+              notaEnviada={p.respuestas?.[0]?.nota}
+            />
+          ) : (
+            <CardPedidoNuevo
+              key={p.id}
+              pedidoId={p.id}
+              fechaSeleccion={p.fechaSeleccion}
+              compradorNombre={p.compradorNombre}
+              compradorRating={p.compradorRating}
+              textoPedido={p.textoPedido}
+              onEnviarPresupuesto={handleEnviarPresupuesto}
+              onEliminarPedido={handleEliminarPedido}
+            />
+          ),
+        )
       )}
     </ScrollView>
   );

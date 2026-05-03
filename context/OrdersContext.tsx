@@ -70,6 +70,7 @@ const mockPedidos: Pedido[] = [
       titular: "Pedro Pascal",
       rating: 4.8,
       precio: 25000,
+      nota: "El pedido será entregado entre las 11 y las 13hs.",
     },
   },
   {
@@ -111,6 +112,7 @@ const mockPedidos: Pedido[] = [
       titular: "Juan Pérez",
       rating: 4.0,
       precio: 4150,
+      nota: "El pedido será entregado entre las 10 y las 1ahs.",
     },
     comprobantes: [
       {

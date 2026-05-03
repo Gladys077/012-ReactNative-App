@@ -12,21 +12,36 @@ import {
 } from "react-native";
 import { FlechaAbajo } from "../icons";
 
+type Alineacion = "izquierda" | "centro" | "derecha";
+
 type ToggleExpandirProps = {
   expandidoInicial?: boolean;
   textoMostrar?: string;
   textoOcultar?: string;
   colorTexto?: string;
+  mostrarFlecha?: boolean; // ← nueva: oculta/muestra la flechita
+  alineacion?: Alineacion; // ← nueva: posición del botón
+  inline?: boolean; // ← nueva: no ocupa línea completa (para usarlo en row con otros elementos)
   onToggle?: (expandido: boolean) => void;
   style?: ViewStyle;
-  children?: React.ReactNode; // el contenido expandible
+  children?: React.ReactNode;
 };
+
+const alineacionMap: Record<Alineacion, "flex-start" | "center" | "flex-end"> =
+  {
+    izquierda: "flex-start",
+    centro: "center",
+    derecha: "flex-end",
+  };
 
 const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
   expandidoInicial = false,
   textoMostrar = "Mostrar contenido",
   textoOcultar = "Ocultar contenido",
   colorTexto,
+  mostrarFlecha = true,
+  alineacion = "centro",
+  inline = false,
   onToggle,
   style,
   children,
@@ -72,30 +87,31 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
     outputRange: [0, 1],
   });
 
-  return (
-    <View style={[{ width: "100%" }, style]}>
-      {/* Botón toggle */}
-      <Pressable
-        onPress={toggleExpandir}
+  const boton = (
+    <Pressable
+      onPress={toggleExpandir}
+      style={{
+        flexDirection: "row",
+        // inline=true → el Pressable no fuerza ancho completo, se ajusta a su contenido
+        alignSelf: inline ? "auto" : alineacionMap[alineacion],
+        alignItems: "center",
+        paddingVertical: Spacing.xs,
+        gap: mostrarFlecha ? 6 : 0,
+      }}
+    >
+      <Text
         style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingVertical: Spacing.xs,
+          fontFamily: fonts.robotoMedium,
+          fontSize: FontSizes.sm,
+          color: colorTexto || colors.brandSeller,
+          letterSpacing: 0.3,
+          textDecorationLine: "underline",
         }}
       >
-        <Text
-          style={{
-            fontFamily: fonts.robotoMedium,
-            fontSize: FontSizes.sm,
-            color: colorTexto || colors.textDefault,
-            marginRight: 8,
-            letterSpacing: 0.3,
-          }}
-        >
-          {expandido ? textoOcultar : textoMostrar}
-        </Text>
+        {expandido ? textoOcultar : textoMostrar}
+      </Text>
 
+      {mostrarFlecha && (
         <Animated.View style={{ transform: [{ rotate: rotacion }] }}>
           <FlechaAbajo
             width={18}
@@ -103,17 +119,19 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
             stroke={colorTexto || colors.textDefault}
           />
         </Animated.View>
-      </Pressable>
+      )}
+    </Pressable>
+  );
 
-      {/* Contenido expandible animado */}
+  return (
+    // inline=true → el wrapper no toma ancho completo, el padre maneja el layout
+    <View style={[inline ? {} : { width: "100%" }, style]}>
+      {boton}
+
       <Animated.View
         style={{
           opacity: animacion,
-          transform: [
-            {
-              scaleY: altura,
-            },
-          ],
+          transform: [{ scaleY: altura }],
         }}
       >
         {expandido && children}
@@ -123,3 +141,32 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
 };
 
 export default ToggleExpandir;
+
+// MODO DE USO:
+// Centro con flecha (comportamiento original):
+// <ToggleExpandir textoMostrar="Ver más" textoOcultar="Ver menos">
+//   {/* contenido */}
+// </ToggleExpandir>
+
+// Izquierda sin flecha (solo texto):
+// <ToggleExpandir
+//   textoMostrar="Ver más"
+//   textoOcultar="Ver menos"
+//   alineacion="izquierda"
+//   mostrarFlecha={false}
+// >
+//   {/* contenido */}
+// </ToggleExpandir>
+
+// Inline junto al ícono delete (el caso de CardHistorialVendedor):
+// <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+//   <ToggleExpandir
+//     textoMostrar="Ver más"
+//     textoOcultar="Ver menos"
+//     mostrarFlecha={false}
+//     inline
+//   />
+//   <Pressable onPress={handleEliminar} style={{ padding: Spacing.sm }}>
+//     <Remove width={26} height={26} fill={colors.textError} />
+//   </Pressable>
+// </View>
