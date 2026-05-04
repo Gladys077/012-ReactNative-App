@@ -19,7 +19,7 @@ export default function NotaEnviada({ nota }: NotaEnviadaProps) {
         borderLeftColor: colors.brandSeller,
         paddingHorizontal: Spacing.md,
         paddingVertical: Spacing.md,
-        backgroundColor: colors.bgPressed,
+        backgroundColor: colors.background,
         borderRadius: BorderRadius.sm,
       }}
     >
