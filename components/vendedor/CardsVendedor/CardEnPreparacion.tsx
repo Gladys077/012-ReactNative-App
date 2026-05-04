@@ -5,7 +5,7 @@ import type { Mensaje } from "@/types/pedidos";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
-import { Chat, EnCaminoOutline, Telephone, Ubicacion } from "../../icons";
+import { Chat, ListoParaEnviarNuevo, Telephone, Ubicacion } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
@@ -15,7 +15,7 @@ import CardVendedorBase from "./CardVendedorBase";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
-interface CardListoParaEnviarProps {
+interface CardEnPreparacionProps {
   pedidoId: string | number;
   fechaSeleccion?: string;
   compradorNombre?: string;
@@ -90,7 +90,7 @@ const ContenidoExpandible = ({
         {
           text: "Sí, confirmar",
           onPress: () => {
-            updateEstado(pedidoId, "en_camino");
+            updateEstado(pedidoId, "listo_para_enviar");
           },
         },
       ],
@@ -144,7 +144,7 @@ const ContenidoExpandible = ({
             />
             <Text
               style={{
-                fontSize: FontSizes.base,
+                fontSize: FontSizes.xs,
                 fontFamily: fonts.robotoMedium,
                 color: colors.textDefault,
               }}
@@ -203,7 +203,7 @@ const ContenidoExpandible = ({
               <Ubicacion width={16} height={16} fill={colors.textDefault} />
               <Text
                 style={{
-                  fontSize: FontSizes.base,
+                  fontSize: FontSizes.sm,
                   fontFamily: fonts.robotoRegular,
                   color: colors.textDefault,
                   flex: 1,
@@ -252,11 +252,11 @@ const ContenidoExpandible = ({
         section="seller"
         variant="primary"
         width="full"
-        icon={EnCaminoOutline}
+        icon={ListoParaEnviarNuevo}
         iconSize={32}
         onPress={handleListoParaEnviar}
       >
-        <Text>En Camino</Text>
+        <Text>Listo para enviar</Text>
       </Button>
     </View>
   );
@@ -264,9 +264,9 @@ const ContenidoExpandible = ({
 
 // ─── Export principal ─────────────────────────────────────────────────────────
 
-const ESTADO: EtiqEstadoType = "Listo. Enviar!";
+const ESTADO: EtiqEstadoType = "En preparación";
 
-export default function CardListoParaEnviar({
+export default function CardEnPreparacion({
   pedidoId,
   fechaSeleccion,
   compradorNombre,
@@ -280,7 +280,7 @@ export default function CardListoParaEnviar({
   onVerPedido,
   onVerNota,
   onListoParaEnviar,
-}: CardListoParaEnviarProps) {
+}: CardEnPreparacionProps) {
   return (
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}

@@ -14,6 +14,7 @@ interface ButtonProps {
   disabled?: boolean;
   onPress?: () => void;
   icon?: ComponentType<SvgProps>;
+  iconSize?: number;
   iconPosition?: "left" | "right";
   styleAdd?: ViewStyle;
 }
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onPress,
   icon,
+  iconSize = 16,
   iconPosition = "left",
   styleAdd,
 }) => {
@@ -138,8 +140,9 @@ const Button: React.FC<ButtonProps> = ({
             <View style={contentStyle}>
               {Icon && (
                 <Icon
-                  width={16}
-                  height={16}
+                  width={iconSize}
+                  height={iconSize}
+                  color={containerColors.iconColor}
                   fill={containerColors.iconColor}
                   stroke={containerColors.iconColor}
                 />

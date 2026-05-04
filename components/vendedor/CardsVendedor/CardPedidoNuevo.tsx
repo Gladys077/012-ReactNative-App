@@ -2,7 +2,6 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Text, TextInput, View } from "react-native";
-import { Enviar } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
@@ -207,7 +206,7 @@ const ContenidoExpandible = ({
             section="seller"
             variant="primary"
             width="full"
-            icon={Enviar}
+            // icon={Enviar}
             iconPosition="left"
             onPress={handleEnviar}
           >

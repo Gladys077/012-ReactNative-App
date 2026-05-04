@@ -316,8 +316,8 @@ export default function ChatModal({
                 {fechaSeleccion && (
                   <Text
                     style={{
-                      color: colors.textMuted,
-                      fontSize: FontSizes.xs,
+                      color: colors.textDefault,
+                      fontSize: FontSizes.sm,
                       fontFamily: fonts.robotoRegular,
                     }}
                   >

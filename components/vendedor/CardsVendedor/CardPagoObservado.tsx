@@ -5,9 +5,9 @@ import type { Mensaje } from "@/types/pedidos";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
-import { Chat, Comprobante } from "../../icons";
+import { Chat, Comprobante, Historial } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
-import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
+import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
 import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
@@ -91,8 +91,9 @@ const ContenidoExpandible = ({
     <View
       style={{
         gap: Spacing.md,
-        backgroundColor: colors.background,
-        paddingHorizontal: Spacing.lg,
+        // backgroundColor: colors.background,
+        // paddingHorizontal: Spacing.lg,
+        paddingTop: Spacing.md,
         paddingBottom: Spacing.lg,
       }}
     >
@@ -213,7 +214,7 @@ const ContenidoExpandible = ({
       />
 
       {/* ── Nota del vendedor ── */}
-      {nota && <NotaDelVendedor nota={nota} onVerNota={onVerNota} />}
+      <NotaEnviada nota={nota} />
 
       {/* ── Ver pedido ── */}
       <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
@@ -230,6 +231,7 @@ const ContenidoExpandible = ({
         section="seller"
         variant="primary"
         width="full"
+        icon={Historial}
         onPress={handleArchivar}
       >
         <Text>Archivar pedido</Text>

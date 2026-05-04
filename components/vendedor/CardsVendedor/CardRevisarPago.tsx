@@ -7,7 +7,7 @@ import { Mensaje } from "../../../types/pedidos";
 import ChatModal from "../../Chat/ChatModal";
 import { Cancel, Chat, Check, Comprobante } from "../../icons";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
-import NotaDelVendedor from "../../subcomponentes/NotaDelVendedor";
+import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
 import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
@@ -22,7 +22,6 @@ interface CardRevisarPagoProps {
   nota?: string;
   precio: number;
   onVerPedido: (id: string | number) => void;
-  onVerNota?: (nota: string) => void;
   onVerComprobante: (id: string | number) => void;
 }
 
@@ -124,7 +123,6 @@ const ContenidoExpandible = ({
   compradorNombre,
   fechaSeleccion,
   onVerPedido,
-  onVerNota,
   onVerComprobante,
 }: {
   pedidoId: string | number;
@@ -133,7 +131,6 @@ const ContenidoExpandible = ({
   compradorNombre?: string;
   fechaSeleccion?: string;
   onVerPedido: (id: string | number) => void;
-  onVerNota?: (nota: string) => void;
   onVerComprobante: (id: string | number) => void;
 }) => {
   const { colors, fonts } = useTheme();
@@ -142,7 +139,6 @@ const ContenidoExpandible = ({
   const [estadoPago, setEstadoPago] = useState<EstadoPago>(null);
   const [chatVisible, setChatVisible] = useState(false);
 
-  // Llamado desde ChatModal al enviar — mueve la card si hay problema
   const handleMensajeEnviado = (texto: string) => {
     if (!texto.trim()) return;
 
@@ -169,7 +165,6 @@ const ContenidoExpandible = ({
     if (estadoPago === "correcto") {
       handlePagoConfirmado();
     } else if (estadoPago === "problema") {
-      // Muevo la card a Pago Observado
       updateEstado(pedidoId, "pago_observado");
     }
   };
@@ -293,7 +288,7 @@ const ContenidoExpandible = ({
       />
 
       {/* ── Nota del vendedor ── */}
-      {nota && <NotaDelVendedor nota={nota} onVerNota={onVerNota} />}
+      <NotaEnviada nota={nota} />
 
       {/* ── Ver pedido ── */}
       <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
@@ -306,19 +301,17 @@ const ContenidoExpandible = ({
       <LineaDivisoria />
 
       {/* ── CTA principal ── */}
-
       <Button
         section="seller"
-        variant={"primary"}
+        variant="primary"
         width="full"
-        disabled={estadoPago === null} // Solo deshabilitado si no eligió nada
+        disabled={estadoPago === null}
         onPress={handleAccionPrincipal}
         styleAdd={
           estadoPago === "problema"
             ? {
                 backgroundColor: colors.brandSeller,
                 borderWidth: 2,
-                // borderColor: colors.brandSeller,
                 elevation: 0,
                 shadowOpacity: 0,
               }
@@ -348,7 +341,6 @@ export default function CardRevisarPago({
   nota,
   precio,
   onVerPedido,
-  onVerNota,
   onVerComprobante,
 }: CardRevisarPagoProps) {
   return (
@@ -366,7 +358,6 @@ export default function CardRevisarPago({
           compradorNombre={compradorNombre}
           fechaSeleccion={fechaSeleccion}
           onVerPedido={onVerPedido}
-          onVerNota={onVerNota}
           onVerComprobante={onVerComprobante}
         />
       }

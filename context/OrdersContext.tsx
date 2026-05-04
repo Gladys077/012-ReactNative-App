@@ -47,6 +47,7 @@ const mockPedidos: Pedido[] = [
         titular: "María Rodriguez",
         rating: 4.5,
         precio: 4250,
+        nota: "Se le entregará entre las 12 y las 13hs.",
         duracionCronometro: 30,
       },
     ],
@@ -55,7 +56,7 @@ const mockPedidos: Pedido[] = [
   {
     id: "3",
     estadoSistema: "aceptado_transferencia",
-    textoPedido: `200 Sandwichs de miga de jamón y queso`,
+    textoPedido: `200 Sandwichs de miga de jamón y queso\n1 kilo de pan casero\n1 kilo de pan flauta\n1 kilo de pan lactal\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 Cremona `,
     direccionComprador: "Calle 1, nro 933",
     celularComprador: 12341243,
     compradorNombre: "Marcelo Andrade",
@@ -76,7 +77,7 @@ const mockPedidos: Pedido[] = [
   {
     id: "4",
     estadoSistema: "en_preparacion",
-    textoPedido: `200 Sandwichs de miga de jamón y queso`,
+    textoPedido: `200 Sandwichs de miga de jamón y queso\n1 kilo de pan casero\n1 kilo de pan flauta\n1 kilo de pan lactal\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 kilo de pan casero\n1 Cremona `,
     direccionComprador: "Calle 50, nro 90",
     celularComprador: 12341243,
     compradorNombre: "Laura Gómez",
@@ -91,7 +92,17 @@ const mockPedidos: Pedido[] = [
       titular: "Pedro Pascal",
       rating: 4.8,
       precio: 25000,
+      nota: "El pedido será entregado entre las 11 y las 13hs.",
     },
+    mensajes: [
+      {
+        id: "m1",
+        texto:
+          "El comprobante que me enviaste no cubre el importe total del pedido.",
+        remitenteId: "vendedor",
+        timestamp: new Date(Date.now() - 28 * 60 * 1000).toISOString(),
+      },
+    ],
   },
   {
     id: "5",
@@ -112,7 +123,7 @@ const mockPedidos: Pedido[] = [
       titular: "Juan Pérez",
       rating: 4.0,
       precio: 4150,
-      nota: "El pedido será entregado entre las 10 y las 1ahs.",
+      nota: "El pedido será entregado entre las 10 y las 11hs.",
     },
     comprobantes: [
       {
@@ -151,6 +162,7 @@ const mockPedidos: Pedido[] = [
       titular: "Juan Pérez",
       rating: 4.0,
       precio: 4250,
+      nota: "Se le entregará entre las 12 y las 13hs.",
     },
     comprobantes: [
       {

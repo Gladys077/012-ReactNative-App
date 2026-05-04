@@ -4,7 +4,7 @@ import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import CardEnCamino from "../CardsVendedor/CardEnCamino";
-import CardEnPreparacion from "../CardsVendedor/CardEnPreparación";
+import CardEnPreparacion from "../CardsVendedor/CardEnPreparacion";
 import CardListoParaEnviar from "../CardsVendedor/CardListoParaEnviar";
 import CardPagoObservado from "../CardsVendedor/CardPagoObservado";
 import CardPagoPendiente from "../CardsVendedor/CardPagoPendiente";
@@ -57,7 +57,7 @@ function renderCard(
     nota: pedido.respuestaSeleccionada?.nota,
     precio: pedido.respuestaSeleccionada?.precio ?? 0,
     direccionComprador: pedido.direccionComprador,
-    telefono: pedido.respuestaSeleccionada?.telefono,
+    celularComprador: pedido.celularComprador,
     onVerPedido: handlers.onVerPedido,
     onVerNota: handlers.onVerNota,
   };
@@ -89,6 +89,7 @@ function renderCard(
         <CardEnPreparacion
           key={pedido.id}
           {...common}
+          mensajes={pedido.mensajes}
           onListoParaEnviar={handlers.onListoParaEnviar}
         />
       );
@@ -98,6 +99,7 @@ function renderCard(
         <CardListoParaEnviar
           key={pedido.id}
           {...common}
+          mensajes={pedido.mensajes}
           onListoParaEnviar={handlers.onListoParaEnviar}
         />
       );
@@ -107,6 +109,7 @@ function renderCard(
         <CardEnCamino
           key={pedido.id}
           {...common}
+          mensajes={pedido.mensajes}
           onListoParaEnviar={handlers.onEntregado}
         />
       );
