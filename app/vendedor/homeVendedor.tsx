@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
 import ComprobanteViewerModal from "../../components/vendedor/ComprobanteViewerModal";
@@ -23,31 +23,46 @@ const HomeVendedor = () => {
     useBottomSheetVerPedido();
 
   const { pedidos } = useOrders();
+  // const pathname = usePathname();
+
   const { switchRole } = useAuthContext();
 
   const [tabActivo, setTabActivo] = useState<TabVendedorMenu>("pedidos");
   const [tipsOpen, setTipsOpen] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        // Se ejecuta cuando la screen PIERDE el foco (navegás a otra)
+        closeBottomSheetVerPedido();
+      };
+    }, [closeBottomSheetVerPedido]),
+  );
 
   const [subTabPendienteActivo, setSubTabPendienteActivo] =
     useState<SubTabPendiente | null>(null);
 
   // ─── Handlers ──────────────────────────────────────────────────────
   const handleTabChange = (tab: TabVendedorMenu) => {
+    closeBottomSheetVerPedido();
     if (tab === "pendientes" && tabActivo === "pendientes") {
       // Ya estamos en pendientes → volver al submenú
       setSubTabPendienteActivo(null);
       return;
     }
     setTabActivo(tab);
+    if (tab === "pendientes") setSubTabPendienteActivo(null);
   };
 
   const handleVerPedido = (id: string | number) => {
+    const pedido = pedidos.find((p) => p.id === id);
+    if (!pedido) return;
+
     if (isVisible) {
       closeBottomSheetVerPedido();
       return;
     }
-    const pedido = pedidosPendientes.find((p) => p.id === id);
-    if (!pedido) return;
+
     openBottomSheetVerPedido({
       fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],
@@ -91,7 +106,10 @@ const HomeVendedor = () => {
           <PedidosPendientes
             pedidos={pedidosPendientes}
             subTabActivo={subTabPendienteActivo}
-            onSubTabChange={setSubTabPendienteActivo}
+            onSubTabChange={(sub) => {
+              closeBottomSheetVerPedido();
+              setSubTabPendienteActivo(sub);
+            }}
             onVerPedido={handleVerPedido}
             onVerNota={handleVerNota}
             onVerComprobante={handleVerComprobante}
@@ -103,7 +121,13 @@ const HomeVendedor = () => {
           />
         );
       case "entregados":
-        return <PedidosEntregados pedidos={pedidosEntregados} />;
+        return (
+          <PedidosEntregados
+            pedidos={pedidosEntregados}
+            onVerPedido={handleVerPedido}
+            onVerNota={handleVerNota}
+          />
+        );
     }
   };
 

@@ -39,8 +39,13 @@ export const BottomSheetVerPedidoProvider = ({
   }, []);
 
   const closeBottomSheetVerPedido = useCallback(() => {
+    sheetRef.current?.dismiss();
     setIsVisible(false);
-    setPedidoData({});
+  }, []);
+
+  const handleSheetClose = useCallback(() => {
+    setIsVisible(false);
+    setPedidoData({}); // se limpia DESPUÉS de la animación de cierre
   }, []);
 
   return (
@@ -53,7 +58,7 @@ export const BottomSheetVerPedidoProvider = ({
         ref={sheetRef}
         items={pedidoData.items}
         isVisible={isVisible}
-        onClose={closeBottomSheetVerPedido}
+        onClose={handleSheetClose}
         backgroundColor={pedidoData.backgroundColor}
       />
     </BottomSheetVerPedidoContext.Provider>

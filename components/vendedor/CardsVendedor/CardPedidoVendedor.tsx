@@ -34,6 +34,7 @@ export interface CardPedidoVendedorProps {
   btnPrincipalIcon: React.ComponentType<any>;
   btnPrincipalIconSize?: number;
   onPressBtnPrincipal: () => void;
+  contenidoExtra?: React.ReactNode;
 }
 
 interface ContenidoExpandibleProps {
@@ -49,6 +50,7 @@ interface ContenidoExpandibleProps {
   btnPrincipalIcon: React.ComponentType<any>;
   btnPrincipalIconSize?: number;
   onPressBtnPrincipal: () => void;
+  contenidoExtra?: React.ReactNode;
 }
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -76,6 +78,7 @@ const ContenidoExpandible = ({
   btnPrincipalIcon,
   btnPrincipalIconSize = 32,
   onPressBtnPrincipal,
+  contenidoExtra,
 }: ContenidoExpandibleProps) => {
   const { colors, fonts } = useTheme();
   const { agregarMensaje } = useOrders();
@@ -193,6 +196,8 @@ const ContenidoExpandible = ({
       >
         <Text>{btnPrincipalLabel}</Text>
       </Button>
+
+      {contenidoExtra}
     </View>
   );
 };
@@ -217,6 +222,7 @@ export default function CardPedidoVendedor({
   btnPrincipalIcon,
   btnPrincipalIconSize,
   onPressBtnPrincipal,
+  contenidoExtra,
 }: CardPedidoVendedorProps) {
   return (
     <CardVendedorBase
@@ -239,6 +245,7 @@ export default function CardPedidoVendedor({
           btnPrincipalIcon={btnPrincipalIcon}
           btnPrincipalIconSize={btnPrincipalIconSize}
           onPressBtnPrincipal={onPressBtnPrincipal}
+          contenidoExtra={contenidoExtra}
         />
       }
     />

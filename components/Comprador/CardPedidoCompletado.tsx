@@ -1,9 +1,10 @@
 import CardPedidoBase from "@/components/shared/CardPedidoBase";
-import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useEffect, useRef } from "react";
-import { Animated, Image, Text } from "react-native";
+import { useCallback } from "react";
+import ContenidoGracias from "../subcomponentes/ContenidoGracias";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+
+// ─── Props ────────────────────────────────────────────────────────────────────
 
 interface CardPedidoCompletadoProps {
   pedidoId: string | number;
@@ -11,30 +12,18 @@ interface CardPedidoCompletadoProps {
   onDesaparecer?: () => void;
 }
 
-const DURACION_MS = 5000;
+// ─── Export principal ─────────────────────────────────────────────────────────
 
 export default function CardPedidoCompletado({
   pedidoId,
   fechaSeleccion,
   onDesaparecer,
 }: CardPedidoCompletadoProps) {
-  const { colors, fonts } = useTheme();
-  const progreso = useRef(new Animated.Value(1)).current;
+  const { colors } = useTheme();
 
-  useEffect(() => {
-    Animated.timing(progreso, {
-      toValue: 0,
-      duration: DURACION_MS,
-      useNativeDriver: false,
-    }).start(() => {
-      onDesaparecer?.();
-    });
-  }, []);
-
-  const width = progreso.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["100%", "0%"],
-  });
+  const handleFin = useCallback(() => {
+    onDesaparecer?.();
+  }, [onDesaparecer]);
 
   return (
     <CardPedidoBase
@@ -44,45 +33,7 @@ export default function CardPedidoCompletado({
     >
       <LineaEstadoPedido estadoActual="Recibido" todosCompletados={true} />
 
-      <Text
-        style={{
-          fontFamily: fonts.robotoMedium,
-          fontSize: FontSizes.base,
-          color: colors.textDefault,
-          textAlign: "center",
-          marginTop: Spacing.lg,
-          fontStyle: "italic",
-        }}
-      >
-        ¡Misión cumplida!{"\n"}Tu opinión ayuda a que otros puedan elegir mejor.
-      </Text>
-
-      <Image
-        source={require("@/assets/images/Listo.png")}
-        style={{ width: "100%", height: 220, marginTop: Spacing.lg }}
-        resizeMode="contain"
-      />
-
-      {/* Barra de progreso */}
-      <Text
-        style={{
-          fontSize: FontSizes.sm,
-          color: colors.textDefault,
-          textAlign: "center",
-          marginTop: Spacing.lg,
-        }}
-      >
-        Guardando en historial...
-      </Text>
-      <Animated.View
-        style={{
-          height: 4,
-          borderRadius: 2,
-          backgroundColor: colors.brandBuyer,
-          width,
-          marginTop: Spacing.xs,
-        }}
-      />
+      <ContenidoGracias colorBarra={colors.brandBuyer} onFin={handleFin} />
     </CardPedidoBase>
   );
 }

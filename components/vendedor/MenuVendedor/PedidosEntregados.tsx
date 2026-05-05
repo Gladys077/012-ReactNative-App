@@ -1,21 +1,26 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import React from "react";
 import { ScrollView, Text } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
+import CardEntregado from "../CardsVendedor/CardEntregado";
 
 interface Props {
   pedidos: Pedido[];
+  onVerPedido: (id: string | number) => void;
+  onVerNota?: (nota: string) => void;
 }
 
-const PedidosEntregados = ({ pedidos }: Props) => {
+const PedidosEntregados = ({ pedidos, onVerPedido, onVerNota }: Props) => {
   const { colors } = useTheme();
 
   return (
     <ScrollView
       contentContainerStyle={{
-        paddingHorizontal: Spacing.xl,
-        paddingVertical: Spacing.xl,
+        padding: Spacing.md,
+        paddingTop: Spacing.xl,
         gap: Spacing.lg,
+        paddingBottom: Spacing.xl,
       }}
       showsVerticalScrollIndicator={false}
     >
@@ -32,9 +37,21 @@ const PedidosEntregados = ({ pedidos }: Props) => {
         </Text>
       ) : (
         pedidos.map((p) => (
-          <Text key={p.id} style={{ color: colors.textDefault }}>
-            {p.compradorNombre} — {p.estadoSistema}
-          </Text>
+          <CardEntregado
+            key={p.id}
+            pedidoId={p.id}
+            fechaSeleccion={p.fechaSeleccion}
+            compradorNombre={p.compradorNombre}
+            compradorRating={p.compradorRating}
+            textoPedido={p.textoPedido}
+            nota={p.respuestaSeleccionada?.nota}
+            precio={p.respuestaSeleccionada?.precio ?? 0}
+            mensajes={p.mensajes}
+            direccionComprador={p.direccionComprador}
+            celularComprador={p.celularComprador}
+            onVerPedido={onVerPedido}
+            onVerNota={onVerNota}
+          />
         ))
       )}
     </ScrollView>

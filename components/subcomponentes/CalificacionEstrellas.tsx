@@ -8,14 +8,20 @@ const EMOJIS = ["😞", "😕", "😐", "😊", "🤩"];
 
 interface CalificacionEstrellasProps {
   onEnviar: (data: { estrellas: number; comentario: string }) => void;
+  titulo?: string;
+  colorBoton?: string;
 }
 
 export default function CalificacionEstrellas({
   onEnviar,
+  titulo = "Calificá al vendedor",
+  colorBoton,
 }: CalificacionEstrellasProps) {
   const { colors, fonts } = useTheme();
   const [estrellas, setEstrellas] = useState(0);
   const [comentario, setComentario] = useState("");
+
+  const colorBtnFinal = colorBoton ?? colors.brandBuyer;
 
   return (
     <View
@@ -34,7 +40,7 @@ export default function CalificacionEstrellas({
           textAlign: "center",
         }}
       >
-        Califica al vendedor
+        {titulo}
       </Text>
 
       {/* Estrellas + emoji */}
@@ -96,8 +102,7 @@ export default function CalificacionEstrellas({
           onEnviar({ estrellas, comentario });
         }}
         style={({ pressed }) => ({
-          backgroundColor:
-            estrellas === 0 ? colors.textMuted : colors.brandBuyer,
+          backgroundColor: estrellas === 0 ? colors.textMuted : colorBtnFinal,
           borderRadius: 12,
           padding: Spacing.md,
           alignItems: "center",

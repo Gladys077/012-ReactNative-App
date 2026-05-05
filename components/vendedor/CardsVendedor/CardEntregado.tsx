@@ -1,17 +1,14 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { Spacing } from "@/constants/Tokens";
 import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { Mensaje } from "@/types/pedidos";
-import React, { useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
-import ChatModal from "../../Chat/ChatModal";
-import { Chat, Entregado, Telephone, Ubicacion } from "../../icons";
-import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
-import NotaEnviada from "../../subcomponentes/NotaEnviada";
-import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
-import Button from "../../UI/Button/Button";
-import LineaDivisoria from "../../UI/LineaDivisoria";
-import CardVendedorBase from "./CardVendedorBase";
+import React, { useCallback, useState } from "react";
+import { Modal, Pressable } from "react-native";
+// import { CalificarIcono } from "../../icons";
+import { Estrella100 } from "../../icons";
+import CalificacionEstrellas from "../../subcomponentes/CalificacionEstrellas";
+import ContenidoGracias from "../../subcomponentes/ContenidoGracias";
+import CardPedidoVendedor from "./CardPedidoVendedor";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -28,245 +25,15 @@ interface CardEntregadoProps {
   celularComprador?: number;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
-  onListoParaEnviar: (id: string | number) => void;
 }
 
-const toMensajesModal = (mensajes?: Mensaje[]): Mensaje[] =>
-  (mensajes ?? []).map((m) => ({
-    id: m.id,
-    texto: m.texto,
-    remitenteId: m.remitenteId,
-    timestamp: m.timestamp,
-  }));
+// ─── Constante ────────────────────────────────────────────────────────────────
 
-// ─── Contenido Expandible ─────────────────────────────────────────────────────
-
-const ContenidoExpandible = ({
-  pedidoId,
-  nota,
-  mensajes,
-  compradorNombre,
-  direccionComprador,
-  celularComprador,
-  fechaSeleccion,
-  onVerPedido,
-  onVerNota,
-  onListoParaEnviar,
-}: {
-  pedidoId: string | number;
-  nota?: string;
-  mensajes?: Mensaje[];
-  compradorNombre?: string;
-  direccionComprador?: string;
-  celularComprador?: number;
-  fechaSeleccion?: string;
-  onVerPedido: (id: string | number) => void;
-  onVerNota?: (nota: string) => void;
-  onListoParaEnviar: (id: string | number) => void;
-}) => {
-  const { colors, fonts } = useTheme();
-  const { updateEstado, agregarMensaje } = useOrders();
-  const [chatVisible, setChatVisible] = useState(false);
-
-  const mensajesModal = toMensajesModal(mensajes);
-
-  const handleMensajeEnviado = (texto: string) => {
-    if (!texto.trim()) return;
-    const nuevo: Mensaje = {
-      id: Date.now().toString(),
-      texto: texto.trim(),
-      remitenteId: "vendedor",
-      timestamp: new Date().toISOString(),
-    };
-    agregarMensaje(pedidoId, nuevo);
-  };
-
-  const handleListoParaEnviar = () => {
-    Alert.alert(
-      "Pedido en camino",
-      "¿Confirmás que el pedido ha sido entregado?",
-      [
-        { text: "No, volver", style: "cancel" },
-        {
-          text: "Sí, confirmar",
-          onPress: () => {
-            updateEstado(pedidoId, "entregado_pendiente_calif");
-          },
-        },
-      ],
-    );
-  };
-
-  return (
-    <View
-      style={{
-        gap: Spacing.md,
-        // backgroundColor: colors.background,
-        // paddingHorizontal: Spacing.sm,
-        paddingTop: Spacing.md,
-        paddingBottom: Spacing.lg,
-      }}
-    >
-      {/* ── Mensajes ── */}
-      {mensajesModal.length > 0 && (
-        <Pressable
-          onPress={() => setChatVisible(true)}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: colors.cardBg,
-            borderRadius: BorderRadius.lg,
-            borderWidth: 1,
-            borderColor: colors.brandSeller,
-            padding: Spacing.lg,
-            gap: Spacing.md,
-          }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              fontSize: FontSizes.sm,
-              fontFamily: fonts.robotoRegular,
-              color: colors.textDefault,
-            }}
-          >
-            {mensajesModal.length > 0
-              ? `${mensajesModal.length} mensaje${mensajesModal.length > 1 ? "s" : ""} en la conversación.`
-              : "Sin mensajes aún. Podés escribirle al comprador."}
-          </Text>
-          <View style={{ alignItems: "center", gap: 4 }}>
-            <Chat
-              width={24}
-              height={24}
-              stroke={colors.textDefault}
-              strokeWidth={1.5}
-              fill="transparent"
-            />
-            <Text
-              style={{
-                fontSize: FontSizes.base,
-                fontFamily: fonts.robotoMedium,
-                color: colors.textDefault,
-              }}
-            >
-              Mensajes
-            </Text>
-          </View>
-        </Pressable>
-      )}
-
-      {/* ── ChatModal ── */}
-      <ChatModal
-        visible={chatVisible}
-        onClose={() => setChatVisible(false)}
-        pedidoId={pedidoId}
-        fechaSeleccion={fechaSeleccion}
-        otroNombre={compradorNombre ?? "Comprador"}
-        rolActual="vendedor"
-        mensajesIniciales={mensajesModal.map((m) => ({
-          ...m,
-          timestamp: new Date(m.timestamp),
-        }))}
-        onMensajeEnviado={handleMensajeEnviado}
-      />
-
-      {/* ── Nota del vendedor ── */}
-      <NotaEnviada nota={nota} />
-
-      {/* ── Datos del comprador ── */}
-      {(direccionComprador || celularComprador) && (
-        <View
-          style={{
-            backgroundColor: colors.cardBg,
-            borderRadius: BorderRadius.md,
-            padding: Spacing.md,
-            gap: Spacing.sm,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: FontSizes.base,
-              fontFamily: fonts.robotoBold,
-              color: colors.textDefault,
-            }}
-          >
-            Datos del comprador
-          </Text>
-          {direccionComprador && (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: Spacing.sm,
-              }}
-            >
-              <Ubicacion width={16} height={16} fill={colors.textDefault} />
-              <Text
-                style={{
-                  fontSize: FontSizes.base,
-                  fontFamily: fonts.robotoRegular,
-                  color: colors.textDefault,
-                  flex: 1,
-                }}
-              >
-                {direccionComprador}
-              </Text>
-            </View>
-          )}
-          {celularComprador && (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: Spacing.sm,
-              }}
-            >
-              <Telephone width={16} height={16} fill={colors.textDefault} />
-              <Text
-                style={{
-                  fontSize: FontSizes.base,
-                  fontFamily: fonts.robotoRegular,
-                  color: colors.textDefault,
-                  flex: 1,
-                }}
-              >
-                {celularComprador}
-              </Text>
-            </View>
-          )}
-        </View>
-      )}
-
-      {/* ── Ver pedido ── */}
-      <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
-        <VerBottomSheet
-          onPress={() => onVerPedido(pedidoId)}
-          variant="seller"
-        />
-      </View>
-
-      <LineaDivisoria />
-
-      {/* ── Listo para enviar ── */}
-      <Button
-        section="seller"
-        variant="primary"
-        width="full"
-        icon={Entregado}
-        iconSize={32}
-        onPress={handleListoParaEnviar}
-      >
-        <Text>Entregado</Text>
-      </Button>
-    </View>
-  );
-};
+const ESTADO = "Entregado" as const;
 
 // ─── Export principal ─────────────────────────────────────────────────────────
 
-const ESTADO: EtiqEstadoType = "En camino";
-
-export default function CardEnCamino({
+export default function CardEntregado({
   pedidoId,
   fechaSeleccion,
   compradorNombre,
@@ -279,29 +46,108 @@ export default function CardEnCamino({
   celularComprador,
   onVerPedido,
   onVerNota,
-  onListoParaEnviar,
 }: CardEntregadoProps) {
+  const { colors } = useTheme();
+  const { moverAHistorial } = useOrders();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [calificado, setCalificado] = useState(false);
+
+  const handleCalificar = useCallback(
+    (data: { estrellas: number; comentario: string }) => {
+      // acá guardás la calificación donde corresponda
+      setModalVisible(false);
+      setCalificado(true);
+    },
+    [],
+  );
+
+  const handleFin = useCallback(() => {
+    moverAHistorial(pedidoId);
+  }, [pedidoId, moverAHistorial]);
+
+  // ── Tras calificar: muestra agradecimiento inline ──
+  if (calificado) {
+    return (
+      <CardPedidoVendedor
+        pedidoId={pedidoId}
+        fechaSeleccion={fechaSeleccion}
+        compradorNombre={compradorNombre}
+        compradorRating={compradorRating}
+        textoPedido={textoPedido}
+        nota={nota}
+        precio={precio}
+        mensajes={mensajes}
+        direccionComprador={direccionComprador}
+        celularComprador={celularComprador}
+        onVerPedido={onVerPedido}
+        onVerNota={onVerNota}
+        estado={ESTADO}
+        btnPrincipalLabel="Calificar"
+        btnPrincipalIcon={Estrella100}
+        btnPrincipalIconSize={32}
+        onPressBtnPrincipal={() => {}}
+        contenidoExtra={
+          <ContenidoGracias colorBarra={colors.brandSeller} onFin={handleFin} />
+        }
+      />
+    );
+  }
+
+  // ── Estado normal: btn Calificar ──
   return (
-    <CardVendedorBase
-      fechaSeleccion={fechaSeleccion}
-      estado={ESTADO}
-      compradorNombre={compradorNombre}
-      compradorRating={compradorRating}
-      precio={precio}
-      contenidoExpandible={
-        <ContenidoExpandible
-          pedidoId={pedidoId}
-          nota={nota}
-          mensajes={mensajes}
-          compradorNombre={compradorNombre}
-          direccionComprador={direccionComprador}
-          celularComprador={celularComprador}
-          fechaSeleccion={fechaSeleccion}
-          onVerPedido={onVerPedido}
-          onVerNota={onVerNota}
-          onListoParaEnviar={onListoParaEnviar}
-        />
-      }
-    />
+    <>
+      <CardPedidoVendedor
+        pedidoId={pedidoId}
+        fechaSeleccion={fechaSeleccion}
+        compradorNombre={compradorNombre}
+        compradorRating={compradorRating}
+        textoPedido={textoPedido}
+        nota={nota}
+        precio={precio}
+        mensajes={mensajes}
+        direccionComprador={direccionComprador}
+        celularComprador={celularComprador}
+        onVerPedido={onVerPedido}
+        onVerNota={onVerNota}
+        estado={ESTADO}
+        btnPrincipalLabel="Calificar"
+        btnPrincipalIcon={Estrella100}
+        btnPrincipalIconSize={32}
+        onPressBtnPrincipal={() => setModalVisible(true)}
+      />
+
+      {/* ── Modal de calificación ── */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.4)",
+            justifyContent: "flex-end",
+          }}
+          onPress={() => setModalVisible(false)}
+        >
+          <Pressable
+            style={{
+              backgroundColor: colors.background,
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+              padding: Spacing.xl,
+            }}
+            onPress={() => {}}
+          >
+            <CalificacionEstrellas
+              titulo="Calificá al comprador"
+              colorBoton={colors.brandSeller}
+              onEnviar={handleCalificar}
+            />
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </>
   );
 }

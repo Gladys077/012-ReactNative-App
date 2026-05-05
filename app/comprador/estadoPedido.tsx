@@ -2,6 +2,8 @@ import CardPedidoVerRespuestas from "@/components/Comprador/CardPedidoVerRespues
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
 import CardPedidoCompletado from "../../components/Comprador/CardPedidoCompletado";
@@ -16,14 +18,30 @@ import { estadoSistemaAComprador } from "../../types/pedidos";
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
-  const { openBottomSheetVerPedido } = useBottomSheetVerPedido();
+  const { isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido } =
+    useBottomSheetVerPedido();
   const { pedidos, updateEstado, updatePedido, moverAHistorial } = useOrders();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        // Se ejecuta cuando la screen PIERDE el foco (navegás a otra)
+        closeBottomSheetVerPedido();
+      };
+    }, [closeBottomSheetVerPedido]),
+  );
 
   // ─── Handlers ────────────────────────────────────────────────────────────────
 
   const handleVerPedido = (id: string | number) => {
     const pedido = pedidos.find((p) => p.id === id);
     if (!pedido) return;
+
+    if (isVisible) {
+      closeBottomSheetVerPedido();
+      return;
+    }
+
     openBottomSheetVerPedido({
       fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],

@@ -6,39 +6,13 @@ import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import { Chat, Comprobante, Remove } from "../../icons";
+import DatosDelComprador from "../../subcomponentes/DatosDelComprador";
 
 interface CardHistorialVendedorProps {
   pedido: Pedido;
   onEliminar: (id: string | number) => void;
   onVerComprobante: (id: string | number) => void;
 }
-
-const FilaInfo = ({ label, valor }: { label: string; valor: string }) => {
-  const { colors, fonts } = useTheme();
-  return (
-    <View style={{ flexDirection: "row", gap: Spacing.sm, flexWrap: "wrap" }}>
-      <Text
-        style={{
-          fontFamily: fonts.robotoBold,
-          fontSize: FontSizes.sm,
-          color: colors.textMuted,
-        }}
-      >
-        {label}
-      </Text>
-      <Text
-        style={{
-          fontFamily: fonts.robotoRegular,
-          fontSize: FontSizes.sm,
-          color: colors.textDefault,
-          flex: 1,
-        }}
-      >
-        {valor}
-      </Text>
-    </View>
-  );
-};
 
 export default function CardHistorialVendedor({
   pedido,
@@ -158,113 +132,88 @@ export default function CardHistorialVendedor({
 
           <LineaDivisoria />
 
-          {/* Datos del comprador */}
-          <Text
-            style={{
-              fontFamily: fonts.robotoBold,
-              fontSize: FontSizes.sm,
-              color: colors.textMuted,
-              textTransform: "uppercase",
-              letterSpacing: 0.8,
-            }}
-          >
-            Datos del comprador
-          </Text>
-          <FilaInfo label="Dirección:" valor={pedido.direccionComprador} />
-          <FilaInfo
-            label="Celular:"
-            valor={pedido.celularComprador?.toString() ?? "—"}
+          <DatosDelComprador
+            direccion={pedido.direccionComprador}
+            celular={pedido.celularComprador}
           />
 
-          <LineaDivisoria />
+          {(tieneComprobantes || tieneMensajes) && <LineaDivisoria />}
 
-          {/* ── Ver Comprobante ── */}
-          <Pressable
-            onPress={() => tieneComprobantes && onVerComprobante(pedido.id)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: Spacing.sm,
-              paddingVertical: Spacing.lg,
-              borderRadius: BorderRadius.md,
-              borderWidth: 1,
-              borderColor: tieneComprobantes
-                ? colors.textDefault
-                : colors.textMuted,
-              borderStyle: "dashed",
-              opacity: tieneComprobantes ? 1 : 0.45,
-            }}
-          >
-            <Comprobante
-              width={24}
-              height={24}
-              fill={tieneComprobantes ? colors.brandSeller : colors.textMuted}
-            />
-            <Text
+          {/* ── Ver Comprobante: solo si hay ── */}
+          {tieneComprobantes && (
+            <Pressable
+              onPress={() => onVerComprobante(pedido.id)}
               style={{
-                fontSize: FontSizes.sm,
-                fontFamily: fonts.robotoBold,
-                color: tieneComprobantes
-                  ? colors.brandSeller
-                  : colors.textMuted,
-                letterSpacing: 0.5,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: Spacing.sm,
+                paddingVertical: Spacing.lg,
+                borderRadius: BorderRadius.md,
+                borderWidth: 1,
+                borderColor: colors.textDefault,
+                borderStyle: "dashed",
               }}
             >
-              {tieneComprobantes
-                ? `Ver Comprobante${(pedido.comprobantes?.length ?? 0) > 1 ? `s (${pedido.comprobantes!.length})` : ""}`
-                : "Sin comprobantes"}
-            </Text>
-          </Pressable>
-
-          {/* ── Mensajes ── */}
-          <Pressable
-            onPress={() => tieneMensajes && setChatVisible(true)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: colors.cardBg,
-              borderRadius: BorderRadius.lg,
-              borderWidth: 1,
-              borderColor: tieneMensajes
-                ? colors.brandSeller
-                : colors.textMuted,
-              padding: Spacing.lg,
-              gap: Spacing.md,
-              opacity: tieneMensajes ? 1 : 0.45,
-            }}
-          >
-            <Text
-              style={{
-                flex: 1,
-                fontSize: FontSizes.sm,
-                fontFamily: fonts.robotoRegular,
-                color: colors.textDefault,
-              }}
-            >
-              {tieneMensajes
-                ? `${mensajesModal.length} mensaje${mensajesModal.length > 1 ? "s" : ""} en la conversación.`
-                : "Sin mensajes en esta venta."}
-            </Text>
-            <View style={{ alignItems: "center", gap: 4 }}>
-              <Chat
-                width={24}
-                height={24}
-                stroke={tieneMensajes ? colors.textDefault : colors.textMuted}
-                strokeWidth={1.5}
-                fill="transparent"
-              />
+              <Comprobante width={24} height={24} fill={colors.brandSeller} />
               <Text
                 style={{
-                  fontSize: FontSizes.xs,
-                  fontFamily: fonts.robotoMedium,
-                  color: tieneMensajes ? colors.textDefault : colors.textMuted,
+                  fontSize: FontSizes.sm,
+                  fontFamily: fonts.robotoBold,
+                  color: colors.brandSeller,
+                  letterSpacing: 0.5,
                 }}
               >
-                Mensajes
+                {`Ver Comprobante${(pedido.comprobantes?.length ?? 0) > 1 ? `s (${pedido.comprobantes!.length})` : ""}`}
               </Text>
-            </View>
-          </Pressable>
+            </Pressable>
+          )}
+
+          {/* ── Mensajes: solo si hay ── */}
+          {tieneMensajes && (
+            <Pressable
+              onPress={() => setChatVisible(true)}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: colors.cardBg,
+                borderRadius: BorderRadius.lg,
+                borderWidth: 1,
+                borderColor: colors.brandSeller,
+                padding: Spacing.lg,
+                gap: Spacing.md,
+              }}
+            >
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: FontSizes.sm,
+                  fontFamily: fonts.robotoRegular,
+                  color: colors.textDefault,
+                }}
+              >
+                {`${mensajesModal.length} mensaje${mensajesModal.length > 1 ? "s" : ""} en la conversación.`}
+              </Text>
+              <View style={{ alignItems: "center", gap: 4 }}>
+                <Chat
+                  width={24}
+                  height={24}
+                  stroke={colors.textDefault}
+                  strokeWidth={1.5}
+                  fill="transparent"
+                />
+                <Text
+                  style={{
+                    fontSize: FontSizes.xs,
+                    fontFamily: fonts.robotoMedium,
+                    color: colors.textDefault,
+                  }}
+                >
+                  Mensajes
+                </Text>
+              </View>
+            </Pressable>
+          )}
 
           {/* ── ChatModal readOnly ── */}
           <ChatModal

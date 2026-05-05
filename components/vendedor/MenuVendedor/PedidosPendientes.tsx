@@ -90,7 +90,6 @@ function renderCard(
           key={pedido.id}
           {...common}
           mensajes={pedido.mensajes}
-          onListoParaEnviar={handlers.onListoParaEnviar}
         />
       );
 
@@ -100,18 +99,12 @@ function renderCard(
           key={pedido.id}
           {...common}
           mensajes={pedido.mensajes}
-          onListoParaEnviar={handlers.onListoParaEnviar}
         />
       );
 
     case "en_camino":
       return (
-        <CardEnCamino
-          key={pedido.id}
-          {...common}
-          mensajes={pedido.mensajes}
-          onListoParaEnviar={handlers.onEntregado}
-        />
+        <CardEnCamino key={pedido.id} {...common} mensajes={pedido.mensajes} />
       );
   }
 }
