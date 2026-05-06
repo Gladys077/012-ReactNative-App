@@ -11,6 +11,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import CambiarRol from "../../components/CambiarRol";
 import { Enviar } from "../../components/icons";
 import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
@@ -223,24 +224,13 @@ const NuevoPedido = () => {
           </Button>
         </View>
 
-        <View style={{ alignItems: "center", marginVertical: 8 }}>
-          <Text style={{ fontSize: FontSizes.base, color: colors.textMuted }}>
-            ¿Deseas vender?{"  "}
-            <Text
-              onPress={() => {
-                switchRole("seller");
-                router.push("/vendedor/homeVendedor");
-              }}
-              style={{
-                color: colors.brandBuyer,
-                textDecorationLine: "underline",
-                fontFamily: fonts.robotoRegular,
-              }}
-            >
-              Sí, quiero vender
-            </Text>
-          </Text>
-        </View>
+        <CambiarRol
+          rolActual="comprador"
+          onPress={() => {
+            switchRole("seller");
+            router.push("/vendedor/homeVendedor");
+          }}
+        />
       </ScrollView>
 
       {/* El sheet — FUERA del ScrollView, se renderiza sobre toda la pantalla */}

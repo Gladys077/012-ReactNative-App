@@ -1,8 +1,9 @@
-import { FontSizes, Spacing } from "@/constants/Tokens";
+import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, View } from "react-native";
+import CambiarRol from "../../components/CambiarRol";
 import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
 import ComprobanteViewerModal from "../../components/vendedor/ComprobanteViewerModal";
 import MenuVendedor, {
@@ -171,7 +172,7 @@ const HomeVendedor = () => {
             onPress={() => setTipsOpen((prev) => !prev)}
           />
         )}
-        {tabActivo === "pedidos" && (
+        {/* {tabActivo === "pedidos" && (
           <View style={{ alignItems: "center", marginVertical: 4 }}>
             <Text
               style={{
@@ -184,7 +185,7 @@ const HomeVendedor = () => {
               <Text
                 onPress={() => {
                   switchRole("buyer");
-                  router.push("/comprador/estadoPedido");
+                  router.push("/comprador/nuevoPedido");
                 }}
                 style={{
                   color: colors.brandBuyer,
@@ -196,6 +197,16 @@ const HomeVendedor = () => {
               </Text>
             </Text>
           </View>
+        )} */}
+        {tabActivo === "pedidos" && (
+          <CambiarRol
+            rolActual="vendedor"
+            onPress={() => {
+              switchRole("buyer");
+              router.push("/comprador/nuevoPedido");
+            }}
+            style={{ marginVertical: 4 }}
+          />
         )}
       </View>
 

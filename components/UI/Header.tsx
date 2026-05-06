@@ -98,7 +98,12 @@ export default function Header({
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
             >
-              <Monedas width={24} height={24} fill={colors.brandSeller} />
+              <Monedas
+                width={24}
+                height={24}
+                fill={colors.brandSeller}
+                strokeColor={colors.background}
+              />
               <Text
                 style={{
                   fontSize: FontSizes.md,
