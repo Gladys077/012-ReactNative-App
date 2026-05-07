@@ -24,6 +24,8 @@ export default function VendedorLayout() {
         return "Historial de ventas";
       case "creditos":
         return "Créditos";
+      case "comprar":
+        return "Comprar";
       case "ajustesVendedor":
         return "Ajustes";
       default:

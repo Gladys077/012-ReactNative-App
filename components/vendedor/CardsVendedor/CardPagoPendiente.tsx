@@ -34,7 +34,7 @@ const ContenidoExpandible = ({
           fontFamily: fonts.robotoRegular,
           color: colors.textDefault,
           lineHeight: 22,
-          backgroundColor: colors.textSecondaryBg,
+          backgroundColor: colors.bgSubMenuPendientes,
           borderRadius: BorderRadius.md,
           padding: Spacing.md,
         }}

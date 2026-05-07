@@ -1,10 +1,10 @@
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { router, useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Alert, View } from "react-native";
-import CambiarRol from "../../components/CambiarRol";
-import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
+import { TipsSheet } from "../../components/subcomponentes/TipsBottomSheet";
+import TipsFAB from "../../components/UI/FAB";
 import ComprobanteViewerModal from "../../components/vendedor/ComprobanteViewerModal";
 import MenuVendedor, {
   TabVendedorMenu,
@@ -19,7 +19,7 @@ import { useOrders } from "../../context/OrdersContext";
 import { Comprobante, estadoSistemaATabVendedor } from "../../types/pedidos";
 
 const HomeVendedor = () => {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
   const { isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido } =
     useBottomSheetVerPedido();
 
@@ -33,8 +33,14 @@ const HomeVendedor = () => {
 
   useFocusEffect(
     useCallback(() => {
+      switchRole("seller");
+    }, []),
+  );
+
+  useFocusEffect(
+    useCallback(() => {
       return () => {
-        // Se ejecuta cuando la screen PIERDE el foco (navegás a otra)
+        // Se ejecuta cuando la screen PIERDE el foco (cuando navegamos a otra)
         closeBottomSheetVerPedido();
       };
     }, [closeBottomSheetVerPedido]),
@@ -160,55 +166,14 @@ const HomeVendedor = () => {
       </View>
 
       {/* Footer fijo */}
-      <View
-        style={{
-          paddingHorizontal: Spacing.xxl,
-          gap: Spacing.sm,
-        }}
-      >
-        {tabActivo === "pedidos" && (
-          <TipsButton
-            isOpen={tipsOpen}
+      {tabActivo === "pedidos" && (
+        <View style={{ paddingHorizontal: Spacing.xxl }}>
+          <TipsFAB
             onPress={() => setTipsOpen((prev) => !prev)}
-          />
-        )}
-        {/* {tabActivo === "pedidos" && (
-          <View style={{ alignItems: "center", marginVertical: 4 }}>
-            <Text
-              style={{
-                fontSize: FontSizes.base,
-                color: colors.textMuted,
-                textAlign: "center",
-              }}
-            >
-              ¿Deseas comprar?{"  "}
-              <Text
-                onPress={() => {
-                  switchRole("buyer");
-                  router.push("/comprador/nuevoPedido");
-                }}
-                style={{
-                  color: colors.brandBuyer,
-                  textDecorationLine: "underline",
-                  fontFamily: fonts.robotoRegular,
-                }}
-              >
-                Sí, quiero comprar
-              </Text>
-            </Text>
-          </View>
-        )} */}
-        {tabActivo === "pedidos" && (
-          <CambiarRol
-            rolActual="vendedor"
-            onPress={() => {
-              switchRole("buyer");
-              router.push("/comprador/nuevoPedido");
-            }}
             style={{ marginVertical: 4 }}
           />
-        )}
-      </View>
+        </View>
+      )}
 
       {tabActivo === "pedidos" && (
         <TipsSheet isOpen={tipsOpen} onClose={() => setTipsOpen(false)} />

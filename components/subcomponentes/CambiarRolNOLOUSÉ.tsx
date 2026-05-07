@@ -1,7 +1,7 @@
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect, useRef } from "react";
 import { Animated, Pressable, Text, View, ViewStyle } from "react-native";
-import { Carrito, TiendaIcon } from "./icons";
+import { Carrito, TiendaIcon } from "../icons";
 
 interface CambiarRolProps {
   rolActual: "comprador" | "vendedor";

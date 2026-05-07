@@ -1,59 +1,105 @@
-web application/stitch/projects/9993107665831745335/screens/6f40dc0c21104ca997c7f3ee82a6407d
-import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import React, { useEffect, useRef } from "react";
+import { Animated, Pressable, Text, View, ViewStyle } from "react-native";
+import { TipLamparita } from "../icons";
+import { useTipsBottomSheet } from "../subcomponentes/TipsBottomSheet";
 
-const TipsFAB = ({ onPress }) => {
+interface TipsFABProps {
+  onPress: () => void;
+  style?: ViewStyle;
+}
+
+export default function TipsFAB({ onPress, style }: TipsFABProps) {
+  const { colorRole, fonts, title } = useTipsBottomSheet();
+
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const slideAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.delay(800),
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.04,
+            duration: 900,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 900,
+            useNativeDriver: true,
+          }),
+        ]),
+        { iterations: 3 },
+      ),
+    ]).start();
+  }, []);
+
+  const handlePress = () => {
+    Animated.sequence([
+      Animated.timing(slideAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start(() => onPress());
+  };
+
+  const translateX = slideAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 6],
+  });
+
   return (
-    <TouchableOpacity 
-      activeOpacity={0.8} 
-      style={styles.fab} 
-      onPress={onPress}
+    <View
+      style={[
+        {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+        },
+        style,
+      ]}
     >
-      <View style={styles.content}>
-        {/* Icono de lamparita (Emoji o Icon Library) */}
-        <Text style={styles.icon}>💡</Text>
-        <Text style={styles.text}>Tips</Text>
-      </View>
-    </TouchableOpacity>
+      <Pressable onPress={handlePress} hitSlop={8}>
+        {({ pressed }) => (
+          <Animated.View
+            style={{
+              transform: [
+                { scale: pressed ? 0.95 : pulseAnim },
+                { translateX },
+              ],
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 5,
+              paddingVertical: 5,
+              paddingHorizontal: 16,
+              borderRadius: 999,
+              borderWidth: 1.5,
+              borderColor: colorRole,
+              backgroundColor: pressed ? colorRole + "22" : colorRole + "12",
+            }}
+          >
+            <TipLamparita width={16} height={16} color={colorRole} />
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: fonts.robotoMedium,
+                color: colorRole,
+                letterSpacing: 0.2,
+              }}
+            >
+              {title}
+            </Text>
+          </Animated.View>
+        )}
+      </Pressable>
+    </View>
   );
-};
-
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    right: 16,
-    // Ajustado para quedar en la esquina inferior derecha, 
-    // alineado con la zona de acciones secundarias
-    bottom: 100, 
-    backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    // Sombra para dar elevación (Android)
-    elevation: 5,
-    // Sombra para iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    fontSize: 16,
-    marginRight: 6,
-  },
-  text: {
-    color: '#051424',
-    fontSize: 14,
-    fontWeight: '600',
-    fontFamily: 'System', // Cambiar por Manrope si está disponible
-  },
-});
-
-export default TipsFAB;
+}

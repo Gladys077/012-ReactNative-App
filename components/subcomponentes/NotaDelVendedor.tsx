@@ -25,6 +25,7 @@ const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({
           flexDirection: "row",
           alignItems: "center",
           gap: 6,
+          backgroundColor: colors.background,
         }}
       >
         <Text

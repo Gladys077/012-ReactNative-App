@@ -1,8 +1,8 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,16 +11,17 @@ import {
   TextInput,
   View,
 } from "react-native";
-import CambiarRol from "../../components/CambiarRol";
 import { Enviar } from "../../components/icons";
 import { rubrosVendedor } from "../../components/SelectRubros/rubrosConfig";
 import SelectRubros from "../../components/SelectRubros/SelectRubros";
-import { TipsButton, TipsSheet } from "../../components/TipsBottomSheet";
+import { TipsSheet } from "../../components/subcomponentes/TipsBottomSheet";
 import Button from "../../components/UI/Button/Button";
+import TipsFAB from "../../components/UI/FAB";
 import { useAuthContext } from "../../context/AuthContext";
 
 const NuevoPedido = () => {
   const { colors, fonts } = useTheme();
+  const { switchRole } = useAuthContext();
 
   const [selectedRubros, setSelectedRubros] = useState<string[]>([]);
   const [rubrosDisponibles, setRubrosDisponibles] = useState(rubrosVendedor);
@@ -28,7 +29,13 @@ const NuevoPedido = () => {
   const [errors, setErrors] = useState<{ rubros?: string; pedido?: string }>(
     {},
   );
-  const [tipsOpen, setTipsOpen] = useState(false); // ← estado del sheet
+  const [tipsOpen, setTipsOpen] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      switchRole("buyer");
+    }, []),
+  );
 
   useEffect(() => {
     const loadRubros = async () => {
@@ -48,21 +55,17 @@ const NuevoPedido = () => {
 
   const handleChange = (values: string[]) => {
     setSelectedRubros(values);
-    if (values.length > 0 && errors.rubros) {
+    if (values.length > 0 && errors.rubros)
       setErrors((prev) => ({ ...prev, rubros: undefined }));
-    }
   };
 
   const handleTextChange = (text: string) => {
     setPedidoTexto(text);
-    if (text.trim().length > 0 && errors.pedido) {
+    if (text.trim().length > 0 && errors.pedido)
       setErrors((prev) => ({ ...prev, pedido: undefined }));
-    }
   };
 
   const PEDIDO_STORAGE_KEY = "pedidoBorrador";
-
-  const { switchRole } = useAuthContext();
 
   const savePedidoLocal = async (payload: {
     rubros: string[];
@@ -81,12 +84,10 @@ const NuevoPedido = () => {
 
   const handleSubmit = async () => {
     const newErrors: { rubros?: string; pedido?: string } = {};
-    if (selectedRubros.length === 0) {
+    if (selectedRubros.length === 0)
       newErrors.rubros = "Por favor, selecciona al menos un rubro.";
-    }
-    if (!pedidoTexto.trim()) {
+    if (!pedidoTexto.trim())
       newErrors.pedido = "Describe brevemente tu pedido.";
-    }
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
@@ -101,7 +102,6 @@ const NuevoPedido = () => {
     setPedidoTexto("");
     setErrors({});
     setTipsOpen(false);
-
     router.push("/comprador/estadoPedido");
   };
 
@@ -166,7 +166,6 @@ const NuevoPedido = () => {
             borderRadius: Spacing.lg,
             flex: 1,
             minHeight: 120,
-            paddingBottom: Spacing.xxl,
           }}
         >
           <Text
@@ -206,12 +205,6 @@ const NuevoPedido = () => {
             </Text>
           )}
 
-          {/* Solo el botón — dentro del ScrollView */}
-          <TipsButton
-            isOpen={tipsOpen}
-            onPress={() => setTipsOpen((prev) => !prev)}
-          />
-
           <Button
             section="buyer"
             width="full"
@@ -223,17 +216,16 @@ const NuevoPedido = () => {
             Solicitar presupuesto
           </Button>
         </View>
-
-        <CambiarRol
-          rolActual="comprador"
-          onPress={() => {
-            switchRole("seller");
-            router.push("/vendedor/homeVendedor");
-          }}
-        />
       </ScrollView>
 
-      {/* El sheet — FUERA del ScrollView, se renderiza sobre toda la pantalla */}
+      {/* Footer — fuera del scroll */}
+      <View style={{ paddingVertical: Spacing.lg }}>
+        <TipsFAB
+          onPress={() => setTipsOpen((prev) => !prev)}
+          style={{ marginVertical: 4 }}
+        />
+      </View>
+
       <TipsSheet isOpen={tipsOpen} onClose={() => setTipsOpen(false)} />
     </KeyboardAvoidingView>
   );

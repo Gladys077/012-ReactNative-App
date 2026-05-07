@@ -8,7 +8,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
-import { FlechaAbajo, TipLamparita } from "./icons";
+import { FlechaAbajo, TipLamparita } from "../icons";
 
 // Hook interno para compartir lógica de animación y colores
 export function useTipsBottomSheet() {
@@ -50,15 +50,6 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
     inputRange: [0, 1],
     outputRange: ["0deg", "180deg"],
   });
-
-  // Animación del chevron
-  React.useEffect(() => {
-    Animated.timing(rotateAnim, {
-      toValue: isOpen ? 1 : 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-  }, [isOpen]);
 
   return (
     <Pressable

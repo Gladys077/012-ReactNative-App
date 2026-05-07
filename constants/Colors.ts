@@ -115,7 +115,7 @@ export const Colors = {
 
     // Superficies
     headerFooterBg: "rgba(17,24,39,.9)",
-    cardBg: "#374151", // gray-700
+    cardBg: "#1d222b", // gray-700
     background: "#1f2937", // gray-800
     border: "#374151", // gray-700
     bgPressed: "#3f3f46", // zinc-700

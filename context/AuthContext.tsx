@@ -74,6 +74,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setUser({ ...user, role: newRole });
   };
 
+  const updateCredits = (amount: number) => {
+    if (!user) return;
+    setUser({ ...user, credits: (user.credits ?? 0) + amount });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -85,6 +90,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         login,
         logout,
         switchRole,
+        updateCredits,
       }}
     >
       {children}
