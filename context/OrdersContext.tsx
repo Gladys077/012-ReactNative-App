@@ -232,14 +232,17 @@ const mockPedidos: Pedido[] = [
 interface OrdersContextValue {
   pedidos: Pedido[];
   loading: boolean;
-  historial: Pedido[];
   updateEstado: (id: string | number, nuevoEstado: EstadoSistema) => void;
   updatePedido: (id: string | number, cambios: Partial<Pedido>) => void;
   getPedidoById: (id: string | number) => Pedido | undefined;
-  moverAHistorial: (id: string | number) => void;
-  removePedidoHistorial: (id: string | number) => void;
   removePedido: (id: string | number) => void;
   agregarMensaje: (id: string | number, mensaje: Mensaje) => void;
+  historialComprador: Pedido[];
+  historialVendedor: Pedido[];
+  moverAHistorialComprador: (id: string | number) => void;
+  moverAHistorialVendedor: (id: string | number) => void;
+  removeHistorialComprador: (id: string | number) => void;
+  removeHistorialVendedor: (id: string | number) => void;
 }
 
 const OrdersContext = createContext<OrdersContextValue | undefined>(undefined);
@@ -249,7 +252,9 @@ const OrdersContext = createContext<OrdersContextValue | undefined>(undefined);
 export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
   const [pedidos, setPedidos] = useState<Pedido[]>(mockPedidos);
   const [loading] = useState(false);
-  const [historial, setHistorial] = useState<Pedido[]>([]);
+
+  const [historialComprador, setHistorialComprador] = useState<Pedido[]>([]);
+  const [historialVendedor, setHistorialVendedor] = useState<Pedido[]>([]);
 
   const updateEstado = useCallback(
     (id: string | number, nuevoEstado: EstadoSistema) => {
@@ -276,16 +281,28 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     [pedidos],
   );
 
-  const moverAHistorial = useCallback((id: string | number) => {
+  const moverAHistorialComprador = useCallback((id: string | number) => {
     setPedidos((prev) => {
       const pedido = prev.find((p) => p.id === id);
-      if (pedido) setHistorial((h) => [pedido, ...h]);
+      if (pedido) setHistorialComprador((h) => [pedido, ...h]);
       return prev.filter((p) => p.id !== id);
     });
   }, []);
 
-  const removePedidoHistorial = useCallback((id: string | number) => {
-    setHistorial((prev) => prev.filter((p) => p.id !== id));
+  const moverAHistorialVendedor = useCallback((id: string | number) => {
+    setPedidos((prev) => {
+      const pedido = prev.find((p) => p.id === id);
+      if (pedido) setHistorialVendedor((h) => [pedido, ...h]);
+      return prev.filter((p) => p.id !== id);
+    });
+  }, []);
+
+  const removeHistorialComprador = useCallback((id: string | number) => {
+    setHistorialComprador((prev) => prev.filter((p) => p.id !== id));
+  }, []);
+
+  const removeHistorialVendedor = useCallback((id: string | number) => {
+    setHistorialVendedor((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
   const removePedido = useCallback((id: string | number) => {
@@ -314,11 +331,14 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
         updateEstado,
         updatePedido,
         getPedidoById,
-        moverAHistorial,
-        historial,
-        removePedidoHistorial,
         removePedido,
         agregarMensaje,
+        historialComprador,
+        historialVendedor,
+        moverAHistorialComprador,
+        moverAHistorialVendedor,
+        removeHistorialComprador,
+        removeHistorialVendedor,
       }}
     >
       {children}

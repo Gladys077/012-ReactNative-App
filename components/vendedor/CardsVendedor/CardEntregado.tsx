@@ -48,7 +48,7 @@ export default function CardEntregado({
   onVerNota,
 }: CardEntregadoProps) {
   const { colors } = useTheme();
-  const { moverAHistorial } = useOrders();
+  const { moverAHistorialVendedor } = useOrders();
   const [modalVisible, setModalVisible] = useState(false);
   const [calificado, setCalificado] = useState(false);
 
@@ -62,8 +62,8 @@ export default function CardEntregado({
   );
 
   const handleFin = useCallback(() => {
-    moverAHistorial(pedidoId);
-  }, [pedidoId, moverAHistorial]);
+    moverAHistorialVendedor(pedidoId);
+  }, [pedidoId, moverAHistorialVendedor]);
 
   // ── Tras calificar: muestra agradecimiento inline ──
   if (calificado) {

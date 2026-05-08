@@ -4,6 +4,13 @@ import useModal from "@/hooks/useModal";
 import React from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
+interface ModalComponentProps {
+  visible: boolean;
+  type: "alert" | "confirm";
+  options: any;
+  closeModal: () => void;
+}
+
 export default function ModalComponent() {
   const { colors, fonts } = useTheme();
   const { visible, type, options, closeModal } = useModal();

@@ -167,7 +167,12 @@ const HomeVendedor = () => {
 
       {/* Footer fijo */}
       {tabActivo === "pedidos" && (
-        <View style={{ paddingHorizontal: Spacing.xxl }}>
+        <View
+          style={{
+            paddingVertical: Spacing.lg,
+            paddingHorizontal: Spacing.xxl,
+          }}
+        >
           <TipsFAB
             onPress={() => setTipsOpen((prev) => !prev)}
             style={{ marginVertical: 4 }}

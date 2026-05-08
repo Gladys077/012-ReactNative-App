@@ -38,6 +38,7 @@ export const Colors = {
     background: "#ededed", // gray-100
     border: "#E5E7EB",
     bgPressed: "#f3f4f6", // color al presionar (gris-100)
+    backgroundTips: "#b9b91811",
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
@@ -119,6 +120,7 @@ export const Colors = {
     background: "#1f2937", // gray-800
     border: "#374151", // gray-700
     bgPressed: "#3f3f46", // zinc-700
+    backgroundTips: "#0505081a",
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray

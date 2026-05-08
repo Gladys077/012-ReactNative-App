@@ -9,7 +9,7 @@ import type { Comprobante } from "../../types/pedidos";
 
 export default function HistorialVendedor() {
   const { colors } = useTheme();
-  const { historial, removePedidoHistorial } = useOrders();
+  const { historialVendedor, removeHistorialVendedor } = useOrders();
 
   const [comprobanteModal, setComprobanteModal] = useState<{
     visible: boolean;
@@ -17,7 +17,7 @@ export default function HistorialVendedor() {
   }>({ visible: false, comprobantes: [] });
 
   const handleVerComprobante = (id: string | number) => {
-    const pedido = historial.find((p) => p.id === id);
+    const pedido = historialVendedor.find((p) => p.id === id);
     if (!pedido?.comprobantes?.length) return;
     setComprobanteModal({ visible: true, comprobantes: pedido.comprobantes });
   };
@@ -40,12 +40,12 @@ export default function HistorialVendedor() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {historial.length > 0 ? (
-          historial.map((pedido) => (
+        {historialVendedor.length > 0 ? (
+          historialVendedor.map((pedido) => (
             <CardHistorialVendedor
               key={pedido.id}
               pedido={pedido}
-              onEliminar={removePedidoHistorial}
+              onEliminar={removeHistorialVendedor}
               onVerComprobante={handleVerComprobante}
             />
           ))

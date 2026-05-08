@@ -7,10 +7,10 @@ import { useOrders } from "../../context/OrdersContext";
 export default function HistorialComprador() {
   const { colors } = useTheme();
 
-  const { historial, removePedidoHistorial } = useOrders();
+  const { historialComprador, removeHistorialComprador } = useOrders();
 
   const handleEliminar = (id: string | number) => {
-    removePedidoHistorial(id);
+    removeHistorialComprador(id);
   };
 
   return (
@@ -24,8 +24,8 @@ export default function HistorialComprador() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {historial.length > 0 ? (
-          historial.map((item) => {
+        {historialComprador.length > 0 ? (
+          historialComprador.map((item) => {
             const r = item.respuestaSeleccionada;
             if (!r) return null;
             return (

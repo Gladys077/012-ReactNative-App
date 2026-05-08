@@ -102,7 +102,8 @@ export default function CalificacionEstrellas({
           onEnviar({ estrellas, comentario });
         }}
         style={({ pressed }) => ({
-          backgroundColor: estrellas === 0 ? colors.textMuted : colorBtnFinal,
+          backgroundColor:
+            estrellas === 0 ? colors.textSecondaryBg : colorBtnFinal,
           borderRadius: 12,
           padding: Spacing.md,
           alignItems: "center",

@@ -20,7 +20,8 @@ const EstadoPedido = () => {
   const { colors } = useTheme();
   const { isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido } =
     useBottomSheetVerPedido();
-  const { pedidos, updateEstado, updatePedido, moverAHistorial } = useOrders();
+  const { pedidos, updateEstado, updatePedido, moverAHistorialComprador } =
+    useOrders();
 
   useFocusEffect(
     useCallback(() => {
@@ -307,7 +308,7 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     fechaSeleccion={pedido.fechaSeleccion}
-                    onDesaparecer={() => moverAHistorial(pedido.id)}
+                    onDesaparecer={() => moverAHistorialComprador(pedido.id)}
                   />
                 );
 
