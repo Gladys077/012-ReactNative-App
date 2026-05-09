@@ -8,7 +8,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
-import { TipLamparita } from "../icons";
+import { FlechaAbajo, TipLamparita } from "../icons";
 
 export function useTipsBottomSheet() {
   const { user } = useAuthContext();
@@ -85,9 +85,9 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
           {title}
         </Text>
       </View>
-      {/* <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+      <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
         <FlechaAbajo width={18} height={18} color={colorRole} />
-      </Animated.View> */}
+      </Animated.View>
     </Pressable>
   );
 }

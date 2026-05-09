@@ -2,6 +2,7 @@ import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useRef, useState } from "react";
 import { Animated, Pressable, Text, View, ViewStyle } from "react-native";
+import { FlechaAbajo } from "../icons";
 
 type Alineacion = "izquierda" | "centro" | "derecha";
 
@@ -89,7 +90,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
         {expandido ? textoOcultar : textoMostrar}
       </Text>
 
-      {/* {mostrarFlecha && (
+      {mostrarFlecha && (
         <Animated.View style={{ transform: [{ rotate: rotacion }] }}>
           <FlechaAbajo
             width={18}
@@ -97,7 +98,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
             stroke={colorTexto || colors.textDefault}
           />
         </Animated.View>
-      )} */}
+      )}
     </Pressable>
   );
 

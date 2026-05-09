@@ -7,11 +7,14 @@ import { useTipsBottomSheet } from "../subcomponentes/TipsBottomSheet";
 interface TipsFABProps {
   onPress: () => void;
   style?: ViewStyle;
+  section?: "buyer" | "seller";
 }
 
-export default function TipsFAB({ onPress, style }: TipsFABProps) {
+export default function TipsFAB({ onPress, style, section }: TipsFABProps) {
   const { colors } = useTheme();
   const { colorRole, fonts, title } = useTipsBottomSheet();
+  const fabColor =
+    section === "seller" ? colors.brandSeller : colors.brandBuyer;
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -65,10 +68,10 @@ export default function TipsFAB({ onPress, style }: TipsFABProps) {
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
-          backgroundColor: colors.backgroundTips,
+          // backgroundColor: colors.tipsColorBuyer,
           borderRadius: 999,
           borderWidth: 1,
-          borderColor: "white",
+          borderColor: colors.backgroundTips,
           // paddingVertical: 4,
         },
         style,
@@ -85,16 +88,17 @@ export default function TipsFAB({ onPress, style }: TipsFABProps) {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              // gap: 5,
+              gap: 5,
               paddingVertical: 5,
               paddingHorizontal: 16,
               borderRadius: 50,
               borderWidth: 1,
-              borderColor: colorRole + "44",
+              borderColor: colorRole,
+              borderStyle: "solid",
 
-              // backgroundColor: colorRole + "18",
+              // backgroundColor: "red" + "18",
 
-              shadowColor: "#000",
+              shadowColor: colors.textOnColor,
               shadowOpacity: 0.12,
               shadowRadius: 8,
               shadowOffset: {
@@ -103,15 +107,17 @@ export default function TipsFAB({ onPress, style }: TipsFABProps) {
               },
 
               elevation: 5,
-              backgroundColor: pressed ? colorRole + "22" : colorRole + "12",
+              backgroundColor: pressed
+                ? colors.headerFooterBg
+                : colors.bgPressed,
             }}
           >
-            <TipLamparita width={16} height={16} color={colorRole} />
+            <TipLamparita width={16} height={16} color={fabColor} />
             <Text
               style={{
                 fontSize: 12,
-                fontFamily: fonts.robotoMedium,
-                color: colorRole,
+                fontFamily: fonts.robotoBold,
+                color: fabColor,
                 letterSpacing: 0.2,
               }}
             >

@@ -37,16 +37,26 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
 
   const shineTranslate = useRef(new Animated.Value(-180)).current;
 
+  const shouldAnimate = !["Completado", "Cancelado", "Entregado"].includes(
+    estado,
+  );
+
   useEffect(() => {
+    if (!shouldAnimate) return;
+
+    const randomDelay = Math.floor(Math.random() * 4000) + 3000;
+
     const animation = Animated.loop(
       Animated.sequence([
-        Animated.delay(5000),
+        Animated.delay(randomDelay),
+
         Animated.timing(shineTranslate, {
           toValue: 180,
           duration: 1100,
           easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
+
         Animated.timing(shineTranslate, {
           toValue: -180,
           duration: 0,
@@ -60,7 +70,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
     return () => {
       animation.stop();
     };
-  }, [shineTranslate]);
+  }, [estado, shineTranslate, shouldAnimate]);
 
   // Clave= nombre del estado y Valor= objeto con los colores: bg(suave) y dot(punto intenso)
   const estadoColors: Record<EtiqEstadoType, { bg: string; dot: string }> = {
@@ -119,18 +129,20 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
         position: "relative",
       }}
     >
-      <Animated.View
-        pointerEvents="none"
-        style={{
-          position: "absolute",
-          top: -10,
-          left: 0,
-          width: 28,
-          height: 50,
-          backgroundColor: "rgba(255,255,255,0.18)",
-          transform: [{ translateX: shineTranslate }, { rotate: "18deg" }],
-        }}
-      />
+      {shouldAnimate && (
+        <Animated.View
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            top: -10,
+            left: 0,
+            width: 28,
+            height: 50,
+            backgroundColor: colors.shineColor,
+            transform: [{ translateX: shineTranslate }, { rotate: "18deg" }],
+          }}
+        />
+      )}
       <View
         style={{
           width: 6,
@@ -142,7 +154,7 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
       />
       <Text
         style={{
-          fontFamily: fonts.robotoRegular,
+          fontFamily: fonts.robotoMedium,
           fontSize: FontSizes.sm,
           color: colors.textDefault,
           marginRight: 8,

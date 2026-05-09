@@ -1,8 +1,10 @@
-import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
+import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
+import NotaEnviada from "../../subcomponentes/NotaEnviada";
+import TextoPedido from "../../subcomponentes/TextoPedido";
 import CardVendedorBase from "./CardVendedorBase";
 
 interface CardPresupuestadoProps {
@@ -25,46 +27,12 @@ const ContenidoExpandible = ({
   const { colors, fonts } = useTheme();
 
   return (
-    <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
+    <View style={{ gap: Spacing.xl, marginTop: Spacing.md }}>
       {/* Texto del pedido */}
-      <Text
-        style={{
-          fontSize: FontSizes.sm,
-          fontFamily: fonts.robotoRegular,
-          color: colors.textDefault,
-          lineHeight: 22,
-          backgroundColor: colors.textSecondaryBg,
-          borderRadius: BorderRadius.md,
-          padding: Spacing.md,
-        }}
-      >
-        {textoPedido}
-      </Text>
+      <TextoPedido texto={textoPedido} />
 
-      {/* Nota inline — solo si existe */}
-      {notaEnviada && notaEnviada.trim() !== "" && (
-        <View
-          style={{
-            borderLeftWidth: 3,
-            borderLeftColor: colors.brandSeller,
-            paddingLeft: Spacing.md,
-            paddingVertical: Spacing.xs,
-            backgroundColor: colors.textSecondaryBg,
-            borderRadius: BorderRadius.sm,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: FontSizes.sm,
-              fontFamily: fonts.robotoRegular,
-              color: colors.textDefault,
-            }}
-          >
-            <Text style={{ fontFamily: fonts.robotoBold }}>Nota: </Text>
-            {notaEnviada}
-          </Text>
-        </View>
-      )}
+      {/* Nota -solo si existe- */}
+      <NotaEnviada nota={notaEnviada} />
     </View>
   );
 };

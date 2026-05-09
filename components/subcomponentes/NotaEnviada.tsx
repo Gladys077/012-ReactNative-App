@@ -19,7 +19,7 @@ export default function NotaEnviada({ nota }: NotaEnviadaProps) {
         borderLeftColor: colors.brandSeller,
         paddingHorizontal: Spacing.md,
         paddingVertical: Spacing.md,
-        backgroundColor: colors.background,
+        backgroundColor: colors.fondoPedidos,
         borderRadius: BorderRadius.sm,
       }}
     >
@@ -30,7 +30,14 @@ export default function NotaEnviada({ nota }: NotaEnviadaProps) {
           color: colors.textDefault,
         }}
       >
-        <Text style={{ fontFamily: fonts.robotoBold }}>Nota: </Text>
+        <Text
+          style={{
+            fontFamily: fonts.robotoBold,
+            color: colors.textOnColor,
+          }}
+        >
+          NOTA:{" "}
+        </Text>
         {nota}
       </Text>
     </View>

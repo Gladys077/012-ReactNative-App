@@ -3,6 +3,7 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Text, TextInput, View } from "react-native";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
+import TextoPedido from "../../subcomponentes/TextoPedido";
 import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
@@ -70,10 +71,12 @@ const ContenidoExpandible = ({
   return (
     <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
       {/* Texto del pedido */}
-      <View
+      {/* <View
         style={{
-          backgroundColor: colors.textSecondaryBg,
+          backgroundColor: colors.fondoPedidos,
           borderRadius: BorderRadius.md,
+          borderBottomColor: colors.textSecondaryBg,
+          borderBottomWidth: 1,
           padding: Spacing.md,
         }}
       >
@@ -87,7 +90,8 @@ const ContenidoExpandible = ({
         >
           {textoPedido}
         </Text>
-      </View>
+      </View> */}
+      <TextoPedido texto={textoPedido} />
 
       {/* Input nota */}
       <View style={{ gap: Spacing.xs, marginVertical: Spacing.sm }}>
@@ -95,7 +99,7 @@ const ContenidoExpandible = ({
           style={{
             fontSize: FontSizes.sm,
             fontFamily: fonts.robotoMedium,
-            color: colors.textOnColor,
+            color: colors.textDefault,
           }}
         >
           Tu nota{" "}
@@ -129,10 +133,10 @@ const ContenidoExpandible = ({
           style={{
             fontSize: FontSizes.sm,
             fontFamily: fonts.robotoMedium,
-            color: colors.textOnColor,
+            color: colors.textDefault,
           }}
         >
-          Tu precio
+          Precio
         </Text>
         <View
           style={{

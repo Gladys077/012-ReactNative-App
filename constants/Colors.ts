@@ -25,8 +25,11 @@ export const Colors = {
     //Background SubMenuPendientes
     bgSubMenuPendientes: "#f7d3c8", // ambar-50
 
+    fondoPedidos: "#ecedee", // gray-800,
+
     // Para fondos suaves
     tipsColorBuyer: "#1D4ED8", // blue-700
+    tipsColorSeller: "#ed6728",
 
     // Bordes cards dentro de las cards del comprador
     borderTopBottom: "#72a5cf", //
@@ -68,13 +71,16 @@ export const Colors = {
     statusBlueBg: "#DBEAFE",
     statusBlueDot: "#2563EB",
     statusCyanBg: "#E0F7FA",
-    statusCyanDot: "#00ACC1",
+    statusCyanDot: "#16646e",
     statusTurquoiseBg: "#82f5ee",
     statusTurquoiseDot: "#046963",
     statusLavenderBg: "#E0E7FF",
     statusLavenderDot: "#4F46E5",
     statusCanceledBg: "#F8D7DA",
     statusCanceledDot: "#C82333",
+
+    // Reflejo de estiq.estadoSistemaAComprador
+    shineColor: "rgba(0, 0, 0, 0.08)",
 
     // Reloj
     relojBuyer: "#0730a3", // azul oscuro
@@ -107,6 +113,8 @@ export const Colors = {
     //Background SubMenuPendientes
     bgSubMenuPendientes: "#504d4b62", // ambar-50
 
+    fondoPedidos: "#3b434e", // gray-800,
+
     // Para fondos suaves
     tipsColorBuyer: "#64B5F6", // blue-400
 
@@ -120,7 +128,7 @@ export const Colors = {
     background: "#1f2937", // gray-800
     border: "#374151", // gray-700
     bgPressed: "#3f3f46", // zinc-700
-    backgroundTips: "#7892b669",
+    backgroundTips: "#4f5b6b69",
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
@@ -152,7 +160,7 @@ export const Colors = {
     statusPurpleDot: "#C4B5FD",
     statusBlueBg: "#1E3A8A",
     statusBlueDot: "#60A5FA",
-    statusCyanBg: "#083344",
+    statusCyanBg: "#0e4d66",
     statusCyanDot: "#22D3EE",
     statusTurquoiseBg: "#166e69",
     statusTurquoiseDot: "#05faec",
@@ -160,6 +168,9 @@ export const Colors = {
     statusLavenderDot: "#A5B4FC",
     statusCanceledBg: "#4A1F24",
     statusCanceledDot: "#F5B3BA",
+
+    // Reflejo de estiq.estadoSistemaAComprador
+    shineColor: "rgba(255,255,255,0.18)",
 
     // Reloj
     relojBuyer: "#6ce5f5",

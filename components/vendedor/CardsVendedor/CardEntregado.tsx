@@ -4,10 +4,9 @@ import { useTheme } from "@/context/ThemeContext";
 import type { Mensaje } from "@/types/pedidos";
 import React, { useCallback, useState } from "react";
 import { Modal, Pressable } from "react-native";
-// import { CalificarIcono } from "../../icons";
 import { Estrella100 } from "../../icons";
 import CalificacionEstrellas from "../../subcomponentes/CalificacionEstrellas";
-import ContenidoGracias from "../../subcomponentes/ContenidoGracias";
+import MascotaAgradeciendo from "../../subcomponentes/MascotaAgradeciendo";
 import CardPedidoVendedor from "./CardPedidoVendedor";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -54,7 +53,7 @@ export default function CardEntregado({
 
   const handleCalificar = useCallback(
     (data: { estrellas: number; comentario: string }) => {
-      // acá guardás la calificación donde corresponda
+      // TODO enviar calificación al backend (data + pedidoId)
       setModalVisible(false);
       setCalificado(true);
     },
@@ -65,7 +64,7 @@ export default function CardEntregado({
     moverAHistorialVendedor(pedidoId);
   }, [pedidoId, moverAHistorialVendedor]);
 
-  // ── Tras calificar: muestra agradecimiento inline ──
+  // ── Tras calificar: muestra MascotaAgradeciendo ──
   if (calificado) {
     return (
       <CardPedidoVendedor
@@ -86,8 +85,12 @@ export default function CardEntregado({
         btnPrincipalIcon={Estrella100}
         btnPrincipalIconSize={32}
         onPressBtnPrincipal={() => {}}
+        modoAgradecimiento={true}
         contenidoExtra={
-          <ContenidoGracias colorBarra={colors.brandSeller} onFin={handleFin} />
+          <MascotaAgradeciendo
+            colorBarra={colors.brandSeller}
+            onFin={handleFin}
+          />
         }
       />
     );

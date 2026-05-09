@@ -228,6 +228,7 @@ const NuevoPedido = () => {
         }}
       >
         <TipsFAB
+          section="buyer"
           onPress={() => setTipsOpen((prev) => !prev)}
           style={{ marginVertical: 4 }}
         />

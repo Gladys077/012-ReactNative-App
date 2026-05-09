@@ -175,9 +175,11 @@ const HomeVendedor = () => {
             right: 0,
             borderRadius: "50",
             paddingVertical: Spacing.lg,
+            marginRight: Spacing.md,
           }}
         >
           <TipsFAB
+            section="seller"
             onPress={() => setTipsOpen((prev) => !prev)}
             style={{ marginVertical: 4 }}
           />

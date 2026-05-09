@@ -60,6 +60,10 @@ export default function CardPedidoBase({
         {
           backgroundColor: colors.cardBg,
           borderRadius: BorderRadius.lg,
+          borderWidth: 0.2,
+          borderColor: colors.brandBuyer,
+          borderLeftColor: colors.brandBuyer,
+          borderLeftWidth: 3,
           padding: Spacing.xl,
           gap: Spacing.md,
           elevation: computedElevation,

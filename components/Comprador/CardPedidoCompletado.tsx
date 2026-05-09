@@ -1,8 +1,8 @@
 import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { useTheme } from "@/context/ThemeContext";
 import { useCallback } from "react";
-import ContenidoGracias from "../subcomponentes/ContenidoGracias";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import ContenidoGracias from "../subcomponentes/MascotaAgradeciendo";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 

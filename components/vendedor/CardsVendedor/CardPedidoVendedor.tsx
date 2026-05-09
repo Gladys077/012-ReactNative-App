@@ -35,6 +35,7 @@ export interface CardPedidoVendedorProps {
   btnPrincipalIconSize?: number;
   onPressBtnPrincipal: () => void;
   contenidoExtra?: React.ReactNode;
+  modoAgradecimiento?: boolean; // si true, tras calificar muestra la mascota agradeciendo.
 }
 
 interface ContenidoExpandibleProps {
@@ -51,6 +52,7 @@ interface ContenidoExpandibleProps {
   btnPrincipalIconSize?: number;
   onPressBtnPrincipal: () => void;
   contenidoExtra?: React.ReactNode;
+  modoAgradecimiento?: boolean;
 }
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -79,6 +81,7 @@ const ContenidoExpandible = ({
   btnPrincipalIconSize = 32,
   onPressBtnPrincipal,
   contenidoExtra,
+  modoAgradecimiento,
 }: ContenidoExpandibleProps) => {
   const { colors, fonts } = useTheme();
   const { agregarMensaje } = useOrders();
@@ -105,98 +108,101 @@ const ContenidoExpandible = ({
         paddingBottom: Spacing.lg,
       }}
     >
-      {/* ── Mensajes ── */}
-      {mensajesModal.length > 0 && (
-        <Pressable
-          onPress={() => setChatVisible(true)}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: colors.cardBg,
-            borderRadius: BorderRadius.lg,
-            borderWidth: 1,
-            borderColor: colors.brandSeller,
-            padding: Spacing.lg,
-            gap: Spacing.md,
-          }}
-        >
-          <Text
-            style={{
-              flex: 1,
-              fontSize: FontSizes.sm,
-              fontFamily: fonts.robotoRegular,
-              color: colors.textDefault,
-            }}
-          >
-            {`${mensajesModal.length} mensaje${mensajesModal.length > 1 ? "s" : ""} en la conversación.`}
-          </Text>
-          <View style={{ alignItems: "center", gap: 4 }}>
-            <Chat
-              width={24}
-              height={24}
-              stroke={colors.textDefault}
-              strokeWidth={1.5}
-              fill="transparent"
-            />
-            <Text
+      {!modoAgradecimiento && (
+        <>
+          {/* ── Mensajes ── */}
+          {mensajesModal.length > 0 && (
+            <Pressable
+              onPress={() => setChatVisible(true)}
               style={{
-                fontSize: FontSizes.xs,
-                fontFamily: fonts.robotoMedium,
-                color: colors.textDefault,
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: colors.cardBg,
+                borderRadius: BorderRadius.lg,
+                borderWidth: 1,
+                borderColor: colors.brandSeller,
+                padding: Spacing.lg,
+                gap: Spacing.md,
               }}
             >
-              Mensajes
-            </Text>
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: FontSizes.sm,
+                  fontFamily: fonts.robotoRegular,
+                  color: colors.textDefault,
+                }}
+              >
+                {`${mensajesModal.length} mensaje${mensajesModal.length > 1 ? "s" : ""} en la conversación.`}
+              </Text>
+              <View style={{ alignItems: "center", gap: 4 }}>
+                <Chat
+                  width={24}
+                  height={24}
+                  stroke={colors.textDefault}
+                  strokeWidth={1.5}
+                  fill="transparent"
+                />
+                <Text
+                  style={{
+                    fontSize: FontSizes.xs,
+                    fontFamily: fonts.robotoMedium,
+                    color: colors.textDefault,
+                  }}
+                >
+                  Mensajes
+                </Text>
+              </View>
+            </Pressable>
+          )}
+
+          {/* ── ChatModal ── */}
+          <ChatModal
+            visible={chatVisible}
+            onClose={() => setChatVisible(false)}
+            pedidoId={pedidoId}
+            fechaSeleccion={fechaSeleccion}
+            otroNombre={compradorNombre ?? "Comprador"}
+            rolActual="vendedor"
+            mensajesIniciales={mensajesModal.map((m) => ({
+              ...m,
+              timestamp: new Date(m.timestamp),
+            }))}
+            onMensajeEnviado={handleMensajeEnviado}
+          />
+
+          {/* ── Nota del vendedor ── */}
+          <NotaEnviada nota={nota} />
+
+          {/* ── Datos del comprador ── */}
+          <DatosDelComprador
+            direccion={direccionComprador}
+            celular={celularComprador}
+          />
+
+          {/* ── Ver pedido ── */}
+          <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
+            <VerBottomSheet
+              onPress={() => onVerPedido(pedidoId)}
+              variant="seller"
+            />
           </View>
-        </Pressable>
+
+          <LineaDivisoria />
+
+          {/* ── Btn principal (inyectado por cada card) ── */}
+          <Button
+            section="seller"
+            variant="primary"
+            width="full"
+            icon={btnPrincipalIcon}
+            iconSize={btnPrincipalIconSize}
+            onPress={onPressBtnPrincipal}
+          >
+            <Text>{btnPrincipalLabel}</Text>
+          </Button>
+        </>
       )}
-
-      {/* ── ChatModal ── */}
-      <ChatModal
-        visible={chatVisible}
-        onClose={() => setChatVisible(false)}
-        pedidoId={pedidoId}
-        fechaSeleccion={fechaSeleccion}
-        otroNombre={compradorNombre ?? "Comprador"}
-        rolActual="vendedor"
-        mensajesIniciales={mensajesModal.map((m) => ({
-          ...m,
-          timestamp: new Date(m.timestamp),
-        }))}
-        onMensajeEnviado={handleMensajeEnviado}
-      />
-
-      {/* ── Nota del vendedor ── */}
-      <NotaEnviada nota={nota} />
-
-      {/* ── Datos del comprador ── */}
-      <DatosDelComprador
-        direccion={direccionComprador}
-        celular={celularComprador}
-      />
-
-      {/* ── Ver pedido ── */}
-      <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
-        <VerBottomSheet
-          onPress={() => onVerPedido(pedidoId)}
-          variant="seller"
-        />
-      </View>
-
-      <LineaDivisoria />
-
-      {/* ── Btn principal (inyectado por cada card) ── */}
-      <Button
-        section="seller"
-        variant="primary"
-        width="full"
-        icon={btnPrincipalIcon}
-        iconSize={btnPrincipalIconSize}
-        onPress={onPressBtnPrincipal}
-      >
-        <Text>{btnPrincipalLabel}</Text>
-      </Button>
-
       {contenidoExtra}
     </View>
   );
@@ -223,6 +229,7 @@ export default function CardPedidoVendedor({
   btnPrincipalIconSize,
   onPressBtnPrincipal,
   contenidoExtra,
+  modoAgradecimiento,
 }: CardPedidoVendedorProps) {
   return (
     <CardVendedorBase
@@ -246,6 +253,7 @@ export default function CardPedidoVendedor({
           btnPrincipalIconSize={btnPrincipalIconSize}
           onPressBtnPrincipal={onPressBtnPrincipal}
           contenidoExtra={contenidoExtra}
+          modoAgradecimiento={modoAgradecimiento}
         />
       }
     />

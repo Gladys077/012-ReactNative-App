@@ -138,14 +138,14 @@ export default function LineaEstadoPedido({
               <Text
                 style={{
                   fontFamily: fonts.robotoMedium,
-                  fontSize: FontSizes.xxs,
+                  fontSize: FontSizes.xs,
                   color: colors.textDefault,
                   marginTop: Spacing.sm,
                   textAlign: "center",
                 }}
               >
                 {estado === "Verificacion"
-                  ? "Verificación"
+                  ? "Revisión"
                   : estado === "Preparacion"
                     ? "Preparación"
                     : estado === "EnCamino"

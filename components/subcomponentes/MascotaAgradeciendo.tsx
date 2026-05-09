@@ -5,7 +5,7 @@ import { Animated, Image, ImageSourcePropType, Text } from "react-native";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
-interface ContenidoGraciasProps {
+interface MascotaAgradeciendoProps {
   colorBarra: string;
   onFin: () => void;
   imagen?: ImageSourcePropType;
@@ -17,11 +17,11 @@ const DURACION_MS = 3000;
 
 // ─── Export principal ─────────────────────────────────────────────────────────
 
-export default function ContenidoGracias({
+export default function MascotaAgradeciendo({
   colorBarra,
   onFin,
   imagen = require("@/assets/images/Listo.png"),
-}: ContenidoGraciasProps) {
+}: MascotaAgradeciendoProps) {
   const { colors, fonts } = useTheme();
   const progreso = useRef(new Animated.Value(0)).current;
 
@@ -53,7 +53,7 @@ export default function ContenidoGracias({
           fontSize: FontSizes.base,
           color: colors.textDefault,
           textAlign: "center",
-          marginTop: Spacing.lg,
+          marginTop: Spacing.sm,
           fontStyle: "italic",
         }}
       >
@@ -62,7 +62,7 @@ export default function ContenidoGracias({
 
       <Image
         source={imagen}
-        style={{ width: "100%", height: 220, marginTop: Spacing.lg }}
+        style={{ width: "100%", height: 220, marginTop: Spacing.sm }}
         resizeMode="contain"
       />
 
@@ -71,7 +71,7 @@ export default function ContenidoGracias({
           fontSize: FontSizes.sm,
           color: colors.textDefault,
           textAlign: "center",
-          marginTop: Spacing.lg,
+          marginTop: Spacing.sm,
         }}
       >
         Guardando en historial...
