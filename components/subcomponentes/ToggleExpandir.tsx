@@ -1,16 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Platform,
-  Pressable,
-  Text,
-  UIManager,
-  View,
-  ViewStyle,
-} from "react-native";
-import { FlechaAbajo } from "../icons";
+import React, { useRef, useState } from "react";
+import { Animated, Pressable, Text, View, ViewStyle } from "react-native";
 
 type Alineacion = "izquierda" | "centro" | "derecha";
 
@@ -19,9 +10,9 @@ type ToggleExpandirProps = {
   textoMostrar?: string;
   textoOcultar?: string;
   colorTexto?: string;
-  mostrarFlecha?: boolean; // ← nueva: oculta/muestra la flechita
-  alineacion?: Alineacion; // ← nueva: posición del botón
-  inline?: boolean; // ← nueva: no ocupa línea completa (para usarlo en row con otros elementos)
+  mostrarFlecha?: boolean;
+  alineacion?: Alineacion;
+  inline?: boolean; // no ocupa línea completa (para usarlo en row con otros elementos)
   onToggle?: (expandido: boolean) => void;
   style?: ViewStyle;
   children?: React.ReactNode;
@@ -51,19 +42,6 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
   const animacion = useRef(
     new Animated.Value(expandidoInicial ? 1 : 0),
   ).current;
-
-  useEffect(() => {
-    if (
-      Platform.OS === "android" &&
-      UIManager.setLayoutAnimationEnabledExperimental
-    ) {
-      try {
-        UIManager.setLayoutAnimationEnabledExperimental(true);
-      } catch {
-        // ignorar
-      }
-    }
-  }, []);
 
   const toggleExpandir = () => {
     const nuevoEstado = !expandido;
@@ -111,7 +89,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
         {expandido ? textoOcultar : textoMostrar}
       </Text>
 
-      {mostrarFlecha && (
+      {/* {mostrarFlecha && (
         <Animated.View style={{ transform: [{ rotate: rotacion }] }}>
           <FlechaAbajo
             width={18}
@@ -119,7 +97,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
             stroke={colorTexto || colors.textDefault}
           />
         </Animated.View>
-      )}
+      )} */}
     </Pressable>
   );
 

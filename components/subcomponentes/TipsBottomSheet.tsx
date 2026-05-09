@@ -8,16 +8,14 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo, useRef } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
-import { FlechaAbajo, TipLamparita } from "../icons";
+import { TipLamparita } from "../icons";
 
-// Hook interno para compartir lógica de animación y colores
 export function useTipsBottomSheet() {
   const { user } = useAuthContext();
   const { colors, fonts } = useTheme();
 
   const role = user?.role || "buyer";
-  const title =
-    role === "buyer" ? "Tips para hacer tu pedido" : "Tips para tus respuestas";
+  const title = role === "buyer" ? "Tips" : "Tips";
   const tips =
     role === "buyer"
       ? [
@@ -62,13 +60,19 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
         paddingVertical: Spacing.lg,
         paddingHorizontal: Spacing.xl,
         borderRadius: BorderRadius.md,
-        backgroundColor: colors.bgPressed,
+        // backgroundColor: colors.bgPressed,
         marginBottom: Spacing.sm,
         marginTop: Spacing.lg,
         height: 48,
       }}
     >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: colors.textDefault,
+        }}
+      >
         <TipLamparita width={24} height={24} color={colorRole} />
         <Text
           style={{
@@ -81,9 +85,9 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
           {title}
         </Text>
       </View>
-      <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+      {/* <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
         <FlechaAbajo width={18} height={18} color={colorRole} />
-      </Animated.View>
+      </Animated.View> */}
     </Pressable>
   );
 }

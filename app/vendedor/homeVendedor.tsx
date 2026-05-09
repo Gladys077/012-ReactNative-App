@@ -1,4 +1,3 @@
-import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
@@ -13,6 +12,7 @@ import PedidosEntregados from "../../components/vendedor/MenuVendedor/PedidosEnt
 import PedidosNuevos from "../../components/vendedor/MenuVendedor/PedidosNuevos";
 import PedidosPendientes from "../../components/vendedor/MenuVendedor/PedidosPendientes";
 import { SubTabPendiente } from "../../components/vendedor/MenuVendedor/SubMenuPendientes";
+import { Spacing } from "../../constants/Tokens";
 import { useAuthContext } from "../../context/AuthContext";
 import { useBottomSheetVerPedido } from "../../context/BottomSheetVerPedidoContext";
 import { useOrders } from "../../context/OrdersContext";
@@ -168,9 +168,13 @@ const HomeVendedor = () => {
       {/* Footer fijo */}
       {tabActivo === "pedidos" && (
         <View
+          pointerEvents="box-none"
           style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            borderRadius: "50",
             paddingVertical: Spacing.lg,
-            paddingHorizontal: Spacing.xxl,
           }}
         >
           <TipsFAB

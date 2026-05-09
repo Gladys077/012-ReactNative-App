@@ -219,7 +219,14 @@ const NuevoPedido = () => {
       </ScrollView>
 
       {/* Footer — fuera del scroll */}
-      <View style={{ paddingVertical: Spacing.lg }}>
+      <View
+        pointerEvents="box-none"
+        style={{
+          position: "absolute",
+          bottom: 120,
+          right: 0,
+        }}
+      >
         <TipsFAB
           onPress={() => setTipsOpen((prev) => !prev)}
           style={{ marginVertical: 4 }}

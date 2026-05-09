@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, Pressable, Text, View, ViewStyle } from "react-native";
+import { useTheme } from "../../context/ThemeContext";
 import { TipLamparita } from "../icons";
 import { useTipsBottomSheet } from "../subcomponentes/TipsBottomSheet";
 
@@ -9,6 +10,7 @@ interface TipsFABProps {
 }
 
 export default function TipsFAB({ onPress, style }: TipsFABProps) {
+  const { colors } = useTheme();
   const { colorRole, fonts, title } = useTipsBottomSheet();
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -63,6 +65,11 @@ export default function TipsFAB({ onPress, style }: TipsFABProps) {
           alignItems: "center",
           justifyContent: "center",
           gap: 8,
+          backgroundColor: colors.backgroundTips,
+          borderRadius: 999,
+          borderWidth: 1,
+          borderColor: "white",
+          // paddingVertical: 4,
         },
         style,
       ]}
@@ -77,12 +84,25 @@ export default function TipsFAB({ onPress, style }: TipsFABProps) {
               ],
               flexDirection: "row",
               alignItems: "center",
-              gap: 5,
+              justifyContent: "center",
+              // gap: 5,
               paddingVertical: 5,
               paddingHorizontal: 16,
-              borderRadius: 999,
-              borderWidth: 1.5,
-              borderColor: colorRole,
+              borderRadius: 50,
+              borderWidth: 1,
+              borderColor: colorRole + "44",
+
+              // backgroundColor: colorRole + "18",
+
+              shadowColor: "#000",
+              shadowOpacity: 0.12,
+              shadowRadius: 8,
+              shadowOffset: {
+                width: 0,
+                height: 4,
+              },
+
+              elevation: 5,
               backgroundColor: pressed ? colorRole + "22" : colorRole + "12",
             }}
           >

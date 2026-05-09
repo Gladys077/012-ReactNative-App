@@ -1,9 +1,9 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, Text, View } from "react-native";
 
-// Defino las variantes (clave)
+// Defino las variantes
 export type EtiqEstadoType =
   | "En proceso"
   | "Ver respuestas"
@@ -34,6 +34,33 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
   estado,
 }) => {
   const { colors, fonts } = useTheme();
+
+  const shineTranslate = useRef(new Animated.Value(-180)).current;
+
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.delay(5000),
+        Animated.timing(shineTranslate, {
+          toValue: 180,
+          duration: 1100,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(shineTranslate, {
+          toValue: -180,
+          duration: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [shineTranslate]);
 
   // Clave= nombre del estado y Valor= objeto con los colores: bg(suave) y dot(punto intenso)
   const estadoColors: Record<EtiqEstadoType, { bg: string; dot: string }> = {
@@ -87,8 +114,23 @@ const EtiqEstadoDelPedido: React.FC<EtiqEstadoDelPedidoProps> = ({
         borderRadius: BorderRadius.lg,
         gap: Spacing.md,
         paddingHorizontal: Spacing.md,
+
+        overflow: "hidden", //para que el brillo no se vea fuera del pill
+        position: "relative",
       }}
     >
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          top: -10,
+          left: 0,
+          width: 28,
+          height: 50,
+          backgroundColor: "rgba(255,255,255,0.18)",
+          transform: [{ translateX: shineTranslate }, { rotate: "18deg" }],
+        }}
+      />
       <View
         style={{
           width: 6,
