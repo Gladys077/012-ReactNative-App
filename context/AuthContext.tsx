@@ -29,6 +29,9 @@ interface User {
   name: string;
   email: string;
   role: "buyer" | "seller"; //para ser usado por los headers/footers
+
+  sellerProfileCompleted?: boolean;
+
   credits?: number; // para seller
   commerceName?: string; // para seller
 }
@@ -43,7 +46,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | undefined>({
     name: "Usuario Test",
     email: "test@test.com",
-    role: "seller", // o "seller"
+    role: "buyer", // o "seller"
+
+    sellerProfileCompleted: false,
+
     credits: 150,
     commerceName: "Mi Comercio",
   });

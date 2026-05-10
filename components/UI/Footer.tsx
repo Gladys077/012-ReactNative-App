@@ -1,6 +1,6 @@
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter, useSegments } from "expo-router";
-import { ComponentType } from "react";
+import React, { ComponentType, useState } from "react";
 import { View } from "react-native";
 import type { SvgProps } from "react-native-svg";
 import { useTheme } from "../../context/ThemeContext";
@@ -13,6 +13,7 @@ import {
   Pendientes,
   TiendaIconOutline,
 } from "../icons";
+import SellerActivationSheet from "../subcomponentes/SellerActivationSheet";
 import { IconLabel } from "./IconLabel";
 
 interface FooterItem {
@@ -47,6 +48,8 @@ export default function Footer() {
   const { user } = useAuthContext();
   const segments = useSegments();
 
+  const [showSellerSheet, setShowSellerSheet] = useState(false);
+
   if (!user) return null;
 
   // Detectar sección activa POR RUTA, no por rol del usuario
@@ -66,35 +69,69 @@ export default function Footer() {
 
   const activeLabel = getActiveLabelByRoute();
 
+  const handleFooterNavigation = (item: FooterItem) => {
+    const isSellerTab = item.label === "Vender";
+
+    const isBuyerTab = item.label === "Comprar";
+
+    // Quiere entrar a vendedor
+    if (isSellerTab) {
+      // aún no configuró perfil vendedor
+      if (!user.sellerProfileCompleted) {
+        setShowSellerSheet(true);
+        return;
+      }
+
+      router.push(item.route as any);
+      return;
+    }
+
+    // volver a comprador
+    if (isBuyerTab) {
+      router.push(item.route as any);
+      return;
+    }
+
+    router.push(item.route as any);
+  };
+
   return (
-    <View style={{ backgroundColor: colors.headerFooterBg, paddingBottom: 8 }}>
+    <>
       <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-          borderTopWidth: 1,
-          borderTopColor: colors.border,
-          paddingTop: 12,
-          height: 64,
-          width: "100%",
-          maxWidth: 500,
-          alignSelf: "center",
-          backgroundColor: colors.headerFooterBg,
-        }}
+        style={{ backgroundColor: colors.headerFooterBg, paddingBottom: 8 }}
       >
-        {items.map((item) => (
-          <View key={item.label} style={{ flex: 1, alignItems: "center" }}>
-            <IconLabel
-              icon={item.icon}
-              label={item.label}
-              role={isSellerSection ? "seller" : "buyer"}
-              active={item.label === activeLabel}
-              onPress={() => router.push(item.route as any)}
-            />
-          </View>
-        ))}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            alignItems: "center",
+            borderTopWidth: 1,
+            borderTopColor: colors.border,
+            paddingTop: 12,
+            height: 64,
+            width: "100%",
+            maxWidth: 500,
+            alignSelf: "center",
+            backgroundColor: colors.headerFooterBg,
+          }}
+        >
+          {items.map((item) => (
+            <View key={item.label} style={{ flex: 1, alignItems: "center" }}>
+              <IconLabel
+                icon={item.icon}
+                label={item.label}
+                role={isSellerSection ? "seller" : "buyer"}
+                active={item.label === activeLabel}
+                onPress={() => handleFooterNavigation(item)}
+              />
+            </View>
+          ))}
+        </View>
       </View>
-    </View>
+      <SellerActivationSheet
+        isOpen={showSellerSheet}
+        onClose={() => setShowSellerSheet(false)}
+      />
+    </>
   );
 }

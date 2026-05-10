@@ -9,7 +9,7 @@ import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedido
 export default function CompradorLayout() {
   const { colors } = useTheme();
   const segments = useSegments();
-  const currentPage = segments[segments.length - 1] as string; // extrae el último segmento (nombre de la screen)
+  const currentPage = segments[segments.length - 1] as string; // Extrae el último segmento (nombre de la screen)
 
   const getTitleByPage = () => {
     switch (currentPage) {
@@ -48,9 +48,6 @@ export default function CompradorLayout() {
         >
           <Slot />
         </View>
-        {/* View aislante para el footer */}
-        {/* <View style={{ width: "100%" }}> */}
-        {/* </View> */}
       </BottomSheetVerPedidoProvider>
       <Footer />
     </View>
