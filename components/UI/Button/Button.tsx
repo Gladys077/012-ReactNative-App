@@ -1,4 +1,4 @@
-import { BorderRadius, shadows, Spacing } from "@/constants/Tokens";
+import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { ComponentType, ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View, ViewStyle } from "react-native";
@@ -66,7 +66,7 @@ const Button: React.FC<ButtonProps> = ({
   const primaryBg = sectionBgMap[section];
   const primaryTextColor = colors.textOnColor;
 
-  const secondaryBg = colors.textSecondaryBg;
+  const secondaryBg = "transparent";
   const secondaryBorder = colors.textSecondaryBorder;
   const secondaryTextColor = colors.textDefault;
 
@@ -85,7 +85,7 @@ const Button: React.FC<ButtonProps> = ({
           iconColor: secondaryTextColor,
         };
 
-  // ===== botón estilos base (inline, Android-friendly)
+  // ===== botón estilos base
   const baseButtonStyle: ViewStyle = {
     backgroundColor: containerColors.backgroundColor,
     borderRadius: BorderRadius.pillBtn,
@@ -98,7 +98,7 @@ const Button: React.FC<ButtonProps> = ({
     justifyContent: "center",
     alignItems: "center",
     // Sombra nativa (uso tokens.shadows para control)
-    ...shadows.md,
+    // ...shadows.md,
     opacity: disabled ? 0.4 : 1,
   };
 

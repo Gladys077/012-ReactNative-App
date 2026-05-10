@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -32,6 +32,9 @@ export default function PerfilScreen() {
   const [titular, setTitular] = useState("");
   const [editingField, setEditingField] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const sellerSectionY = useRef(0);
 
   const [errors, setErrors] = useState({
     name: "",
@@ -91,6 +94,23 @@ export default function PerfilScreen() {
     setToastVisible(true);
   };
 
+  const params = useLocalSearchParams();
+
+  const isSellerSetup = params.mode === "seller-setup";
+
+  useEffect(() => {
+    if (isSellerSetup) {
+      setIsSeller(true);
+
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          y: sellerSectionY.current - 60,
+          animated: true,
+        });
+      }, 250);
+    }
+  }, [isSellerSetup]);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
@@ -98,6 +118,7 @@ export default function PerfilScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <ScrollView
+          ref={scrollRef}
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -188,32 +209,40 @@ export default function PerfilScreen() {
 
               <LineaDivisoria />
 
-              <Pressable
-                onPress={() => setIsSeller((prev) => !prev)}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginTop: Spacing.lg,
+              {/* sección de vendedor */}
+              <View
+                onLayout={(event) => {
+                  // Guarda la posición Y del bloque vendedor
+                  sellerSectionY.current = event.nativeEvent.layout.y; // para hacer scroll automático cuando el usuario // llega desde SellerActivationSheet
                 }}
               >
-                <View
+                <Pressable
+                  onPress={() => setIsSeller((prev) => !prev)}
                   style={{
-                    width: 18,
-                    height: 18,
-                    borderWidth: 1.5,
-                    borderColor: colors.textDefault,
-                    marginRight: 8,
-                    justifyContent: "center",
+                    flexDirection: "row",
                     alignItems: "center",
-                    backgroundColor: isSeller
-                      ? colors.brandCommon
-                      : "transparent",
+                    marginTop: Spacing.lg,
                   }}
-                />
-                <Text style={{ color: colors.textDefault }}>
-                  También deseo vender
-                </Text>
-              </Pressable>
+                >
+                  <View
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderWidth: 1.5,
+                      borderColor: colors.textDefault,
+                      marginRight: 8,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: isSeller
+                        ? colors.brandCommon
+                        : "transparent",
+                    }}
+                  />
+                  <Text style={{ color: colors.textDefault }}>
+                    También deseo vender
+                  </Text>
+                </Pressable>
+              </View>
 
               {isSeller && (
                 <View

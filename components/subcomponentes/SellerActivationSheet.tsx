@@ -6,7 +6,8 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo, useRef } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import Button from "../../components/UI/Button/Button";
 import { TiendaIconOutline } from "../icons";
 
 interface SellerActivationSheetProps {
@@ -120,6 +121,34 @@ export default function SellerActivationSheet({
         <View
           style={{
             flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 16,
+          }}
+        >
+          <View style={{ flex: 1, marginRight: 8 }}>
+            <Button
+              variant="secondary"
+              section="common"
+              width="full"
+              onPress={onClose}
+            >
+              Ahora no
+            </Button>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              variant="primary"
+              section="common"
+              width="full"
+              onPress={handleGoToProfile}
+            >
+              Configurar perfil
+            </Button>
+          </View>
+        </View>
+        {/* <View
+          style={{
+            flexDirection: "row",
             gap: Spacing.md,
             marginTop: Spacing.lg,
           }}
@@ -166,7 +195,7 @@ export default function SellerActivationSheet({
               Configurar perfil
             </Text>
           </Pressable>
-        </View>
+        </View> */}
       </BottomSheetView>
     </BottomSheet>
   );

@@ -7,6 +7,7 @@ import ChatModal from "../../Chat/ChatModal";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import { Chat, Comprobante, Remove } from "../../icons";
 import DatosDelComprador from "../../subcomponentes/DatosDelComprador";
+import TextoPedido from "../../subcomponentes/TextoPedido";
 
 interface CardHistorialVendedorProps {
   pedido: Pedido;
@@ -116,19 +117,7 @@ export default function CardHistorialVendedor({
       {expandido && (
         <View style={{ gap: Spacing.md, marginTop: Spacing.sm }}>
           {/* Listado del pedido */}
-          <Text
-            style={{
-              backgroundColor: colors.textSecondaryBg,
-              borderRadius: BorderRadius.md,
-              padding: Spacing.md,
-              fontFamily: fonts.robotoRegular,
-              fontSize: FontSizes.sm,
-              color: colors.textDefault,
-              lineHeight: 22,
-            }}
-          >
-            {pedido.textoPedido}
-          </Text>
+          <TextoPedido texto={pedido.textoPedido} />
 
           <LineaDivisoria />
 

@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     email: "test@test.com",
     role: "buyer", // o "seller"
 
-    sellerProfileCompleted: false,
+    sellerProfileCompleted: false, // TODO: Mock hasta que se haga el backend (para saber si el usuario se registró como vendedor)
 
     credits: 150,
     commerceName: "Mi Comercio",

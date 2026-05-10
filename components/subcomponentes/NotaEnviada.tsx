@@ -33,7 +33,7 @@ export default function NotaEnviada({ nota }: NotaEnviadaProps) {
         <Text
           style={{
             fontFamily: fonts.robotoBold,
-            color: colors.textOnColor,
+            color: colors.textDefault,
           }}
         >
           NOTA:{" "}
