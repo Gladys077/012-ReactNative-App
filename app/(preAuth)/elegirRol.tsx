@@ -95,7 +95,7 @@ export default function ElegirRolScreen() {
                 fontSize: 24,
                 fontFamily: fonts.robotoBold,
                 marginTop: Spacing.md,
-                marginBottom: Spacing.sm,
+                marginBottom: Spacing.md,
               }}
             >
               ¡Hola! 👋
@@ -108,7 +108,7 @@ export default function ElegirRolScreen() {
                 marginBottom: Spacing.lg,
               }}
             >
-              ¿Cómo deseas comenzar?
+              ¿Ahora quieres comprar o vender?
             </Text>
           </View>
 

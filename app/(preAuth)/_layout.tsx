@@ -18,6 +18,8 @@ export default function PreAuthLayout() {
     switch (currentPage) {
       case "registro":
         return "Registro";
+      case "elegirRol":
+        return "Bienvenido";
       case "perfil":
         return "Perfil";
       case "cambiarContrasena":

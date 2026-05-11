@@ -1,7 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Animated, Pressable, Text, View } from "react-native";
+import {
+  Alert,
+  Animated,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { BorderRadius, FontSizes, Spacing } from "../../constants/Tokens";
 import { useTheme } from "../../context/ThemeContext";
 import { Chevron, MasBlanca, TiendaIcon } from "../icons";
@@ -63,6 +70,7 @@ export default function SelectRubros({
   const [selectedValues, setSelectedValues] = useState<string[]>(selected);
   const [nuevoRubro, setNuevoRubro] = useState("");
   const [agregando, setAgregando] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
 
   const rotateAnim = useMemo(() => new Animated.Value(0), []);
 
@@ -115,10 +123,18 @@ export default function SelectRubros({
     setSelectedValues(selected);
   }, [selected]);
 
+  // Filtrado de rubros por búsqueda 👈 NUEVO
+  const rubrosFiltrados = useMemo(() => {
+    const query = busqueda.trim().toLowerCase();
+    if (!query) return rubrosInternos;
+    return rubrosInternos.filter((r) => r.label.toLowerCase().includes(query));
+  }, [rubrosInternos, busqueda]);
+
   const toggleOpen = () => {
     const next = !isOpen;
     setIsOpen(next);
     animateChevron(next);
+    if (!next) setBusqueda(""); //limpia búsqueda al cerrar
   };
 
   const toggleRubro = (value: string) => {
@@ -233,15 +249,69 @@ export default function SelectRubros({
       {/* Lista expandible */}
       {isOpen && (
         <View style={{ paddingHorizontal: 12, paddingBottom: 8 }}>
-          {rubrosInternos.map((item) => (
-            <RubroItem
-              key={item.value}
-              rubro={item}
-              isSelected={selectedValues.includes(item.value)}
-              onToggle={toggleRubro}
+          {/* 🔍 BARRA DE BÚSQUEDA — NUEVO */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: mode === "dark" ? "#2D3748" : "#F1F5F9",
+              borderRadius: 10,
+              paddingHorizontal: 12,
+              marginBottom: 8,
+              marginTop: 4,
+            }}
+          >
+            {/* Podés usar un ícono de lupa si tenés uno, o texto */}
+            <Text style={{ color: colors.textMuted, marginRight: 6 }}>🔍</Text>
+            <TextInput
+              value={busqueda}
+              onChangeText={setBusqueda}
+              placeholder="Buscar rubro..."
+              placeholderTextColor={colors.textMuted}
+              style={{
+                flex: 1,
+                paddingVertical: 10,
+                fontSize: FontSizes.base,
+                color: colors.textDefault,
+              }}
+              autoCorrect={false}
             />
-          ))}
-          {allowAddNew ? (
+            {busqueda.length > 0 && (
+              <Pressable onPress={() => setBusqueda("")}>
+                <Text style={{ color: colors.textMuted, fontSize: 16 }}>✕</Text>
+              </Pressable>
+            )}
+          </View>
+
+          {/* Lista filtrada */}
+          {rubrosFiltrados.length === 0 ? (
+            <Text
+              style={{
+                color: colors.textMuted,
+                fontSize: FontSizes.sm,
+                textAlign: "center",
+                paddingVertical: 16,
+              }}
+            >
+              No se encontraron rubros
+            </Text>
+          ) : (
+            rubrosFiltrados.map(
+              (
+                item, // 👈 rubrosFiltrados en vez de rubrosInternos
+              ) => (
+                <RubroItem
+                  key={item.value}
+                  rubro={item}
+                  isSelected={selectedValues.includes(item.value)}
+                  onToggle={toggleRubro}
+                />
+              ),
+            )
+          )}
+
+          {/* "Nuevo Rubro" — solo si no hay búsqueda activa o el rubro no existe */}
+          {allowAddNew && !busqueda ? ( // 👈 oculta "Nuevo Rubro" mientras se busca
             agregando ? (
               <NuevoRubroInput
                 value={nuevoRubro}
