@@ -156,6 +156,6 @@ export interface Pedido {
   expandido?: boolean;
 
   // Calificaciones
-  calificacionComprador?: number; // el vendedor califica al comprador
-  calificacionVendedor?: number; // el comprador califica al vendedor
+  calificacionComprador?: { estrellas: number; comentario: string }; // el vendedor califica al comprador
+  calificacionVendedor?: { estrellas: number; comentario: string }; // el comprador califica al vendedor
 }

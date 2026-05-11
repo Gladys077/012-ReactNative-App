@@ -47,17 +47,24 @@ export default function CardEntregado({
   onVerNota,
 }: CardEntregadoProps) {
   const { colors } = useTheme();
-  const { moverAHistorialVendedor } = useOrders();
+  const { moverAHistorialVendedor, updatePedido } = useOrders();
   const [modalVisible, setModalVisible] = useState(false);
   const [calificado, setCalificado] = useState(false);
 
+  // TODO enviar calificación al backend (data + pedidoId) - VER LIO
+
   const handleCalificar = useCallback(
     (data: { estrellas: number; comentario: string }) => {
-      // TODO enviar calificación al backend (data + pedidoId)
+      updatePedido(pedidoId, {
+        calificacionComprador: {
+          estrellas: data.estrellas,
+          comentario: data.comentario,
+        },
+      });
       setModalVisible(false);
       setCalificado(true);
     },
-    [],
+    [pedidoId, updatePedido],
   );
 
   const handleFin = useCallback(() => {

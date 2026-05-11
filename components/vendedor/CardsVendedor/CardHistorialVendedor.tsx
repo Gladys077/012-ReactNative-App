@@ -6,7 +6,7 @@ import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import { Chat, Comprobante, Remove } from "../../icons";
-import DatosDelComprador from "../../subcomponentes/DatosDelComprador";
+import CalificacionDada from "../../subcomponentes/CalificacionDada";
 import TextoPedido from "../../subcomponentes/TextoPedido";
 
 interface CardHistorialVendedorProps {
@@ -23,6 +23,7 @@ export default function CardHistorialVendedor({
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
   const [chatVisible, setChatVisible] = useState(false);
+  const calif = pedido.calificacionComprador;
 
   const r = pedido.respuestaSeleccionada;
   const precio = r?.precio ?? 0;
@@ -119,12 +120,14 @@ export default function CardHistorialVendedor({
           {/* Listado del pedido */}
           <TextoPedido texto={pedido.textoPedido} />
 
-          <LineaDivisoria />
-
-          <DatosDelComprador
-            direccion={pedido.direccionComprador}
-            celular={pedido.celularComprador}
-          />
+          {/* ── Calificación al Comprador ── */}
+          {calif && (
+            <CalificacionDada
+              estrellas={calif.estrellas}
+              comentario={calif.comentario}
+              label="Califiqué al comprador con:"
+            />
+          )}
 
           {(tieneComprobantes || tieneMensajes) && <LineaDivisoria />}
 

@@ -295,8 +295,14 @@ const EstadoPedido = () => {
                     telefono={r.telefono}
                     onVerPedido={handleVerPedido}
                     onEnviarCalificacion={(data) => {
-                      console.log("TODO: enviar calificación al backend", data);
-                      updateEstado(pedido.id, "completado");
+                      //TODO: enviar calificación al backend
+                      updatePedido(pedido.id, {
+                        calificacionVendedor: {
+                          estrellas: data.estrellas,
+                          comentario: data.comentario,
+                        },
+                        estadoSistema: "completado",
+                      });
                     }}
                   />
                 );

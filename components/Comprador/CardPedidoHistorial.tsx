@@ -3,27 +3,31 @@ import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import { Remove } from "../icons";
+import CalificacionDada from "../subcomponentes/CalificacionDada";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
+import TextoPedido from "../subcomponentes/TextoPedido";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardHistorialCompradorProps {
-  id: string | number;
+  pedidoId: string | number;
   vendedorNombre: string;
   precio: number;
   fechaSeleccion: string;
   textoPedido: string;
   notaVendedor?: string;
-  onEliminar: (id: string | number) => void;
+  onEliminar: (pedidoId: string | number) => void;
+  calificacionDada?: { estrellas: number; comentario: string };
 }
 
 export default function CardHistorialComprador({
-  id,
+  pedidoId,
   vendedorNombre,
   precio,
   fechaSeleccion,
   textoPedido,
   notaVendedor,
   onEliminar,
+  calificacionDada,
 }: CardHistorialCompradorProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -45,7 +49,7 @@ export default function CardHistorialComprador({
         {
           text: "Eliminar",
           style: "destructive",
-          onPress: () => onEliminar(id),
+          onPress: () => onEliminar(pedidoId),
         },
       ],
       { cancelable: true },
@@ -104,17 +108,7 @@ export default function CardHistorialComprador({
       {/* Contenido expandible */}
       {expandido && (
         <View style={{ gap: Spacing.md, marginTop: Spacing.sm }}>
-          <Text
-            style={{
-              fontFamily: fonts.robotoRegular,
-              fontSize: FontSizes.sm,
-              color: colors.textDefault,
-              lineHeight: 20,
-              marginBottom: Spacing.lg,
-            }}
-          >
-            {textoPedido}
-          </Text>
+          <TextoPedido texto={textoPedido} />
 
           {notaVendedor && (
             <>
@@ -125,6 +119,16 @@ export default function CardHistorialComprador({
               />
             </>
           )}
+
+          <View style={{ marginTop: Spacing.lg }}>
+            {calificacionDada && (
+              <CalificacionDada
+                estrellas={calificacionDada.estrellas}
+                comentario={calificacionDada.comentario}
+                label="Califiqué al vendedor con:"
+              />
+            )}
+          </View>
 
           <LineaDivisoria />
         </View>

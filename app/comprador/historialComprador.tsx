@@ -31,12 +31,13 @@ export default function HistorialComprador() {
             return (
               <CardPedidoHistorial
                 key={item.id}
-                id={item.id}
+                pedidoId={item.id}
                 vendedorNombre={r.vendedorNombre}
                 precio={r.precio}
                 fechaSeleccion={item.fechaSeleccion ?? ""}
                 textoPedido={item.textoPedido}
                 notaVendedor={r.nota}
+                calificacionDada={item.calificacionVendedor}
                 onEliminar={handleEliminar}
               />
             );

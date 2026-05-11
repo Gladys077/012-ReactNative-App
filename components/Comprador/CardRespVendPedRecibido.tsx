@@ -98,18 +98,6 @@ export default function CardRespVendPedRecibido({
             {telefono ?? "No disponible"}
           </Text>
         </View>
-        {/* <View
-          style={{
-            borderWidth: 1,
-            borderColor: colors.border,
-            borderRadius: BorderRadius.md,
-            padding: Spacing.md,
-          }}
-        >
-          <Text style={{ fontSize: 14, color: colors.textDefault }}>
-            Celular: {telefono ?? "No disponible"}
-          </Text>
-        </View> */}
       </View>
 
       <LineaDivisoria />
