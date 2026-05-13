@@ -9,13 +9,13 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SelectRubros from "../../components/SelectRubros/SelectRubros";
-import Button from "../../components/UI/Button/Button";
-import { InputField } from "../../components/UI/InputField";
-import LineaDivisoria from "../../components/UI/LineaDivisoria";
-import Toast from "../../components/UI/Toast";
-import { Spacing } from "../../constants/Tokens";
-import { useTheme } from "../../context/ThemeContext";
+import SelectRubros from "../../../components/SelectRubros/SelectRubros";
+import Button from "../../../components/UI/Button/Button";
+import { InputField } from "../../../components/UI/InputField";
+import LineaDivisoria from "../../../components/UI/LineaDivisoria";
+import Toast from "../../../components/UI/Toast";
+import { Spacing } from "../../../constants/Tokens";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function PerfilScreen() {
   const { colors, fonts } = useTheme();
@@ -325,7 +325,7 @@ export default function PerfilScreen() {
                     variant="secondary"
                     section="common"
                     width="full"
-                    onPress={() => router.replace("/(auth)/elegirRol")}
+                    onPress={() => router.replace("/(preAuth)/elegirRol")}
                   >
                     Cancelar
                   </Button>

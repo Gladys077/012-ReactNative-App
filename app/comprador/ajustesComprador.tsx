@@ -98,12 +98,14 @@ const AjustesCompradorScreen = () => {
             <ItemsAjustes
               icon={Avatar}
               texto="Perfil"
-              onPress={() => router.push("/perfil")}
+              onPress={() => router.push("/(preAuth)/Ajustes/perfil" as any)}
             />
             <ItemsAjustes
               icon={CambiarContraseña}
               texto="Cambiar contraseña"
-              onPress={() => router.push("/cambiarContrasena")}
+              onPress={() =>
+                router.push("/(preAuth)/Ajustes/cambiarContrasena" as any)
+              }
             />
             <ItemsAjustes
               icon={Salir}
@@ -126,12 +128,19 @@ const AjustesCompradorScreen = () => {
             <ItemsAjustes
               icon={Terminos}
               texto="Términos y condiciones"
-              // onPress={() => router.push("/terminos")}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/terms" as any,
+                  params: { from: "comprador" },
+                })
+              }
             />
             <ItemsAjustes
               icon={Visible}
               texto="Políticas de privacidad"
-              // onPress={() => router.push("/privacidad")}
+              onPress={() =>
+                router.push("/(preAuth)/Ajustes/privacidad" as any)
+              }
             />
             <ItemsAjustes
               icon={Version}
@@ -141,7 +150,12 @@ const AjustesCompradorScreen = () => {
             <ItemsAjustes
               icon={Faq}
               texto="Preguntas frecuentes (FAQ)"
-              // onPress={() => router.push("/faq")}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/terms" as any,
+                  params: { from: "comprador" },
+                })
+              }
             />
             <ItemsAjustes
               icon={Mail}
@@ -156,7 +170,7 @@ const AjustesCompradorScreen = () => {
               icon={MonedasOutline}
               texto="Cargar créditos"
               textoSecundario="Ingresa como vendedor para acceder"
-              // onPress={() => router.push("/creditos")}
+              onPress={() => router.push("vendedor/creditos" as any)}
               deshabilitado
             />
           </SeccionAjustes>

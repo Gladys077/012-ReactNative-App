@@ -99,12 +99,14 @@ const AjustesVendedorScreen = () => {
             <ItemsAjustes
               icon={Avatar}
               texto="Perfil"
-              onPress={() => router.push("/perfil")}
+              onPress={() => router.push("/(preAuth)/Ajustes/perfil" as any)}
             />
             <ItemsAjustes
               icon={CambiarContraseña}
               texto="Cambiar contraseña"
-              onPress={() => router.push("/cambiarContrasena")}
+              onPress={() =>
+                router.push("/(preAuth)/Ajustes/cambiarContrasena" as any)
+              }
             />
             <ItemsAjustes
               icon={Salir}
@@ -127,12 +129,19 @@ const AjustesVendedorScreen = () => {
             <ItemsAjustes
               icon={Terminos}
               texto="Términos y condiciones"
-              // onPress={() => router.push("/terminos")}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/terms" as any,
+                  params: { from: "vendedor" },
+                })
+              }
             />
             <ItemsAjustes
               icon={Visible}
               texto="Políticas de privacidad"
-              // onPress={() => router.push("/privacidad")}
+              onPress={() =>
+                router.push("/(preAuth)/Ajustes/privacidad" as any)
+              }
             />
             <ItemsAjustes
               icon={Version}
@@ -142,7 +151,7 @@ const AjustesVendedorScreen = () => {
             <ItemsAjustes
               icon={Faq}
               texto="Preguntas frecuentes (FAQ)"
-              // onPress={() => router.push("/faq")}
+              onPress={() => router.push("/(preAuth)/Ajustes/FAQ" as any)}
             />
             <ItemsAjustes
               icon={Mail}

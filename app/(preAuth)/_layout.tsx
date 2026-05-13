@@ -1,9 +1,15 @@
 import "react-native-reanimated";
 
+import { Routes } from "@/constants/Routes";
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Slot, useSegments } from "expo-router";
+import {
+  Slot,
+  useLocalSearchParams,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Header from "../../components/UI/Header";
@@ -13,6 +19,9 @@ export default function PreAuthLayout() {
   const segments = useSegments();
 
   const currentPage = segments[segments.length - 1] as string;
+
+  const router = useRouter();
+  const { from } = useLocalSearchParams();
 
   const getTitleByPage = () => {
     switch (currentPage) {
@@ -26,18 +35,38 @@ export default function PreAuthLayout() {
         return "Cambiar Contraseña";
       case "olvideContrasena":
         return "Recuperar Contraseña";
-      case "creditos":
-        return "Mis Créditos";
+      case "terms":
+        return "Términos y condiciones";
       default:
         return "";
     }
+  };
+
+  const handleGoBack = () => {
+    if (currentPage === "terms") {
+      if (from === "comprador") {
+        router.replace(Routes.comprador.ajustes);
+        return;
+      }
+
+      if (from === "vendedor") {
+        router.replace(Routes.vendedor.ajustes);
+        return;
+      }
+    }
+
+    router.back();
   };
 
   return (
     <SafeAreaProvider>
       <BottomSheetModalProvider>
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-          <Header showBackArrow title={getTitleByPage()} />
+          <Header
+            showBackArrow
+            title={getTitleByPage()}
+            onBack={handleGoBack}
+          />
 
           <View
             style={{

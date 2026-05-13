@@ -11,4 +11,4 @@ export const Routes = {
     creditos: "/vendedor/creditos",
     ajustes: "/vendedor/ajustesVendedor",
   },
-};
+} as const;

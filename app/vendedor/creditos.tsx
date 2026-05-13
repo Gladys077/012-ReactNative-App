@@ -49,9 +49,8 @@ const FAQ_ITEMS: FaqItem[] = [
       "Al confirmar una venta, el sistema descuenta automáticamente el 5% del valor de la transacción de tu saldo de créditos. No necesitás hacer nada manual, el proceso es completamente automático.",
   },
   {
-    question: "¿Puedo pedir reintegro?",
-    answer:
-      "Sí, podés solicitar el reintegro de créditos no utilizados contactando a nuestro equipo de soporte. El proceso puede demorar hasta 72 horas hábiles y está sujeto a nuestros términos y condiciones.",
+    question: "¿Cuándo se confirma una venta?",
+    answer: "Cuando el vendedor confirma que ha entregado el producto.",
   },
   {
     question: "¿Los créditos vencen?",
@@ -276,8 +275,6 @@ function SaldoBanner({ credits }: { credits: number }) {
       <View
         style={{ flexDirection: "row", alignItems: "center", gap: Spacing.md }}
       >
-        {/* <Text style={{ fontSize: 20 }}>🪙</Text> */}
-
         <Monedas width={26} height={25} color={colors.brandSeller} />
 
         <Text
@@ -343,6 +340,16 @@ export default function CreditosVendedorScreen() {
   const [selectedId, setSelectedId] = useState<string>("opt2");
   const [customAmount, setCustomAmount] = useState("");
 
+  // Formatea el string con puntos cada 3 dígitos (ej: "1.500.000")
+  const formatWithDots = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+  const handleCustomChange = (value: string) => {
+    setCustomAmount(formatWithDots(value));
+  };
+
   const handleComprar = () => {
     const selected = CREDIT_OPTIONS.find((o) => o.id === selectedId);
     if (!selected) return;
@@ -402,7 +409,7 @@ export default function CreditosVendedorScreen() {
               selected={selectedId === opt.id}
               onSelect={() => setSelectedId(opt.id)}
               customAmount={customAmount}
-              onCustomChange={setCustomAmount}
+              onCustomChange={handleCustomChange}
             />
           ))}
 

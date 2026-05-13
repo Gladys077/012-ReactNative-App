@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Spacing } from "../../constants/Tokens";
-import { useTheme } from "../../context/ThemeContext";
+import { Spacing } from "../../../constants/Tokens";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function Terms() {
   const { colors } = useTheme();
@@ -37,7 +37,7 @@ export default function Terms() {
               marginBottom: Spacing.xxl,
             }}
           >
-            FAQ
+            Contactar soporte técnico
           </Text>
 
           <Text
@@ -46,7 +46,7 @@ export default function Terms() {
               lineHeight: 24,
             }}
           >
-            Aquí irán FAQ
+            Aquí contactar soporte técnico
           </Text>
         </View>
       </ScrollView>

@@ -12,6 +12,7 @@ type HeaderProps = {
   rightContent?: React.ReactNode;
   variant?: "buyer" | "seller" | "neutral";
   credits?: number;
+  onBack?: () => void;
 };
 
 export default function Header({
@@ -21,6 +22,7 @@ export default function Header({
   credits,
   leftContent,
   rightContent,
+  onBack,
 }: HeaderProps) {
   const { colors, fonts } = useTheme();
   const navigation = useNavigation();
@@ -54,7 +56,14 @@ export default function Header({
           ) : showBackArrow ? (
             /* Flecha Volver */
             <Pressable
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                if (onBack) {
+                  onBack();
+                  return;
+                }
+
+                navigation.goBack();
+              }}
               style={{ padding: 8 }}
             >
               <Volver width={22} height={22} fill={colors.textDefault} />
