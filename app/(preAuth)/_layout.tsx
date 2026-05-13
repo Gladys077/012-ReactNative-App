@@ -26,6 +26,8 @@ export default function PreAuthLayout() {
         return "Cambiar Contraseña";
       case "olvideContrasena":
         return "Recuperar Contraseña";
+      case "creditos":
+        return "Mis Créditos";
       default:
         return "";
     }

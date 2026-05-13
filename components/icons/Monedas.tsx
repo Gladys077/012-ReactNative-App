@@ -3,6 +3,7 @@ import type { SvgProps } from "react-native-svg";
 import Svg, { Path } from "react-native-svg";
 
 interface MonedasProps extends SvgProps {
+  size?: number;
   strokeColor?: string;
 }
 

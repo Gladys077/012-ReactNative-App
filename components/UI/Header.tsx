@@ -57,15 +57,15 @@ export default function Header({
               onPress={() => navigation.goBack()}
               style={{ padding: 8 }}
             >
-              <Volver width={24} height={24} fill={colors.textDefault} />
+              <Volver width={22} height={22} fill={colors.textDefault} />
             </Pressable>
           ) : (
             /* Iconos de rol (solo si no hay flecha) */
             <>
               {variant === "seller" && (
                 <TiendaIcon
-                  width={28}
-                  height={28}
+                  width={24}
+                  height={24}
                   fill={colors.brandSeller}
                   // stroke={colors.textDefault}
                 />

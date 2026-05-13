@@ -59,127 +59,91 @@ import { Home, Historial } from '@/components/icons';
 
 ```bash
 assets/
-  icons/     ← *SVGs originales (vacía por defecto)*
-  images/    ← *(Futuro uso para imágenes)*
-  emojis/    ← *(Futuro uso para emojis)*
+  icons/     ← *SVGs originales*
+  images/    ← *Imágenes estáticas*
+  emojis/    ← *Emojis*
 
 components/
-  icons/     ← *Íconos convertidos como componentes RN*
-  index.ts   ← *Exporta todos los íconos*
+  icons/     ← Íconos convertidos como componentes RN
+  index.ts   ← Exporta todos los íconos (generado automáticamente)
+  shared/    ← Componentes compartidos entre buyer y seller
+  subcomponentes/ ← Componentes reutilizables menores
+  UI/        ← Elementos de interfaz genéricos (Button, LineaDivisoria, etc.)
+  Comprador/ ← Cards y componentes exclusivos del lado comprador
+  vendedor/  ← Cards y componentes exclusivos del lado vendedor
 
-scripts/
-  convertir-svgs.ts
-  generate-icons-index.ts
+context/
+  OrdersContext.tsx   ← Estado global de pedidos, historiales y calificaciones
+  ThemeContext.tsx    ← Tema claro/oscuro
+  AuthContext.tsx     ← Rol activo (buyer/seller)
+
+constants/
+  Colors.ts   ← Paleta de colores por tema (light/dark)
+  Tokens.ts   ← Spacing, FontSizes, BorderRadius
+
+types/
+  pedidos.ts  ← Tipos: Pedido, EstadoSistema, EstadoComprador, EstadoVendedor, etc.
+
 ```
 
 ### ❗ Importante
 
 1. No edites manualmente components/icons/index.ts, se genera automáticamente.
-2. La carpeta assets/icons puede permanecer vacía: usala solo para nuevos SVGs.
+2. La carpeta assets/icons usala solo para SVGs convertidos en componentes que permitiran cambios dinámicos.
 3. No se usan require() para importar imágenes en este proyecto.
 
 ---
 
 ---
 
-# 🎨 Guía de Colores - Para el Equipo
+## 🎨 Sistema de colores - (para el equipo)
 
-## 📋 Roles de Usuario
-
-- **buyer** = Comprador (azul)
-- **seller** = Vendedor (naranja)
-- **common** = Páginas comunes (violeta)
-
-## 🔧 Cómo usar colores en componentes
-
-### ✅ MÉTODO 1: Color directo (SIEMPRE funciona)
+El proyecto **no usa NativeWind ni Tailwind**. Los colores se manejan a través de `ThemeContext` y se consumen con el hook `useTheme()`.
 
 ```tsx
-import { getColorByRole, Colors } from '@/constants/Colors';
+import { useTheme } from '@/context/ThemeContext';
 
-// Para íconos, SVG, style={{ color: ... }}
-<Icon color={getColorByRole('seller')} />
-<Text style={{ color: getColorByRole('buyer') }}>Texto azul</Text>
+const { colors, fonts } = useTheme();
 
-// Para textos normales
-<Text style={{ color: Colors.light.textDefault }}>Texto normal</Text>
-<Text style={{ color: Colors.light.textMuted }}>Texto gris</Text>
+Texto
+...
 ```
 
-### ✅ MÉTODO 2: Clases Tailwind (cuando funciona)
+### Roles de usuario
+
+| Rol        | Color   | Uso                 |
+| ---------- | ------- | ------------------- |
+| **buyer**  | Azul    | Sección comprador   |
+| **seller** | Naranja | Sección vendedor    |
+| **common** | Violeta | Páginas compartidas |
+
+Los colores de marca por rol se acceden directamente desde `colors`:
 
 ```tsx
-import { getTailwindClass } from '@/constants/Colors';
-
-// Para textos y fondos con Tailwind
-<Text className={getTailwindClass('seller', 'text')}>Texto naranja</Text>
-<View className={getTailwindClass('buyer', 'bg')}>Fondo azul</View>
+colors.brandBuyer; // azul comprador
+colors.brandSeller; // naranja vendedor
 ```
 
-## 🚦 CUÁNDO USAR CADA MÉTODO
+---
 
-| Caso                  | Usar          | Ejemplo                                       |
-| --------------------- | ------------- | --------------------------------------------- |
-| **Íconos SVG**        | Color directo | `color={getColorByRole('seller')}`            |
-| **Texto normal**      | Tailwind      | `className="text-orange-600"`                 |
-| **Si Tailwind falla** | Color directo | `style={{ color: getColorByRole('seller') }}` |
-| **Fondos**            | Tailwind      | `className="bg-blue-600"`                     |
+## 🔄 Flujo de estados de un pedido
 
-## 📖 EJEMPLOS COMUNES
+Cada pedido tiene un `estadoSistema` como fuente de verdad, que se mapea a lo que ve cada rol:
 
-### Botón que cambia por rol:
+- `estadoSistemaAComprador` → lo que ve el comprador
+- `estadoSistemaAVendedor` → lo que ve el vendedor
+- `estadoSistemaATabVendedor` → en qué tab aparece del lado vendedor
 
-```tsx
-const RoleButton = ({ role, children, onPress }) => (
-  <Pressable
-    onPress={onPress}
-    style={{
-      backgroundColor: getColorByRole(role),
-      padding: 16,
-      borderRadius: 8,
-    }}
-  >
-    <Text style={{ color: "white" }}>{children}</Text>
-  </Pressable>
-);
+Al completarse la transacción:
 
-// Uso:
-<RoleButton role="seller" onPress={handlePress}>
-  Botón Vendedor
-</RoleButton>;
-```
+- El comprador archiva en `historialComprador` vía `moverAHistorialComprador()`
+- El vendedor archiva en `historialVendedor` vía `moverAHistorialVendedor()`
 
-### Ícono con estado activo:
+---
 
-```tsx
-const StatusIcon = ({ role, active, icon: Icon }) => {
-  const color = active ? getColorByRole(role) : Colors.light.textMuted;
+## ❗ Importante
 
-  return <Icon color={color} />;
-};
-
-// Uso:
-<StatusIcon role="buyer" active={true} icon={HomeIcon} />;
-```
-
-## ⚡ TIPS PRO
-
-1. **Usa `getColorByRole()`** cuando necesitemos el color exacto
-2. **No usamos NativeWind ni Tailwind para las clases CSS** (así evitamos problemas versiones y el motor RN)
-3. **Siempre importa desde `@/constants/Colors`**
-4. **En caso de duda, usa color directo** (siempre funciona)
-
-## 🐛 PROBLEMAS COMUNES
-
-**❌ Error**: "No se ve el color"
-**✅ Solución**: Cambiar de className a style
-
-```tsx
-// ❌ Puede fallar:
-<Text className="text-primary-seller">Texto</Text>
-
-// ✅ Siempre funciona:
-<Text style={{ color: getColorByRole('seller') }}>Texto</Text>
-```
-
-### 🥰 Las animaciones de la mascota tipeando y gif delivery son de LottieFile Free.
+1. No edites manualmente `components/icons/index.ts`, se genera automáticamente.
+2. La carpeta `assets/icons` puede permanecer vacía: usala solo para nuevos SVGs.
+3. No se usan `require()` para importar imágenes en este proyecto.
+4. Las animaciones de la mascota y el gif de delivery son de LottieFiles (free).
