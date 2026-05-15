@@ -3,7 +3,7 @@ import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useBottomSheetVerPedido } from "@/context/BottomSheetVerPedidoContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import CardPedidoAResolver from "../../components/Comprador/CardPedidoAResolver";
 import CardPedidoCompletado from "../../components/Comprador/CardPedidoCompletado";
@@ -13,8 +13,18 @@ import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso"
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
 import CardPedidoRecibido from "../../components/Comprador/CardPedidoRecibido";
+import BottomSheetAyudaPedido from "../../components/subcomponentes/BottomSheetAyudaPedido";
 import { useOrders } from "../../context/OrdersContext";
 import { estadoSistemaAComprador } from "../../types/pedidos";
+
+// ─── Opciones de ayuda (buyer) ────────────────────────────────────────────────
+// "Otro" se agrega automáticamente
+const OPCIONES_AYUDA_BUYER = [
+  "El pedido no llegó",
+  "El pedido llegó incompleto",
+  "El producto llegó en mal estado",
+  "Quiero cancelar el pedido",
+];
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
@@ -23,11 +33,14 @@ const EstadoPedido = () => {
   const { pedidos, updateEstado, updatePedido, moverAHistorialComprador } =
     useOrders();
 
+  // ─── Estado del sheet de ayuda ────────────────────────────────────────────
+  const [ayudaVisible, setAyudaVisible] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       return () => {
-        // Se ejecuta cuando la screen PIERDE el foco (navegás a otra)
         closeBottomSheetVerPedido();
+        setAyudaVisible(false); // también cerramos ayuda al salir de la screen
       };
     }, [closeBottomSheetVerPedido]),
   );
@@ -50,7 +63,6 @@ const EstadoPedido = () => {
   };
 
   const handleCancelarPedido = (id: number | string) => {
-    // TODO: reemplazar con updateEstado cuando haya estado "cancelado"
     console.log(`Pedido ${id} cancelado`);
   };
 
@@ -77,7 +89,7 @@ const EstadoPedido = () => {
       (r) => r.id === respuestaId,
     );
     updatePedido(pedidoId, {
-      estadoSistema: "aceptado_transferencia", // se actualizará cuando se elija forma de pago
+      estadoSistema: "aceptado_transferencia",
       respuestaSeleccionada,
       expandido: true,
       fechaSeleccion: new Date().toISOString(),
@@ -107,9 +119,16 @@ const EstadoPedido = () => {
     updatePedido(pedidoId, { expandido: valor });
   };
 
+  const handleAyudaEnviada = (opcion: string, mensaje?: string) => {
+    // TODO: conectar al backend
+    console.log("Ayuda enviada:", opcion, mensaje);
+    setAyudaVisible(false);
+  };
+
   // ─── Render ───────────────────────────────────────────────────────────────────
 
   return (
+    // View raíz: aquí viven el ScrollView Y el sheet, como hermanos
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         style={{ flex: 1 }}
@@ -201,7 +220,6 @@ const EstadoPedido = () => {
                     timestampRespuesta={0}
                     onEnviarDatos={(payload) => {
                       console.log("TODO: enviar al backend", payload);
-                      // La forma de pago determina el siguiente estado
                       const siguiente =
                         payload.formaPago === "efectivo"
                           ? "aceptado_efectivo"
@@ -221,7 +239,6 @@ const EstadoPedido = () => {
                     key={pedido.id}
                     pedidoId={pedido.id}
                     fechaSeleccion={pedido.fechaSeleccion}
-                    // fechaConfirmacion={pedido.fechaConfirmacion}
                     vendedorNombre={r.vendedorNombre}
                     rating={r.rating}
                     telefono={r.telefono}
@@ -278,6 +295,8 @@ const EstadoPedido = () => {
                     telefono={r.telefono}
                     direccion={pedido.direccionComprador}
                     onVerPedido={handleVerPedido}
+                    // La card solo avisa — el sheet vive fuera del ScrollView
+                    onAbrirAyuda={() => setAyudaVisible(true)}
                   />
                 );
               }
@@ -295,7 +314,6 @@ const EstadoPedido = () => {
                     telefono={r.telefono}
                     onVerPedido={handleVerPedido}
                     onEnviarCalificacion={(data) => {
-                      //TODO: enviar calificación al backend
                       updatePedido(pedido.id, {
                         calificacionVendedor: {
                           estrellas: data.estrellas,
@@ -347,6 +365,18 @@ const EstadoPedido = () => {
           </Text>
         )}
       </ScrollView>
+
+      {/*
+        ── BottomSheetAyudaPedido ─── Para reclamos
+      */}
+      <BottomSheetAyudaPedido
+        isVisible={ayudaVisible}
+        role="buyer"
+        opciones={OPCIONES_AYUDA_BUYER}
+        subtitulo="Seleccioná el problema con tu pedido"
+        onEnviar={handleAyudaEnviada}
+        onCerrar={() => setAyudaVisible(false)}
+      />
     </View>
   );
 };

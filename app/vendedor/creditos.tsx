@@ -13,7 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { Monedas } from "../../components/icons";
+import { Chevron, Monedas } from "../../components/icons";
+import Button from "../../components/UI/Button/Button";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -66,7 +67,7 @@ const FAQ_ITEMS: FaqItem[] = [
 
 // ─── Subcomponentes ───────────────────────────────────────────────────────────
 
-/** Tarjeta de opción de crédito */
+/** Comprar créditos */
 function CreditCard({
   option,
   selected,
@@ -91,9 +92,10 @@ function CreditCard({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        paddingHorizontal: Spacing.lg,
-        paddingVertical: Spacing.lg,
-        borderRadius: BorderRadius.md,
+        paddingHorizontal: Spacing.xl,
+        minHeight: 64,
+        paddingVertical: Spacing.sm,
+        borderRadius: BorderRadius.xl,
         backgroundColor: selected ? colors.brandSeller + "18" : colors.cardBg,
         borderWidth: 1.5,
         borderColor: selected ? colors.brandSeller : colors.border,
@@ -101,11 +103,11 @@ function CreditCard({
         opacity: pressed ? 0.85 : 1,
       })}
     >
-      {/* Etiqueta */}
+      {/* Etiquetas créditos */}
       <Text
         style={{
           fontFamily: fonts.robotoMedium,
-          fontSize: FontSizes.sm,
+          fontSize: FontSizes.base,
           color: colors.textDefault,
           flex: 1,
         }}
@@ -124,9 +126,9 @@ function CreditCard({
           placeholderTextColor={colors.textMuted}
           style={{
             fontFamily: fonts.robotoRegular,
-            fontSize: FontSizes.sm,
+            fontSize: FontSizes.base,
             color: colors.textDefault,
-            textAlign: "right",
+            textAlign: customAmount ? "right" : "center",
             minWidth: 90,
             borderWidth: 1,
             borderColor: selected ? colors.brandSeller : colors.border,
@@ -141,7 +143,7 @@ function CreditCard({
         <Text
           style={{
             fontFamily: fonts.robotoRegular,
-            fontSize: FontSizes.sm,
+            fontSize: FontSizes.base,
             color: colors.textMuted,
             marginRight: Spacing.md,
           }}
@@ -187,10 +189,12 @@ function FaqAccordion({ item }: { item: FaqItem }) {
       onPress={() => setOpen((prev) => !prev)}
       style={({ pressed }) => ({
         backgroundColor: pressed ? colors.brandSeller + "0D" : colors.cardBg,
-        borderRadius: BorderRadius.md,
+        borderRadius: BorderRadius.xl,
         borderWidth: 1,
         borderColor: open ? colors.brandSeller + "55" : colors.border,
         marginBottom: Spacing.xs,
+        paddingHorizontal: Spacing.sm,
+        paddingVertical: Spacing.sm,
         overflow: "hidden",
       })}
     >
@@ -200,8 +204,8 @@ function FaqAccordion({ item }: { item: FaqItem }) {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingHorizontal: Spacing.md,
-          paddingVertical: Spacing.sm + 4,
+          paddingHorizontal: Spacing.lg,
+          paddingVertical: Spacing.lg,
         }}
       >
         <Text
@@ -216,15 +220,16 @@ function FaqAccordion({ item }: { item: FaqItem }) {
           {item.question}
         </Text>
         {/* Chevron */}
-        <Text
+        <Chevron width="18" height="18" color={colors.brandSeller} />
+        {/* <Text
           style={{
-            fontSize: 16,
+            fontSize: 24,
             color: colors.brandSeller,
             transform: [{ rotate: open ? "180deg" : "0deg" }],
           }}
         >
           ▾
-        </Text>
+        </Text> */}
       </View>
 
       {/* Respuesta */}
@@ -267,7 +272,7 @@ function SaldoBanner({ credits }: { credits: number }) {
         borderWidth: 1,
         borderColor: colors.brandSeller + "40",
         padding: Spacing.md,
-        marginBottom: Spacing.lg,
+        marginBottom: Spacing.xxl,
         gap: Spacing.xs,
       }}
     >
@@ -294,7 +299,11 @@ function SaldoBanner({ credits }: { credits: number }) {
 
       {/* Fila 2 */}
       <View
-        style={{ flexDirection: "row", alignItems: "center", gap: Spacing.sm }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: Spacing.md,
+        }}
       >
         <Text style={{ fontSize: 24, color: "yellow" }}>⚠</Text>
         <Text
@@ -311,17 +320,17 @@ function SaldoBanner({ credits }: { credits: number }) {
   );
 }
 
-/** Label de sección */
+/** Títulos de cada sección */
 function SectionLabel({ label }: { label: string }) {
   const { colors, fonts } = useTheme();
   return (
     <Text
       style={{
         fontFamily: fonts.robotoBold ?? fonts.robotoMedium,
-        fontSize: FontSizes.base,
+        fontSize: FontSizes.md,
         color: colors.textDefault,
-        marginBottom: Spacing.sm,
         marginTop: Spacing.lg,
+        paddingBottom: Spacing.xl,
       }}
     >
       {label}
@@ -332,7 +341,7 @@ function SectionLabel({ label }: { label: string }) {
 // ─── Screen principal ─────────────────────────────────────────────────────────
 
 export default function CreditosVendedorScreen() {
-  const { colors, fonts } = useTheme();
+  const { colors } = useTheme();
 
   // Créditos del usuario (vendrá del contexto/backend)
   const userCredits = 5000;
@@ -414,29 +423,20 @@ export default function CreditosVendedorScreen() {
           ))}
 
           {/* Botón comprar */}
-          <Pressable
-            onPress={handleComprar}
-            style={({ pressed }) => ({
-              backgroundColor: colors.brandSeller,
-              borderRadius: BorderRadius.md,
-              paddingVertical: Spacing.md,
-              alignItems: "center",
-              marginTop: Spacing.md,
-              marginBottom: 32,
-              opacity: pressed ? 0.88 : 1,
-            })}
+          <View
+            style={{ paddingHorizontal: Spacing.lg, marginBottom: Spacing.xl }}
           >
-            <Text
-              style={{
-                fontFamily: fonts.robotoMedium,
-                fontSize: FontSizes.md,
-                color: "#FFFFFF",
-                letterSpacing: 0.3,
+            <Button
+              section="seller"
+              width="full"
+              onPress={handleComprar}
+              styleAdd={{
+                marginBottom: Spacing.xl,
               }}
             >
               Comprar ahora
-            </Text>
-          </Pressable>
+            </Button>
+          </View>
 
           {/* ── Preguntas frecuentes ── */}
           <SectionLabel label="Preguntas frecuentes" />

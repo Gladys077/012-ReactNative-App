@@ -21,7 +21,7 @@ export default function PreAuthLayout() {
   const currentPage = segments[segments.length - 1] as string;
 
   const router = useRouter();
-  const { from } = useLocalSearchParams();
+  const { origin } = useLocalSearchParams();
 
   const getTitleByPage = () => {
     switch (currentPage) {
@@ -37,25 +37,28 @@ export default function PreAuthLayout() {
         return "Recuperar Contraseña";
       case "terms":
         return "Términos y condiciones";
+      case "privacidad":
+        return "Política de privacidad";
+      case "FAQ":
+        return "Preguntas frecuentes (FAQ)";
       default:
         return "";
     }
   };
 
   const handleGoBack = () => {
-    if (currentPage === "terms") {
-      if (from === "comprador") {
+    switch (origin) {
+      case "comprador-ajustes":
         router.replace(Routes.comprador.ajustes);
         return;
-      }
 
-      if (from === "vendedor") {
+      case "vendedor-ajustes":
         router.replace(Routes.vendedor.ajustes);
         return;
-      }
-    }
 
-    router.back();
+      default:
+        router.back();
+    }
   };
 
   return (

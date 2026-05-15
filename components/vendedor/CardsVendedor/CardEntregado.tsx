@@ -24,6 +24,7 @@ interface CardEntregadoProps {
   celularComprador?: number;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onCalificar?: () => void;
 }
 
 // ─── Constante ────────────────────────────────────────────────────────────────
@@ -45,6 +46,7 @@ export default function CardEntregado({
   celularComprador,
   onVerPedido,
   onVerNota,
+  onCalificar,
 }: CardEntregadoProps) {
   const { colors } = useTheme();
   const { moverAHistorialVendedor, updatePedido } = useOrders();
@@ -123,7 +125,10 @@ export default function CardEntregado({
         btnPrincipalLabel="Calificar"
         btnPrincipalIcon={Estrella100}
         btnPrincipalIconSize={32}
-        onPressBtnPrincipal={() => setModalVisible(true)}
+        onPressBtnPrincipal={() => {
+          onCalificar?.(); // cierra el sheet primero
+          setModalVisible(true);
+        }}
       />
 
       {/* ── Modal de calificación ── */}

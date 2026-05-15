@@ -3,6 +3,7 @@ import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { View } from "react-native";
+import AyudaPedidoTrigger from "../subcomponentes/AyudaPedidoTrigger";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardRespVendPedEnCamino from "./CardRespVendPedEnCamino";
 
@@ -14,6 +15,8 @@ interface CardPedidoEnCaminoProps {
   telefono?: string;
   direccion: string;
   onVerPedido: (id: string | number) => void;
+  /** La page es quien abre el sheet — la card solo avisa */
+  onAbrirAyuda?: () => void;
 }
 
 export default function CardPedidoEnCamino({
@@ -24,6 +27,7 @@ export default function CardPedidoEnCamino({
   telefono,
   direccion,
   onVerPedido,
+  onAbrirAyuda,
 }: CardPedidoEnCaminoProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(true);
@@ -57,6 +61,7 @@ export default function CardPedidoEnCamino({
             direccion={direccion}
             onVerPedido={() => onVerPedido(pedidoId)}
           />
+          <AyudaPedidoTrigger role="buyer" onPress={() => onAbrirAyuda?.()} />
         </View>
       }
     >

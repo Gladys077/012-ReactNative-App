@@ -52,6 +52,10 @@ export const Colors = {
     brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
     brandSellerSoft: "#f7d3c8", //ambar-100 = fondo suave
 
+    // BottomSheetAyudaPedido
+    bottomSheetBgBuyer: "#d0e6f5",
+    bottomSheetBgSeller: "#f7d3c8",
+
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
 
@@ -139,11 +143,12 @@ export const Colors = {
     brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave
     brandSellerSoft: "#78350F", //ambar-900 = fondo suave
 
-    // Inputs (InputField)
+    // BottomSheetAyudaPedido
+    bottomSheetBgBuyer: "#191a1d",
+    bottomSheetBgSeller: "#191a1d",
 
     // Inputs (InputField)
     inputBorder: "#E0E0E0",
-    // inputBorder: "#333333",
 
     // EtiquetasEstadoDelPedido
     statusRedBg: "#7F1D1D",

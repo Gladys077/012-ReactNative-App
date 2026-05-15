@@ -1,6 +1,6 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { Animated, Image, ImageSourcePropType, Text } from "react-native";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -15,15 +15,29 @@ interface MascotaAgradeciendoProps {
 
 const DURACION_MS = 3000;
 
+const IMAGENES_DEFECTO: ImageSourcePropType[] = [
+  require("@/assets/images/Listo.png"),
+  require("@/assets/images/Listo2.png"),
+  require("@/assets/images/Listo3.png"),
+  require("@/assets/images/Listo4.png"),
+];
+
 // ─── Export principal ─────────────────────────────────────────────────────────
 
 export default function MascotaAgradeciendo({
   colorBarra,
   onFin,
-  imagen = require("@/assets/images/Listo.png"),
+  imagen,
 }: MascotaAgradeciendoProps) {
   const { colors, fonts } = useTheme();
   const progreso = useRef(new Animated.Value(0)).current;
+
+  // Elige una imagen aleatoria solo al montar el componente
+  const imagenFinal = useMemo(() => {
+    if (imagen) return imagen;
+    const idx = Math.floor(Math.random() * IMAGENES_DEFECTO.length);
+    return IMAGENES_DEFECTO[idx];
+  }, [imagen]);
 
   const handleFin = useCallback(() => {
     onFin();
@@ -61,7 +75,7 @@ export default function MascotaAgradeciendo({
       </Text>
 
       <Image
-        source={imagen}
+        source={imagenFinal}
         style={{ width: "100%", height: 220, marginTop: Spacing.sm }}
         resizeMode="contain"
       />

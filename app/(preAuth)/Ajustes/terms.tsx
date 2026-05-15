@@ -4,8 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Routes } from "../../../constants/Routes";
 
 type Section = {
   title: string;
@@ -14,18 +12,6 @@ type Section = {
 
 export default function TermsScreen() {
   const { colors } = useTheme();
-
-  const router = useRouter();
-  const { from } = useLocalSearchParams();
-
-  const handleGoBack = () => {
-    if (from === "comprador") {
-      router.replace(Routes.comprador.ajustes);
-      return;
-    }
-
-    router.replace(Routes.vendedor.ajustes);
-  };
 
   const sections: Section[] = [
     {

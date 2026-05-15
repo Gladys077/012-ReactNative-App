@@ -9,9 +9,15 @@ interface Props {
   pedidos: Pedido[];
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onCalificar?: () => void;
 }
 
-const PedidosEntregados = ({ pedidos, onVerPedido, onVerNota }: Props) => {
+const PedidosEntregados = ({
+  pedidos,
+  onVerPedido,
+  onVerNota,
+  onCalificar,
+}: Props) => {
   const { colors } = useTheme();
 
   return (
@@ -51,6 +57,7 @@ const PedidosEntregados = ({ pedidos, onVerPedido, onVerNota }: Props) => {
             celularComprador={p.celularComprador}
             onVerPedido={onVerPedido}
             onVerNota={onVerNota}
+            onCalificar={onCalificar}
           />
         ))
       )}

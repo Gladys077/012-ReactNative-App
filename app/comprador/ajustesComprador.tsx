@@ -98,13 +98,21 @@ const AjustesCompradorScreen = () => {
             <ItemsAjustes
               icon={Avatar}
               texto="Perfil"
-              onPress={() => router.push("/(preAuth)/Ajustes/perfil" as any)}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/perfil" as any,
+                  params: { origin: "comprador-ajustes" },
+                })
+              }
             />
             <ItemsAjustes
               icon={CambiarContraseña}
               texto="Cambiar contraseña"
               onPress={() =>
-                router.push("/(preAuth)/Ajustes/cambiarContrasena" as any)
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/cambiarContrasena" as any,
+                  params: { origin: "comprador-ajustes" },
+                })
               }
             />
             <ItemsAjustes
@@ -131,7 +139,7 @@ const AjustesCompradorScreen = () => {
               onPress={() =>
                 router.push({
                   pathname: "/(preAuth)/Ajustes/terms" as any,
-                  params: { from: "comprador" },
+                  params: { origin: "comprador-ajustes" },
                 })
               }
             />
@@ -139,7 +147,10 @@ const AjustesCompradorScreen = () => {
               icon={Visible}
               texto="Políticas de privacidad"
               onPress={() =>
-                router.push("/(preAuth)/Ajustes/privacidad" as any)
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/privacidad" as any,
+                  params: { origin: "comprador-ajustes" },
+                })
               }
             />
             <ItemsAjustes
@@ -152,8 +163,8 @@ const AjustesCompradorScreen = () => {
               texto="Preguntas frecuentes (FAQ)"
               onPress={() =>
                 router.push({
-                  pathname: "/(preAuth)/Ajustes/terms" as any,
-                  params: { from: "comprador" },
+                  pathname: "/(preAuth)/Ajustes/FAQ" as any,
+                  params: { origin: "comprador-ajustes" },
                 })
               }
             />

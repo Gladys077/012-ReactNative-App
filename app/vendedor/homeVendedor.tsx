@@ -133,6 +133,7 @@ const HomeVendedor = () => {
             pedidos={pedidosEntregados}
             onVerPedido={handleVerPedido}
             onVerNota={handleVerNota}
+            onCalificar={closeBottomSheetVerPedido}
           />
         );
     }
