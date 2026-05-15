@@ -63,7 +63,7 @@ const BottomSheetAyudaPedido = forwardRef<
   (
     {
       opciones,
-      titulo = "¿En qué podemos ayudarte?",
+      titulo = "Cuéntanos qué ocurrió",
       subtitulo,
       role = "buyer",
       onEnviar,
@@ -159,7 +159,7 @@ const BottomSheetAyudaPedido = forwardRef<
               paddingTop: Spacing.xl,
               paddingBottom: Spacing.lg,
               borderBottomWidth: 1,
-              borderBottomColor: SHEET_DIVIDER,
+              borderBottomColor: colors.border,
             }}
           >
             <Text
@@ -307,13 +307,13 @@ const BottomSheetAyudaPedido = forwardRef<
             )}
           </View>
 
-          {/* ── Acciones estilo alert ── */}
+          {/* ── Acciones ── */}
           <View
             style={{
               flexDirection: "row",
               borderTopWidth: 1,
-              borderTopColor: accentColor + 44,
-              marginTop: Spacing.sm,
+              borderTopColor: accentColor + "33",
+              marginTop: Spacing.md,
             }}
           >
             {/* Btns: Cancelar - Enviar */}
@@ -324,8 +324,8 @@ const BottomSheetAyudaPedido = forwardRef<
                 paddingHorizontal: Spacing.xxl,
                 paddingBottom: Spacing.xl,
                 borderTopWidth: 1,
-                borderTopColor: SHEET_DIVIDER,
-                marginTop: Spacing.md,
+                borderTopColor: colors.border,
+                marginTop: Spacing.lg,
                 width: "100%",
                 maxWidth: 500,
               }}

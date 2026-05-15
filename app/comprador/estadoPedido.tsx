@@ -23,7 +23,7 @@ const OPCIONES_AYUDA_BUYER = [
   "El pedido no llegó",
   "El pedido llegó incompleto",
   "El producto llegó en mal estado",
-  "Quiero cancelar el pedido",
+  "El vendedor no responde",
 ];
 
 const EstadoPedido = () => {
@@ -373,7 +373,7 @@ const EstadoPedido = () => {
         isVisible={ayudaVisible}
         role="buyer"
         opciones={OPCIONES_AYUDA_BUYER}
-        subtitulo="Seleccioná el problema con tu pedido"
+        subtitulo="Si no pudiste resolver el problema con el vendedor, selecciona lo ocurrido y nuestro equipo revisará el caso. (Tiempo: 48-72hs)"
         onEnviar={handleAyudaEnviada}
         onCerrar={() => setAyudaVisible(false)}
       />

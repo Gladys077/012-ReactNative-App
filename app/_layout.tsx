@@ -21,7 +21,7 @@ function ThemedStatusBar() {
   useEffect(() => {
     const setColors = async () => {
       try {
-        await SystemUI.setBackgroundColorAsync(colors.background);
+        await SystemUI.setBackgroundColorAsync(colors.headerFooterBg);
       } catch (error) {
         console.warn("Error configurando SystemUI:", error);
       }
@@ -47,7 +47,10 @@ const AppContent = () => {
           <AuthProvider>
             <OrdersProvider>
               <SafeAreaView
-                style={{ flex: 1, backgroundColor: colors.background }}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.headerFooterBg,
+                }}
               >
                 <ThemedStatusBar />
                 <ModalComponent />

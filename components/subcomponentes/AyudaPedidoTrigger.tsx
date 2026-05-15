@@ -18,7 +18,7 @@ interface AyudaPedidoTriggerProps {
 
 const AyudaPedidoTrigger: React.FC<AyudaPedidoTriggerProps> = ({
   role = "buyer",
-  label = "¿Necesitás ayuda con este pedido?",
+  label = "Reportar un problema",
   onPress,
   style,
 }) => {
@@ -33,8 +33,8 @@ const AyudaPedidoTrigger: React.FC<AyudaPedidoTriggerProps> = ({
     <View
       style={[
         {
-          marginTop: Spacing.xl,
-          paddingTop: Spacing.xl,
+          // marginTop: Spacing.xl,
+          paddingTop: Spacing.lg,
           borderTopWidth: 1,
           borderTopColor: dividerColor + "40", // 25% opacidad
           alignItems: "center",
@@ -54,21 +54,9 @@ const AyudaPedidoTrigger: React.FC<AyudaPedidoTriggerProps> = ({
         })}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
-        {/* Ícono de interrogación minimalista */}
         <Text
           style={{
-            fontSize: FontSizes.base,
-            color: accentColor,
             fontFamily: fonts.robotoMedium,
-            opacity: 0.7,
-          }}
-        >
-          ?
-        </Text>
-
-        <Text
-          style={{
-            fontFamily: fonts.robotoRegular,
             fontSize: FontSizes.sm,
             color: accentColor,
             textDecorationLine: "underline",

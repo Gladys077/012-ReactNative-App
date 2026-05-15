@@ -36,9 +36,6 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
       dismiss: () => sheetRef.current?.close(),
     }));
 
-    // Ya no hacemos early return — el sheet siempre está montado
-    // pero arranca cerrado (index={-1}) y solo se abre cuando se llama present()
-
     return (
       <BottomSheet
         ref={sheetRef}
