@@ -132,8 +132,8 @@ export default function CardErrorPagoDireccion({
         visible={chatVisible}
         onClose={() => setChatVisible(false)}
         pedidoId={pedidoId}
-        vendedorNombre={nombreNegocio}
-        vendedorAlias={titular}
+        otroNombre={nombreNegocio}
+        rolActual="comprador"
       />
 
       {/* Acciones superiores */}

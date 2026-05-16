@@ -78,7 +78,7 @@ const Avatar = ({
   size?: number;
   color: string;
 }) => {
-  const { fonts } = useTheme();
+  const { colors, fonts } = useTheme();
   return (
     <View
       style={{
@@ -92,7 +92,7 @@ const Avatar = ({
     >
       <Text
         style={{
-          color: "#fff",
+          color: colors.textDefault,
           fontFamily: fonts.robotoBold,
           fontSize: size === 40 ? FontSizes.sm : FontSizes.xs,
         }}
@@ -146,7 +146,7 @@ const Burbuja = ({
       >
         <Text
           style={{
-            color: esPropio ? "#fff" : colors.textDefault,
+            color: colors.textDefault,
             fontSize: FontSizes.base,
             fontFamily: fonts.robotoRegular,
             lineHeight: 20,
@@ -156,7 +156,7 @@ const Burbuja = ({
         </Text>
         <Text
           style={{
-            color: esPropio ? "rgba(255,255,255,0.7)" : colors.textMuted,
+            color: colors.textMuted,
             fontSize: FontSizes.xs,
             alignSelf: "flex-end",
             marginTop: 4,
@@ -255,7 +255,8 @@ export default function ChatModal({
       ? "CO"
       : "VE";
   const otroLetras = iniciales(otroNombre);
-  const avatarColor = colors.brandBuyer; // siempre azul para ambos lados
+  const avatarColor =
+    rolActual === "comprador" ? colors.brandBuyerSoft : colors.brandSellerSoft;
 
   return (
     <Modal
@@ -420,7 +421,9 @@ export default function ChatModal({
                 >
                   <Text
                     style={{
-                      color: texto.trim() ? "#fff" : colors.textMuted,
+                      color: texto.trim()
+                        ? colors.textDefault
+                        : colors.textMuted,
                       fontFamily: fonts.robotoBold,
                       fontSize: FontSizes.sm,
                     }}

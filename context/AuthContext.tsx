@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | undefined>({
     name: "Usuario Test",
     email: "test@test.com",
-    role: "buyer", // o "seller"
+    role: "seller", // o "buyer"
 
     sellerProfileCompleted: true, // TODO: Mock hasta que se haga el backend (para saber si el usuario se registró como vendedor)
 

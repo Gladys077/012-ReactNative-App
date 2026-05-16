@@ -373,7 +373,7 @@ const EstadoPedido = () => {
         isVisible={ayudaVisible}
         role="buyer"
         opciones={OPCIONES_AYUDA_BUYER}
-        subtitulo="Si no pudiste resolver el problema con el vendedor, selecciona lo ocurrido y nuestro equipo revisará el caso. (Tiempo: 48-72hs)"
+        subtitulo="Si no pudiste resolver el problema con el vendedor, selecciona lo ocurrido y nuestro equipo revisará el caso. (Estimado: 48-72hs)"
         onEnviar={handleAyudaEnviada}
         onCerrar={() => setAyudaVisible(false)}
       />

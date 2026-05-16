@@ -34,7 +34,7 @@ const NuevoPedido = () => {
   useFocusEffect(
     useCallback(() => {
       switchRole("buyer");
-    }, []),
+    }, [switchRole]),
   );
 
   useEffect(() => {

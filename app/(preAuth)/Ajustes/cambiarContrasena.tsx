@@ -2,12 +2,12 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CambiarContraseña } from "../../components/icons";
-import Button from "../../components/UI/Button/Button";
-import { InputField } from "../../components/UI/InputField";
-import Toast from "../../components/UI/Toast";
-import { Spacing } from "../../constants/Tokens";
-import { useTheme } from "../../context/ThemeContext";
+import { CambiarContraseña } from "../../../components/icons";
+import Button from "../../../components/UI/Button/Button";
+import { InputField } from "../../../components/UI/InputField";
+import Toast from "../../../components/UI/Toast";
+import { Spacing } from "../../../constants/Tokens";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function CambiarContraseñaScreen() {
   const { colors } = useTheme();
