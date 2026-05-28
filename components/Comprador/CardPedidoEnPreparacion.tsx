@@ -3,6 +3,7 @@ import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { View } from "react-native";
+import AyudaReportar from "../subcomponentes/AyudaReportar";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import CardRespVendPedEnPrep from "./CardRespVendPedEnPrep";
 
@@ -12,9 +13,10 @@ interface CardPedidoEnPreparacionProps {
   fechaConfirmacion?: string;
   vendedorNombre: string;
   rating: number;
-  telefono?: string;
+  telefono?: number;
   direccion: string;
   onVerPedido: (id: string | number) => void;
+  onAbrirAyuda?: () => void;
 }
 
 export default function CardPedidoEnPreparacion({
@@ -26,9 +28,10 @@ export default function CardPedidoEnPreparacion({
   telefono,
   direccion,
   onVerPedido,
+  onAbrirAyuda,
 }: CardPedidoEnPreparacionProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(true);
+  const [expandido, setExpandido] = useState(false);
 
   return (
     <CardPedidoBase
@@ -60,6 +63,7 @@ export default function CardPedidoEnPreparacion({
             fechaConfirmacion={fechaConfirmacion}
             onVerPedido={() => onVerPedido(pedidoId)}
           />
+          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
         </View>
       }
     >

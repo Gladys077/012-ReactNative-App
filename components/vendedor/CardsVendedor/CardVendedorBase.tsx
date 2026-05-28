@@ -1,3 +1,5 @@
+// Este es el contenedor visual puro — maneja el layout de la card, el header (fecha + estado), nombre, rating, precio, y el toggle expandir/colapsar.
+
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
@@ -20,6 +22,7 @@ interface CardVendedorBaseProps {
   contenidoExpandible?: React.ReactNode;
   style?: ViewStyle;
   elevation?: number;
+  mostrarTiempoAceptacion?: boolean;
 }
 
 export default function CardVendedorBase({
@@ -32,6 +35,7 @@ export default function CardVendedorBase({
   contenidoExpandible,
   style,
   elevation,
+  mostrarTiempoAceptacion = true,
 }: CardVendedorBaseProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -106,7 +110,9 @@ export default function CardVendedorBase({
       )}
 
       {/* TIEMPO DESDE ACEPTACIÓN */}
-      <TiempoAceptacion fechaSeleccion={fechaSeleccion} />
+      {mostrarTiempoAceptacion && (
+        <TiempoAceptacion fechaSeleccion={fechaSeleccion} />
+      )}
 
       {/* TOTAL */}
       {precio !== undefined && (

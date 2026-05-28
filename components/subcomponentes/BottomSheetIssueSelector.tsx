@@ -10,23 +10,14 @@ import React, {
 import { Pressable, Text, TextInput, View } from "react-native";
 import Button from "../UI/Button/Button";
 
-// ─── MODO DE USO ──────────────────────────────────────────────────────────────
-//
-// 1. Importo el ref y el componente en la card:
-//
-//    import BottomSheetAyudaPedido, {
-//      BottomSheetAyudaPedidoRef,
-//    } from "@/components/shared/BottomSheetAyudaPedido";
-//    import AyudaPedidoTrigger from "@/components/shared/AyudaPedidoTrigger";
-
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
-export type BottomSheetAyudaPedidoRef = {
+export type BottomSheetAyudaReportarRef = {
   present: () => void;
   dismiss: () => void;
 };
 
-interface BottomSheetAyudaPedidoProps {
+interface BottomSheetAyudaReportarProps {
   /* Array de opciones predefinidas. La última siempre actúa como "Otro" si `mostrarOtro` es true (default). Debemos pasar las opciones sin incluir "Otro", xq el componente lo agrega automáticamente. */
   opciones: string[];
   /* Título del sheet. Default: "¿En qué podemos ayudarte?" */
@@ -44,26 +35,16 @@ interface BottomSheetAyudaPedidoProps {
   backgroundColor?: string;
 }
 
-// ─── Colores fijos del sheet (oscuro, independiente del tema) ────────────────
-const SHEET_BG = "#181d27";
-const SHEET_SURFACE = "#232a38";
-const SHEET_BORDER = "rgba(255,255,255,0.08)";
-const SHEET_TEXT = "#e8eaf0";
-const SHEET_TEXT_MUTED = "#7b8499";
-const SHEET_INDICATOR = "#3d4558";
-const SHEET_DIVIDER = "rgba(255,255,255,0.06)";
-const SHEET_PRESSED = "rgba(255,255,255,0.05)";
-
 // ─── Componente ───────────────────────────────────────────────────────────────
 
-const BottomSheetAyudaPedido = forwardRef<
-  BottomSheetAyudaPedidoRef,
-  BottomSheetAyudaPedidoProps
+const BottomSheetAyudaReportar = forwardRef<
+  BottomSheetAyudaReportarRef,
+  BottomSheetAyudaReportarProps
 >(
   (
     {
       opciones,
-      titulo = "Cuéntanos qué ocurrió",
+      titulo = "¿Tuviste un inconveniente?",
       subtitulo,
       role = "buyer",
       onEnviar,
@@ -176,9 +157,9 @@ const BottomSheetAyudaPedido = forwardRef<
               <Text
                 style={{
                   fontFamily: fonts.robotoRegular,
-                  fontSize: FontSizes.sm,
+                  fontSize: FontSizes.base,
                   color: colors.textDefault,
-                  lineHeight: 18,
+                  lineHeight: 20,
                 }}
               >
                 {subtitulo}
@@ -361,13 +342,22 @@ const BottomSheetAyudaPedido = forwardRef<
   },
 );
 
-BottomSheetAyudaPedido.displayName = "BottomSheetAyudaPedido";
+BottomSheetAyudaReportar.displayName = "BottomSheetAyudaReportar";
 
-export default BottomSheetAyudaPedido;
+export default BottomSheetAyudaReportar;
+
+// ─── MODO DE USO ──────────────────────────────────────────────────────────────
+//
+// 1. Importo el ref y el componente en la card:
+//
+//    import BottomSheetAyudaReportar, {
+//      BottomSheetAyudaReportarRef,
+//    } from "@/components/shared/BottomSheetAyudaReportar";
+//    import AyudaReportar from "@/components/shared/AyudaReportar";
 //
 // 2. Declaro el ref y estado en la card:
 //
-//    const ayudaRef = useRef<BottomSheetAyudaPedidoRef>(null);
+//    const ayudaRef = useRef<BottomSheetAyudaReportarRef>(null);
 //    const [ayudaVisible, setAyudaVisible] = useState(false);
 //
 // 3. Opciones específicas por rol (no incluir "Otro", se agrega automáticamente):
@@ -392,14 +382,14 @@ export default BottomSheetAyudaPedido;
 //
 //    {expandido && (
 //      <>
-//        <AyudaPedidoTrigger
+//        <AyudaReportar
 //          role="buyer"
 //          onPress={() => {
 //            setAyudaVisible(true);
 //            ayudaRef.current?.present();
 //          }}
 //        />
-//        <BottomSheetAyudaPedido
+//        <BottomSheetAyudaReportar
 //          ref={ayudaRef}
 //          isVisible={ayudaVisible}
 //          role="buyer"

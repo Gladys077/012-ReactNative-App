@@ -39,7 +39,7 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
           gap: 8,
         }}
       >
-        {/* -----Tranferencia----- */}
+        {/* -----Transferencia----- */}
         <Pressable
           onPress={() => setFormaPago("transferencia")}
           style={{
@@ -69,12 +69,13 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
           />
           <Text
             style={{
-              fontFamily: fonts.robotoRegular,
-              fontSize: FontSizes.xs,
+              fontFamily: fonts.robotoMedium,
+              fontSize: FontSizes.sm,
               color:
                 formaPago === "transferencia"
                   ? colors.textDefault
                   : colors.textMuted,
+              textAlign: "center",
             }}
           >
             Transferencia
@@ -111,12 +112,13 @@ const FormaPagoTabs: React.FC<Props> = ({ formaPago, setFormaPago }) => {
           />
           <Text
             style={{
-              fontFamily: fonts.robotoRegular,
-              fontSize: FontSizes.xs,
+              fontFamily: fonts.robotoMedium,
+              fontSize: FontSizes.sm,
               color:
                 formaPago === "efectivo"
                   ? colors.textDefault
                   : colors.textMuted,
+              textAlign: "center",
             }}
           >
             Efectivo contra entrega

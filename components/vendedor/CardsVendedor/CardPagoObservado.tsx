@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
 import { Chat, Comprobante, Historial } from "../../icons";
+import AyudaReportar from "../../subcomponentes/AyudaReportar";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
@@ -27,6 +28,7 @@ interface CardPagoObservadoProps {
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
   onVerComprobante: (id: string | number) => void;
+  onAbrirIssue?: () => void;
 }
 
 const toMensajesModal = (mensajes?: Mensaje[]): Mensaje[] =>
@@ -48,6 +50,7 @@ const ContenidoExpandible = ({
   onVerPedido,
   onVerNota,
   onVerComprobante,
+  onAbrirIssue,
 }: Omit<
   //omit = omitirá 3props de un tipo de 11 (compradorRating, precio, textoPedido)
   CardPagoObservadoProps,
@@ -237,6 +240,12 @@ const ContenidoExpandible = ({
       >
         <Text>Archivar pedido</Text>
       </Button>
+
+      <AyudaReportar // ← agregado
+        role="seller"
+        label="Reportar problema"
+        onPress={() => onAbrirIssue?.()}
+      />
     </View>
   );
 };
@@ -257,6 +266,7 @@ export default function CardPagoObservado({
   onVerPedido,
   onVerNota,
   onVerComprobante,
+  onAbrirIssue,
 }: CardPagoObservadoProps) {
   return (
     <CardVendedorBase
@@ -275,6 +285,7 @@ export default function CardPagoObservado({
           onVerPedido={onVerPedido}
           onVerNota={onVerNota}
           onVerComprobante={onVerComprobante}
+          onAbrirIssue={onAbrirIssue}
         />
       }
     />

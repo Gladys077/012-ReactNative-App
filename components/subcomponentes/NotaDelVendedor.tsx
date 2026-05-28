@@ -31,7 +31,7 @@ const NotaDelVendedor: React.FC<NotaDelVendedorProps> = ({
         <Text
           style={{
             fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.sm,
+            fontSize: FontSizes.base,
             color: colors.brandBuyer,
             textDecorationLine: "underline",
           }}

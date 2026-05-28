@@ -10,7 +10,7 @@ import LineaDivisoria from "../UI/LineaDivisoria";
 interface CardCompradorEnPreparacionProps {
   vendedorNombre: string;
   rating: number;
-  telefono?: string;
+  telefono?: number;
   direccion: string;
   fechaConfirmacion?: string;
   onVerPedido: () => void;

@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import ModalComponent from "../components/UI/ModalComponent";
 import { ModalOptions, ModalType } from "../types/modalTypes";
 
 interface ModalContextValue {
@@ -44,8 +43,6 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      {/* ModalComponent lee del context internamente */}
-      <ModalComponent />
     </ModalContext.Provider>
   );
 }

@@ -1,8 +1,10 @@
+//Si el comprador presiona "vender" desde el footer, pero no se ha registrado como vendedor, este componente le avisará que para vender necesita completar el perfil y lo llevará a la page "peril" abriédolo justo donde agregar la info.
+
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import BottomSheet, {
-    BottomSheetBackdrop,
-    BottomSheetView,
+  BottomSheetBackdrop,
+  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo, useRef } from "react";
@@ -43,7 +45,7 @@ export default function SellerActivationSheet({
     onClose();
 
     router.push({
-      pathname: "/(preAuth)/perfil",
+      pathname: "/(preAuth)/Ajustes/perfil",
       params: {
         mode: "seller-setup",
       },
@@ -146,56 +148,6 @@ export default function SellerActivationSheet({
             </Button>
           </View>
         </View>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            gap: Spacing.md,
-            marginTop: Spacing.lg,
-          }}
-        >
-          <Pressable
-            onPress={onClose}
-            style={{
-              flex: 1,
-              height: 48,
-              borderRadius: BorderRadius.full,
-              justifyContent: "center",
-              alignItems: "center",
-              borderWidth: 1,
-              borderColor: colors.border,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.textDefault,
-                fontFamily: fonts.robotoMedium,
-              }}
-            >
-              Ahora no
-            </Text>
-          </Pressable>
-
-          <Pressable
-            onPress={handleGoToProfile}
-            style={{
-              flex: 1,
-              height: 48,
-              borderRadius: BorderRadius.full,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: colors.brandSeller,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.textDefault,
-                fontFamily: fonts.robotoMedium,
-              }}
-            >
-              Configurar perfil
-            </Text>
-          </Pressable>
-        </View> */}
       </BottomSheetView>
     </BottomSheet>
   );

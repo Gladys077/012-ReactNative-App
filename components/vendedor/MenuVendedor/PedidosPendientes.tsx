@@ -1,8 +1,11 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
+import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
+import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
+import BottomSheetIssueSelector from "../../subcomponentes/BottomSheetIssueSelector";
+import { useToast } from "../../UI/ToastContext";
 import CardEnCamino from "../CardsVendedor/CardEnCamino";
 import CardEnPreparacion from "../CardsVendedor/CardEnPreparacion";
 import CardListoParaEnviar from "../CardsVendedor/CardListoParaEnviar";
@@ -29,7 +32,15 @@ interface Props {
   onEntregado: (id: string | number) => void;
 }
 
-// Tipo específico para renderCard
+// ─── Opciones de incidencias (seller) ────────────────────────────────────────
+// "Otro" se agrega automáticamente
+const OPCIONES_ISSUE_SELLER = [
+  "El comprador no respondió.",
+  "Hubo un problema con el pago.",
+  "El comprador no estaba en el domicilio.",
+];
+
+// Tipo específico para renderCard ────────────────────────────────────────
 type CardHandlers = {
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
@@ -39,6 +50,7 @@ type CardHandlers = {
   onMensaje: (id: string | number) => void;
   onListoParaEnviar: (id: string | number) => void;
   onEntregado: (id: string | number) => void;
+  onReportIssue: (pedidoId: string | number) => void; //para reportar xq no se concretó la transacción
 };
 
 // ─── Renderer por subtab ──────────────────────────────────────────────────────
@@ -64,7 +76,13 @@ function renderCard(
 
   switch (subTab) {
     case "esperando_pago":
-      return <CardPagoPendiente key={pedido.id} {...common} />;
+      return (
+        <CardPagoPendiente
+          key={pedido.id}
+          {...common}
+          onAbrirIssue={() => handlers.onReportIssue(pedido.id)}
+        />
+      );
 
     case "revisar_pago":
       return (
@@ -82,6 +100,7 @@ function renderCard(
           {...common}
           mensajes={pedido.mensajes}
           onVerComprobante={handlers.onVerComprobante}
+          onAbrirIssue={() => handlers.onReportIssue(pedido.id)}
         />
       );
     case "en_preparacion":
@@ -90,6 +109,7 @@ function renderCard(
           key={pedido.id}
           {...common}
           mensajes={pedido.mensajes}
+          onAbrirIssue={() => handlers.onReportIssue(pedido.id)}
         />
       );
 
@@ -104,7 +124,12 @@ function renderCard(
 
     case "en_camino":
       return (
-        <CardEnCamino key={pedido.id} {...common} mensajes={pedido.mensajes} />
+        <CardEnCamino
+          key={pedido.id}
+          {...common}
+          mensajes={pedido.mensajes}
+          onAbrirIssue={() => handlers.onReportIssue(pedido.id)}
+        />
       );
   }
 }
@@ -125,6 +150,27 @@ const PedidosPendientes = ({
   onEntregado,
 }: Props) => {
   const { colors, fonts } = useTheme();
+  const { updateEstado, moverAHistorialVendedor } = useOrders();
+  const { showToast } = useToast();
+  const [issueVisible, setIssueVisible] = useState(false);
+  const [pedidoIssueId, setPedidoIssueId] = useState<string | number | null>(
+    null,
+  );
+
+  const handleAbrirIssue = (pedidoId: string | number) => {
+    setPedidoIssueId(pedidoId);
+    setIssueVisible(true);
+  };
+
+  const handleIssueEnviado = (opcion: string, mensaje?: string) => {
+    if (!pedidoIssueId) return;
+
+    updateEstado(pedidoIssueId, "no_concretado");
+    moverAHistorialVendedor(pedidoIssueId, { opcion, detalle: mensaje });
+
+    setIssueVisible(false);
+    showToast("El pedido pasará al historial como: No concretado");
+  };
 
   const pedidosFiltrados = subTabActivo
     ? pedidos.filter(
@@ -143,6 +189,7 @@ const PedidosPendientes = ({
     onMensaje,
     onListoParaEnviar,
     onEntregado,
+    onReportIssue: handleAbrirIssue,
   };
 
   if (subTabActivo === null) {
@@ -213,6 +260,18 @@ const PedidosPendientes = ({
           pedidosFiltrados.map((p) => renderCard(p, subTabActivo, handlers))
         )}
       </ScrollView>
+
+      <BottomSheetIssueSelector
+        isVisible={issueVisible}
+        role="seller"
+        opciones={OPCIONES_ISSUE_SELLER}
+        titulo={"¿Qué ocurrió con el pedido?"}
+        subtitulo={
+          'Al presionar "Enviar", el pedido pasará al historial como "No concretado".'
+        }
+        onEnviar={handleIssueEnviado}
+        onCerrar={() => setIssueVisible(false)}
+      />
     </View>
   );
 };

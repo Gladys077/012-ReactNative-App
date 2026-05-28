@@ -1,5 +1,4 @@
 import { Spacing } from "@/constants/Tokens";
-import { useTheme } from "@/context/ThemeContext";
 import React from "react";
 import { View } from "react-native";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
@@ -24,8 +23,6 @@ const ContenidoExpandible = ({
   textoPedido: string;
   notaEnviada?: string;
 }) => {
-  const { colors, fonts } = useTheme();
-
   return (
     <View style={{ gap: Spacing.xl, marginTop: Spacing.md }}>
       {/* Texto del pedido */}

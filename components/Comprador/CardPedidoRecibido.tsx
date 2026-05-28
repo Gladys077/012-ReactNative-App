@@ -11,7 +11,7 @@ interface CardPedidoRecibidoProps {
   fechaSeleccion?: string;
   vendedorNombre: string;
   rating: number;
-  telefono?: string;
+  telefono?: number;
   onVerPedido: (id: string | number) => void;
   onEnviarCalificacion: (data: {
     estrellas: number;
@@ -29,7 +29,7 @@ export default function CardPedidoRecibido({
   onEnviarCalificacion,
 }: CardPedidoRecibidoProps) {
   const { colors } = useTheme();
-  const [expandido, setExpandido] = useState(true); // expandida por default
+  const [expandido, setExpandido] = useState(false);
 
   return (
     <CardPedidoBase

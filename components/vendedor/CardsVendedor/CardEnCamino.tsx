@@ -3,6 +3,7 @@ import type { Mensaje } from "@/types/pedidos";
 import React from "react";
 import { Alert } from "react-native";
 import { Entregado } from "../../icons";
+import AyudaReportar from "../../subcomponentes/AyudaReportar";
 import CardPedidoVendedor from "./CardPedidoVendedor";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -20,6 +21,7 @@ interface CardEnCaminoProps {
   celularComprador?: number;
   onVerPedido: (id: string | number) => void;
   onVerNota?: (nota: string) => void;
+  onAbrirIssue?: () => void;
 }
 
 // ─── Export principal ─────────────────────────────────────────────────────────
@@ -39,6 +41,7 @@ export default function CardEnCamino({
   celularComprador,
   onVerPedido,
   onVerNota,
+  onAbrirIssue,
 }: CardEnCaminoProps) {
   const { updateEstado } = useOrders();
 
@@ -75,6 +78,13 @@ export default function CardEnCamino({
       btnPrincipalIcon={Entregado}
       btnPrincipalIconSize={32}
       onPressBtnPrincipal={handleEntregado}
+      contenidoExtra={
+        <AyudaReportar
+          role="seller"
+          label="Reportar un problema"
+          onPress={() => onAbrirIssue?.()}
+        />
+      }
     />
   );
 }

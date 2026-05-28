@@ -28,6 +28,7 @@ interface CardPedidoBaseProps {
   style?: ViewStyle;
   elevation?: number;
   contenidoExpandible?: React.ReactNode;
+  contenidoPosMascota?: React.ReactNode;
 }
 
 export default function CardPedidoBase({
@@ -48,6 +49,7 @@ export default function CardPedidoBase({
   style,
   elevation,
   contenidoExpandible,
+  contenidoPosMascota,
 }: CardPedidoBaseProps) {
   const { colors } = useTheme();
 
@@ -110,6 +112,9 @@ export default function CardPedidoBase({
           posicion={mascotaPosicion}
         />
       )}
+
+      {/* CONTENIDO POST-MASCOTA OPCIONAL */}
+      {contenidoPosMascota}
 
       {/* SEPARADOR OPCIONAL */}
       {mostrarDivisor && <LineaDivisoria />}

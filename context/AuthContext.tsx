@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -75,10 +76,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   // Nuevo: switchRole
-  const switchRole = (newRole: "buyer" | "seller") => {
-    if (!user) return;
-    setUser({ ...user, role: newRole });
-  };
+  // const switchRole = (newRole: "buyer" | "seller") => {
+  //   if (!user) return;
+  //   setUser({ ...user, role: newRole });
+  // };
+
+  const switchRole = useCallback((newRole: "buyer" | "seller") => {
+    setUser((prev) => (prev ? { ...prev, role: newRole } : prev));
+  }, []);
 
   const updateCredits = (amount: number) => {
     if (!user) return;

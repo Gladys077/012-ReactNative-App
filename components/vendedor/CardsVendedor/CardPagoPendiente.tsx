@@ -1,6 +1,7 @@
 import { Spacing } from "@/constants/Tokens";
 import React from "react";
 import { View } from "react-native";
+import AyudaReportar from "../../subcomponentes/AyudaReportar";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import TextoPedido from "../../subcomponentes/TextoPedido";
@@ -14,15 +15,18 @@ interface CardPagoPendienteProps {
   textoPedido: string;
   nota?: string;
   precio: number;
+  onAbrirIssue?: () => void;
 }
 
 // Subcomponente interno: muestra el texto del pedido y nota opcional
 const ContenidoExpandible = ({
   textoPedido,
   nota,
+  onAbrirIssue,
 }: {
   textoPedido: string;
   nota?: string;
+  onAbrirIssue?: () => void;
 }) => {
   return (
     <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
@@ -30,6 +34,12 @@ const ContenidoExpandible = ({
 
       {/* Nota */}
       <NotaEnviada nota={nota} />
+
+      <AyudaReportar
+        role="seller"
+        label="Reportar un problema"
+        onPress={() => onAbrirIssue?.()}
+      />
     </View>
   );
 };
@@ -43,6 +53,7 @@ export default function CardPagoPendiente({
   textoPedido,
   nota,
   precio,
+  onAbrirIssue,
 }: CardPagoPendienteProps) {
   return (
     <CardVendedorBase
@@ -52,7 +63,11 @@ export default function CardPagoPendiente({
       compradorRating={compradorRating}
       precio={precio}
       contenidoExpandible={
-        <ContenidoExpandible textoPedido={textoPedido} nota={nota} />
+        <ContenidoExpandible
+          textoPedido={textoPedido}
+          nota={nota}
+          onAbrirIssue={onAbrirIssue}
+        />
       }
     />
   );

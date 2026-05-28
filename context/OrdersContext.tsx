@@ -87,6 +87,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v3",
       vendedorNombre: "Minimarket Pedro",
+      telefono: 12341234,
       alias: "SANDWICHERIAEXPRESS",
       entidad: "Mercado Pago",
       titular: "Pedro Pascal",
@@ -118,6 +119,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v5",
       vendedorNombre: "Minimarket Juan",
+      telefono: 123123123123,
       alias: "MINIMARKETJUAN",
       entidad: "Mercado Pago",
       titular: "Juan Pérez",
@@ -198,6 +200,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v5",
       vendedorNombre: "Minimarket Juan",
+      telefono: 12341234,
       alias: "MINIMARKETJUAN",
       entidad: "Mercado Pago",
       titular: "Juan Pérez",
@@ -240,7 +243,10 @@ interface OrdersContextValue {
   historialComprador: Pedido[];
   historialVendedor: Pedido[];
   moverAHistorialComprador: (id: string | number) => void;
-  moverAHistorialVendedor: (id: string | number) => void;
+  moverAHistorialVendedor: (
+    id: string | number,
+    motivo?: { opcion: string; detalle?: string },
+  ) => void;
   removeHistorialComprador: (id: string | number) => void;
   removeHistorialVendedor: (id: string | number) => void;
 }
@@ -289,13 +295,21 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, []);
 
-  const moverAHistorialVendedor = useCallback((id: string | number) => {
-    setPedidos((prev) => {
-      const pedido = prev.find((p) => p.id === id);
-      if (pedido) setHistorialVendedor((h) => [pedido, ...h]);
-      return prev.filter((p) => p.id !== id);
-    });
-  }, []);
+  const moverAHistorialVendedor = useCallback(
+    (id: string | number, motivo?: { opcion: string; detalle?: string }) => {
+      setPedidos((prev) => {
+        const pedido = prev.find((p) => p.id === id);
+        if (pedido) {
+          const pedidoConMotivo = motivo
+            ? { ...pedido, motivoNoConcretado: motivo }
+            : pedido;
+          setHistorialVendedor((h) => [pedidoConMotivo, ...h]);
+        }
+        return prev.filter((p) => p.id !== id);
+      });
+    },
+    [],
+  );
 
   const removeHistorialComprador = useCallback((id: string | number) => {
     setHistorialComprador((prev) => prev.filter((p) => p.id !== id));

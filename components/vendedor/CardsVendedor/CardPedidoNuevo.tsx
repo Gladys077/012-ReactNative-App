@@ -70,27 +70,6 @@ const ContenidoExpandible = ({
 
   return (
     <View style={{ gap: Spacing.lg, marginTop: Spacing.md }}>
-      {/* Texto del pedido */}
-      {/* <View
-        style={{
-          backgroundColor: colors.fondoPedidos,
-          borderRadius: BorderRadius.md,
-          borderBottomColor: colors.textSecondaryBg,
-          borderBottomWidth: 1,
-          padding: Spacing.md,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: FontSizes.sm,
-            fontFamily: fonts.robotoRegular,
-            color: colors.textDefault,
-            lineHeight: 22,
-          }}
-        >
-          {textoPedido}
-        </Text>
-      </View> */}
       <TextoPedido texto={textoPedido} />
 
       {/* Input nota */}

@@ -3,6 +3,7 @@ import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { View } from "react-native";
+import AyudaReportar from "../subcomponentes/AyudaReportar";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -25,11 +26,12 @@ interface CardPedidoPagoEnRevisionProps {
   timestampRespuesta: number;
   onVerPedido?: (id: string | number) => void;
   onEditarDireccion?: () => void;
-  onVerNota?: (nota: string) => void; // ← AGREGÁ ESTO
+  onVerNota?: (nota: string) => void;
   onFinishCronometro?: (
     pedidoId: string | number,
     respuestaId: string | number,
   ) => void;
+  onAbrirAyuda?: () => void;
 }
 
 export default function CardPedidoPagoEnRevision({
@@ -39,6 +41,7 @@ export default function CardPedidoPagoEnRevision({
   tieneProblema,
   fechaSeleccion,
   onVerPedido,
+  onAbrirAyuda,
 }: CardPedidoPagoEnRevisionProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(true);
@@ -69,6 +72,9 @@ export default function CardPedidoPagoEnRevision({
       }
       mascotaVariante={tieneProblema ? "attention" : "message"}
       elevation={expandido ? 0 : 5}
+      contenidoPosMascota={
+        <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+      }
       contenidoExpandible={
         <View
           style={{

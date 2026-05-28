@@ -1,3 +1,5 @@
+// es la capa de dominio — recibe las props específicas de un pedido, construye el ContenidoExpandible (mensajes, chat, nota, datos del comprador, btn principal), y se lo pasa a CardVendedorBase como contenidoExpandible.
+
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";

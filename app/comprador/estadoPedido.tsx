@@ -13,7 +13,8 @@ import CardPedidoEnProceso from "../../components/Comprador/CardPedidoEnProceso"
 import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoEnRevision";
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
 import CardPedidoRecibido from "../../components/Comprador/CardPedidoRecibido";
-import BottomSheetAyudaPedido from "../../components/subcomponentes/BottomSheetAyudaPedido";
+import BottomSheetIssueSelector from "../../components/subcomponentes/BottomSheetIssueSelector";
+import { useToast } from "../../components/UI/ToastContext";
 import { useOrders } from "../../context/OrdersContext";
 import { estadoSistemaAComprador } from "../../types/pedidos";
 
@@ -40,7 +41,7 @@ const EstadoPedido = () => {
     useCallback(() => {
       return () => {
         closeBottomSheetVerPedido();
-        setAyudaVisible(false); // también cerramos ayuda al salir de la screen
+        setAyudaVisible(false); // también cierro ayuda al salir de la screen
       };
     }, [closeBottomSheetVerPedido]),
   );
@@ -119,10 +120,13 @@ const EstadoPedido = () => {
     updatePedido(pedidoId, { expandido: valor });
   };
 
+  const { showToast } = useToast();
+
   const handleAyudaEnviada = (opcion: string, mensaje?: string) => {
     // TODO: conectar al backend
     console.log("Ayuda enviada:", opcion, mensaje);
     setAyudaVisible(false);
+    showToast("Tu reclamo fue enviado.");
   };
 
   // ─── Render ───────────────────────────────────────────────────────────────────
@@ -191,6 +195,7 @@ const EstadoPedido = () => {
                     timestampRespuesta={0}
                     tieneProblema={false}
                     estado={"Pago y dirección"}
+                    onAbrirAyuda={() => setAyudaVisible(true)}
                   />
                 );
               }
@@ -244,6 +249,7 @@ const EstadoPedido = () => {
                     telefono={r.telefono}
                     direccion={pedido.direccionComprador}
                     onVerPedido={handleVerPedido}
+                    onAbrirAyuda={() => setAyudaVisible(true)}
                   />
                 );
               }
@@ -366,14 +372,15 @@ const EstadoPedido = () => {
         )}
       </ScrollView>
 
-      {/*
-        ── BottomSheetAyudaPedido ─── Para reclamos
-      */}
-      <BottomSheetAyudaPedido
+      {/* ── BottomSheetIssueSelector ─── Para reclamos */}
+      <BottomSheetIssueSelector
         isVisible={ayudaVisible}
         role="buyer"
         opciones={OPCIONES_AYUDA_BUYER}
-        subtitulo="Si no pudiste resolver el problema con el vendedor, selecciona lo ocurrido y nuestro equipo revisará el caso. (Estimado: 48-72hs)"
+        subtitulo={
+          "Primero intenta resolverlo con el vendedor.\n" +
+          "Si el problema continúa, selecciona lo ocurrido y revisaremos el caso."
+        }
         onEnviar={handleAyudaEnviada}
         onCerrar={() => setAyudaVisible(false)}
       />

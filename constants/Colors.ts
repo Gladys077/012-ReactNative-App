@@ -137,7 +137,7 @@ export const Colors = {
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
     fondoCirculoActivo: "#a8d0f0", // celeste
-    success: "#10b981", // green (verde esmeralda más brillante)
+    success: "#059669", // green (verde esmeralda más brillante)
 
     //para TipsBottomSheet
     brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave

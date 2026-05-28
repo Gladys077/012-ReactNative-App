@@ -10,6 +10,7 @@ export type EstadoSistema =
   | "listo_para_enviar"
   | "en_camino"
   | "entregado_pendiente_calif"
+  | "no_concretado"
   | "completado"
   | "cancelado";
 
@@ -23,7 +24,8 @@ export type EstadoComprador =
   | "En preparación"
   | "En camino"
   | "Pedido recibido"
-  | "Completado";
+  | "Completado"
+  | "Cancelado";
 
 export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   nuevo: "En proceso",
@@ -36,8 +38,9 @@ export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   listo_para_enviar: "En preparación", // el comprador no ve este sub-estado "listo para enviar"
   en_camino: "En camino",
   entregado_pendiente_calif: "Pedido recibido",
+  no_concretado: "Cancelado",
   completado: "Completado",
-  cancelado: "Completado", // el comprador no necesita ver "cancelado"
+  cancelado: "Cancelado",
 };
 
 // ─── Lo que ve el VENDEDOR ────────────────────────────────────────────────────
@@ -51,6 +54,8 @@ export type EstadoVendedor =
   | "Listo para enviar"
   | "En camino"
   | "Entregado"
+  | "No concretado"
+  | "Cancelado"
   | "Completado";
 
 export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
@@ -64,8 +69,9 @@ export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
   listo_para_enviar: "Listo para enviar",
   en_camino: "En camino",
   entregado_pendiente_calif: "Entregado",
+  no_concretado: "No concretado",
   completado: "Completado",
-  cancelado: "Completado", // se verá en historial con etiqueta propia
+  cancelado: "Cancelado", // se verá en historial con etiqueta propia
 };
 
 // ─── Tabs del menú vendedor ───────────────────────────────────────────────────
@@ -82,6 +88,7 @@ export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
   listo_para_enviar: "pendientes",
   en_camino: "pendientes",
   entregado_pendiente_calif: "entregados",
+  no_concretado: "entregados",
   completado: "entregados", // permanece en historial
   cancelado: "entregados", // va al historial
 };
@@ -94,7 +101,7 @@ export interface Respuesta {
   entidad?: string;
   titular?: string;
   rating: number;
-  telefono?: string;
+  telefono?: number;
   precio: number;
   nota?: string;
   duracionCronometro?: number;
@@ -158,4 +165,9 @@ export interface Pedido {
   // Calificaciones
   calificacionComprador?: { estrellas: number; comentario: string }; // el vendedor califica al comprador
   calificacionVendedor?: { estrellas: number; comentario: string }; // el comprador califica al vendedor
+
+  motivoNoConcretado?: {
+    opcion: string;
+    detalle?: string;
+  };
 }

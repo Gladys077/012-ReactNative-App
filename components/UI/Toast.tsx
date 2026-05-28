@@ -1,3 +1,5 @@
+//Arma el mensajito temporal q aparece abajo de la pantalla para avisar q algo sucedió, aparece y desaparece solo
+
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useEffect } from "react";
@@ -37,17 +39,18 @@ export default function Toast({
 
   useEffect(() => {
     if (visible) {
+      const callback = onOcultar; // ← capturá afuera del worklet
       opacity.value = withSequence(
         withTiming(1, { duration: 300 }),
         withDelay(
           duracion,
           withTiming(0, { duration: 300 }, (finished) => {
-            if (finished && onOcultar) runOnJS(onOcultar)();
+            if (finished && callback) runOnJS(callback)();
           }),
         ),
       );
     }
-  }, [visible]);
+  }, [visible, duracion, onOcultar]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
@@ -68,7 +71,7 @@ export default function Toast({
           borderRadius: 12,
           padding: Spacing.md,
           alignItems: "center",
-          zIndex: 999,
+          zIndex: 9999,
         },
         animatedStyle,
       ]}

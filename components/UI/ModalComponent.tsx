@@ -1,19 +1,20 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import useModal from "@/hooks/useModal";
-import React from "react";
+
+import { ModalContext } from "@/context/ModalContext";
+import React, { useContext } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-interface ModalComponentProps {
-  visible: boolean;
-  type: "alert" | "confirm";
-  options: any;
-  closeModal: () => void;
-}
+// interface ModalComponentProps {
+//   visible: boolean;
+//   type: "alert" | "confirm";
+//   options: any;
+//   closeModal: () => void;
+// }
 
 export default function ModalComponent() {
   const { colors, fonts } = useTheme();
-  const { visible, type, options, closeModal } = useModal();
+  const { visible, type, options, closeModal } = useContext(ModalContext);
 
   if (!visible || !options) return null;
 
