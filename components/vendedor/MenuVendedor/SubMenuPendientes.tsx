@@ -1,7 +1,7 @@
 import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated, Pressable, Text, View } from "react-native";
 import {
   EnCaminoOutline,
   EnPreparacionNuevo,
@@ -24,77 +24,112 @@ interface SubMenuItemProps {
   label: string;
   badge: number;
   onPress: () => void;
+  index: number;
 }
 
-const SubMenuItem = ({ Icon, label, badge, onPress }: SubMenuItemProps) => {
+const STAGGER_DELAY = 60; // ms entre cada ítem
+const ANIM_DURATION = 280; // ms que dura cada ítem
+
+const SubMenuItem = ({
+  Icon,
+  label,
+  badge,
+  onPress,
+  index,
+}: SubMenuItemProps) => {
   const { colors, fonts } = useTheme();
   const iconSize = 36;
 
+  // Valores animados para mostrar el submenú pendientes
+  const translateY = useRef(new Animated.Value(-24)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: ANIM_DURATION,
+        delay: index * STAGGER_DELAY,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: ANIM_DURATION,
+        delay: index * STAGGER_DELAY,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => ({
-        flexDirection: "row",
-        alignItems: "center",
-        paddingVertical: 25,
-        paddingHorizontal: Spacing.lg,
-        paddingLeft: 105,
-        backgroundColor: pressed
-          ? colors.textSecondaryBg
-          : colors.bgSubMenuPendientes,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.textSecondaryBorder,
-        gap: Spacing.xl,
-        width: "100%",
-        maxWidth: 500,
-      })}
-    >
-      {/* Ícono con badge */}
-      <View style={{ position: "relative", width: iconSize, height: iconSize }}>
-        <Icon width={iconSize} height={iconSize} color={colors.textDefault} />
-        {badge > 0 && (
-          <View
-            style={{
-              position: "absolute",
-              top: -6,
-              right: -6,
-              backgroundColor: colors.badge,
-              borderRadius: 9999,
-              minWidth: 18,
-              height: 20,
-              paddingHorizontal: 5,
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 0.8,
-              borderColor: colors.textDefault,
-            }}
-          >
-            <Text
+    <Animated.View style={{ opacity, transform: [{ translateY }] }}>
+      <Pressable
+        onPress={onPress}
+        style={({ pressed }) => ({
+          flexDirection: "row",
+          alignItems: "center",
+          paddingVertical: 25,
+          paddingHorizontal: Spacing.lg,
+          paddingLeft: 105,
+          backgroundColor: pressed
+            ? colors.textSecondaryBg
+            : colors.bgSubMenuPendientes,
+          borderBottomWidth: 1,
+          borderBottomColor: colors.textSecondaryBorder,
+          gap: Spacing.xl,
+          width: "100%",
+          maxWidth: 500,
+        })}
+      >
+        {/* Ícono con badge */}
+        <View
+          style={{ position: "relative", width: iconSize, height: iconSize }}
+        >
+          <Icon width={iconSize} height={iconSize} color={colors.textDefault} />
+          {badge > 0 && (
+            <View
               style={{
-                color: colors.textOnColor,
-                fontSize: 11,
-                fontFamily: fonts.robotoMedium,
-                lineHeight: 12,
+                position: "absolute",
+                top: -6,
+                right: -6,
+                backgroundColor: colors.badge,
+                borderRadius: 9999,
+                minWidth: 18,
+                height: 20,
+                paddingHorizontal: 5,
+                alignItems: "center",
+                justifyContent: "center",
+                borderWidth: 0.8,
+                borderColor: colors.textDefault,
               }}
             >
-              {badge}
-            </Text>
-          </View>
-        )}
-      </View>
+              <Text
+                style={{
+                  color: colors.textOnColor,
+                  fontSize: 11,
+                  fontFamily: fonts.robotoMedium,
+                  lineHeight: 12,
+                }}
+              >
+                {badge}
+              </Text>
+            </View>
+          )}
+        </View>
 
-      {/* Label */}
-      <Text
-        style={{
-          flex: 1,
-          color: colors.textDefault,
-          fontSize: 14,
-          fontFamily: fonts.robotoMedium,
-        }}
-      >
-        {label}
-      </Text>
-    </Pressable>
+        {/* Label */}
+        <Text
+          style={{
+            flex: 1,
+            color: colors.textDefault,
+            fontSize: 14,
+            fontFamily: fonts.robotoMedium,
+          }}
+        >
+          {label}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 };
 
@@ -146,9 +181,10 @@ const SubMenuPendientes = ({
 
   return (
     <View style={{ flex: 1 }}>
-      {SUB_TABS.map(({ key, label, Icon }) => (
+      {SUB_TABS.map(({ key, label, Icon }, index) => (
         <SubMenuItem
           key={key}
+          index={index}
           Icon={Icon}
           label={label}
           badge={getBadge(key)}

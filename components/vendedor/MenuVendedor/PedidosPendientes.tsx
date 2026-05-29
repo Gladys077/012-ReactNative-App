@@ -1,7 +1,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import BottomSheetIssueSelector from "../../subcomponentes/BottomSheetIssueSelector";
@@ -195,9 +195,21 @@ const PedidosPendientes = ({
     onReportIssue: handleAbrirIssue,
   };
 
+  const menuKeyRef = useRef(0);
+  const prevSubTabRef = useRef(subTabActivo);
+
+  if (prevSubTabRef.current !== null && subTabActivo === null) {
+    menuKeyRef.current += 1; // incrementa solo cuando "volvés" al submenú
+  }
+  prevSubTabRef.current = subTabActivo;
+
   if (subTabActivo === null) {
     return (
-      <SubMenuPendientes pedidos={pedidos} onSelectSubTab={onSubTabChange} />
+      <SubMenuPendientes
+        key={menuKeyRef.current}
+        pedidos={pedidos}
+        onSelectSubTab={onSubTabChange}
+      />
     );
   }
 
