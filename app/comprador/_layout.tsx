@@ -4,8 +4,8 @@ import { Slot, useSegments } from "expo-router";
 import { View } from "react-native";
 import Footer from "../../components/UI/Footer";
 import Header from "../../components/UI/Header";
-import { ToastProvider } from "../../components/UI/ToastContext";
 import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedidoContext";
+import { ToastProvider } from "../../context/ToastContext";
 
 export default function CompradorLayout() {
   const { colors } = useTheme();
@@ -43,6 +43,8 @@ export default function CompradorLayout() {
             style={{
               flex: 1,
               paddingHorizontal: Spacing.xl,
+              paddingTop: Spacing.xs,
+              paddingBottom: Spacing.lg,
               maxWidth: 500,
               width: "100%",
               alignSelf: "center",

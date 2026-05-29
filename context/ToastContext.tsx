@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
-import Toast from "./Toast";
+import Toast from "../components/UI/Toast";
 
 interface ToastContextValue {
   showToast: (mensaje: string, variante?: "success" | "error" | "info") => void;

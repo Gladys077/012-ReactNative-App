@@ -6,6 +6,7 @@ import { View } from "react-native";
 import Footer from "../../components/UI/Footer";
 import Header from "../../components/UI/Header";
 import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedidoContext";
+import { ToastProvider } from "../../context/ToastContext";
 
 export default function VendedorLayout() {
   const { colors } = useTheme();
@@ -34,28 +35,31 @@ export default function VendedorLayout() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      {/* Header recibe showBackArrow solo si NO estamos en la home */}
-      <Header
-        title={getTitleByPage()}
-        showBackArrow={!isHome}
-        variant="seller"
-      />
-      <BottomSheetVerPedidoProvider>
-        <View
-          style={{
-            flex: 1,
-            paddingTop: Spacing.xs,
-            paddingBottom: Spacing.lg,
-            maxWidth: 500,
-            width: "100%",
-            alignSelf: "center",
-          }}
-        >
-          <Slot />
-        </View>
-      </BottomSheetVerPedidoProvider>
-      <Footer />
-    </View>
+    <ToastProvider>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        {/* Header recibe showBackArrow solo si NO estamos en la home */}
+        <Header
+          title={getTitleByPage()}
+          showBackArrow={!isHome}
+          variant="seller"
+        />
+        <BottomSheetVerPedidoProvider>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: Spacing.xl,
+              paddingTop: Spacing.xs,
+              paddingBottom: Spacing.lg,
+              maxWidth: 500,
+              width: "100%",
+              alignSelf: "center",
+            }}
+          >
+            <Slot />
+          </View>
+        </BottomSheetVerPedidoProvider>
+        <Footer />
+      </View>
+    </ToastProvider>
   );
 }

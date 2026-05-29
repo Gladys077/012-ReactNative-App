@@ -1,10 +1,8 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "expo-router";
-import React from "react";
 import { Alert, Linking, ScrollView, View } from "react-native";
 
 import { Spacing } from "@/constants/Tokens";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ItemsAjustes from "../../components/ajustes/ItemsAjustes";
 import SeccionAjustes from "../../components/ajustes/SeccionAjustes";
 import {
@@ -68,7 +66,7 @@ const AjustesCompradorScreen = () => {
   };
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: colors.background,
@@ -78,6 +76,7 @@ const AjustesCompradorScreen = () => {
         style={{
           flex: 1,
           backgroundColor: colors.background,
+          paddingVertical: Spacing.md,
           paddingHorizontal: Spacing.xs,
         }}
         showsVerticalScrollIndicator={false}
@@ -190,7 +189,7 @@ const AjustesCompradorScreen = () => {
           <View style={{ height: Spacing.xl }} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

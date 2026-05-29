@@ -24,7 +24,7 @@ interface ToastProps {
 export default function Toast({
   mensaje,
   visible,
-  duracion = 2000,
+  duracion = 3000,
   variante = "success",
   onOcultar,
 }: ToastProps) {

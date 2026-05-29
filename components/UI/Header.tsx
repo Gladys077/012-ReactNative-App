@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontSizes } from "../../constants/Tokens";
@@ -25,7 +25,6 @@ export default function Header({
   onBack,
 }: HeaderProps) {
   const { colors, fonts } = useTheme();
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView edges={["left", "right"]}>
@@ -61,8 +60,7 @@ export default function Header({
                   onBack();
                   return;
                 }
-
-                navigation.goBack();
+                router.back();
               }}
               style={{ padding: 8 }}
             >

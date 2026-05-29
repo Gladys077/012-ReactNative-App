@@ -1,6 +1,5 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter } from "expo-router";
-import React from "react";
 import { Alert, Linking, ScrollView, View } from "react-native";
 
 import { Spacing } from "@/constants/Tokens";
@@ -71,14 +70,13 @@ const AjustesVendedorScreen = () => {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        paddingHorizontal: Spacing.xl,
       }}
     >
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: colors.background,
-          paddingVertical: Spacing.lg,
+          paddingVertical: Spacing.md,
           paddingHorizontal: Spacing.xs,
         }}
         showsVerticalScrollIndicator={false}
@@ -88,7 +86,7 @@ const AjustesVendedorScreen = () => {
             flex: 1,
             justifyContent: "center",
             paddingHorizontal: Spacing.lg,
-            // paddingBottom: Spacing.xl,
+            paddingBottom: Spacing.xl,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
@@ -99,13 +97,21 @@ const AjustesVendedorScreen = () => {
             <ItemsAjustes
               icon={Avatar}
               texto="Perfil"
-              onPress={() => router.push("/(preAuth)/Ajustes/perfil" as any)}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/perfil" as any,
+                  params: { origin: "vendedor-ajustes" },
+                })
+              }
             />
             <ItemsAjustes
               icon={CambiarContraseña}
               texto="Cambiar contraseña"
               onPress={() =>
-                router.push("/(preAuth)/Ajustes/cambiarContrasena" as any)
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/cambiarContrasena" as any,
+                  params: { origin: "vendedor-ajustes" },
+                })
               }
             />
             <ItemsAjustes
@@ -132,7 +138,7 @@ const AjustesVendedorScreen = () => {
               onPress={() =>
                 router.push({
                   pathname: "/(preAuth)/Ajustes/terms" as any,
-                  params: { from: "vendedor" },
+                  params: { origin: "vendedor-ajustes" },
                 })
               }
             />
@@ -140,7 +146,10 @@ const AjustesVendedorScreen = () => {
               icon={Visible}
               texto="Políticas de privacidad"
               onPress={() =>
-                router.push("/(preAuth)/Ajustes/privacidad" as any)
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/privacidad" as any,
+                  params: { origin: "vendedor-ajustes" },
+                })
               }
             />
             <ItemsAjustes
@@ -151,7 +160,12 @@ const AjustesVendedorScreen = () => {
             <ItemsAjustes
               icon={Faq}
               texto="Preguntas frecuentes (FAQ)"
-              onPress={() => router.push("/(preAuth)/Ajustes/FAQ" as any)}
+              onPress={() =>
+                router.push({
+                  pathname: "/(preAuth)/Ajustes/FAQ" as any,
+                  params: { origin: "vendedor-ajustes" },
+                })
+              }
             />
             <ItemsAjustes
               icon={Mail}

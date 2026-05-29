@@ -14,8 +14,8 @@ import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoE
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
 import CardPedidoRecibido from "../../components/Comprador/CardPedidoRecibido";
 import BottomSheetIssueSelector from "../../components/subcomponentes/BottomSheetIssueSelector";
-import { useToast } from "../../components/UI/ToastContext";
 import { useOrders } from "../../context/OrdersContext";
+import { useToast } from "../../context/ToastContext";
 import { estadoSistemaAComprador } from "../../types/pedidos";
 
 // ─── Opciones de ayuda (buyer) ────────────────────────────────────────────────

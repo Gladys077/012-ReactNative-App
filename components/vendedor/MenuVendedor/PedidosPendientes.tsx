@@ -5,7 +5,8 @@ import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import BottomSheetIssueSelector from "../../subcomponentes/BottomSheetIssueSelector";
-import { useToast } from "../../UI/ToastContext";
+
+import { useToast } from "../../../context/ToastContext";
 import CardEnCamino from "../CardsVendedor/CardEnCamino";
 import CardEnPreparacion from "../CardsVendedor/CardEnPreparacion";
 import CardListoParaEnviar from "../CardsVendedor/CardListoParaEnviar";
@@ -35,7 +36,7 @@ interface Props {
 // ─── Opciones de incidencias (seller) ────────────────────────────────────────
 // "Otro" se agrega automáticamente
 const OPCIONES_ISSUE_SELLER = [
-  "El comprador no respondió.",
+  "Sin respuesta del comprador.",
   "Hubo un problema con el pago.",
   "El comprador no estaba en el domicilio.",
 ];
@@ -165,11 +166,13 @@ const PedidosPendientes = ({
   const handleIssueEnviado = (opcion: string, mensaje?: string) => {
     if (!pedidoIssueId) return;
 
+    setIssueVisible(false);
+    showToast(
+      "Problema registrado. El pedido pasará al historial como: No concretado",
+    );
+
     updateEstado(pedidoIssueId, "no_concretado");
     moverAHistorialVendedor(pedidoIssueId, { opcion, detalle: mensaje });
-
-    setIssueVisible(false);
-    showToast("El pedido pasará al historial como: No concretado");
   };
 
   const pedidosFiltrados = subTabActivo
