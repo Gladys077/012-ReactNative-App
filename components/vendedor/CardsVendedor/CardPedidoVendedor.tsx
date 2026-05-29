@@ -23,6 +23,7 @@ export interface CardPedidoVendedorProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   nota?: string;
   precio: number;
@@ -217,6 +218,7 @@ export default function CardPedidoVendedor({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   nota,
   precio,
@@ -239,6 +241,7 @@ export default function CardPedidoVendedor({
       estado={estado}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       precio={precio}
       contenidoExpandible={
         <ContenidoExpandible

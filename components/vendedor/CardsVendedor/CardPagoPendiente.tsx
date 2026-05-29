@@ -12,6 +12,7 @@ interface CardPagoPendienteProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   nota?: string;
   precio: number;
@@ -50,6 +51,7 @@ export default function CardPagoPendiente({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   nota,
   precio,
@@ -61,6 +63,7 @@ export default function CardPagoPendiente({
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       precio={precio}
       contenidoExpandible={
         <ContenidoExpandible

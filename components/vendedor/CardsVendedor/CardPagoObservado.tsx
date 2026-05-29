@@ -21,6 +21,7 @@ interface CardPagoObservadoProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   nota?: string;
   precio: number;
@@ -259,6 +260,7 @@ export default function CardPagoObservado({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   nota,
   precio,
@@ -274,6 +276,7 @@ export default function CardPagoObservado({
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       precio={precio}
       contenidoExpandible={
         <ContenidoExpandible

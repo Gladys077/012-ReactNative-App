@@ -101,6 +101,7 @@ export interface Respuesta {
   entidad?: string;
   titular?: string;
   rating: number;
+  ratingCount?: number;
   telefono?: number;
   precio: number;
   nota?: string;
@@ -138,6 +139,7 @@ export interface Pedido {
   // Datos del comprador (los ve el vendedor)
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   direccionComprador: string;
   celularComprador: number;
 

@@ -6,11 +6,13 @@ import { Estrella100 } from "../icons";
 
 interface EstrellaUnicaProps {
   rating: number;
+  ratingCount?: number;
   size?: number;
 }
 
 export default function EstrellaUnica({
   rating,
+  ratingCount,
   size = 16,
 }: EstrellaUnicaProps) {
   const { colors, fonts } = useTheme();
@@ -32,6 +34,17 @@ export default function EstrellaUnica({
       >
         {rating.toFixed(1)}
       </Text>
+      {ratingCount !== undefined && (
+        <Text
+          style={{
+            fontSize: FontSizes.sm,
+            fontFamily: fonts.robotoRegular,
+            color: colors.textMuted,
+          }}
+        >
+          ({ratingCount})
+        </Text>
+      )}
     </View>
   );
 }

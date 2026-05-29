@@ -23,6 +23,7 @@ interface CardVendedorBaseProps {
   style?: ViewStyle;
   elevation?: number;
   mostrarTiempoAceptacion?: boolean;
+  compradorRatingCount?: number;
 }
 
 export default function CardVendedorBase({
@@ -36,6 +37,7 @@ export default function CardVendedorBase({
   style,
   elevation,
   mostrarTiempoAceptacion = true,
+  compradorRatingCount,
 }: CardVendedorBaseProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -104,7 +106,10 @@ export default function CardVendedorBase({
             {compradorNombre}
           </Text>
           {compradorRating !== undefined && (
-            <EstrellaUnica rating={compradorRating} />
+            <EstrellaUnica
+              rating={compradorRating}
+              ratingCount={compradorRatingCount}
+            />
           )}
         </View>
       )}

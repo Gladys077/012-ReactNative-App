@@ -69,6 +69,7 @@ const PedidosNuevos = ({ pedidos }: Props) => {
               fechaSeleccion={p.fechaSeleccion}
               compradorNombre={p.compradorNombre}
               compradorRating={p.compradorRating}
+              compradorRatingCount={p.compradorRatingCount}
               textoPedido={p.textoPedido}
               precioEnviado={p.respuestas?.[0]?.precio ?? 0}
               notaEnviada={p.respuestas?.[0]?.nota}
@@ -80,6 +81,7 @@ const PedidosNuevos = ({ pedidos }: Props) => {
               fechaSeleccion={p.fechaSeleccion}
               compradorNombre={p.compradorNombre}
               compradorRating={p.compradorRating}
+              compradorRatingCount={p.compradorRatingCount}
               textoPedido={p.textoPedido}
               onEnviarPresupuesto={handleEnviarPresupuesto}
               onEliminarPedido={handleEliminarPedido}

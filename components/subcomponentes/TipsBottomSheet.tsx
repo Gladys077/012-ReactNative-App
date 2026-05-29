@@ -22,6 +22,7 @@ export function useTipsBottomSheet() {
           "Escribe tu pedido en forma de lista, como el ejemplo.",
           "Especifica cantidades.",
           "Incluye las marcas, si tienes alguna preferencia.",
+          "Antes de transferir, verifica que el vendedor tenga al menos 10 calificaciones. Si no te convence, siempre puedes pagar contra entrega.",
         ]
       : [
           "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",
@@ -54,7 +55,6 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
         paddingVertical: Spacing.lg,
         paddingHorizontal: Spacing.xl,
         borderRadius: BorderRadius.md,
-        // backgroundColor: colors.bgPressed,
         marginBottom: Spacing.sm,
         marginTop: Spacing.lg,
         height: 48,

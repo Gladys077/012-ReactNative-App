@@ -66,6 +66,7 @@ function renderCard(
     fechaSeleccion: pedido.fechaSeleccion,
     compradorNombre: pedido.compradorNombre,
     compradorRating: pedido.compradorRating,
+    compradorRatingCount: pedido.compradorRatingCount,
     textoPedido: pedido.textoPedido,
     nota: pedido.respuestaSeleccionada?.nota,
     precio: pedido.respuestaSeleccionada?.precio ?? 0,

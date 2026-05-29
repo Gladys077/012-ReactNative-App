@@ -13,6 +13,7 @@ interface CardEnCaminoProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   nota?: string;
   precio: number;
@@ -33,6 +34,7 @@ export default function CardEnCamino({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   nota,
   precio,
@@ -65,6 +67,7 @@ export default function CardEnCamino({
       fechaSeleccion={fechaSeleccion}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       textoPedido={textoPedido}
       nota={nota}
       precio={precio}

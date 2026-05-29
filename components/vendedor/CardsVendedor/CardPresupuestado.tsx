@@ -11,6 +11,7 @@ interface CardPresupuestadoProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   precioEnviado: number;
   notaEnviada?: string;
@@ -40,6 +41,7 @@ export default function CardPresupuestado({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   precioEnviado,
   notaEnviada,
@@ -50,6 +52,7 @@ export default function CardPresupuestado({
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       precio={precioEnviado}
       contenidoExpandible={
         <ContenidoExpandible

@@ -49,6 +49,7 @@ const PedidosEntregados = ({
             fechaSeleccion={p.fechaSeleccion}
             compradorNombre={p.compradorNombre}
             compradorRating={p.compradorRating}
+            compradorRatingCount={p.compradorRatingCount}
             textoPedido={p.textoPedido}
             nota={p.respuestaSeleccionada?.nota}
             precio={p.respuestaSeleccionada?.precio ?? 0}

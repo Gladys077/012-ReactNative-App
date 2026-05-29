@@ -13,6 +13,7 @@ interface CardPedidoNuevoProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   onEnviarPresupuesto: (
     pedidoId: string | number,
@@ -208,6 +209,7 @@ export default function CardPedidoNuevo({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   onEnviarPresupuesto,
   onEliminarPedido,
@@ -218,6 +220,7 @@ export default function CardPedidoNuevo({
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       contenidoExpandible={
         <ContenidoExpandible
           pedidoId={pedidoId}

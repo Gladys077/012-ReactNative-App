@@ -221,6 +221,7 @@ export default function CardHistorialVendedor({
       estado={ESTADO}
       compradorNombre={pedido.compradorNombre}
       compradorRating={pedido.compradorRating}
+      compradorRatingCount={pedido.compradorRatingCount}
       precio={precio}
       elevation={3}
       contenidoExpandible={

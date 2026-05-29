@@ -18,6 +18,7 @@ interface CardRevisarPagoProps {
   fechaSeleccion?: string;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   textoPedido: string;
   nota?: string;
   precio: number;
@@ -337,6 +338,7 @@ export default function CardRevisarPago({
   fechaSeleccion,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   textoPedido,
   nota,
   precio,
@@ -349,6 +351,7 @@ export default function CardRevisarPago({
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
+      compradorRatingCount={compradorRatingCount}
       precio={precio}
       contenidoExpandible={
         <ContenidoExpandible
