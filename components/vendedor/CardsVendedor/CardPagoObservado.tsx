@@ -5,12 +5,11 @@ import type { Mensaje } from "@/types/pedidos";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
-import { Chat, Comprobante, Historial } from "../../icons";
+import { Chat, Comprobante } from "../../icons";
 import AyudaReportar from "../../subcomponentes/AyudaReportar";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import VerBottomSheet from "../../subcomponentes/VerBottomSheet";
-import Button from "../../UI/Button/Button";
 import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
@@ -232,7 +231,7 @@ const ContenidoExpandible = ({
       <LineaDivisoria />
 
       {/* ── Archivar ── */}
-      <Button
+      {/* <Button
         section="seller"
         variant="primary"
         width="full"
@@ -240,7 +239,7 @@ const ContenidoExpandible = ({
         onPress={handleArchivar}
       >
         <Text>Archivar pedido</Text>
-      </Button>
+      </Button> */}
 
       <AyudaReportar // ← agregado
         role="seller"

@@ -121,6 +121,7 @@ function renderCard(
           key={pedido.id}
           {...common}
           mensajes={pedido.mensajes}
+          onAbrirIssue={() => handlers.onReportIssue(pedido.id)}
         />
       );
 
