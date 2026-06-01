@@ -20,11 +20,12 @@ interface CardVendedorPagoDireccionProps {
 
   nombreNegocio: string;
   rating: number;
+  ratingCount: number;
   precio: number;
   nota?: string | undefined;
 
-  duracionCronometro: number;
-  timestampRespuesta: number;
+  // duracionCronometro: number;
+  // timestampRespuesta: number;
 
   alias: string;
   entidad: string;
@@ -35,10 +36,10 @@ interface CardVendedorPagoDireccionProps {
   onEditarDireccion: () => void;
   onVerPedido: () => void;
   onVerNota: (nota: string) => void;
-  onFinishCronometro: (
-    pedidoId: string | number,
-    respuestaId: string | number,
-  ) => void;
+  // onFinishCronometro: (
+  //   pedidoId: string | number,
+  //   respuestaId: string | number,
+  // ) => void;
   comprobante?: { uri: string; name: string } | null; // <-- lo toma PagoTransferencia
 
   onCancelarPedido: () => void;
@@ -56,10 +57,11 @@ export default function CardVendedorPagoDireccion({
   respuestaId,
   nombreNegocio,
   rating,
+  ratingCount,
   precio,
   nota,
-  duracionCronometro,
-  timestampRespuesta,
+  // duracionCronometro,
+  // timestampRespuesta,
   alias,
   entidad,
   titular,
@@ -67,7 +69,7 @@ export default function CardVendedorPagoDireccion({
   // onEditarDireccion,
   onVerPedido,
   onVerNota,
-  onFinishCronometro,
+  // onFinishCronometro,
 
   onCancelarPedido,
   onEnviarDatos,
@@ -133,7 +135,7 @@ export default function CardVendedorPagoDireccion({
       direccion: direccionState,
     });
 
-    onFinishCronometro?.(pedidoId, respuestaId);
+    // onFinishCronometro?.(pedidoId, respuestaId);
   };
 
   //TODO: FALTARÍA AGREGAR A LA FUNCIÓN handleEnviar EL ENVÍO DE DATOS AL BACKEND SEGÚN FORMA DE PAGO. Esta info le llega al vendedor y si se hizo una transferencia el vendedor confirma la acreditación del pago, o si se eligió efectivo contra entrega y la dirección de entrega está bien, el Vendedor dará el OK "confirmando que la transferencia es correcta" o dando continuar (en el caso de que el comprador abone contra entrega).  Si la transferencia no es correcta, el vendedor contactará al comprador desde la card PagoRecibido "en la sección Mensajes" para informarle que hubo un problema con la transferencia y que debe volver a cargar un nuevo comprobante de pago con el importe correcto (o con falte para completar el total).
@@ -144,15 +146,16 @@ export default function CardVendedorPagoDireccion({
       respuestaId={respuestaId}
       vendedorNombre={nombreNegocio}
       rating={rating}
+      ratingCount={ratingCount}
       precio={precio}
       nota={nota}
-      duracionCronometro={duracionCronometro}
-      timestampRespuesta={timestampRespuesta}
+      // duracionCronometro={duracionCronometro}
+      // timestampRespuesta={timestampRespuesta}
       tipoCronometro="pagar"
       onVerNota={onVerNota}
-      onFinishCronometro={() => {
-        onFinishCronometro?.(pedidoId, respuestaId);
-      }}
+      // onFinishCronometro={() => {
+      //   onFinishCronometro?.(pedidoId, respuestaId);
+      // }}
     >
       {/* Nota + Presupuesto */}
       <View

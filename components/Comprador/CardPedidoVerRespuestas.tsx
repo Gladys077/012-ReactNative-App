@@ -66,6 +66,7 @@ export default function CardPedidoVerRespuestas({
               respuestaId={respuesta.id}
               vendedorNombre={respuesta.vendedorNombre}
               rating={respuesta.rating}
+              ratingCount={respuesta.ratingCount}
               precio={respuesta.precio}
               nota={respuesta.nota}
               duracionCronometro={respuesta.duracionCronometro}

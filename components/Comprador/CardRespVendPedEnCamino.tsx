@@ -10,6 +10,7 @@ import LineaDivisoria from "../UI/LineaDivisoria";
 interface CardRespVendPedEnCaminoProps {
   vendedorNombre: string;
   rating: number;
+  ratingCount: number;
   telefono?: number;
   direccion: string;
   onVerPedido: () => void;
@@ -18,6 +19,7 @@ interface CardRespVendPedEnCaminoProps {
 export default function CardRespVendPedEnCamino({
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   direccion,
   onVerPedido,
@@ -59,16 +61,11 @@ export default function CardRespVendPedEnCamino({
             {vendedorNombre}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: fonts.robotoRegular,
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
+            <EstrellaReputacion
+              rating={rating}
+              size={14}
+              ratingCount={ratingCount}
+            />
           </View>
         </View>
 

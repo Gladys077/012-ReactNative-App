@@ -70,7 +70,10 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
           <ScrollView contentContainerStyle={{ paddingBottom: 48 }}>
             {items.length > 0 ? (
               items.map((it) => (
-                <View key={it.id} style={{ paddingVertical: 8 }}>
+                <View
+                  key={it.id}
+                  style={{ paddingVertical: 8, paddingBottom: 48 }}
+                >
                   <Text
                     style={{
                       color: colors.textDefault,

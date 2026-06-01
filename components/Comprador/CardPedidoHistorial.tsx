@@ -11,6 +11,8 @@ import LineaDivisoria from "../UI/LineaDivisoria";
 interface CardHistorialCompradorProps {
   pedidoId: string | number;
   vendedorNombre: string;
+  rating?: number;
+  ratingCount?: number;
   precio: number;
   fechaSeleccion: string;
   textoPedido: string;
@@ -22,6 +24,8 @@ interface CardHistorialCompradorProps {
 export default function CardHistorialComprador({
   pedidoId,
   vendedorNombre,
+  rating,
+  ratingCount,
   precio,
   fechaSeleccion,
   textoPedido,
@@ -74,23 +78,32 @@ export default function CardHistorialComprador({
           alignItems: "center",
         }}
       >
+        <View style={{ gap: 4 }}>
+          <Text
+            style={{
+              fontFamily: fonts.robotoBold,
+              fontSize: FontSizes.base,
+              color: colors.textDefault,
+            }}
+          >
+            {vendedorNombre}
+          </Text>
+          {/* {rating !== undefined && (
+            <EstrellaUnica
+              rating={rating}
+              ratingCount={ratingCount}
+              size={13}
+            />
+          )} */}
+        </View>
         <Text
           style={{
             fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.base,
+            fontSize: FontSizes.md,
             color: colors.textDefault,
           }}
         >
-          {vendedorNombre}
-        </Text>
-        <Text
-          style={{
-            fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.base,
-            color: colors.textDefault,
-          }}
-        >
-          ${precio.toLocaleString("es-AR")}
+          $ {precio.toLocaleString("es-AR")}
         </Text>
       </View>
 

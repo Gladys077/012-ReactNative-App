@@ -10,7 +10,8 @@ import LineaDivisoria from "../UI/LineaDivisoria";
 interface CardCompradorEnPreparacionProps {
   vendedorNombre: string;
   rating: number;
-  telefono?: number;
+  ratingCount: number;
+  telefono: number;
   direccion: string;
   fechaConfirmacion?: string;
   onVerPedido: () => void;
@@ -19,6 +20,7 @@ interface CardCompradorEnPreparacionProps {
 export default function CardCompradorEnPreparacion({
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   direccion,
   fechaConfirmacion,
@@ -70,16 +72,11 @@ export default function CardCompradorEnPreparacion({
             {vendedorNombre}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: fonts.robotoRegular,
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
+            <EstrellaReputacion
+              rating={rating}
+              size={14}
+              ratingCount={ratingCount}
+            />
           </View>
         </View>
 

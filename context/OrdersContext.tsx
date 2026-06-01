@@ -1,4 +1,9 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useState
+} from "react";
 import type { EstadoSistema, Mensaje, Pedido } from "../types/pedidos";
 
 // ─── Mock ─────────────────────────────────────────────────────────────────────
@@ -15,11 +20,13 @@ const mockPedidos: Pedido[] = [
     compradorRatingCount: 38,
     respuestasRecibidas: 0,
     duracionCronometro: 60,
-    fechaSeleccion: new Date().toISOString(),
+    fechaSeleccion: new Date().toISOString(), //cuando el comprador acepta el presupuesto
   },
   {
     id: "2",
     estadoSistema: "presupuestado",
+    fechaPresupuesto: new Date(Date.now() - 47 * 60 * 60 * 1000).toISOString(), // hace 47hs — casi expira
+
     textoPedido: `Revisión de cañerías del baño. Traer soplete y materiales básicos.`,
     direccionComprador: "Av. SiempreViva 724",
     celularComprador: 12341243,
@@ -33,6 +40,7 @@ const mockPedidos: Pedido[] = [
       {
         id: "v1",
         vendedorNombre: "Plomería Juan",
+        telefono: 12341234,
         alias: "plomerojuan",
         entidad: "Mercado Pago",
         titular: "Juan Pérez",
@@ -45,6 +53,7 @@ const mockPedidos: Pedido[] = [
       {
         id: "v2",
         vendedorNombre: "Tienda Victor",
+        telefono: 12341234,
         alias: "TIENDAVICTOR",
         entidad: "Mercado Pago",
         titular: "Víctor Rodriguez",
@@ -71,6 +80,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v3",
       vendedorNombre: "Minimarket Pedro",
+      telefono: 12341234,
       alias: "SANDWICHERIAEXPRESS",
       entidad: "Mercado Pago",
       titular: "Pedro Pascal",
@@ -170,6 +180,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v5",
       vendedorNombre: "Minimarket Juan",
+      telefono: 123123123123,
       alias: "MINIMARKETJUAN",
       entidad: "Mercado Pago",
       titular: "Juan Pérez",
@@ -199,7 +210,7 @@ const mockPedidos: Pedido[] = [
     textoPedido: "Pedido de verduras varias",
     direccionComprador: "Av. Corrientes 1234",
     celularComprador: 12341243,
-    compradorNombre: "Romina Silva",
+    compradorNombre: "Roberto Silva",
     compradorRating: 3.9,
     compradorRatingCount: 27,
     formaPago: "transferencia",
@@ -230,6 +241,7 @@ const mockPedidos: Pedido[] = [
     respuestaSeleccionada: {
       id: "v5",
       vendedorNombre: "Minimarket Juan",
+      telefono: 12341234,
       alias: "MINIMARKETJUAN",
       entidad: "Mercado Pago",
       titular: "Juan Pérez",

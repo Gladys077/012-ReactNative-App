@@ -23,6 +23,7 @@ interface Props {
 
   nombreNegocio: string;
   rating: number;
+  ratingCount: number;
   precio: number;
   nota?: string;
 
@@ -58,6 +59,7 @@ export default function CardErrorPagoDireccion({
   respuestaId,
   nombreNegocio,
   rating,
+  ratingCount,
   precio,
   nota,
   formaPagoInicial,
@@ -121,6 +123,7 @@ export default function CardErrorPagoDireccion({
       respuestaId={respuestaId}
       vendedorNombre={nombreNegocio}
       rating={rating}
+      ratingCount={ratingCount}
       precio={precio}
       nota={nota}
       // tipoCronometro="pagar"
@@ -204,18 +207,6 @@ export default function CardErrorPagoDireccion({
           onCambiarImporte={setImporteEfectivo}
         />
       )}
-
-      {/* Dirección - sólo permitimos editar la dirección si el vendedor lo marcó como dirección errónea */}
-      {/* <DireccionEntrega
-        direccion={direccionState}
-        editable={hayErrorDireccion && editandoDireccion}
-        onEditarDireccion={() =>
-          hayErrorDireccion && setEditandoDireccion(true)
-        }
-        onCambiarDireccion={setDireccionState}
-        onGuardarDireccion={() => setEditandoDireccion(false)}
-        errorDireccion={errorDireccion}
-      /> */}
 
       {/* Btns: Rechazar - Aceptar */}
       <View

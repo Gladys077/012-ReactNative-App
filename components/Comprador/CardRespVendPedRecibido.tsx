@@ -11,7 +11,8 @@ import LineaDivisoria from "../UI/LineaDivisoria";
 interface CardRespVendPedRecibidoProps {
   vendedorNombre: string;
   rating: number;
-  telefono?: string;
+  ratingCount: number;
+  telefono: number;
   onVerPedido: () => void;
   onEnviarCalificacion: (data: {
     estrellas: number;
@@ -22,6 +23,7 @@ interface CardRespVendPedRecibidoProps {
 export default function CardRespVendPedRecibido({
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   onVerPedido,
   onEnviarCalificacion,
@@ -63,16 +65,11 @@ export default function CardRespVendPedRecibido({
             {vendedorNombre}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: fonts.robotoRegular,
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
+            <EstrellaReputacion
+              rating={rating}
+              size={14}
+              ratingCount={ratingCount}
+            />
           </View>
         </View>
         <VerBottomSheet onPress={onVerPedido} variant="buyer" />

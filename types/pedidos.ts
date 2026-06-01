@@ -2,6 +2,7 @@
 export type EstadoSistema =
   | "nuevo"
   | "presupuestado"
+  | "expirado"
   | "aceptado_efectivo"
   | "aceptado_transferencia"
   | "pago_enviado"
@@ -30,6 +31,7 @@ export type EstadoComprador =
 export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   nuevo: "En proceso",
   presupuestado: "Ver respuestas",
+  expirado: "Cancelado",
   aceptado_efectivo: "En preparación",
   aceptado_transferencia: "Pago y dirección",
   pago_enviado: "Pago en revisión",
@@ -47,6 +49,7 @@ export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
 export type EstadoVendedor =
   | "Nuevo pedido"
   | "Presupuesto enviado"
+  | "Expirado"
   | "Esperando pago"
   | "Pago observado"
   | "Por verificar"
@@ -58,9 +61,11 @@ export type EstadoVendedor =
   | "Cancelado"
   | "Completado";
 
+// esta etiqueta verá el vendedor (text para mostrar en la UI)
 export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
   nuevo: "Nuevo pedido",
   presupuestado: "Presupuesto enviado",
+  expirado: "Expirado", // se verá en el historial con etiq. expirado -para cuando el comprando no elige ningún vendedor ni cancela el pedido
   aceptado_efectivo: "En preparación",
   aceptado_transferencia: "Esperando pago",
   pago_enviado: "Por verificar",
@@ -75,8 +80,9 @@ export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
 };
 
 // ─── Tabs del menú vendedor ───────────────────────────────────────────────────
-export type TabVendedor = "pedidos" | "pendientes" | "entregados";
+export type TabVendedor = "pedidos" | "pendientes" | "entregados" | "historial";
 
+// muestro en qué pestaña del menúVendedor aparece
 export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
   nuevo: "pedidos",
   presupuestado: "pedidos",
@@ -88,9 +94,11 @@ export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
   listo_para_enviar: "pendientes",
   en_camino: "pendientes",
   entregado_pendiente_calif: "entregados",
-  no_concretado: "entregados",
-  completado: "entregados", // permanece en historial
-  cancelado: "entregados", // va al historial
+  // ─ Irán directo al historial
+  completado: "historial",
+  cancelado: "historial",
+  expirado: "historial",
+  no_concretado: "historial",
 };
 
 // ─── Respuesta / Presupuesto del vendedor ─────────────────────────────────────
@@ -102,7 +110,7 @@ export interface Respuesta {
   titular?: string;
   rating: number;
   ratingCount?: number;
-  telefono?: number;
+  telefono: number;
   precio: number;
   nota?: string;
   duracionCronometro?: number;
@@ -135,6 +143,7 @@ export interface Pedido {
   rubros?: string[];
 
   fechaSeleccion?: string; // cuando el comprador acepta un presupuesto
+  fechaPresupuesto?: string; // ISO timestamp — cuando el vendedor envía el presupuesto
 
   // Datos del comprador (los ve el vendedor)
   compradorNombre?: string;

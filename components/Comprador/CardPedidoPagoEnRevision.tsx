@@ -17,6 +17,7 @@ interface CardPedidoPagoEnRevisionProps {
   precio: number;
   nombreNegocio: string;
   rating: number;
+  ratingCount: number;
   alias: string;
   entidad: string;
   titular: string;

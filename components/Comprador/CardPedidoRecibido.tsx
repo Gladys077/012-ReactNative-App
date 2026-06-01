@@ -11,7 +11,8 @@ interface CardPedidoRecibidoProps {
   fechaSeleccion?: string;
   vendedorNombre: string;
   rating: number;
-  telefono?: number;
+  ratingCount: number;
+  telefono: number;
   onVerPedido: (id: string | number) => void;
   onEnviarCalificacion: (data: {
     estrellas: number;
@@ -24,6 +25,7 @@ export default function CardPedidoRecibido({
   fechaSeleccion,
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   onVerPedido,
   onEnviarCalificacion,
@@ -56,6 +58,7 @@ export default function CardPedidoRecibido({
           <CardRespVendPedRecibido
             vendedorNombre={vendedorNombre}
             rating={rating}
+            ratingCount={ratingCount}
             telefono={telefono}
             onVerPedido={() => onVerPedido(pedidoId)}
             onEnviarCalificacion={onEnviarCalificacion}

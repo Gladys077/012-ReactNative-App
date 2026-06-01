@@ -15,6 +15,7 @@ interface CardPedidoAResolverProps {
 
   nombreNegocio: string;
   rating: number;
+  ratingCount: number;
   precio: number;
   alias: string;
   entidad: string;
@@ -48,6 +49,7 @@ export default function CardPedidoAResolver({
   precio,
   nombreNegocio,
   rating,
+  ratingCount,
   alias,
   entidad,
   titular,
@@ -83,6 +85,7 @@ export default function CardPedidoAResolver({
             respuestaId={respuestaId}
             nombreNegocio={nombreNegocio}
             rating={rating}
+            ratingCount={ratingCount}
             precio={precio}
             nota={nota}
             alias={alias}

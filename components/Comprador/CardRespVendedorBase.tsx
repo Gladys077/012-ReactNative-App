@@ -10,6 +10,7 @@ interface CardRespVendedorBaseProps {
   respuestaId: string | number;
   vendedorNombre: string;
   rating: number;
+  ratingCount: number;
   precio: number;
   nota?: string;
   tipoCronometro?: "espera" | "elegir" | "pagar";
@@ -29,6 +30,7 @@ export default function CardRespVendedorBase({
   respuestaId,
   vendedorNombre,
   rating,
+  ratingCount,
   precio,
   nota,
   duracionCronometro,
@@ -78,16 +80,11 @@ export default function CardRespVendedorBase({
           </Text>
 
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <EstrellaReputacion rating={rating} size={14} />
-            <Text
-              style={{
-                fontFamily: fonts.robotoRegular,
-                fontSize: FontSizes.sm,
-                color: colors.textMuted,
-              }}
-            >
-              ({rating.toFixed(1)})
-            </Text>
+            <EstrellaReputacion
+              rating={rating}
+              size={14}
+              ratingCount={ratingCount}
+            />
           </View>
         </View>
 

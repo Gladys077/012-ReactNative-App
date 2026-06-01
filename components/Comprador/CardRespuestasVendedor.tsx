@@ -1,7 +1,5 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-// import useModal from "@/hooks/useModal";
-import React from "react";
 import { Alert, Text, Vibration, View } from "react-native";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import Button from "../UI/Button/Button";
@@ -11,6 +9,7 @@ interface CardRespuestaVendedorProps {
   respuestaId: string | number;
   vendedorNombre: string;
   rating: number;
+  ratingCount?: number;
   precio: number;
   nota?: string;
   duracionCronometro: number;
@@ -18,13 +17,13 @@ interface CardRespuestaVendedorProps {
   onRechazar: (respuestaId: string | number) => void;
   onVerNota?: (nota: string) => void;
   onFinishCronometro?: (respuestaId: string | number) => void;
-  // onCancelarPedido?: () => void;
 }
 
 export default function CardRespuestaVendedor({
   respuestaId,
   vendedorNombre,
   rating,
+  ratingCount,
   precio,
   nota,
   duracionCronometro,
@@ -38,13 +37,6 @@ export default function CardRespuestaVendedor({
 
   const handleConfirmarRechazo = () => {
     Vibration.vibrate(300);
-    //  openModal("confirm", {
-    //     title: "Rechazar presupuesto",
-    //     message: "¿Seguro que querés rechazar este presupuesto? No podrás recuperarlo luego.",
-    //     cancelText: "Volver",
-    //     confirmText: "Sí, rechazar",
-    //     onConfirm: () => onRechazar(respuestaId),
-    //   });
     Alert.alert(
       "Rechazar presupuesto",
       "Si confirmas, este presupuesto se eliminará y no podrás recuperarlo.",
@@ -65,6 +57,7 @@ export default function CardRespuestaVendedor({
       respuestaId={respuestaId}
       vendedorNombre={vendedorNombre}
       rating={rating}
+      ratingCount={ratingCount}
       precio={precio}
       nota={nota}
       duracionCronometro={duracionCronometro}

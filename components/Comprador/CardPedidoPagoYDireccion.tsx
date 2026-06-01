@@ -16,6 +16,7 @@ interface CardPedidoPagoYDireccionProps {
   precio: number;
   nombreNegocio: string;
   rating: number;
+  ratingCount: number;
   alias: string;
   entidad: string;
   titular: string;
@@ -49,6 +50,7 @@ export default function CardPedidoPagoYDireccion({
   precio,
   nombreNegocio,
   rating,
+  ratingCount,
   alias,
   entidad,
   titular,
@@ -93,10 +95,11 @@ export default function CardPedidoPagoYDireccion({
             respuestaId={respuestaId}
             nombreNegocio={nombreNegocio}
             rating={rating}
+            ratingCount={ratingCount}
             precio={precio}
             nota={nota}
-            duracionCronometro={duracionCronometro}
-            timestampRespuesta={timestampRespuesta}
+            // duracionCronometro={duracionCronometro}
+            // timestampRespuesta={timestampRespuesta}
             alias={alias}
             entidad={entidad}
             titular={titular}
@@ -106,9 +109,9 @@ export default function CardPedidoPagoYDireccion({
             onVerNota={(nota) => {
               Alert.alert("Nota del vendedor", nota);
             }}
-            onFinishCronometro={(pedidoId, respuestaId) => {
-              console.log("Tiempo terminado", pedidoId, respuestaId);
-            }}
+            // onFinishCronometro={(pedidoId, respuestaId) => {
+            //   console.log("Tiempo terminado", pedidoId, respuestaId);
+            // }}
             onCancelarPedido={() => onCancelarPedido?.()}
             onEnviarDatos={onEnviarDatos}
           />

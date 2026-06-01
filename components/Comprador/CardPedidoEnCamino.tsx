@@ -12,7 +12,8 @@ interface CardPedidoEnCaminoProps {
   fechaSeleccion?: string;
   vendedorNombre: string;
   rating: number;
-  telefono?: number;
+  ratingCount: number;
+  telefono: number;
   direccion: string;
   onVerPedido: (id: string | number) => void;
   /** La page es quien abre el sheet — la card solo avisa */
@@ -24,6 +25,7 @@ export default function CardPedidoEnCamino({
   fechaSeleccion,
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   direccion,
   onVerPedido,
@@ -57,6 +59,7 @@ export default function CardPedidoEnCamino({
           <CardRespVendPedEnCamino
             vendedorNombre={vendedorNombre}
             rating={rating}
+            ratingCount={ratingCount}
             telefono={telefono}
             direccion={direccion}
             onVerPedido={() => onVerPedido(pedidoId)}

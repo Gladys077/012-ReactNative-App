@@ -33,6 +33,8 @@ export default function HistorialComprador() {
                 key={item.id}
                 pedidoId={item.id}
                 vendedorNombre={r.vendedorNombre}
+                rating={item.respuestaSeleccionada?.rating}
+                ratingCount={item.respuestaSeleccionada?.ratingCount}
                 precio={r.precio}
                 fechaSeleccion={item.fechaSeleccion ?? ""}
                 textoPedido={item.textoPedido}

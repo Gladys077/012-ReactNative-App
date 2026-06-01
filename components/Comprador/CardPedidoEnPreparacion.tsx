@@ -13,7 +13,8 @@ interface CardPedidoEnPreparacionProps {
   fechaConfirmacion?: string;
   vendedorNombre: string;
   rating: number;
-  telefono?: number;
+  ratingCount: number;
+  telefono: number;
   direccion: string;
   onVerPedido: (id: string | number) => void;
   onAbrirAyuda?: () => void;
@@ -25,6 +26,7 @@ export default function CardPedidoEnPreparacion({
   fechaConfirmacion,
   vendedorNombre,
   rating,
+  ratingCount,
   telefono,
   direccion,
   onVerPedido,
@@ -58,6 +60,7 @@ export default function CardPedidoEnPreparacion({
           <CardRespVendPedEnPrep
             vendedorNombre={vendedorNombre}
             rating={rating}
+            ratingCount={ratingCount}
             telefono={telefono}
             direccion={direccion}
             fechaConfirmacion={fechaConfirmacion}

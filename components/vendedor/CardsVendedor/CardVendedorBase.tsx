@@ -17,13 +17,13 @@ interface CardVendedorBaseProps {
   estado: EtiqEstadoType;
   compradorNombre?: string;
   compradorRating?: number;
+  compradorRatingCount?: number;
   precio?: number;
   children?: React.ReactNode;
   contenidoExpandible?: React.ReactNode;
   style?: ViewStyle;
   elevation?: number;
   mostrarTiempoAceptacion?: boolean;
-  compradorRatingCount?: number;
 }
 
 export default function CardVendedorBase({
@@ -31,13 +31,13 @@ export default function CardVendedorBase({
   estado,
   compradorNombre,
   compradorRating,
+  compradorRatingCount,
   precio,
   children,
   contenidoExpandible,
   style,
   elevation,
   mostrarTiempoAceptacion = true,
-  compradorRatingCount,
 }: CardVendedorBaseProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);

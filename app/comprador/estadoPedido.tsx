@@ -182,6 +182,7 @@ const EstadoPedido = () => {
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     alias={r.alias ?? ""}
                     entidad={r.entidad ?? ""}
                     titular={r.titular ?? ""}
@@ -212,6 +213,7 @@ const EstadoPedido = () => {
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     alias={r.alias ?? ""}
                     entidad={r.entidad ?? ""}
                     titular={r.titular ?? ""}
@@ -246,6 +248,7 @@ const EstadoPedido = () => {
                     fechaSeleccion={pedido.fechaSeleccion}
                     vendedorNombre={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     telefono={r.telefono}
                     direccion={pedido.direccionComprador}
                     onVerPedido={handleVerPedido}
@@ -267,6 +270,7 @@ const EstadoPedido = () => {
                     precio={r.precio}
                     nombreNegocio={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     alias={r.alias ?? ""}
                     entidad={r.entidad ?? ""}
                     titular={r.titular ?? ""}
@@ -298,6 +302,7 @@ const EstadoPedido = () => {
                     fechaSeleccion={pedido.fechaSeleccion}
                     vendedorNombre={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     telefono={r.telefono}
                     direccion={pedido.direccionComprador}
                     onVerPedido={handleVerPedido}
@@ -317,6 +322,7 @@ const EstadoPedido = () => {
                     fechaSeleccion={pedido.fechaSeleccion}
                     vendedorNombre={r.vendedorNombre}
                     rating={r.rating}
+                    ratingCount={r.ratingCount ?? 0}
                     telefono={r.telefono}
                     onVerPedido={handleVerPedido}
                     onEnviarCalificacion={(data) => {
