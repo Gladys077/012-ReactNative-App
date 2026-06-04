@@ -1,5 +1,6 @@
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -22,6 +23,7 @@ export default function RegistroScreen() {
   const router = useRouter();
 
   const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [cellular, setCellular] = useState("");
@@ -36,6 +38,7 @@ export default function RegistroScreen() {
 
   const [errors, setErrors] = useState({
     name: "",
+    userName: "",
     email: "",
     address: "",
     cellular: "",
@@ -49,6 +52,7 @@ export default function RegistroScreen() {
   const handleRegister = () => {
     const newErrors = {
       name: "",
+      userName: "",
       email: "",
       address: "",
       cellular: "",
@@ -62,6 +66,11 @@ export default function RegistroScreen() {
 
     if (!name.trim()) {
       newErrors.name = "Por favor ingresa tu nombre y apellido";
+      hasError = true;
+    }
+
+    if (!userName.trim()) {
+      newErrors.userName = "Por favor elige un nombre de usuario";
       hasError = true;
     }
 
@@ -120,6 +129,24 @@ export default function RegistroScreen() {
     setShowModal(true);
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      AsyncStorage.removeItem("selectedRubros_seller");
+      setName("");
+      setUserName("");
+      setEmail("");
+      setAddress("");
+      setCellular("");
+      setPassword("");
+      setConfirmPassword("");
+      setRubros([]);
+      setIsSeller(false);
+      setAlias("");
+      setBanco("");
+      setTitular("");
+    }, []),
+  );
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardAvoidingView
@@ -149,6 +176,16 @@ export default function RegistroScreen() {
                   value={name}
                   onChangeText={setName}
                   error={errors.name}
+                />
+              </View>
+
+              <View style={{ marginBottom: Spacing.md }}>
+                <InputField
+                  label="Usuario"
+                  placeholder="Crea tu nombre de usuario"
+                  value={userName}
+                  onChangeText={setUserName}
+                  error={errors.userName}
                 />
               </View>
 
@@ -234,7 +271,7 @@ export default function RegistroScreen() {
                   }}
                 />
                 <Text style={{ color: colors.textDefault, marginLeft: 8 }}>
-                  Deseo vender u ofrecer servicios
+                  Deseo vender
                 </Text>
               </Pressable>
 
@@ -322,10 +359,10 @@ export default function RegistroScreen() {
         onClose={() => setShowModal(false)}
         onGoToLogin={async () => {
           setShowModal(false);
-          await router.push("/(auth)/login");
+          router.replace("./(auth)/login");
         }}
         onResend={async () => {
-          console.log("Correo reenviado");
+          console.log("Correo reenviado"); //TODO: VER CON LIO
           return;
         }}
       />

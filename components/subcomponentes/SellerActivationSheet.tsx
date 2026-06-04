@@ -115,8 +115,8 @@ export default function SellerActivationSheet({
               lineHeight: 22,
             }}
           >
-            Elegí tus rubros y configurá cómo querés cobrar para empezar a
-            recibir pedidos.
+            Completa tu perfil de vendedor: elige tu/s rubro/s y agrega tus
+            datos bancarios para recibir pagos por transferencia.
           </Text>
         </View>
 

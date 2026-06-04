@@ -79,6 +79,7 @@ const RootLayout = () => {
   });
 
   useEffect(() => {
+    // AsyncStorage.clear(); // esto es sólo temporal, sirve para limpiar los rubros agregados
     if (error) SplashScreen.hideAsync();
     if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);

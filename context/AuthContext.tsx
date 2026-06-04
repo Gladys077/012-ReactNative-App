@@ -29,6 +29,7 @@ interface AuthState {
 
 interface User {
   name: string;
+  userName: string;
   email: string;
   role: "buyer" | "seller"; //para ser usado por los headers/footers
 
@@ -41,13 +42,15 @@ interface User {
 // ======== MOCK USERS (para simular login) ========
 const mockUsers: (User & { password: string })[] = [
   {
-    name: "Usuario1",
+    name: "Juan Pérez",
+    userName: "Usuario1",
     email: "comprador@test.com",
     password: "123456",
     role: "buyer",
   },
   {
-    name: "Usuario2",
+    name: "Ana Gómez",
+    userName: "Usuario2",
     email: "vendedor@test.com",
     password: "123456",
     role: "seller",
@@ -97,11 +100,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const loginWithCredentials = (
-    name: string,
+    userName: string,
     password: string,
   ): User | null => {
     const found = mockUsers.find(
-      (u) => u.name === name && u.password === password,
+      (u) => u.userName === userName && u.password === password,
     );
     if (!found) return null;
 
