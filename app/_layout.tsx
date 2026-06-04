@@ -12,6 +12,7 @@ import * as SystemUI from "expo-system-ui";
 
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ModalComponent from "../components/UI/ModalComponent";
+import { ToastProvider } from "../context/ToastContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,22 +46,24 @@ const AppContent = () => {
       <GestureHandlerRootView
         style={{ flex: 1, backgroundColor: colors.background }}
       >
-        <ModalProvider>
-          <AuthProvider>
-            <OrdersProvider>
-              <SafeAreaView
-                style={{
-                  flex: 1,
-                  backgroundColor: colors.background,
-                }}
-              >
-                <ThemedStatusBar />
-                <ModalComponent />
-                <Slot />
-              </SafeAreaView>
-            </OrdersProvider>
-          </AuthProvider>
-        </ModalProvider>
+        <ToastProvider>
+          <ModalProvider>
+            <AuthProvider>
+              <OrdersProvider>
+                <SafeAreaView
+                  style={{
+                    flex: 1,
+                    backgroundColor: colors.background,
+                  }}
+                >
+                  <ThemedStatusBar />
+                  <ModalComponent />
+                  <Slot />
+                </SafeAreaView>
+              </OrdersProvider>
+            </AuthProvider>
+          </ModalProvider>
+        </ToastProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

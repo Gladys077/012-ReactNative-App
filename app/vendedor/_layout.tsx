@@ -5,12 +5,12 @@ import { Slot, useSegments } from "expo-router";
 import { View } from "react-native";
 import Footer from "../../components/UI/Footer";
 import Header from "../../components/UI/Header";
+import { useAuthContext } from "../../context/AuthContext";
 import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedidoContext";
-import { ToastProvider } from "../../context/ToastContext";
 
 export default function VendedorLayout() {
   const { colors } = useTheme();
-  // const { user } = useAuthContext();
+  const { user } = useAuthContext();
   const segments = useSegments();
   const currentPage = segments[segments.length - 1] as string;
 
@@ -19,8 +19,8 @@ export default function VendedorLayout() {
   const getTitleByPage = () => {
     switch (currentPage) {
       case "homeVendedor":
-        return "Mi Negocio";
-      // return user?.commerceName || "Mi negocio";
+        // return "Mi Negocio";
+        return user?.commerceName || "Mi negocio";
       case "historialVendedor":
         return "Historial de ventas";
       case "creditos":
@@ -35,31 +35,30 @@ export default function VendedorLayout() {
   };
 
   return (
-    <ToastProvider>
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
-        {/* Header recibe showBackArrow solo si NO estamos en la home */}
-        <Header
-          title={getTitleByPage()}
-          showBackArrow={!isHome}
-          variant="seller"
-        />
-        <BottomSheetVerPedidoProvider>
-          <View
-            style={{
-              flex: 1,
-              paddingHorizontal: Spacing.xl,
-              paddingTop: Spacing.xs,
-              paddingBottom: Spacing.lg,
-              maxWidth: 500,
-              width: "100%",
-              alignSelf: "center",
-            }}
-          >
-            <Slot />
-          </View>
-        </BottomSheetVerPedidoProvider>
-        <Footer />
-      </View>
-    </ToastProvider>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      {/* Header recibe showBackArrow solo si NO estamos en la home */}
+      <Header
+        title={getTitleByPage()}
+        showBackArrow={!isHome}
+        variant="seller"
+        credits={user?.credits}
+      />
+      <BottomSheetVerPedidoProvider>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: Spacing.xl,
+            paddingTop: Spacing.xs,
+            paddingBottom: Spacing.lg,
+            maxWidth: 500,
+            width: "100%",
+            alignSelf: "center",
+          }}
+        >
+          <Slot />
+        </View>
+      </BottomSheetVerPedidoProvider>
+      <Footer />
+    </View>
   );
 }

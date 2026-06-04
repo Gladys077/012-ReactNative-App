@@ -5,7 +5,6 @@ import { View } from "react-native";
 import Footer from "../../components/UI/Footer";
 import Header from "../../components/UI/Header";
 import { BottomSheetVerPedidoProvider } from "../../context/BottomSheetVerPedidoContext";
-import { ToastProvider } from "../../context/ToastContext";
 
 export default function CompradorLayout() {
   const { colors } = useTheme();
@@ -31,30 +30,28 @@ export default function CompradorLayout() {
   const showBackArrow = currentPage !== "nuevoPedido";
 
   return (
-    <ToastProvider>
-      <View style={{ flex: 1, backgroundColor: colors.background }}>
-        <Header
-          title={getTitleByPage()}
-          showBackArrow={showBackArrow}
-          variant="buyer"
-        />
-        <BottomSheetVerPedidoProvider>
-          <View
-            style={{
-              flex: 1,
-              paddingHorizontal: Spacing.xl,
-              paddingTop: Spacing.xs,
-              paddingBottom: Spacing.lg,
-              maxWidth: 500,
-              width: "100%",
-              alignSelf: "center",
-            }}
-          >
-            <Slot />
-          </View>
-        </BottomSheetVerPedidoProvider>
-        <Footer />
-      </View>
-    </ToastProvider>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
+      <Header
+        title={getTitleByPage()}
+        showBackArrow={showBackArrow}
+        variant="buyer"
+      />
+      <BottomSheetVerPedidoProvider>
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: Spacing.xl,
+            paddingTop: Spacing.xs,
+            paddingBottom: Spacing.lg,
+            maxWidth: 500,
+            width: "100%",
+            alignSelf: "center",
+          }}
+        >
+          <Slot />
+        </View>
+      </BottomSheetVerPedidoProvider>
+      <Footer />
+    </View>
   );
 }

@@ -70,20 +70,10 @@ export default function Header({
             /* Iconos de rol (solo si no hay flecha) */
             <>
               {variant === "seller" && (
-                <TiendaIcon
-                  width={24}
-                  height={24}
-                  fill={colors.brandSeller}
-                  // stroke={colors.textDefault}
-                />
+                <TiendaIcon width={24} height={24} fill={colors.brandSeller} />
               )}
               {variant === "buyer" && (
-                <Carrito
-                  width={24}
-                  height={24}
-                  fill={colors.brandBuyer}
-                  // stroke={colors.textDefault}
-                />
+                <Carrito width={24} height={24} fill={colors.brandBuyer} />
               )}
             </>
           )}

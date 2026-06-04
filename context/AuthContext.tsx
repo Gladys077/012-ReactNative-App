@@ -24,6 +24,7 @@ interface AuthState {
   logout: () => void;
   switchRole: (newRole: "buyer" | "seller") => void;
   updateCredits: (amount: number) => void; // Para actualizar el saldo desde cualquier pantalla
+  loginWithCredentials: (email: string, password: string) => User | null;
 }
 
 interface User {
@@ -37,6 +38,25 @@ interface User {
   commerceName?: string; // para seller
 }
 
+// ======== MOCK USERS (para simular login) ========
+const mockUsers: (User & { password: string })[] = [
+  {
+    name: "Usuario1",
+    email: "comprador@test.com",
+    password: "123456",
+    role: "buyer",
+  },
+  {
+    name: "Usuario2",
+    email: "vendedor@test.com",
+    password: "123456",
+    role: "seller",
+    credits: 1500,
+    commerceName: "El Rincón del Sabor",
+    sellerProfileCompleted: true,
+  },
+];
+
 export const AuthContext = createContext({} as AuthState); //aquí guardo toda la info como si fuera un estado global
 
 export const useAuthContext = () => useContext(AuthContext); //Esto crea un atajo llamado useAuthContext, que permite acceder al contenido del contexto, desde cualquier parte de la app.
@@ -44,16 +64,8 @@ export const useAuthContext = () => useContext(AuthContext); //Esto crea un ataj
 //Esto crea un "repartidor/proveedor" del contexto. children son todos los componentes que van dentro del AuthProvider. El value={{}} es lo que compartiré (va a tener cosas como user, login, logout, etc).
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [status, setStatus] = useState<AuthStatus>(AuthStatus.checking);
-  const [user, setUser] = useState<User | undefined>({
-    name: "Usuario Test",
-    email: "test@test.com",
-    role: "seller", // o "buyer"
+  const [user, setUser] = useState<User | undefined>(undefined);
 
-    sellerProfileCompleted: true, // TODO: Mock hasta que se haga el backend (para saber si el usuario se registró como vendedor)
-
-    credits: 150,
-    commerceName: "Mi Comercio",
-  });
   const [token, setToken] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -75,12 +87,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setStatus(AuthStatus.unauthenticated);
   };
 
-  // Nuevo: switchRole
-  // const switchRole = (newRole: "buyer" | "seller") => {
-  //   if (!user) return;
-  //   setUser({ ...user, role: newRole });
-  // };
-
   const switchRole = useCallback((newRole: "buyer" | "seller") => {
     setUser((prev) => (prev ? { ...prev, role: newRole } : prev));
   }, []);
@@ -88,6 +94,20 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const updateCredits = (amount: number) => {
     if (!user) return;
     setUser({ ...user, credits: (user.credits ?? 0) + amount });
+  };
+
+  const loginWithCredentials = (
+    name: string,
+    password: string,
+  ): User | null => {
+    const found = mockUsers.find(
+      (u) => u.name === name && u.password === password,
+    );
+    if (!found) return null;
+
+    const { password: _, ...userData } = found;
+    login(userData, "mock-token-123");
+    return userData;
   };
 
   return (
@@ -102,6 +122,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         logout,
         switchRole,
         updateCredits,
+        loginWithCredentials,
       }}
     >
       {children}

@@ -5,8 +5,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../../components/UI/Button/Button";
 import ButtonGoogle from "../../components/UI/Button/ButtonGoogle";
 import { InputField } from "../../components/UI/InputField";
+import { Routes } from "../../constants/Routes";
 import { Spacing } from "../../constants/Tokens";
+import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
+import { useToast } from "../../context/ToastContext";
 
 export default function LoginScreen() {
   const { colors, fonts } = useTheme();
@@ -15,9 +18,23 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const { showToast } = useToast();
+
+  const { loginWithCredentials } = useAuthContext();
+
   const handleLogin = () => {
-    console.log("Iniciar sesión", { email, password });
-    router.push("/elegirRol"); // debe ir a elegir-rol
+    const user = loginWithCredentials(email, password);
+
+    if (!user) {
+      showToast("CREDENCIALES INCORRECTAS", "error");
+      return;
+    }
+
+    if (user.role === "seller") {
+      router.replace(Routes.vendedor.home);
+    } else {
+      router.replace(Routes.comprador.nuevoPedido);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -34,7 +51,6 @@ export default function LoginScreen() {
       style={{
         flex: 1,
         backgroundColor: colors.background,
-        // paddingTop: Spacing.lg,
       }}
     >
       <ScrollView
@@ -46,7 +62,6 @@ export default function LoginScreen() {
             flex: 1,
             paddingHorizontal: Spacing.xl,
             marginTop: Spacing.lg,
-            // paddingTop: Spacing.lg,
             maxWidth: 500,
             width: "100%",
             alignSelf: "center",
@@ -107,8 +122,8 @@ export default function LoginScreen() {
           <View style={{ marginBottom: Spacing.xl }}>
             <View style={{ marginBottom: Spacing.md }}>
               <InputField
-                label="Correo electrónico"
-                placeholder="nombre@ejemplo.com"
+                label="Usuario o email"
+                placeholder="Usuario o nombre@ejemplo.com"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
