@@ -14,12 +14,12 @@ import CardPedidoPagoEnRevision from "../../components/Comprador/CardPedidoPagoE
 import CardPedidoPagoYDireccion from "../../components/Comprador/CardPedidoPagoYDireccion";
 import CardPedidoRecibido from "../../components/Comprador/CardPedidoRecibido";
 import BottomSheetIssueSelector from "../../components/subcomponentes/BottomSheetIssueSelector";
+import UndoToast from "../../components/subcomponentes/UndoToast";
 import { useOrders } from "../../context/OrdersContext";
 import { useToast } from "../../context/ToastContext";
+import { useUndoToast } from "../../hooks/useUndoToast";
 import { estadoSistemaAComprador } from "../../types/pedidos";
 
-// ─── Opciones de ayuda (buyer) ────────────────────────────────────────────────
-// "Otro" se agrega automáticamente
 const OPCIONES_AYUDA_BUYER = [
   "El pedido no llegó",
   "El pedido llegó incompleto",
@@ -31,32 +31,34 @@ const EstadoPedido = () => {
   const { colors } = useTheme();
   const { isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido } =
     useBottomSheetVerPedido();
-  const { pedidos, updateEstado, updatePedido, moverAHistorialComprador } =
-    useOrders();
-
-  // ─── Estado del sheet de ayuda ────────────────────────────────────────────
+  const {
+    pedidos,
+    updateEstado,
+    updatePedido,
+    moverAHistorialComprador,
+    removePedido,
+  } = useOrders();
+  const { toast, mostrar, cancelar, cerrar } = useUndoToast();
+  const [pendienteId, setPendienteId] = useState<string | number | null>(null);
   const [ayudaVisible, setAyudaVisible] = useState(false);
+  const { showToast } = useToast();
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         closeBottomSheetVerPedido();
-        setAyudaVisible(false); // también cierro ayuda al salir de la screen
+        setAyudaVisible(false);
       };
     }, [closeBottomSheetVerPedido]),
   );
 
-  // ─── Handlers ────────────────────────────────────────────────────────────────
-
   const handleVerPedido = (id: string | number) => {
     const pedido = pedidos.find((p) => p.id === id);
     if (!pedido) return;
-
     if (isVisible) {
       closeBottomSheetVerPedido();
       return;
     }
-
     openBottomSheetVerPedido({
       fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],
@@ -64,7 +66,12 @@ const EstadoPedido = () => {
   };
 
   const handleCancelarPedido = (id: number | string) => {
-    console.log(`Pedido ${id} cancelado`);
+    if (pendienteId !== null) removePedido(pendienteId);
+    setPendienteId(id);
+    mostrar("Pedido cancelado", () => {
+      removePedido(id);
+      setPendienteId(null);
+    });
   };
 
   const handleFinishCronometro = (id: number | string) => {
@@ -120,19 +127,13 @@ const EstadoPedido = () => {
     updatePedido(pedidoId, { expandido: valor });
   };
 
-  const { showToast } = useToast();
-
   const handleAyudaEnviada = (opcion: string, mensaje?: string) => {
-    // TODO: conectar al backend
     console.log("Ayuda enviada:", opcion, mensaje);
     setAyudaVisible(false);
     showToast("Tu reclamo fue enviado.");
   };
 
-  // ─── Render ───────────────────────────────────────────────────────────────────
-
   return (
-    // View raíz: aquí viven el ScrollView Y el sheet, como hermanos
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         style={{ flex: 1 }}
@@ -144,226 +145,229 @@ const EstadoPedido = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        {pedidos.length > 0 ? (
-          pedidos.map((pedido) => {
-            const estadoComprador =
-              estadoSistemaAComprador[pedido.estadoSistema];
+        {pedidos.filter((p) => p.id !== pendienteId).length > 0 ? (
+          pedidos
+            .filter((p) => p.id !== pendienteId)
+            .map((pedido) => {
+              const estadoComprador =
+                estadoSistemaAComprador[pedido.estadoSistema];
 
-            switch (estadoComprador) {
-              case "Ver respuestas":
-                return (
-                  <CardPedidoVerRespuestas
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    cantidadRespuestas={pedido.respuestas?.length || 0}
-                    estado="Ver respuestas"
-                    expandido={pedido.expandido || false}
-                    onToggleExpandir={(valor) =>
-                      toggleExpandido(pedido.id, valor)
-                    }
-                    onVerPedido={handleVerPedido}
-                    onCancelarPedido={() => handleCancelarPedido(pedido.id)}
-                    respuestas={pedido.respuestas}
-                    onAceptarRespuesta={handleAceptarRespuesta}
-                    onRechazarRespuesta={handleRechazarRespuesta}
-                    onVerNota={handleVerNota}
-                    onFinishCronometro={handleFinishCronometroRespuesta}
-                  />
-                );
+              switch (estadoComprador) {
+                case "Ver respuestas":
+                  return (
+                    <CardPedidoVerRespuestas
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      cantidadRespuestas={pedido.respuestas?.length || 0}
+                      estado="Ver respuestas"
+                      expandido={pedido.expandido || false}
+                      onToggleExpandir={(valor) =>
+                        toggleExpandido(pedido.id, valor)
+                      }
+                      onVerPedido={handleVerPedido}
+                      onCancelarPedido={() => handleCancelarPedido(pedido.id)}
+                      respuestas={pedido.respuestas}
+                      onAceptarRespuesta={handleAceptarRespuesta}
+                      onRechazarRespuesta={handleRechazarRespuesta}
+                      onVerNota={handleVerNota}
+                      onFinishCronometro={handleFinishCronometroRespuesta}
+                    />
+                  );
 
-              case "Pago en revisión": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoPagoEnRevision
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    precio={r.precio}
-                    nombreNegocio={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    alias={r.alias ?? ""}
-                    entidad={r.entidad ?? ""}
-                    titular={r.titular ?? ""}
-                    direccion={pedido.direccionComprador}
-                    nota={r.nota}
-                    duracionCronometro={r.duracionCronometro}
-                    onVerPedido={() => handleVerPedido(pedido.id)}
-                    onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={handleFinishCronometro}
-                    respuestaId={""}
-                    timestampRespuesta={0}
-                    tieneProblema={false}
-                    estado={"Pago y dirección"}
-                    onAbrirAyuda={() => setAyudaVisible(true)}
-                  />
-                );
+                case "Pago en revisión": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+                  return (
+                    <CardPedidoPagoEnRevision
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      precio={r.precio}
+                      nombreNegocio={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      alias={r.alias ?? ""}
+                      entidad={r.entidad ?? ""}
+                      titular={r.titular ?? ""}
+                      direccion={pedido.direccionComprador}
+                      nota={r.nota}
+                      duracionCronometro={r.duracionCronometro}
+                      onVerPedido={() => handleVerPedido(pedido.id)}
+                      onEditarDireccion={() => console.log("Editar dirección")}
+                      onFinishCronometro={handleFinishCronometro}
+                      respuestaId={""}
+                      timestampRespuesta={0}
+                      tieneProblema={false}
+                      estado={"Pago y dirección"}
+                      onAbrirAyuda={() => setAyudaVisible(true)}
+                    />
+                  );
+                }
+
+                case "Pago y dirección": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+                  return (
+                    <CardPedidoPagoYDireccion
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      estado="Pago y dirección"
+                      precio={r.precio}
+                      nombreNegocio={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      alias={r.alias ?? ""}
+                      entidad={r.entidad ?? ""}
+                      titular={r.titular ?? ""}
+                      direccion={pedido.direccionComprador}
+                      nota={r.nota}
+                      duracionCronometro={r.duracionCronometro}
+                      onVerPedido={() => handleVerPedido(pedido.id)}
+                      onEditarDireccion={() => console.log("Editar dirección")}
+                      onFinishCronometro={handleFinishCronometro}
+                      respuestaId={""}
+                      timestampRespuesta={0}
+                      onEnviarDatos={(payload) => {
+                        console.log("TODO: enviar al backend", payload);
+                        const siguiente =
+                          payload.formaPago === "efectivo"
+                            ? "aceptado_efectivo"
+                            : "pago_enviado";
+                        updateEstado(pedido.id, siguiente);
+                      }}
+                      onCancelarPedido={() => handleCancelarPedido(pedido.id)}
+                    />
+                  );
+                }
+
+                case "En preparación": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+                  return (
+                    <CardPedidoEnPreparacion
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      vendedorNombre={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      telefono={r.telefono}
+                      direccion={pedido.direccionComprador}
+                      onVerPedido={handleVerPedido}
+                      onAbrirAyuda={() => setAyudaVisible(true)}
+                    />
+                  );
+                }
+
+                case "A resolver": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r || !pedido.formaPago || !pedido.problemaPago)
+                    return null;
+                  return (
+                    <CardPedidoAResolver
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      respuestaId={r.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      precio={r.precio}
+                      nombreNegocio={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      alias={r.alias ?? ""}
+                      entidad={r.entidad ?? ""}
+                      titular={r.titular ?? ""}
+                      direccion={pedido.direccionComprador}
+                      nota={r.nota}
+                      formaPagoInicial={pedido.formaPago}
+                      problemaPago={pedido.problemaPago}
+                      onVerPedido={() => handleVerPedido(pedido.id)}
+                      onVerNota={handleVerNota}
+                      onCancelarPedido={() => handleCancelarPedido(pedido.id)}
+                      onEnviarCorreccion={(data) => {
+                        console.log("TODO: enviar corrección al backend", data);
+                        updatePedido(pedido.id, {
+                          estadoSistema: "pago_enviado",
+                          problemaPago: undefined,
+                        });
+                      }}
+                    />
+                  );
+                }
+
+                case "En camino": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+                  return (
+                    <CardPedidoEnCamino
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      vendedorNombre={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      telefono={r.telefono}
+                      direccion={pedido.direccionComprador}
+                      onVerPedido={handleVerPedido}
+                      onAbrirAyuda={() => setAyudaVisible(true)}
+                    />
+                  );
+                }
+
+                case "Pedido recibido": {
+                  const r = pedido.respuestaSeleccionada;
+                  if (!r) return null;
+                  return (
+                    <CardPedidoRecibido
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      vendedorNombre={r.vendedorNombre}
+                      rating={r.rating}
+                      ratingCount={r.ratingCount ?? 0}
+                      telefono={r.telefono}
+                      onVerPedido={handleVerPedido}
+                      onEnviarCalificacion={(data) => {
+                        updatePedido(pedido.id, {
+                          calificacionVendedor: {
+                            estrellas: data.estrellas,
+                            comentario: data.comentario,
+                          },
+                          estadoSistema: "completado",
+                        });
+                      }}
+                    />
+                  );
+                }
+
+                case "Completado":
+                  return (
+                    <CardPedidoCompletado
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      fechaSeleccion={pedido.fechaSeleccion}
+                      onDesaparecer={() => moverAHistorialComprador(pedido.id)}
+                    />
+                  );
+
+                case "En proceso":
+                default:
+                  return (
+                    <CardPedidoEnProceso
+                      key={pedido.id}
+                      pedidoId={pedido.id}
+                      estado="En proceso"
+                      respuestasRecibidas={pedido.respuestasRecibidas}
+                      duracionCronometro={60}
+                      onVerPedido={() => handleVerPedido(pedido.id)}
+                      onCancelarPedido={() => handleCancelarPedido(pedido.id)}
+                      onFinishCronometro={() =>
+                        handleFinishCronometro(pedido.id)
+                      }
+                    />
+                  );
               }
-
-              case "Pago y dirección": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoPagoYDireccion
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    estado="Pago y dirección"
-                    precio={r.precio}
-                    nombreNegocio={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    alias={r.alias ?? ""}
-                    entidad={r.entidad ?? ""}
-                    titular={r.titular ?? ""}
-                    direccion={pedido.direccionComprador}
-                    nota={r.nota}
-                    duracionCronometro={r.duracionCronometro}
-                    onVerPedido={() => handleVerPedido(pedido.id)}
-                    onEditarDireccion={() => console.log("Editar dirección")}
-                    onFinishCronometro={handleFinishCronometro}
-                    respuestaId={""}
-                    timestampRespuesta={0}
-                    onEnviarDatos={(payload) => {
-                      console.log("TODO: enviar al backend", payload);
-                      const siguiente =
-                        payload.formaPago === "efectivo"
-                          ? "aceptado_efectivo"
-                          : "pago_enviado";
-                      updateEstado(pedido.id, siguiente);
-                    }}
-                    onCancelarPedido={() => handleCancelarPedido(pedido.id)}
-                  />
-                );
-              }
-
-              case "En preparación": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoEnPreparacion
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    vendedorNombre={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    telefono={r.telefono}
-                    direccion={pedido.direccionComprador}
-                    onVerPedido={handleVerPedido}
-                    onAbrirAyuda={() => setAyudaVisible(true)}
-                  />
-                );
-              }
-
-              case "A resolver": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r || !pedido.formaPago || !pedido.problemaPago)
-                  return null;
-                return (
-                  <CardPedidoAResolver
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    respuestaId={r.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    precio={r.precio}
-                    nombreNegocio={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    alias={r.alias ?? ""}
-                    entidad={r.entidad ?? ""}
-                    titular={r.titular ?? ""}
-                    direccion={pedido.direccionComprador}
-                    nota={r.nota}
-                    formaPagoInicial={pedido.formaPago}
-                    problemaPago={pedido.problemaPago}
-                    onVerPedido={() => handleVerPedido(pedido.id)}
-                    onVerNota={handleVerNota}
-                    onCancelarPedido={() => handleCancelarPedido(pedido.id)}
-                    onEnviarCorreccion={(data) => {
-                      console.log("TODO: enviar corrección al backend", data);
-                      updatePedido(pedido.id, {
-                        estadoSistema: "pago_enviado",
-                        problemaPago: undefined,
-                      });
-                    }}
-                  />
-                );
-              }
-
-              case "En camino": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoEnCamino
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    vendedorNombre={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    telefono={r.telefono}
-                    direccion={pedido.direccionComprador}
-                    onVerPedido={handleVerPedido}
-                    // La card solo avisa — el sheet vive fuera del ScrollView
-                    onAbrirAyuda={() => setAyudaVisible(true)}
-                  />
-                );
-              }
-
-              case "Pedido recibido": {
-                const r = pedido.respuestaSeleccionada;
-                if (!r) return null;
-                return (
-                  <CardPedidoRecibido
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    vendedorNombre={r.vendedorNombre}
-                    rating={r.rating}
-                    ratingCount={r.ratingCount ?? 0}
-                    telefono={r.telefono}
-                    onVerPedido={handleVerPedido}
-                    onEnviarCalificacion={(data) => {
-                      updatePedido(pedido.id, {
-                        calificacionVendedor: {
-                          estrellas: data.estrellas,
-                          comentario: data.comentario,
-                        },
-                        estadoSistema: "completado",
-                      });
-                    }}
-                  />
-                );
-              }
-
-              case "Completado":
-                return (
-                  <CardPedidoCompletado
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    fechaSeleccion={pedido.fechaSeleccion}
-                    onDesaparecer={() => moverAHistorialComprador(pedido.id)}
-                  />
-                );
-
-              case "En proceso":
-              default:
-                return (
-                  <CardPedidoEnProceso
-                    key={pedido.id}
-                    pedidoId={pedido.id}
-                    estado="En proceso"
-                    respuestasRecibidas={pedido.respuestasRecibidas}
-                    duracionCronometro={60}
-                    onVerPedido={() => handleVerPedido(pedido.id)}
-                    onCancelarPedido={() => handleCancelarPedido(pedido.id)}
-                    onFinishCronometro={() => handleFinishCronometro(pedido.id)}
-                  />
-                );
-            }
-          })
+            })
         ) : (
           <Text
             style={{
@@ -378,7 +382,6 @@ const EstadoPedido = () => {
         )}
       </ScrollView>
 
-      {/* ── BottomSheetIssueSelector ─── Para reclamos */}
       <BottomSheetIssueSelector
         isVisible={ayudaVisible}
         role="buyer"
@@ -389,6 +392,16 @@ const EstadoPedido = () => {
         }
         onEnviar={handleAyudaEnviada}
         onCerrar={() => setAyudaVisible(false)}
+      />
+
+      <UndoToast
+        visible={toast.visible}
+        mensaje={toast.mensaje}
+        onCancelar={() => {
+          setPendienteId(null);
+          cancelar();
+        }}
+        onCerrar={cerrar}
       />
     </View>
   );

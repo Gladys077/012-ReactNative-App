@@ -1,14 +1,12 @@
 import CardPedidoBase from "@/components/shared/CardPedidoBase";
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
 import { Text, View } from "react-native";
-import { alertaCancelarPedido } from "../../utils/alertas";
 import Cronometro from "../Cronometro/Cronometro";
+import { DeleteButton } from "../subcomponentes/DeleteButton";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
-import LinkFraseIcon from "../subcomponentes/VerBottomSheet";
-import Button from "../UI/Button/Button";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardPedidoEnProcesoProps {
@@ -41,35 +39,35 @@ export default function CardPedidoEnProceso({
         <RespuestasRecibidas cantidad={respuestasRecibidas} />
       )}
 
-      {/* Cronómetro + texto + link */}
+      {/* Cronómetro + texto */}
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignSelf: "center",
           marginTop: 4,
           gap: 16,
           width: "100%",
         }}
       >
-        {/* Cronómetro */}
-        <Cronometro
-          id={`pedido_${pedidoId}`}
-          tipo="espera"
-          duracionInicial={duracionCronometro}
-          onFinish={onFinishCronometro}
-        />
-
-        {/* Bloque derecho: frase + ver pedido */}
         <View
           style={{
             flex: 1,
-            flexDirection: "column",
+            flexDirection: "row",
             justifyContent: "space-between",
+            gap: 16,
           }}
         >
+          <Cronometro
+            id={`pedido_${pedidoId}`}
+            tipo="espera"
+            duracionInicial={duracionCronometro}
+            onFinish={onFinishCronometro}
+          />
+
           <Text
             style={{
+              flex: 1,
               fontFamily: fonts.robotoRegular,
               fontSize: FontSizes.sm,
               color: colors.textDefault,
@@ -79,29 +77,26 @@ export default function CardPedidoEnProceso({
           >
             {frase}
           </Text>
-
-          <LinkFraseIcon onPress={() => onVerPedido?.(pedidoId)} />
         </View>
       </View>
 
       {/* Linea Divisoria */}
       <LineaDivisoria />
 
-      {/* Botón cancelar */}
+      {/* Ver pedido + Botón cancelar */}
       <View
         style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: Spacing.lg,
+          marginBottom: Spacing.sm,
         }}
       >
-        <Button
-          variant="secondary"
-          height="md"
-          width="auto"
-          onPress={() => alertaCancelarPedido(onCancelarPedido)}
-        >
-          Cancelar pedido
-        </Button>
+        <VerBottomSheet icon={null} onPress={() => onVerPedido?.(pedidoId)} />
+
+        {/* Remover card */}
+        <DeleteButton onPress={onCancelarPedido} />
       </View>
     </CardPedidoBase>
   );

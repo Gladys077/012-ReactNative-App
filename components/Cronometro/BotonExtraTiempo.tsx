@@ -17,7 +17,7 @@ export default function BotonExtraTiempo({ tipo }: Props) {
       <Text
         style={{
           fontSize: FontSizes.xs,
-          fontFamily: fonts.robotoBold,
+          fontFamily: fonts.robotoRegular,
           color: colors.textDefault,
         }}
       >

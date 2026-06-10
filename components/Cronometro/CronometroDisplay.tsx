@@ -37,7 +37,7 @@ export default function CronometroDisplay({
           style={{
             color: textoColor,
             fontFamily: fonts.robotoBold,
-            fontSize: FontSizes.xs,
+            fontSize: FontSizes.xl,
             marginBottom: 2,
           }}
         >

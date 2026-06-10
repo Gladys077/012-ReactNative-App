@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useState
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import type { EstadoSistema, Mensaje, Pedido } from "../types/pedidos";
 
 // ─── Mock ─────────────────────────────────────────────────────────────────────
@@ -249,6 +244,45 @@ const mockPedidos: Pedido[] = [
       ratingCount: 88,
       precio: 3200,
     },
+  },
+  {
+    id: "9",
+    estadoSistema: "nuevo",
+    textoPedido: `10 docenas de medialunas\n1 kilo de pan casero integral\n1 Torta de chocolate grande`,
+    direccionComprador: "Av. San Martín 1024",
+    celularComprador: 12341243,
+    compradorNombre: "Sandra Einstein",
+    compradorRating: 4,
+    compradorRatingCount: 30,
+    respuestasRecibidas: 0,
+    duracionCronometro: 60,
+    fechaSeleccion: new Date().toISOString(), //cuando el comprador acepta el presupuesto
+  },
+  {
+    id: "10",
+    estadoSistema: "nuevo",
+    textoPedido: `40 coca-colas de 2.25L\n20 kilos de hielo\n10 bolsas de 1kg de papas fritas\n5 kilos de maní salado`,
+    direccionComprador: "Av. San Martín 1024",
+    celularComprador: 12341243,
+    compradorNombre: "Sonia Enrique",
+    compradorRating: 4,
+    compradorRatingCount: 30,
+    respuestasRecibidas: 0,
+    duracionCronometro: 60,
+    fechaSeleccion: new Date().toISOString(), //cuando el comprador acepta el presupuesto
+  },
+  {
+    id: "11",
+    estadoSistema: "nuevo",
+    textoPedido: `1 kilo de pan casero integral\n1 Torta de chocolate grande`,
+    direccionComprador: "Av. San Martín 1024",
+    celularComprador: 12341243,
+    compradorNombre: "Paola Miguel",
+    compradorRating: 4,
+    compradorRatingCount: 30,
+    respuestasRecibidas: 0,
+    duracionCronometro: 60,
+    fechaSeleccion: new Date().toISOString(), //cuando el comprador acepta el presupuesto
   },
 ];
 

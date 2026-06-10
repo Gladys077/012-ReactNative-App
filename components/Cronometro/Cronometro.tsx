@@ -177,7 +177,7 @@ export default function Cronometro({
                 width: "100%",
                 height: 1,
                 backgroundColor: colors.textMuted,
-                marginVertical: Spacing.sm,
+                marginVertical: Spacing.xs,
               }}
             />
             <BotonExtraTiempo tipo={tipo} />

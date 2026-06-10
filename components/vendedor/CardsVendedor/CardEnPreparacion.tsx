@@ -1,9 +1,9 @@
 import { useOrders } from "@/context/OrdersContext";
 import type { Mensaje } from "@/types/pedidos";
-import React from "react";
-import { Alert } from "react-native";
+import React, { useRef, useState } from "react";
 import { ListoParaEnviarNuevo } from "../../icons";
 import AyudaReportar from "../../subcomponentes/AyudaReportar";
+import UndoToast from "../../subcomponentes/UndoToast";
 import CardPedidoVendedor from "./CardPedidoVendedor";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -47,47 +47,61 @@ export default function CardEnPreparacion({
 }: CardEnPreparacionProps) {
   const { updateEstado } = useOrders();
 
+  const [undoVisible, setUndoVisible] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleListoParaEnviar = () => {
-    Alert.alert(
-      "Listo para enviar",
-      "¿Confirma que el pedido está listo para ser enviado?",
-      [
-        { text: "No, volver", style: "cancel" },
-        {
-          text: "Sí, confirmar",
-          onPress: () => updateEstado(pedidoId, "listo_para_enviar"),
-        },
-      ],
-    );
+    setUndoVisible(true);
+    timeoutRef.current = setTimeout(() => {
+      updateEstado(pedidoId, "listo_para_enviar");
+      setUndoVisible(false);
+    }, 5000);
+  };
+
+  const handleCancelar = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setUndoVisible(false);
   };
 
   return (
-    <CardPedidoVendedor
-      pedidoId={pedidoId}
-      fechaSeleccion={fechaSeleccion}
-      compradorNombre={compradorNombre}
-      compradorRating={compradorRating}
-      compradorRatingCount={compradorRatingCount}
-      textoPedido={textoPedido}
-      nota={nota}
-      precio={precio}
-      mensajes={mensajes}
-      direccionComprador={direccionComprador}
-      celularComprador={celularComprador}
-      onVerPedido={onVerPedido}
-      onVerNota={onVerNota}
-      estado={ESTADO}
-      btnPrincipalLabel="Listo para enviar"
-      btnPrincipalIcon={ListoParaEnviarNuevo}
-      btnPrincipalIconSize={32}
-      onPressBtnPrincipal={handleListoParaEnviar}
-      contenidoExtra={
-        <AyudaReportar
-          role="seller"
-          label="Reportar un problema"
-          onPress={() => onAbrirIssue?.()}
-        />
-      }
-    />
+    <>
+      <CardPedidoVendedor
+        pedidoId={pedidoId}
+        fechaSeleccion={fechaSeleccion}
+        compradorNombre={compradorNombre}
+        compradorRating={compradorRating}
+        compradorRatingCount={compradorRatingCount}
+        textoPedido={textoPedido}
+        nota={nota}
+        precio={precio}
+        mensajes={mensajes}
+        direccionComprador={direccionComprador}
+        celularComprador={celularComprador}
+        onVerPedido={onVerPedido}
+        onVerNota={onVerNota}
+        estado={ESTADO}
+        btnPrincipalLabel="Listo para enviar"
+        btnPrincipalIcon={ListoParaEnviarNuevo}
+        btnPrincipalIconSize={32}
+        onPressBtnPrincipal={handleListoParaEnviar}
+        contenidoExtra={
+          <AyudaReportar
+            role="seller"
+            label="Reportar un problema"
+            onPress={() => onAbrirIssue?.()}
+          />
+        }
+      />
+      <UndoToast
+        visible={undoVisible}
+        mensaje="Pedido movido a Listo para enviar"
+        onCancelar={handleCancelar}
+        onCerrar={() => {
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          updateEstado(pedidoId, "listo_para_enviar");
+          setUndoVisible(false);
+        }}
+      />
+    </>
   );
 }

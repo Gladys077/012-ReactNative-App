@@ -76,7 +76,7 @@ export default function MascotaAgradeciendo({
 
       <Image
         source={imagenFinal}
-        style={{ width: "100%", height: 220, marginTop: Spacing.sm }}
+        style={{ width: "100%", height: 150, marginTop: Spacing.sm }}
         resizeMode="contain"
       />
 

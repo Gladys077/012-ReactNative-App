@@ -2,7 +2,7 @@ import { Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import type { Pedido } from "@/types/pedidos";
 import React, { useMemo, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
 import { Chat, Comprobante, Remove } from "../../icons";
 import CalificacionDada from "../../subcomponentes/CalificacionDada";
@@ -199,19 +199,7 @@ export default function CardHistorialVendedor({
   const precio = r?.precio ?? 0;
 
   const handleEliminar = () => {
-    Alert.alert(
-      "Eliminar del historial",
-      "¿Querés eliminar este pedido de tu historial?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: () => onEliminar(pedido.id),
-        },
-      ],
-      { cancelable: true },
-    );
+    onEliminar(pedido.id);
   };
 
   return (

@@ -105,12 +105,12 @@ export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
 export interface Respuesta {
   id: string | number;
   vendedorNombre: string;
+  telefono?: number;
   alias?: string;
   entidad?: string;
   titular?: string;
   rating: number;
   ratingCount?: number;
-  telefono: number;
   precio: number;
   nota?: string;
   duracionCronometro?: number;

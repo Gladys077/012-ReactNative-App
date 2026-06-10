@@ -2,8 +2,8 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
-import { Remove } from "../icons";
 import CalificacionDada from "../subcomponentes/CalificacionDada";
+import { DeleteButton } from "../subcomponentes/DeleteButton";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import TextoPedido from "../subcomponentes/TextoPedido";
 import LineaDivisoria from "../UI/LineaDivisoria";
@@ -45,19 +45,7 @@ export default function CardHistorialComprador({
   });
 
   const handleEliminar = () => {
-    Alert.alert(
-      "Eliminar del historial",
-      "¿Querés eliminar este pedido de tu historial?",
-      [
-        { text: "Cancelar  ", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: () => onEliminar(pedidoId),
-        },
-      ],
-      { cancelable: true },
-    );
+    onEliminar(pedidoId);
   };
 
   return (
@@ -168,9 +156,7 @@ export default function CardHistorialComprador({
           </Text>
 
           {/* Remover card */}
-          <Pressable onPress={handleEliminar} style={{ padding: Spacing.sm }}>
-            <Remove width={26} height={26} fill={colors.textError} />
-          </Pressable>
+          <DeleteButton onPress={handleEliminar} />
         </View>
       </Pressable>
     </View>

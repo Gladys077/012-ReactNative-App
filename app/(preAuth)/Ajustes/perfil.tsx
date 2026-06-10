@@ -22,7 +22,7 @@ export default function PerfilScreen() {
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email] = useState("");
   const [address, setAddress] = useState("");
   const [cellular, setCellular] = useState("");
   const [rubros, setRubros] = useState<string[]>([]);

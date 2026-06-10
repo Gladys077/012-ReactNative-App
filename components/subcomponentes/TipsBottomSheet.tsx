@@ -22,7 +22,7 @@ export function useTipsBottomSheet() {
           "Escribe tu pedido en forma de lista, como el ejemplo.",
           "Especifica cantidades.",
           "Incluye las marcas, si tienes alguna preferencia.",
-          "Antes de transferir, verifica que el vendedor tenga al menos 10 calificaciones. Si no te convence, siempre puedes pagar contra entrega.",
+          "Antes de transferir, verifica que el vendedor tenga al menos 10 calificaciones. Si no te convence, puedes pagar contra entrega.",
         ]
       : [
           "Usa la sección 'Nota del vendedor' para hacer cualquier aclaración. (Ej.: Cambio de marca / Producto en falta / Demora en la entrega)",

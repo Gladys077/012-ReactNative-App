@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 // import { useTheme } from "../../context/ThemeContext";
 import CardPedidoBase from "@/components/shared/CardPedidoBase";
+import { DeleteButton } from "../subcomponentes/DeleteButton";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import RespuestasRecibidas from "../subcomponentes/RespuestasRecibidas";
 import VerBottomSheet from "../subcomponentes/VerBottomSheet";
@@ -16,8 +17,8 @@ interface CardPedidoVerRespuestasProps {
   expandido?: boolean;
   respuestas?: Respuesta[];
   onToggleExpandir?: (valor: boolean) => void;
-  onVerPedido?: (id: string | number) => void;
-  onCancelarPedido?: () => void;
+  onVerPedido: (id: string | number) => void;
+  onCancelarPedido: () => void;
   onAceptarRespuesta?: (
     pedidoId: string | number,
     respuestaId: string | number,
@@ -43,6 +44,7 @@ export default function CardPedidoVerRespuestas({
   onRechazarRespuesta,
   onVerNota,
   onFinishCronometro,
+  onCancelarPedido,
 }: CardPedidoVerRespuestasProps) {
   const contenidoExpandible =
     respuestas.length === 0 ? null : (
@@ -101,8 +103,26 @@ export default function CardPedidoVerRespuestas({
       {/* Respuestas Recibidas (solo al estar colapsado) */}
       {!expandido && <RespuestasRecibidas cantidad={cantidadRespuestas} />}
 
-      {/* Botón ver pedido */}
-      <VerBottomSheet onPress={() => onVerPedido?.(pedidoId)} variant="buyer" />
+      {/* Ver pedido + Botón cancelar */}
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: Spacing.sm,
+        }}
+      >
+        {/* Botón ver pedido */}
+        <VerBottomSheet
+          icon={null}
+          onPress={() => onVerPedido?.(pedidoId)}
+          variant="buyer"
+        />
+
+        {/* Remover card */}
+        <DeleteButton onPress={onCancelarPedido} />
+      </View>
     </CardPedidoBase>
   );
 }

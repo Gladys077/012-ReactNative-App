@@ -38,6 +38,12 @@ const PedidosNuevos = ({ pedidos }: Props) => {
     removePedido(pedidoId);
   };
 
+  const pedidosOrdenados = [...pedidos].sort((a, b) => {
+    if (a.estadoSistema === b.estadoSistema) return 0;
+    if (a.estadoSistema === "nuevo") return -1;
+    return 1;
+  });
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -61,7 +67,7 @@ const PedidosNuevos = ({ pedidos }: Props) => {
           No tenés pedidos nuevos.
         </Text>
       ) : (
-        pedidos.map((p) =>
+        pedidosOrdenados.map((p) =>
           p.estadoSistema === "presupuestado" ? (
             <CardPresupuestado
               key={p.id}

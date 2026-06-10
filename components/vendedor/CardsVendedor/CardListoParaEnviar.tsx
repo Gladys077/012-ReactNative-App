@@ -1,9 +1,9 @@
 import { useOrders } from "@/context/OrdersContext";
 import type { Mensaje } from "@/types/pedidos";
-import React from "react";
-import { Alert } from "react-native";
+import React, { useRef, useState } from "react";
 import { EnCaminoOutline } from "../../icons";
 import AyudaReportar from "../../subcomponentes/AyudaReportar";
+import UndoToast from "../../subcomponentes/UndoToast";
 import CardPedidoVendedor from "./CardPedidoVendedor";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -46,48 +46,61 @@ export default function CardListoParaEnviar({
   onAbrirIssue,
 }: CardListoParaEnviarProps) {
   const { updateEstado } = useOrders();
+  const [undoVisible, setUndoVisible] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleEnCamino = () => {
-    Alert.alert(
-      "Pedido en camino",
-      "¿Confirma que el pedido está siendo enviado?",
-      [
-        { text: "No, volver", style: "cancel" },
-        {
-          text: "Sí, confirmar",
-          onPress: () => updateEstado(pedidoId, "en_camino"),
-        },
-      ],
-    );
+    setUndoVisible(true);
+    timeoutRef.current = setTimeout(() => {
+      updateEstado(pedidoId, "en_camino");
+      setUndoVisible(false);
+    }, 5000);
+  };
+
+  const handleCancelar = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setUndoVisible(false);
   };
 
   return (
-    <CardPedidoVendedor
-      pedidoId={pedidoId}
-      fechaSeleccion={fechaSeleccion}
-      compradorNombre={compradorNombre}
-      compradorRating={compradorRating}
-      compradorRatingCount={compradorRatingCount}
-      textoPedido={textoPedido}
-      nota={nota}
-      precio={precio}
-      mensajes={mensajes}
-      direccionComprador={direccionComprador}
-      celularComprador={celularComprador}
-      onVerPedido={onVerPedido}
-      onVerNota={onVerNota}
-      estado={ESTADO}
-      btnPrincipalLabel="En camino"
-      btnPrincipalIcon={EnCaminoOutline}
-      btnPrincipalIconSize={32}
-      onPressBtnPrincipal={handleEnCamino}
-      contenidoExtra={
-        <AyudaReportar
-          role="seller"
-          label="Reportar un problema"
-          onPress={() => onAbrirIssue?.()}
-        />
-      }
-    />
+    <>
+      <CardPedidoVendedor
+        pedidoId={pedidoId}
+        fechaSeleccion={fechaSeleccion}
+        compradorNombre={compradorNombre}
+        compradorRating={compradorRating}
+        compradorRatingCount={compradorRatingCount}
+        textoPedido={textoPedido}
+        nota={nota}
+        precio={precio}
+        mensajes={mensajes}
+        direccionComprador={direccionComprador}
+        celularComprador={celularComprador}
+        onVerPedido={onVerPedido}
+        onVerNota={onVerNota}
+        estado={ESTADO}
+        btnPrincipalLabel="En camino"
+        btnPrincipalIcon={EnCaminoOutline}
+        btnPrincipalIconSize={32}
+        onPressBtnPrincipal={handleEnCamino}
+        contenidoExtra={
+          <AyudaReportar
+            role="seller"
+            label="Reportar un problema"
+            onPress={() => onAbrirIssue?.()}
+          />
+        }
+      />
+      <UndoToast
+        visible={undoVisible}
+        mensaje="Pedido movido a Listo para enviar"
+        onCancelar={handleCancelar}
+        onCerrar={() => {
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          updateEstado(pedidoId, "en_camino");
+          setUndoVisible(false);
+        }}
+      />
+    </>
   );
 }

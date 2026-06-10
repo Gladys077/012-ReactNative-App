@@ -8,7 +8,7 @@ interface VerBottomSheetProps {
   label?: string;
   iconPosition?: "left" | "right";
   variant?: "buyer" | "seller";
-  icon?: React.ComponentType<any>;
+  icon?: React.ComponentType<any> | null;
   onPress?: () => void;
   style?: ViewStyle;
 }
@@ -28,11 +28,13 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
   return (
     <Pressable
       onPress={onPress}
-      style={[
+      hitSlop={10}
+      style={({ pressed }) => [
         {
           flexDirection: iconPosition === "left" ? "row-reverse" : "row",
           alignItems: "center",
           alignSelf: "flex-end",
+          opacity: pressed ? 0.5 : 1,
         },
         style,
       ]}
@@ -47,7 +49,7 @@ const VerBottomSheet: React.FC<VerBottomSheetProps> = ({
       >
         {label}
       </Text>
-      <Icon width={20} height={20} fill={color} stroke={color} />
+      {Icon && <Icon width={20} height={20} fill={color} stroke={color} />}
     </Pressable>
   );
 };
