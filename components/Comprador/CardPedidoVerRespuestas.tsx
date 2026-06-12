@@ -57,7 +57,6 @@ export default function CardPedidoVerRespuestas({
         }}
       >
         {respuestas
-          // Filtra respuestas sin cronómetro y las que pasan este filtro tienen duracionCronometro: number
           .filter(
             (r): r is Respuesta & { duracionCronometro: number } =>
               r.duracionCronometro !== undefined,
@@ -99,30 +98,27 @@ export default function CardPedidoVerRespuestas({
       mascotaVariante="message"
       elevation={expandido ? 0 : 5}
       contenidoExpandible={contenidoExpandible}
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.md,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+          <DeleteButton onPress={onCancelarPedido} />
+        </View>
+      }
     >
       {/* Respuestas Recibidas (solo al estar colapsado) */}
       {!expandido && <RespuestasRecibidas cantidad={cantidadRespuestas} />}
-
-      {/* Ver pedido + Botón cancelar */}
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: Spacing.sm,
-        }}
-      >
-        {/* Botón ver pedido */}
-        <VerBottomSheet
-          icon={null}
-          onPress={() => onVerPedido?.(pedidoId)}
-          variant="buyer"
-        />
-
-        {/* Remover card */}
-        <DeleteButton onPress={onCancelarPedido} />
-      </View>
     </CardPedidoBase>
   );
 }

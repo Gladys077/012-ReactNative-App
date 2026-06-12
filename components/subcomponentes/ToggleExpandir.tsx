@@ -69,6 +69,7 @@ const ToggleExpandir: React.FC<ToggleExpandirProps> = ({
   const boton = (
     <Pressable
       onPress={toggleExpandir}
+      hitSlop={10}
       style={{
         flexDirection: "row",
         // inline=true → el Pressable no fuerza ancho completo, se ajusta a su contenido

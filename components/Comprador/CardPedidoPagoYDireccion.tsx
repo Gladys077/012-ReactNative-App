@@ -3,8 +3,10 @@ import { BorderRadius, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Alert, View } from "react-native";
+import { DeleteButton } from "../subcomponentes/DeleteButton";
 import { EtiqEstadoType } from "../subcomponentes/EtiqEstadoDelPedido";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardVendedorPagoDireccion from "./CardVendedorPagoDireccion";
 
 interface CardPedidoPagoYDireccionProps {
@@ -82,6 +84,24 @@ export default function CardPedidoPagoYDireccion({
       mascotaVariante="message"
       mostrarDivisor
       elevation={expandido ? 0 : 5}
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.sm,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+          <DeleteButton onPress={() => onCancelarPedido?.()} />
+        </View>
+      }
       contenidoExpandible={
         <View
           style={{
@@ -98,8 +118,6 @@ export default function CardPedidoPagoYDireccion({
             ratingCount={ratingCount}
             precio={precio}
             nota={nota}
-            // duracionCronometro={duracionCronometro}
-            // timestampRespuesta={timestampRespuesta}
             alias={alias}
             entidad={entidad}
             titular={titular}
@@ -109,9 +127,6 @@ export default function CardPedidoPagoYDireccion({
             onVerNota={(nota) => {
               Alert.alert("Nota del vendedor", nota);
             }}
-            // onFinishCronometro={(pedidoId, respuestaId) => {
-            //   console.log("Tiempo terminado", pedidoId, respuestaId);
-            // }}
             onCancelarPedido={() => onCancelarPedido?.()}
             onEnviarDatos={onEnviarDatos}
           />

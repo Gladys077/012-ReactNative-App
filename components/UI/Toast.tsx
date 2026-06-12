@@ -31,7 +31,7 @@ export default function Toast({
   const { colors, fonts } = useTheme();
   const opacity = useSharedValue(0);
 
-  const bgColor = {
+  const varianteColor = {
     success: colors.success,
     error: colors.textError,
     info: colors.brandCommon,
@@ -67,9 +67,12 @@ export default function Toast({
           bottom: 40,
           left: Spacing.xl,
           right: Spacing.xl,
-          backgroundColor: bgColor,
+          backgroundColor: colors.toastBackground,
           borderRadius: 12,
-          padding: Spacing.md,
+          borderLeftWidth: 2,
+          borderColor: varianteColor,
+          padding: Spacing.lg,
+          paddingHorizontal: Spacing.xl,
           alignItems: "center",
           zIndex: 9999,
         },
@@ -78,7 +81,7 @@ export default function Toast({
     >
       <Text
         style={{
-          color: colors.textOnColor,
+          color: varianteColor,
           fontFamily: fonts.robotoMedium,
           fontSize: FontSizes.base,
         }}

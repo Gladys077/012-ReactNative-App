@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { Spacing } from "../../constants/Tokens";
 
+import { DeleteButton } from "../subcomponentes/DeleteButton";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardErrorPagoDireccion from "./CardErrorPagoDireccion";
 
 type FormaPago = "transferencia" | "efectivo";
@@ -78,6 +80,24 @@ export default function CardPedidoAResolver({
       mascotaVariante="attention"
       mostrarDivisor
       elevation={expandido ? 0 : 5}
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.sm,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+          <DeleteButton onPress={() => onCancelarPedido?.()} />
+        </View>
+      }
       contenidoExpandible={
         <View style={{ marginTop: Spacing.lg }}>
           <CardErrorPagoDireccion

@@ -29,8 +29,12 @@ const OPCIONES_AYUDA_BUYER = [
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
-  const { isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido } =
-    useBottomSheetVerPedido();
+  const {
+    isVisible,
+    pedidoId,
+    openBottomSheetVerPedido,
+    closeBottomSheetVerPedido,
+  } = useBottomSheetVerPedido();
   const {
     pedidos,
     updateEstado,
@@ -55,11 +59,14 @@ const EstadoPedido = () => {
   const handleVerPedido = (id: string | number) => {
     const pedido = pedidos.find((p) => p.id === id);
     if (!pedido) return;
-    if (isVisible) {
+
+    if (isVisible && pedidoId === id) {
       closeBottomSheetVerPedido();
       return;
     }
+
     openBottomSheetVerPedido({
+      pedidoId: pedido.id,
       fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],
     });
@@ -68,6 +75,11 @@ const EstadoPedido = () => {
   const handleCancelarPedido = (id: number | string) => {
     if (pendienteId !== null) removePedido(pendienteId);
     setPendienteId(id);
+
+    if (isVisible && pedidoId === id) {
+      closeBottomSheetVerPedido();
+    }
+
     mostrar("Pedido cancelado", () => {
       removePedido(id);
       setPendienteId(null);

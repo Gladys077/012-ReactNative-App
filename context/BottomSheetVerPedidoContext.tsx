@@ -10,6 +10,7 @@ import React, {
 } from "react";
 
 interface PedidoData {
+  pedidoId?: string | number;
   fechaSeleccion?: string;
   items?: { id: string | number; label: string }[];
   backgroundColor?: string;
@@ -17,6 +18,7 @@ interface PedidoData {
 
 interface BottomSheetVerPedidoContextType {
   isVisible: boolean;
+  pedidoId?: string | number;
   openBottomSheetVerPedido: (data: PedidoData) => void;
   closeBottomSheetVerPedido: () => void;
 }
@@ -50,7 +52,12 @@ export const BottomSheetVerPedidoProvider = ({
 
   return (
     <BottomSheetVerPedidoContext.Provider
-      value={{ isVisible, openBottomSheetVerPedido, closeBottomSheetVerPedido }}
+      value={{
+        isVisible,
+        pedidoId: pedidoData.pedidoId,
+        openBottomSheetVerPedido,
+        closeBottomSheetVerPedido,
+      }}
     >
       {children}
 

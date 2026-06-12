@@ -26,7 +26,7 @@ export default function LoginScreen() {
     const user = loginWithCredentials(email, password);
 
     if (!user) {
-      showToast("CREDENCIALES INCORRECTAS", "error");
+      showToast("⚠  Credenciales correctas", "error");
       return;
     }
 

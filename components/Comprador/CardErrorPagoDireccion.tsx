@@ -3,11 +3,9 @@ import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-import ChatModal from "@/components/Chat/ChatModal";
 import PagoTransferencia from "@/components/subcomponentes/PagoTransferencia";
-import VerBottomSheet from "@/components/subcomponentes/VerBottomSheet";
 import LineaDivisoria from "@/components/UI/LineaDivisoria";
-import { alertaCancelarPedido } from "../../utils/alertas";
+import ChatModal from "../Chat/ChatModal";
 import { Chat } from "../icons";
 import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
@@ -143,17 +141,10 @@ export default function CardErrorPagoDireccion({
       <View
         style={{
           flexDirection: "row",
-          gap: Spacing.lg,
-          alignItems: "center",
-          justifyContent: "space-between",
+          // gap: Spacing.lg,
+          justifyContent: "flex-end",
         }}
       >
-        <VerBottomSheet
-          onPress={onVerPedido}
-          iconPosition="left"
-          variant="buyer"
-        />
-
         <Pressable
           onPress={() => setChatVisible(true)}
           style={{
@@ -208,7 +199,7 @@ export default function CardErrorPagoDireccion({
         />
       )}
 
-      {/* Btns: Rechazar - Aceptar */}
+      {/* Btns: Enviar datos */}
       <View
         style={{
           flexDirection: "row",
@@ -216,17 +207,6 @@ export default function CardErrorPagoDireccion({
           marginTop: Spacing.md,
         }}
       >
-        <View style={{ flex: 1 }}>
-          <Button
-            variant="secondary"
-            height="md"
-            width="full"
-            onPress={() => alertaCancelarPedido(onCancelarPedido)}
-          >
-            Cancelar pedido
-          </Button>
-        </View>
-
         <View style={{ flex: 1 }}>
           <Button
             variant="primary"

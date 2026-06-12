@@ -29,6 +29,7 @@ interface CardPedidoBaseProps {
   elevation?: number;
   contenidoExpandible?: React.ReactNode;
   contenidoPosMascota?: React.ReactNode;
+  contenidoPreToggle?: React.ReactNode;
 }
 
 export default function CardPedidoBase({
@@ -50,6 +51,7 @@ export default function CardPedidoBase({
   elevation,
   contenidoExpandible,
   contenidoPosMascota,
+  contenidoPreToggle,
 }: CardPedidoBaseProps) {
   const { colors } = useTheme();
 
@@ -119,6 +121,8 @@ export default function CardPedidoBase({
       {/* SEPARADOR OPCIONAL */}
       {mostrarDivisor && <LineaDivisoria />}
 
+      {contenidoPreToggle}
+
       {/* TOGGLE OPCIONAL */}
       {mostrarToggle && onToggleExpandir && (
         <ToggleExpandir
@@ -127,6 +131,11 @@ export default function CardPedidoBase({
           textoOcultar={textoOcultar}
           colorTexto={colors.brandBuyer}
           onToggle={onToggleExpandir}
+          style={{
+            backgroundColor: colors.background,
+            paddingVertical: 6,
+            borderRadius: BorderRadius.lg,
+          }}
         >
           {contenidoExpandible}
         </ToggleExpandir>

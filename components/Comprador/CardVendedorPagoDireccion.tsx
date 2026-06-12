@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import { Text, View } from "react-native";
 import { FontSizes, Spacing } from "../../constants/Tokens";
-import { alertaCancelarPedido } from "../../utils/alertas";
 import Button from "../UI/Button/Button";
 import LineaDivisoria from "../UI/LineaDivisoria";
 import DireccionEntrega from "../subcomponentes/DireccionEntrega";
@@ -11,7 +10,6 @@ import FormaPagoTabs from "../subcomponentes/FormaPagoTabs";
 import NotaDelVendedor from "../subcomponentes/NotaDelVendedor";
 import PagoEfectivo from "../subcomponentes/PagoEfectivo";
 import PagoTransferencia from "../subcomponentes/PagoTransferencia";
-import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardRespVendedorBase from "./CardRespVendedorBase";
 
 interface CardVendedorPagoDireccionProps {
@@ -190,15 +188,6 @@ export default function CardVendedorPagoDireccion({
         </Text>
       </View>
 
-      {/* Ver pedido */}
-      <View style={{ alignSelf: "flex-start", marginTop: Spacing.sm }}>
-        <VerBottomSheet
-          onPress={onVerPedido}
-          iconPosition="left"
-          variant="buyer"
-        />
-      </View>
-
       <LineaDivisoria marginVertical={Spacing.lg} />
 
       {/* Tabs */}
@@ -267,17 +256,6 @@ export default function CardVendedorPagoDireccion({
           marginTop: Spacing.md,
         }}
       >
-        <View style={{ flex: 1 }}>
-          <Button
-            variant="secondary"
-            height="md"
-            width="full"
-            onPress={() => alertaCancelarPedido(onCancelarPedido)}
-          >
-            Cancelar pedido
-          </Button>
-        </View>
-
         <View style={{ flex: 1 }}>
           <Button
             variant="primary"

@@ -44,9 +44,22 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
         onClose={onClose}
         enablePanDownToClose
         backgroundStyle={{
-          backgroundColor: backgroundColor ?? colors.brandBuyerSoft,
+          backgroundColor: backgroundColor ?? colors.fondoPedidos,
+          borderTopWidth: 2,
+          borderTopColor: colors.brandBuyer,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          elevation: 25,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
         }}
-        handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
+        handleIndicatorStyle={{
+          backgroundColor: colors.brandBuyer,
+          marginTop: 8,
+          width: 60,
+        }}
       >
         <BottomSheetView style={{ padding: Spacing.lg, paddingBottom: 36 }}>
           {fechaSeleccion && (

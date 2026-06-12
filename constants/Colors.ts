@@ -19,6 +19,8 @@ export const Colors = {
     errorSoft: "#fcc7c7",
     error: "#ef4444",
 
+    errorToast: "#b92020",
+
     //Badges
     badge: "#b30606",
 
@@ -42,6 +44,8 @@ export const Colors = {
     border: "#E5E7EB",
     bgPressed: "#f3f4f6", // color al presionar (gris-100)
     backgroundTips: "#b8c6ce11",
+
+    toastBackground: "#1f1e1e",
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
@@ -117,7 +121,7 @@ export const Colors = {
     //Background SubMenuPendientes
     bgSubMenuPendientes: "#504d4b62", // ambar-50
 
-    fondoPedidos: "#3b434e", // gray-800,
+    fondoPedidos: "#34383f", // gris-medio,
 
     // Para fondos suaves
     tipsColorBuyer: "#64B5F6", // blue-400
@@ -133,6 +137,7 @@ export const Colors = {
     border: "#374151", // gray-700
     bgPressed: "#3f3f46", // zinc-700
     backgroundTips: "#4f5b6b69",
+    toastBackground: "#1f1e1e",
 
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
@@ -144,7 +149,7 @@ export const Colors = {
     brandSellerSoft: "#78350F", //ambar-900 = fondo suave
 
     // BottomSheetAyudaPedido
-    bottomSheetBgBuyer: "#191a1d",
+    bottomSheetBgBuyer: "#232937",
     bottomSheetBgSeller: "#191a1d",
 
     // Inputs (InputField)
