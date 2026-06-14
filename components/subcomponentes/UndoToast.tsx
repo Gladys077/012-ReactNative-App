@@ -11,7 +11,7 @@ interface UndoToastProps {
   onCerrar: () => void;
 }
 
-const DURACION = 5000;
+const DURACION = 8000;
 
 export default function UndoToast({
   visible,

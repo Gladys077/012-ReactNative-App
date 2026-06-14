@@ -6,12 +6,11 @@ import EtiqEstadoDelPedido, {
   EtiqEstadoType,
 } from "../subcomponentes/EtiqEstadoDelPedido";
 import MascotaConMensaje from "../subcomponentes/MascotaConMensaje";
-import PedidoNumero from "../subcomponentes/PedidoNumero";
 import ToggleExpandir from "../subcomponentes/ToggleExpandir";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardPedidoBaseProps {
-  numeroPedido?: number;
+  pedidoId?: string | number;
   fechaSeleccion?: string;
   estado: EtiqEstadoType;
   children?: React.ReactNode;
@@ -28,12 +27,11 @@ interface CardPedidoBaseProps {
   style?: ViewStyle;
   elevation?: number;
   contenidoExpandible?: React.ReactNode;
-  contenidoPosMascota?: React.ReactNode;
   contenidoPreToggle?: React.ReactNode;
 }
 
 export default function CardPedidoBase({
-  numeroPedido,
+  pedidoId,
   fechaSeleccion,
   estado,
   children,
@@ -50,7 +48,6 @@ export default function CardPedidoBase({
   style,
   elevation,
   contenidoExpandible,
-  contenidoPosMascota,
   contenidoPreToggle,
 }: CardPedidoBaseProps) {
   const { colors } = useTheme();
@@ -86,7 +83,7 @@ export default function CardPedidoBase({
       >
         {/* Lado izquierdo: número, fecha, o placeholder vacío */}
         <View>
-          {numeroPedido !== undefined && <PedidoNumero numero={numeroPedido} />}
+          {/* {numeroPedido !== undefined && <PedidoNumero numero={numeroPedido} />} */}
           {fechaSeleccion !== undefined && (
             <Text style={{ fontSize: FontSizes.sm, color: colors.textDefault }}>
               {new Date(fechaSeleccion).toLocaleString("es-AR", {
@@ -114,9 +111,6 @@ export default function CardPedidoBase({
           posicion={mascotaPosicion}
         />
       )}
-
-      {/* CONTENIDO POST-MASCOTA OPCIONAL */}
-      {contenidoPosMascota}
 
       {/* SEPARADOR OPCIONAL */}
       {mostrarDivisor && <LineaDivisoria />}
@@ -147,7 +141,7 @@ export default function CardPedidoBase({
 /* -------------------------------------------------------------------------- */
 /* MODO DE USO EJEMPLO
 <CardPedidoBase
-  numeroPedido={12345}
+  pedidoId={12345}
   estado="En Proceso"
   mostrarMascota
   mascotaMensaje="Tu pedido está siendo procesado"

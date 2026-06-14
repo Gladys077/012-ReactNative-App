@@ -4,7 +4,6 @@ import React from "react";
 import { Text, View } from "react-native";
 import { Check, Telephone, Ubicacion } from "../icons";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
-import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardCompradorEnPreparacionProps {
@@ -14,7 +13,6 @@ interface CardCompradorEnPreparacionProps {
   telefono: number;
   direccion: string;
   fechaConfirmacion?: string;
-  onVerPedido: () => void;
 }
 
 export default function CardCompradorEnPreparacion({
@@ -24,7 +22,6 @@ export default function CardCompradorEnPreparacion({
   telefono,
   direccion,
   fechaConfirmacion,
-  onVerPedido,
 }: CardCompradorEnPreparacionProps) {
   const { colors, fonts } = useTheme();
 
@@ -79,8 +76,6 @@ export default function CardCompradorEnPreparacion({
             />
           </View>
         </View>
-
-        <VerBottomSheet onPress={onVerPedido} variant="buyer" />
       </View>
 
       {/* Pago confirmado */}

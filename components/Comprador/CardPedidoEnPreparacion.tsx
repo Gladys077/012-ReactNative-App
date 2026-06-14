@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import AyudaReportar from "../subcomponentes/AyudaReportar";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardRespVendPedEnPrep from "./CardRespVendPedEnPrep";
 
 interface CardPedidoEnPreparacionProps {
@@ -18,6 +19,7 @@ interface CardPedidoEnPreparacionProps {
   direccion: string;
   onVerPedido: (id: string | number) => void;
   onAbrirAyuda?: () => void;
+  // onCancelarPedido: () => void;
 }
 
 export default function CardPedidoEnPreparacion({
@@ -31,6 +33,7 @@ export default function CardPedidoEnPreparacion({
   direccion,
   onVerPedido,
   onAbrirAyuda,
+  // onCancelarPedido,
 }: CardPedidoEnPreparacionProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -49,6 +52,25 @@ export default function CardPedidoEnPreparacion({
       mascotaVariante="success"
       mostrarDivisor
       elevation={expandido ? 0 : 5}
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.lg,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+
+          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+        </View>
+      }
       contenidoExpandible={
         <View
           style={{
@@ -64,9 +86,7 @@ export default function CardPedidoEnPreparacion({
             telefono={telefono}
             direccion={direccion}
             fechaConfirmacion={fechaConfirmacion}
-            onVerPedido={() => onVerPedido(pedidoId)}
           />
-          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
         </View>
       }
     >

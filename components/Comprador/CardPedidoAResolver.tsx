@@ -87,7 +87,7 @@ export default function CardPedidoAResolver({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: Spacing.sm,
+            marginBottom: Spacing.lg,
           }}
         >
           <VerBottomSheet

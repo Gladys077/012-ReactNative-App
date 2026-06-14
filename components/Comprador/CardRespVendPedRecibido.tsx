@@ -5,7 +5,6 @@ import { Text, View } from "react-native";
 import { Telephone } from "../icons";
 import CalificacionEstrellas from "../subcomponentes/CalificacionEstrellas";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
-import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardRespVendPedRecibidoProps {
@@ -13,7 +12,6 @@ interface CardRespVendPedRecibidoProps {
   rating: number;
   ratingCount: number;
   telefono: number;
-  onVerPedido: () => void;
   onEnviarCalificacion: (data: {
     estrellas: number;
     comentario: string;
@@ -25,7 +23,6 @@ export default function CardRespVendPedRecibido({
   rating,
   ratingCount,
   telefono,
-  onVerPedido,
   onEnviarCalificacion,
 }: CardRespVendPedRecibidoProps) {
   const { colors, fonts } = useTheme();
@@ -72,7 +69,6 @@ export default function CardRespVendPedRecibido({
             />
           </View>
         </View>
-        <VerBottomSheet onPress={onVerPedido} variant="buyer" />
       </View>
 
       {/* Teléfono */}

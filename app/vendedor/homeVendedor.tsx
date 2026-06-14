@@ -3,6 +3,7 @@ import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Alert, View } from "react-native";
 import { TipsSheet } from "../../components/subcomponentes/TipsBottomSheet";
+import UndoToast from "../../components/subcomponentes/UndoToast";
 import TipsFAB from "../../components/UI/FAB";
 import ComprobanteViewerModal from "../../components/vendedor/ComprobanteViewerModal";
 import MenuVendedor, {
@@ -16,6 +17,7 @@ import { Spacing } from "../../constants/Tokens";
 import { useAuthContext } from "../../context/AuthContext";
 import { useBottomSheetVerPedido } from "../../context/BottomSheetVerPedidoContext";
 import { useOrders } from "../../context/OrdersContext";
+import { useUndoToast } from "../../hooks/useUndoToast";
 import { Comprobante, estadoSistemaATabVendedor } from "../../types/pedidos";
 
 const HomeVendedor = () => {
@@ -27,6 +29,9 @@ const HomeVendedor = () => {
   // const pathname = usePathname();
 
   const { switchRole } = useAuthContext();
+
+  const { toast, mostrar, cancelar, cerrar } = useUndoToast();
+  const [pendienteId, setPendienteId] = useState<string | number | null>(null);
 
   const [tabActivo, setTabActivo] = useState<TabVendedorMenu>("pedidos");
   const [tipsOpen, setTipsOpen] = useState(false);
@@ -107,7 +112,14 @@ const HomeVendedor = () => {
   const renderTab = () => {
     switch (tabActivo) {
       case "pedidos":
-        return <PedidosNuevos pedidos={pedidosNuevos} />;
+        return (
+          <PedidosNuevos
+            pedidos={pedidosNuevos}
+            onEliminarConToast={(id, onConfirm) =>
+              mostrar("Pedido eliminado", onConfirm)
+            }
+          />
+        );
       case "pendientes":
         return (
           <PedidosPendientes
@@ -190,6 +202,16 @@ const HomeVendedor = () => {
       {tabActivo === "pedidos" && (
         <TipsSheet isOpen={tipsOpen} onClose={() => setTipsOpen(false)} />
       )}
+
+      <UndoToast
+        visible={toast.visible}
+        mensaje={toast.mensaje}
+        onCancelar={() => {
+          setPendienteId(null);
+          cancelar();
+        }}
+        onCerrar={cerrar}
+      />
     </View>
   );
 };

@@ -25,7 +25,7 @@ interface CardPedidoPagoEnRevisionProps {
   nota?: string;
   duracionCronometro?: number;
   timestampRespuesta: number;
-  onVerPedido?: (id: string | number) => void;
+  onVerPedido: (id: string | number) => void;
   onEditarDireccion?: () => void;
   onVerNota?: (nota: string) => void;
   onFinishCronometro?: (
@@ -59,12 +59,12 @@ export default function CardPedidoPagoEnRevision({
       fechaSeleccion={fechaSeleccion} // Para identificar el pedido y diferenciarlo de otros
       estado="Pago en revisión"
       expandido={expandido}
-      onToggleExpandir={() => setExpandido(!expandido)}
+      // onToggleExpandir={() => setExpandido(!expandido)}
       // SOLO SI HAY PROBLEMA
-      mostrarToggle={tieneProblema}
-      mostrarDivisor={tieneProblema}
-      textoMostrar="Mostrar detalles"
-      textoOcultar="Ocultar detalles"
+      // mostrarToggle={tieneProblema}
+      // mostrarDivisor={tieneProblema}
+      // textoMostrar="Mostrar detalles"
+      // textoOcultar="Ocultar detalles"
       mostrarMascota
       mascotaMensaje={
         tieneProblema
@@ -72,10 +72,29 @@ export default function CardPedidoPagoEnRevision({
           : "Estamos verificando tu pago. Esto puede tardar unos minutos."
       }
       mascotaVariante={tieneProblema ? "attention" : "message"}
+      mostrarDivisor
       elevation={expandido ? 0 : 5}
-      contenidoPosMascota={
-        <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.sm,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+        </View>
       }
+      // contenidoPosMascota={
+      //   <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+      // }
       contenidoExpandible={
         <View
           style={{
@@ -84,31 +103,12 @@ export default function CardPedidoPagoEnRevision({
             borderRadius: BorderRadius.md,
           }}
         >
-          {/* acá después va el detalle del error */}
+          {/* acá después va el detalle del problema */}
         </View>
       }
     >
       {/* Estado del pedido */}
       <LineaEstadoPedido estadoActual="Verificacion" />
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          marginTop: Spacing.sm,
-        }}
-      >
-        {/* {horaFormateada && (
-          <Text style={{ fontSize: FontSizes.sm, color: colors.textMuted }}>
-            Pedido a las {horaFormateada}
-          </Text>
-        )} */}
-        <VerBottomSheet
-          onPress={() => onVerPedido?.(pedidoId)}
-          variant="buyer"
-        />
-      </View>
     </CardPedidoBase>
   );
 }

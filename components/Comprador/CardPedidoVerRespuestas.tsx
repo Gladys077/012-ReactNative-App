@@ -105,7 +105,7 @@ export default function CardPedidoVerRespuestas({
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: Spacing.md,
+            marginBottom: Spacing.lg,
           }}
         >
           <VerBottomSheet

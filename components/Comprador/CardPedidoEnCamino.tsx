@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import AyudaReportar from "../subcomponentes/AyudaReportar";
 import LineaEstadoPedido from "../subcomponentes/LineaEstadoPedido";
+import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import CardRespVendPedEnCamino from "./CardRespVendPedEnCamino";
 
 interface CardPedidoEnCaminoProps {
@@ -48,6 +49,24 @@ export default function CardPedidoEnCamino({
       mascotaVariante="success"
       mostrarDivisor
       elevation={expandido ? 0 : 5}
+      contenidoPreToggle={
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: Spacing.lg,
+          }}
+        >
+          <VerBottomSheet
+            icon={null}
+            onPress={() => onVerPedido?.(pedidoId)}
+            variant="buyer"
+          />
+          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+        </View>
+      }
       contenidoExpandible={
         <View
           style={{
@@ -62,9 +81,7 @@ export default function CardPedidoEnCamino({
             ratingCount={ratingCount}
             telefono={telefono}
             direccion={direccion}
-            onVerPedido={() => onVerPedido(pedidoId)}
           />
-          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
         </View>
       }
     >

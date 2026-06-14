@@ -32,7 +32,7 @@ const AyudaReportar: React.FC<AyudaReportarProps> = ({
         alignItems: "center",
         gap: 4,
         opacity: pressed ? 0.65 : 1,
-        paddingTop: Spacing.md,
+        // paddingTop: Spacing.md,
         paddingHorizontal: Spacing.sm,
 
         alignSelf: "flex-end",

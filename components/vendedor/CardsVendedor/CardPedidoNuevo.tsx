@@ -1,11 +1,10 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
-import { Alert, Text, TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import TextoPedido from "../../subcomponentes/TextoPedido";
 import Button from "../../UI/Button/Button";
-import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
 interface CardPedidoNuevoProps {
@@ -52,21 +51,6 @@ const ContenidoExpandible = ({
     }
     setErrorPrecio("");
     onEnviarPresupuesto(pedidoId, precioNum, nota.trim() || undefined);
-  };
-
-  const handleEliminar = () => {
-    Alert.alert(
-      "Eliminar pedido",
-      "¿Estás seguro que querés eliminar este pedido de tu lista?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Eliminar",
-          style: "destructive",
-          onPress: () => onEliminarPedido(pedidoId),
-        },
-      ],
-    );
   };
 
   return (
@@ -171,16 +155,18 @@ const ContenidoExpandible = ({
         )}
       </View>
 
-      <LineaDivisoria />
+      {/* <LineaDivisoria /> */}
 
       {/* Botones */}
-      <View style={{ flexDirection: "row", gap: Spacing.md }}>
+      <View
+        style={{ flexDirection: "row", gap: Spacing.md, marginTop: Spacing.md }}
+      >
         <View style={{ flex: 1 }}>
           <Button
             section="seller"
             variant="secondary"
             width="full"
-            onPress={handleEliminar}
+            onPress={() => onEliminarPedido(pedidoId)}
           >
             Eliminar pedido
           </Button>

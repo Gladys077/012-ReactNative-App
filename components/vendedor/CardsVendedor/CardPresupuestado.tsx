@@ -15,6 +15,7 @@ interface CardPresupuestadoProps {
   textoPedido: string;
   precioEnviado: number;
   notaEnviada?: string;
+  onCancelarPedido: () => void;
 }
 
 const ContenidoExpandible = ({
@@ -45,14 +46,17 @@ export default function CardPresupuestado({
   textoPedido,
   precioEnviado,
   notaEnviada,
+  onCancelarPedido,
 }: CardPresupuestadoProps) {
   return (
+    // <>
     <CardVendedorBase
       fechaSeleccion={fechaSeleccion}
       estado={ESTADO}
       compradorNombre={compradorNombre}
       compradorRating={compradorRating}
       compradorRatingCount={compradorRatingCount}
+      onCancelarPedido={onCancelarPedido}
       precio={precioEnviado}
       contenidoExpandible={
         <ContenidoExpandible
@@ -60,6 +64,6 @@ export default function CardPresupuestado({
           notaEnviada={notaEnviada}
         />
       }
-    />
+    ></CardVendedorBase>
   );
 }

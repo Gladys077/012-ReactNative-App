@@ -264,7 +264,7 @@ const EstadoPedido = () => {
                       vendedorNombre={r.vendedorNombre}
                       rating={r.rating}
                       ratingCount={r.ratingCount ?? 0}
-                      telefono={r.telefono}
+                      telefono={r.telefono ?? 0}
                       direccion={pedido.direccionComprador}
                       onVerPedido={handleVerPedido}
                       onAbrirAyuda={() => setAyudaVisible(true)}

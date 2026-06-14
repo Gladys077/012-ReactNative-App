@@ -4,6 +4,7 @@ import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import React, { useState } from "react";
 import { Text, View, ViewStyle } from "react-native";
+import { DeleteButton } from "../../subcomponentes/DeleteButton";
 import EstrellaUnica from "../../subcomponentes/EstrellaUnica";
 import EtiqEstadoDelPedido, {
   EtiqEstadoType,
@@ -24,6 +25,7 @@ interface CardVendedorBaseProps {
   style?: ViewStyle;
   elevation?: number;
   mostrarTiempoAceptacion?: boolean;
+  onCancelarPedido?: () => void;
 }
 
 export default function CardVendedorBase({
@@ -38,6 +40,7 @@ export default function CardVendedorBase({
   style,
   elevation,
   mostrarTiempoAceptacion = true,
+  onCancelarPedido,
 }: CardVendedorBaseProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -119,50 +122,70 @@ export default function CardVendedorBase({
         <TiempoAceptacion fechaSeleccion={fechaSeleccion} />
       )}
 
-      {/* TOTAL */}
+      {/* TRASH + Total */}
       {precio !== undefined && (
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: Spacing.sm,
             paddingBottom: Spacing.md,
           }}
         >
-          <Text
+          {/* Trash a la izquierda */}
+          {onCancelarPedido ? (
+            <DeleteButton onPress={onCancelarPedido} />
+          ) : (
+            <View />
+          )}
+
+          {/* Total a la derecha */}
+          <View
             style={{
-              fontSize: FontSizes.md,
-              fontFamily: fonts.robotoRegular,
-              color: colors.textMuted,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: Spacing.sm,
             }}
           >
-            Total:
-          </Text>
-          <Text
-            style={{
-              fontSize: FontSizes.lg,
-              fontFamily: fonts.robotoBold,
-              color: colors.textDefault,
-            }}
-          >
-            $ {precio.toLocaleString("es-AR")}
-          </Text>
+            <Text
+              style={{
+                fontSize: FontSizes.md,
+                fontFamily: fonts.robotoRegular,
+                color: colors.textMuted,
+              }}
+            >
+              Total:
+            </Text>
+            <Text
+              style={{
+                fontSize: FontSizes.lg,
+                fontFamily: fonts.robotoBold,
+                color: colors.textDefault,
+              }}
+            >
+              $ {precio.toLocaleString("es-AR")}
+            </Text>
+          </View>
         </View>
       )}
 
+      <LineaDivisoria />
       {/* TOGGLE VER MÁS / VER MENOS */}
       <ToggleExpandir
         textoMostrar="Ver más"
         textoOcultar="Ver menos"
         colorTexto={colors.brandSeller}
         onToggle={(val) => setExpandido(val)}
+        style={{
+          backgroundColor: colors.background,
+          paddingVertical: 6,
+          borderRadius: BorderRadius.lg,
+        }}
       >
-        <LineaDivisoria />
         {contenidoExpandible}
       </ToggleExpandir>
 
-      {!expandido && <LineaDivisoria />}
+      {/* {!expandido && <LineaDivisoria />} */}
 
       {/* CONTENIDO EXTRA (botones, etc.) */}
       {children}

@@ -4,7 +4,6 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 import { Telephone, Ubicacion } from "../icons";
 import EstrellaReputacion from "../subcomponentes/EstrellaReputacion";
-import VerBottomSheet from "../subcomponentes/VerBottomSheet";
 import LineaDivisoria from "../UI/LineaDivisoria";
 
 interface CardRespVendPedEnCaminoProps {
@@ -13,7 +12,6 @@ interface CardRespVendPedEnCaminoProps {
   ratingCount: number;
   telefono?: number;
   direccion: string;
-  onVerPedido: () => void;
 }
 
 export default function CardRespVendPedEnCamino({
@@ -22,7 +20,6 @@ export default function CardRespVendPedEnCamino({
   ratingCount,
   telefono,
   direccion,
-  onVerPedido,
 }: CardRespVendPedEnCaminoProps) {
   const { colors, fonts } = useTheme();
 
@@ -41,7 +38,7 @@ export default function CardRespVendPedEnCamino({
         gap: Spacing.lg,
       }}
     >
-      {/* Header: nombre + rating + ver pedido */}
+      {/* Header: nombre + rating  */}
       <View
         style={{
           flexDirection: "row",
@@ -68,8 +65,6 @@ export default function CardRespVendPedEnCamino({
             />
           </View>
         </View>
-
-        <VerBottomSheet onPress={onVerPedido} variant="buyer" />
       </View>
 
       {/* GIF delivery */}

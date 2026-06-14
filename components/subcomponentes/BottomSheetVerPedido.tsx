@@ -21,14 +21,17 @@ interface Props {
   isVisible: boolean;
   onClose: () => void;
   backgroundColor?: string;
+  role: "buyer" | "seller";
 }
 
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
   (
-    { fechaSeleccion, items = [], isVisible, onClose, backgroundColor },
+    { fechaSeleccion, items = [], isVisible, onClose, backgroundColor, role },
     ref,
   ) => {
     const { colors, fonts } = useTheme();
+    const brandColor =
+      role === "buyer" ? colors.brandBuyer : colors.brandSeller;
     const sheetRef = useRef<BottomSheet>(null);
 
     useImperativeHandle(ref, () => ({
@@ -44,9 +47,9 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
         onClose={onClose}
         enablePanDownToClose
         backgroundStyle={{
-          backgroundColor: backgroundColor ?? colors.fondoPedidos,
+          backgroundColor: colors.fondoPedidos,
           borderTopWidth: 2,
-          borderTopColor: colors.brandBuyer,
+          borderTopColor: brandColor,
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
           elevation: 25,
@@ -56,7 +59,7 @@ const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
           shadowRadius: 4,
         }}
         handleIndicatorStyle={{
-          backgroundColor: colors.brandBuyer,
+          backgroundColor: brandColor,
           marginTop: 8,
           width: 60,
         }}
