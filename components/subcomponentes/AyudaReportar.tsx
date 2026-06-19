@@ -32,9 +32,8 @@ const AyudaReportar: React.FC<AyudaReportarProps> = ({
         alignItems: "center",
         gap: 4,
         opacity: pressed ? 0.65 : 1,
-        // paddingTop: Spacing.md,
-        paddingHorizontal: Spacing.sm,
-
+        paddingTop: Spacing.lg,
+        paddingHorizontal: Spacing.md,
         alignSelf: "flex-end",
       })}
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} //agranda el área táctil de un btn sin agrandarlo visualmente
@@ -43,7 +42,7 @@ const AyudaReportar: React.FC<AyudaReportarProps> = ({
         style={{
           fontFamily: fonts.robotoMedium,
           fontSize: FontSizes.sm,
-          color: colors.textSecondaryBorder,
+          color: colors.textMuted,
           textDecorationLine: "underline",
           textDecorationStyle: "dotted",
         }}
@@ -63,12 +62,12 @@ export default AyudaReportar;
 //
 //   <AyudaReportar
 //     role="buyer"
-//     onPress={() => onAbrirAyuda?.()}
+//     onPress={() => onAbrirIssue?.()}
 //   />
 //
 // Para el lado del vendedor:
 //   <AyudaReportar
 //     role="seller"
 //     label="¿Tenés un problema con este pedido?"
-//     onPress={() => onAbrirAyuda?.()}
+//     onPress={() => onAbrirIssue?.()}
 //   />

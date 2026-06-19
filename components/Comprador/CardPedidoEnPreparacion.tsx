@@ -18,7 +18,7 @@ interface CardPedidoEnPreparacionProps {
   telefono: number;
   direccion: string;
   onVerPedido: (id: string | number) => void;
-  onAbrirAyuda?: () => void;
+  onAbrirIssue?: () => void;
   // onCancelarPedido: () => void;
 }
 
@@ -32,7 +32,7 @@ export default function CardPedidoEnPreparacion({
   telefono,
   direccion,
   onVerPedido,
-  onAbrirAyuda,
+  onAbrirIssue,
   // onCancelarPedido,
 }: CardPedidoEnPreparacionProps) {
   const { colors } = useTheme();
@@ -68,7 +68,7 @@ export default function CardPedidoEnPreparacion({
             variant="buyer"
           />
 
-          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+          <AyudaReportar role="buyer" onPress={() => onAbrirIssue?.()} />
         </View>
       }
       contenidoExpandible={

@@ -2,7 +2,7 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Animated, ScrollView, Text } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import CardPedidoNuevo from "../CardsVendedor/CardPedidoNuevo";
@@ -10,16 +10,16 @@ import CardPresupuestado from "../CardsVendedor/CardPresupuestado";
 
 interface Props {
   pedidos: Pedido[];
+  pendienteId: string | number | null;
   onEliminarConToast: (
     pedidoId: string | number,
     onConfirm: () => void,
   ) => void;
 }
 
-const PedidosNuevos = ({ pedidos, onEliminarConToast }: Props) => {
+const PedidosNuevos = ({ pedidos, pendienteId, onEliminarConToast }: Props) => {
   const { colors } = useTheme();
   const { updatePedido, removePedido } = useOrders();
-  const [pendienteId, setPendienteId] = useState<string | number | null>(null);
 
   // Un Animated.Value por pedido, inicializado en 1
   const scaleAnims = useRef<Record<string | number, Animated.Value>>({});
@@ -75,11 +75,8 @@ const PedidosNuevos = ({ pedidos, onEliminarConToast }: Props) => {
   };
 
   const handleEliminarPedido = (pedidoId: string | number) => {
-    if (pendienteId !== null) removePedido(pendienteId);
-    setPendienteId(pedidoId);
     onEliminarConToast(pedidoId, () => {
       removePedido(pedidoId);
-      setPendienteId(null);
     });
   };
 

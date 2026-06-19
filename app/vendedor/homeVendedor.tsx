@@ -79,6 +79,7 @@ const HomeVendedor = () => {
       fechaSeleccion: pedido.fechaSeleccion,
       items: [{ id: "texto", label: pedido.textoPedido }],
       backgroundColor: colors.brandSellerSoft,
+      role: "seller",
     });
   };
 
@@ -115,6 +116,7 @@ const HomeVendedor = () => {
         return (
           <PedidosNuevos
             pedidos={pedidosNuevos}
+            pendienteId={pendienteId}
             onEliminarConToast={(id, onConfirm) =>
               mostrar("Pedido eliminado", onConfirm)
             }

@@ -235,15 +235,21 @@ const ContenidoExpandible = ({
           backgroundColor: colors.cardBg,
           borderRadius: BorderRadius.lg,
           borderWidth: 1,
-          borderColor: colors.brandSeller,
+          borderColor:
+            estadoPago === "problema" ? colors.brandSeller : colors.textMuted,
           padding: Spacing.lg,
           gap: Spacing.md,
           marginVertical: Spacing.md,
         }}
       >
         <Pressable
-          onPress={() => setChatVisible(true)}
-          style={{ alignItems: "center", gap: 8, flexDirection: "row" }}
+          onPress={() => estadoPago === "problema" && setChatVisible(true)}
+          style={{
+            alignItems: "center",
+            gap: 8,
+            flexDirection: "row",
+            opacity: estadoPago !== "problema" ? 0.35 : 1,
+          }}
         >
           <Text
             style={{
@@ -253,8 +259,11 @@ const ContenidoExpandible = ({
               color: colors.textDefault,
             }}
           >
-            Si el importe no coincide o existe algún problema, enviá un mensaje
-            al comprador.
+            {estadoPago === "problema"
+              ? "Si el importe no coincide o existe algún problema, envía un mensaje al comprador."
+              : estadoPago === "correcto"
+                ? "Pago verificado. No se requiere contacto con el comprador."
+                : 'Si hubo algún inconveniente, selecciona "A Resolver" para contactar al comprador.'}
           </Text>
           <View style={{ flexDirection: "column", alignItems: "center" }}>
             <Chat
@@ -292,7 +301,7 @@ const ContenidoExpandible = ({
       <NotaEnviada nota={nota} />
 
       {/* ── Ver pedido ── */}
-      <View style={{ alignSelf: "flex-start", paddingTop: Spacing.sm }}>
+      <View style={{ alignSelf: "flex-start", paddingTop: Spacing.md }}>
         <VerBottomSheet
           onPress={() => onVerPedido(pedidoId)}
           variant="seller"

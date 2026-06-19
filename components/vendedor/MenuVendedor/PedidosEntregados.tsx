@@ -1,6 +1,5 @@
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import React from "react";
 import { ScrollView, Text } from "react-native";
 import type { Pedido } from "../../../types/pedidos";
 import CardEntregado from "../CardsVendedor/CardEntregado";

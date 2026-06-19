@@ -14,6 +14,7 @@ interface PedidoData {
   fechaSeleccion?: string;
   items?: { id: string | number; label: string }[];
   backgroundColor?: string;
+  role?: "buyer" | "seller";
 }
 
 interface BottomSheetVerPedidoContextType {
@@ -67,6 +68,7 @@ export const BottomSheetVerPedidoProvider = ({
         isVisible={isVisible}
         onClose={handleSheetClose}
         backgroundColor={pedidoData.backgroundColor}
+        role={pedidoData.role ?? "buyer"}
       />
     </BottomSheetVerPedidoContext.Provider>
   );

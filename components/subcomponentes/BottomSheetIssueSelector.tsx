@@ -1,6 +1,9 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetScrollView,
+  useBottomSheetTimingConfigs,
+} from "@gorhom/bottom-sheet";
 import React, {
   forwardRef,
   useImperativeHandle,
@@ -8,19 +11,20 @@ import React, {
   useState,
 } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
+import { Easing } from "react-native-reanimated";
 import Button from "../UI/Button/Button";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
-export type BottomSheetAyudaReportarRef = {
+export type BottomSheetIssueSelectorRef = {
   present: () => void;
   dismiss: () => void;
 };
 
-interface BottomSheetAyudaReportarProps {
-  /* Array de opciones predefinidas. La última siempre actúa como "Otro" si `mostrarOtro` es true (default). Debemos pasar las opciones sin incluir "Otro", xq el componente lo agrega automáticamente. */
+interface BottomSheetIssueSelectorProps {
+  /* Array de opciones predefinidas. "Otro" se agrega automáticamente al final. */
   opciones: string[];
-  /* Título del sheet. Default: "¿En qué podemos ayudarte?" */
+  /* Título del sheet. Default: "¿Tuviste un inconveniente?" */
   titulo?: string;
   /* Subtítulo/descripción breve debajo del título */
   subtitulo?: string;
@@ -31,15 +35,17 @@ interface BottomSheetAyudaReportarProps {
   /* Callback al cerrar/cancelar */
   onCerrar?: () => void;
   isVisible: boolean;
-
-  backgroundColor?: string;
 }
+
+// ─── Constante interna ────────────────────────────────────────────────────────
+
+const OPCION_OTRO = "Otro";
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
-const BottomSheetAyudaReportar = forwardRef<
-  BottomSheetAyudaReportarRef,
-  BottomSheetAyudaReportarProps
+const BottomSheetIssueSelector = forwardRef<
+  BottomSheetIssueSelectorRef,
+  BottomSheetIssueSelectorProps
 >(
   (
     {
@@ -50,7 +56,6 @@ const BottomSheetAyudaReportar = forwardRef<
       onEnviar,
       onCerrar,
       isVisible,
-      // backgroundColor,
     },
     ref,
   ) => {
@@ -61,6 +66,15 @@ const BottomSheetAyudaReportar = forwardRef<
     const [mostrandoOtro, setMostrandoOtro] = useState(false);
     const [mensajeLibre, setMensajeLibre] = useState("");
     const [enviando, setEnviando] = useState(false);
+
+    const puedeEnviar =
+      seleccionada !== null &&
+      (seleccionada !== OPCION_OTRO || mensajeLibre.trim().length >= 5);
+
+    const animationConfigs = useBottomSheetTimingConfigs({
+      duration: 380,
+      easing: Easing.out(Easing.cubic),
+    });
 
     useImperativeHandle(ref, () => ({
       present: () => {
@@ -73,9 +87,9 @@ const BottomSheetAyudaReportar = forwardRef<
     const accentColor =
       role === "buyer" ? colors.brandBuyer : colors.brandSeller;
     const backgroundColor =
-      role === "buyer" ? colors.bottomSheetBgBuyer : colors.bottomSheetBgBuyer;
+      role === "buyer" ? colors.bottomSheetBgBuyer : colors.bottomSheetBgSeller;
 
-    const todasLasOpciones = [...opciones, "Otro"];
+    const todasLasOpciones = [...opciones, OPCION_OTRO];
 
     const resetear = () => {
       setSeleccionada(null);
@@ -85,14 +99,16 @@ const BottomSheetAyudaReportar = forwardRef<
     };
 
     const handleSeleccionar = (opcion: string) => {
+      if (seleccionada === opcion) {
+        setSeleccionada(null);
+        setMostrandoOtro(false);
+        setMensajeLibre("");
+        return;
+      }
       setSeleccionada(opcion);
-      setMostrandoOtro(opcion === "Otro");
-      if (opcion !== "Otro") setMensajeLibre("");
+      setMostrandoOtro(opcion === OPCION_OTRO);
+      if (opcion !== OPCION_OTRO) setMensajeLibre("");
     };
-
-    const puedeEnviar =
-      seleccionada !== null &&
-      (seleccionada !== "Otro" || mensajeLibre.trim().length >= 5);
 
     const handleEnviar = () => {
       if (!puedeEnviar || enviando) return;
@@ -115,18 +131,16 @@ const BottomSheetAyudaReportar = forwardRef<
         ref={sheetRef}
         index={isVisible ? 0 : -1}
         enableDynamicSizing
+        animationConfigs={animationConfigs}
         onClose={() => {
           resetear();
           onCerrar?.();
         }}
         enablePanDownToClose
-        // ── Teclado: Gorhom lo maneja nativamente, no usar KeyboardAvoidingView
         keyboardBehavior="interactive"
         keyboardBlurBehavior="restore"
         android_keyboardInputMode="adjustResize"
-        backgroundStyle={{
-          backgroundColor: backgroundColor ?? colors.brandBuyerSoft,
-        }}
+        backgroundStyle={{ backgroundColor }}
         handleIndicatorStyle={{ backgroundColor: colors.textMuted }}
       >
         <BottomSheetScrollView
@@ -141,39 +155,65 @@ const BottomSheetAyudaReportar = forwardRef<
               paddingBottom: Spacing.lg,
               borderBottomWidth: 1,
               borderBottomColor: colors.border,
+              flexDirection: "row",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
             }}
           >
-            <Text
-              style={{
-                fontFamily: fonts.robotoBold,
-                fontSize: FontSizes.md,
-                color: colors.textDefault,
-                marginBottom: subtitulo ? Spacing.sm : 0,
-              }}
-            >
-              {titulo}
-            </Text>
-            {subtitulo && (
+            <View style={{ flex: 1, paddingRight: Spacing.lg }}>
               <Text
                 style={{
-                  fontFamily: fonts.robotoRegular,
-                  fontSize: FontSizes.base,
+                  fontFamily: fonts.robotoBold,
+                  fontSize: FontSizes.md,
                   color: colors.textDefault,
-                  lineHeight: 20,
+                  marginBottom: subtitulo ? Spacing.sm : 0,
                 }}
               >
-                {subtitulo}
+                {titulo}
               </Text>
-            )}
+              {subtitulo && (
+                <Text
+                  style={{
+                    fontFamily: fonts.robotoRegular,
+                    fontSize: FontSizes.base,
+                    color: colors.textDefault,
+                    lineHeight: 20,
+                  }}
+                >
+                  {subtitulo}
+                </Text>
+              )}
+            </View>
+
+            {/* X cerrar */}
+            <Pressable
+              onPress={handleCancelar}
+              hitSlop={12}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+                padding: Spacing.xs,
+                marginTop: -Spacing.sm,
+              })}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  color: colors.textMuted,
+                  lineHeight: 22,
+                }}
+              >
+                ✕
+              </Text>
+            </Pressable>
           </View>
 
           {/* ── Opciones ── */}
           <View
             style={{ paddingHorizontal: Spacing.xxl, paddingTop: Spacing.xl }}
           >
-            {todasLasOpciones.map((opcion, index) => {
+            {todasLasOpciones.map((opcion) => {
               const estaSeleccionada = seleccionada === opcion;
-              const esOtro = opcion === "Otro";
+              const esOtro = opcion === OPCION_OTRO;
 
               return (
                 <Pressable
@@ -218,9 +258,7 @@ const BottomSheetAyudaReportar = forwardRef<
                         ? fonts.robotoMedium
                         : fonts.robotoRegular,
                       fontSize: FontSizes.base,
-                      color: estaSeleccionada
-                        ? colors.textDefault
-                        : colors.textDefault,
+                      color: colors.textDefault,
                       flex: 1,
                       lineHeight: 20,
                       fontStyle: esOtro ? "italic" : "normal",
@@ -238,7 +276,7 @@ const BottomSheetAyudaReportar = forwardRef<
                 style={{
                   marginTop: -Spacing.sm,
                   marginBottom: Spacing.lg,
-                  backgroundColor: accentColor + 22,
+                  backgroundColor: accentColor + "22",
                   borderRadius: BorderRadius.md,
                   borderWidth: 1,
                   borderColor:
@@ -267,7 +305,6 @@ const BottomSheetAyudaReportar = forwardRef<
                     textAlignVertical: "top",
                   }}
                 />
-                {/* Contador de caracteres */}
                 <Text
                   style={{
                     fontFamily: fonts.robotoRegular,
@@ -276,13 +313,13 @@ const BottomSheetAyudaReportar = forwardRef<
                     color:
                       mensajeLibre.length > 270
                         ? colors.textError
-                        : colors.textDefault,
+                        : colors.textMuted,
                     textAlign: "right",
                     paddingHorizontal: Spacing.xl,
                     paddingBottom: Spacing.md,
                   }}
                 >
-                  {mensajeLibre.length}/270
+                  {mensajeLibre.length}/300
                 </Text>
               </View>
             )}
@@ -291,50 +328,40 @@ const BottomSheetAyudaReportar = forwardRef<
           {/* ── Acciones ── */}
           <View
             style={{
-              flexDirection: "row",
+              paddingHorizontal: Spacing.xxl,
+              paddingTop: Spacing.lg,
+              paddingBottom: Spacing.xl,
               borderTopWidth: 1,
-              borderTopColor: accentColor + "33",
+              borderTopColor: colors.border,
               marginTop: Spacing.md,
+              gap: Spacing.sm,
             }}
           >
-            {/* Btns: Cancelar - Enviar */}
-            <View
-              style={{
-                flexDirection: "row",
-                gap: Spacing.md,
-                paddingHorizontal: Spacing.xxl,
-                paddingBottom: Spacing.xl,
-                borderTopWidth: 1,
-                borderTopColor: colors.border,
-                marginTop: Spacing.lg,
-                width: "100%",
-                maxWidth: 500,
-              }}
+            <Button
+              variant="primary"
+              section={role === "buyer" ? "buyer" : "seller"}
+              width="full"
+              disabled={!puedeEnviar}
+              onPress={handleEnviar}
             >
-              <View style={{ flex: 1 }}>
-                <Button
-                  variant="secondary"
-                  height="md"
-                  width="full"
-                  onPress={handleCancelar}
-                >
-                  Cancelar
-                </Button>
-              </View>
+              {puedeEnviar
+                ? "Sí, reportar y cancelar pedido"
+                : "Indica el inconveniente"}
+            </Button>
 
-              <View style={{ flex: 1 }}>
-                <Button
-                  variant="primary"
-                  section={role === "buyer" ? "buyer" : "seller"}
-                  height="md"
-                  width="full"
-                  disabled={!puedeEnviar}
-                  onPress={handleEnviar}
-                >
-                  Enviar
-                </Button>
-              </View>
-            </View>
+            {puedeEnviar && (
+              <Text
+                style={{
+                  fontFamily: fonts.robotoRegular,
+                  fontSize: FontSizes.sm,
+                  color: colors.textMuted,
+                  textAlign: "center",
+                  marginTop: Spacing.xs,
+                }}
+              >
+                Esta acción no se puede deshacer
+              </Text>
+            )}
           </View>
         </BottomSheetScrollView>
       </BottomSheet>
@@ -342,64 +369,51 @@ const BottomSheetAyudaReportar = forwardRef<
   },
 );
 
-BottomSheetAyudaReportar.displayName = "BottomSheetAyudaReportar";
+BottomSheetIssueSelector.displayName = "BottomSheetIssueSelector";
 
-export default BottomSheetAyudaReportar;
+export default BottomSheetIssueSelector;
 
 // ─── MODO DE USO ──────────────────────────────────────────────────────────────
 //
-// 1. Importo el ref y el componente en la card:
+// 1. Importar el componente (el ref no es necesario si se controla con isVisible):
 //
-//    import BottomSheetAyudaReportar, {
-//      BottomSheetAyudaReportarRef,
-//    } from "@/components/shared/BottomSheetAyudaReportar";
-//    import AyudaReportar from "@/components/shared/AyudaReportar";
+//    import BottomSheetIssueSelector from "@/components/subcomponentes/BottomSheetIssueSelector";
 //
-// 2. Declaro el ref y estado en la card:
+// 2. Estado en el padre:
 //
-//    const ayudaRef = useRef<BottomSheetAyudaReportarRef>(null);
-//    const [ayudaVisible, setAyudaVisible] = useState(false);
+//    const [issueVisible, setIssueVisible] = useState(false);
 //
-// 3. Opciones específicas por rol (no incluir "Otro", se agrega automáticamente):
+// 3. Opciones por rol (sin incluir "Otro", se agrega automáticamente):
 //
 //    BUYER:
 //    const OPCIONES_BUYER = [
 //      "El pedido no llegó",
 //      "El pedido llegó incompleto",
 //      "El producto llegó en mal estado",
-//      "Quiero cancelar el pedido",
+//      "El vendedor no responde",
 //    ];
 //
 //    SELLER:
 //    const OPCIONES_SELLER = [
-//      "No puedo actualizar el estado del pedido",
-//      "Hay un error en los datos del comprador",
-//      "Problema con el pago recibido",
-//      "Quiero cancelar este pedido",
+//      "Sin respuesta del comprador.",
+//      "Hubo un problema con el pago.",
+//      "El comprador no estaba en el domicilio.",
 //    ];
 //
-// 4. En el JSX de la card (solo cuando `expandido` es true):
+// 4. En el JSX del padre:
 //
-//    {expandido && (
-//      <>
-//        <AyudaReportar
-//          role="buyer"
-//          onPress={() => {
-//            setAyudaVisible(true);
-//            ayudaRef.current?.present();
-//          }}
-//        />
-//        <BottomSheetAyudaReportar
-//          ref={ayudaRef}
-//          isVisible={ayudaVisible}
-//          role="buyer"
-//          opciones={OPCIONES_BUYER}
-//          subtitulo="Seleccioná el problema con tu pedido"
-//          onEnviar={(opcion, mensaje) => {
-//            console.log("Ayuda enviada:", opcion, mensaje);
-//            setAyudaVisible(false);
-//          }}
-//          onCerrar={() => setAyudaVisible(false)}
-//        />
-//      </>
-//    )}
+//    <AyudaReportar
+//      role="buyer"
+//      onPress={() => setIssueVisible(true)}
+//    />
+//    <BottomSheetIssueSelector
+//      isVisible={issueVisible}
+//      role="buyer"
+//      opciones={OPCIONES_BUYER}
+//      subtitulo="Seleccioná el problema con tu pedido"
+//      onEnviar={(opcion, mensaje) => {
+//        console.log("Issue enviado:", opcion, mensaje);
+//        setIssueVisible(false);
+//      }}
+//      onCerrar={() => setIssueVisible(false)}
+//    />

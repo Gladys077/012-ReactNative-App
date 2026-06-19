@@ -11,7 +11,7 @@ interface UndoToastProps {
   onCerrar: () => void;
 }
 
-const DURACION = 8000;
+const DURACION = 6000;
 
 export default function UndoToast({
   visible,
@@ -127,7 +127,7 @@ export default function UndoToast({
         </Pressable>
 
         {/* Cerrar */}
-        <Pressable onPress={onCerrar} style={{ padding: 4 }}>
+        <Pressable onPress={onCerrar} style={{ padding: 8 }}>
           <Text
             style={{
               fontSize: FontSizes.md,

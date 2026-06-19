@@ -29,12 +29,14 @@ const OPCIONES_AYUDA_BUYER = [
 
 const EstadoPedido = () => {
   const { colors } = useTheme();
+
   const {
     isVisible,
     pedidoId,
     openBottomSheetVerPedido,
     closeBottomSheetVerPedido,
   } = useBottomSheetVerPedido();
+
   const {
     pedidos,
     updateEstado,
@@ -42,6 +44,7 @@ const EstadoPedido = () => {
     moverAHistorialComprador,
     removePedido,
   } = useOrders();
+
   const { toast, mostrar, cancelar, cerrar } = useUndoToast();
   const [pendienteId, setPendienteId] = useState<string | number | null>(null);
   const [ayudaVisible, setAyudaVisible] = useState(false);
@@ -211,7 +214,7 @@ const EstadoPedido = () => {
                       timestampRespuesta={0}
                       tieneProblema={false}
                       estado={"Pago y dirección"}
-                      onAbrirAyuda={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => setAyudaVisible(true)}
                     />
                   );
                 }
@@ -267,7 +270,7 @@ const EstadoPedido = () => {
                       telefono={r.telefono ?? 0}
                       direccion={pedido.direccionComprador}
                       onVerPedido={handleVerPedido}
-                      onAbrirAyuda={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => setAyudaVisible(true)}
                     />
                   );
                 }
@@ -321,7 +324,7 @@ const EstadoPedido = () => {
                       telefono={r.telefono}
                       direccion={pedido.direccionComprador}
                       onVerPedido={handleVerPedido}
-                      onAbrirAyuda={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => setAyudaVisible(true)}
                     />
                   );
                 }

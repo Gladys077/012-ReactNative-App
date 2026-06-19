@@ -13,7 +13,7 @@ interface CardPedidoRecibidoProps {
   vendedorNombre: string;
   rating: number;
   ratingCount: number;
-  telefono: number;
+  telefono: number | undefined;
   onVerPedido: (id: string | number) => void;
   onEnviarCalificacion: (data: {
     estrellas: number;

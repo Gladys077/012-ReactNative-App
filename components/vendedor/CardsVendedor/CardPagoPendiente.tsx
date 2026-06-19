@@ -1,10 +1,10 @@
 import { Spacing } from "@/constants/Tokens";
-import React from "react";
 import { View } from "react-native";
 import AyudaReportar from "../../subcomponentes/AyudaReportar";
 import { EtiqEstadoType } from "../../subcomponentes/EtiqEstadoDelPedido";
 import NotaEnviada from "../../subcomponentes/NotaEnviada";
 import TextoPedido from "../../subcomponentes/TextoPedido";
+import LineaDivisoria from "../../UI/LineaDivisoria";
 import CardVendedorBase from "./CardVendedorBase";
 
 interface CardPagoPendienteProps {
@@ -35,6 +35,8 @@ const ContenidoExpandible = ({
 
       {/* Nota */}
       <NotaEnviada nota={nota} />
+
+      <LineaDivisoria />
 
       <AyudaReportar
         role="seller"

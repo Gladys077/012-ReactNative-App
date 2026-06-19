@@ -55,6 +55,8 @@ export function TipsButton({ isOpen, onPress }: TipsButtonProps) {
         paddingVertical: Spacing.lg,
         paddingHorizontal: Spacing.xl,
         borderRadius: BorderRadius.md,
+        borderColor: colorRole,
+        borderWidth: 1,
         marginBottom: Spacing.sm,
         marginTop: Spacing.lg,
         height: 48,

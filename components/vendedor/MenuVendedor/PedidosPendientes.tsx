@@ -284,7 +284,7 @@ const PedidosPendientes = ({
         opciones={OPCIONES_ISSUE_SELLER}
         titulo={"¿Qué ocurrió con el pedido?"}
         subtitulo={
-          'Al presionar "Enviar", el pedido pasará al historial como "No concretado".'
+          'El pedido se cancelará y pasará al historial como "No concretado".'
         }
         onEnviar={handleIssueEnviado}
         onCerrar={() => setIssueVisible(false)}

@@ -1,3 +1,4 @@
+//Este es el sheet q se abre al presionar Ver pedido
 import { FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -21,12 +22,19 @@ interface Props {
   isVisible: boolean;
   onClose: () => void;
   backgroundColor?: string;
-  role: "buyer" | "seller";
+  role?: "buyer" | "seller";
 }
 
 const BottomSheetVerPedido = forwardRef<BottomSheetVerPedidoRef, Props>(
   (
-    { fechaSeleccion, items = [], isVisible, onClose, backgroundColor, role },
+    {
+      fechaSeleccion,
+      items = [],
+      isVisible,
+      onClose,
+      backgroundColor,
+      role = "buyer",
+    },
     ref,
   ) => {
     const { colors, fonts } = useTheme();

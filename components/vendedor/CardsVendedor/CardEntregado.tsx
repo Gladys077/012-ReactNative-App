@@ -2,6 +2,7 @@ import { Spacing } from "@/constants/Tokens";
 import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { Mensaje } from "@/types/pedidos";
+import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { Modal, Pressable } from "react-native";
 import { Estrella100 } from "../../icons";
@@ -60,20 +61,30 @@ export default function CardEntregado({
   const handleCalificar = useCallback(
     (data: { estrellas: number; comentario: string }) => {
       updatePedido(pedidoId, {
+        //guarda la calificación en el pedido
         calificacionComprador: {
           estrellas: data.estrellas,
           comentario: data.comentario,
         },
       });
       setModalVisible(false);
-      setCalificado(true);
+      setCalificado(true); //Muestra MascotaAgradeciendo
     },
     [pedidoId, updatePedido],
   );
 
   const handleFin = useCallback(() => {
-    moverAHistorialVendedor(pedidoId);
+    moverAHistorialVendedor(pedidoId); //Mueve el pedido a la page Historial vendedor
   }, [pedidoId, moverAHistorialVendedor]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        // Si el usuario navegó antes de que termine la animación, movemos igual
+        if (calificado) moverAHistorialVendedor(pedidoId);
+      };
+    }, [calificado, pedidoId, moverAHistorialVendedor]),
+  );
 
   // ── Tras calificar: muestra MascotaAgradeciendo ──
   if (calificado) {

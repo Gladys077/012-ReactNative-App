@@ -14,11 +14,11 @@ interface CardPedidoEnCaminoProps {
   vendedorNombre: string;
   rating: number;
   ratingCount: number;
-  telefono: number;
+  telefono: number | undefined;
   direccion: string;
   onVerPedido: (id: string | number) => void;
   /** La page es quien abre el sheet — la card solo avisa */
-  onAbrirAyuda?: () => void;
+  onAbrirIssue?: () => void;
 }
 
 export default function CardPedidoEnCamino({
@@ -30,7 +30,7 @@ export default function CardPedidoEnCamino({
   telefono,
   direccion,
   onVerPedido,
-  onAbrirAyuda,
+  onAbrirIssue,
 }: CardPedidoEnCaminoProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -64,7 +64,7 @@ export default function CardPedidoEnCamino({
             onPress={() => onVerPedido?.(pedidoId)}
             variant="buyer"
           />
-          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+          <AyudaReportar role="buyer" onPress={() => onAbrirIssue?.()} />
         </View>
       }
       contenidoExpandible={

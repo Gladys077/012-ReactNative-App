@@ -32,7 +32,7 @@ interface CardPedidoPagoEnRevisionProps {
     pedidoId: string | number,
     respuestaId: string | number,
   ) => void;
-  onAbrirAyuda?: () => void;
+  onAbrirIssue?: () => void;
 }
 
 export default function CardPedidoPagoEnRevision({
@@ -42,7 +42,7 @@ export default function CardPedidoPagoEnRevision({
   tieneProblema,
   fechaSeleccion,
   onVerPedido,
-  onAbrirAyuda,
+  onAbrirIssue,
 }: CardPedidoPagoEnRevisionProps) {
   const { colors } = useTheme();
   const [expandido, setExpandido] = useState(true);
@@ -89,11 +89,11 @@ export default function CardPedidoPagoEnRevision({
             onPress={() => onVerPedido?.(pedidoId)}
             variant="buyer"
           />
-          <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+          <AyudaReportar role="buyer" onPress={() => onAbrirIssue?.()} />
         </View>
       }
       // contenidoPosMascota={
-      //   <AyudaReportar role="buyer" onPress={() => onAbrirAyuda?.()} />
+      //   <AyudaReportar role="buyer" onPress={() => onAbrirIssue?.()} />
       // }
       contenidoExpandible={
         <View

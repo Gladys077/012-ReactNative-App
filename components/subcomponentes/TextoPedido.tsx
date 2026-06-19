@@ -12,10 +12,10 @@ export default function TextoPedido({ texto }: TextoPedidoProps) {
   return (
     <Text
       style={{
-        fontSize: FontSizes.sm,
+        fontSize: FontSizes.base,
         fontFamily: fonts.robotoRegular,
         color: colors.textDefault,
-        lineHeight: 22,
+        lineHeight: 18,
         backgroundColor: colors.fondoPedidos,
         borderRadius: BorderRadius.md,
         borderBottomColor: colors.textMuted,

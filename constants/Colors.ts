@@ -27,7 +27,7 @@ export const Colors = {
     //Background SubMenuPendientes
     bgSubMenuPendientes: "#f7d3c8", // ambar-50
 
-    fondoPedidos: "#ecedee", // gray-800,
+    fondoPedidos: "#dcdee0", // gray-800,
 
     // Para fondos suaves
     tipsColorBuyer: "#1D4ED8", // blue-700
@@ -39,7 +39,7 @@ export const Colors = {
 
     // Superficies
     headerFooterBg: "rgba(255,255,255,0.8)",
-    cardBg: "#ffffff",
+    cardBg: "#f4f4f4",
     background: "#ededed", // gray-100
     border: "#E5E7EB",
     bgPressed: "#f3f4f6", // color al presionar (gris-100)
@@ -50,7 +50,7 @@ export const Colors = {
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
     fondoCirculoActivo: "#c5e2fa", // celeste
-    success: "#059669", // green-400 (verde esmeralda)
+    success: "#047753", // green-400 (verde esmeralda)
 
     //para TipsBottomSheet
     brandBuyerSoft: "#E0F2FE", // blue-100 = fondo suave
@@ -98,7 +98,7 @@ export const Colors = {
   dark: {
     // Textos
     textDefault: "#ECEDEE",
-    textMuted: "#9ca3af", // gray-400
+    textMuted: "#999b9e", // gray-400
     textError: "#f87171", // red-400
     textOnColor: "#ffffff",
 
@@ -142,10 +142,10 @@ export const Colors = {
     //linea de tiempo - Estado del pedido
     fondoCirculo: "#D3D3D3", // lightgray
     fondoCirculoActivo: "#a8d0f0", // celeste
-    success: "#037c56", // green (verde esmeralda más brillante)
+    success: "#05a170", // green (verde esmeralda más brillante)
 
     //para TipsBottomSheet
-    brandBuyerSoft: "#1E3A8A", // blue-900 = fondo suave
+    brandBuyerSoft: "#091678", // blue-900 = fondo suave
     brandSellerSoft: "#78350F", //ambar-900 = fondo suave
 
     // BottomSheetAyudaPedido
