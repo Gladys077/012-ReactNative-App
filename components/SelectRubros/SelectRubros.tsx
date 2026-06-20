@@ -49,6 +49,7 @@ type Props = {
   placeholder?: string;
   section?: "seller" | "buyer";
   borderColor?: string;
+  rubros?: RubroConfig[];
 };
 
 const STORAGE_KEY = "rubrosVendedorGuardados";
@@ -61,6 +62,7 @@ export default function SelectRubros({
   placeholder = "Selecciona tu/s rubro/s",
   section = "seller",
   borderColor,
+  rubros,
 }: Props) {
   const { colors, mode } = useTheme();
   const allowAddNew = section === "seller";

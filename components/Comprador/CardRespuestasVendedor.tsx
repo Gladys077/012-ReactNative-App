@@ -9,7 +9,7 @@ interface CardRespuestaVendedorProps {
   respuestaId: string | number;
   vendedorNombre: string;
   rating: number;
-  ratingCount?: number;
+  ratingCount: number;
   precio: number;
   nota?: string;
   duracionCronometro: number;
@@ -23,7 +23,7 @@ export default function CardRespuestaVendedor({
   respuestaId,
   vendedorNombre,
   rating,
-  ratingCount,
+  ratingCount = 0,
   precio,
   nota,
   duracionCronometro,

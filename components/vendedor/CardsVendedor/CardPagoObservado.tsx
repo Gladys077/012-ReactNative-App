@@ -3,7 +3,7 @@ import { useOrders } from "@/context/OrdersContext";
 import { useTheme } from "@/context/ThemeContext";
 import type { Mensaje } from "@/types/pedidos";
 import React, { useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import ChatModal from "../../Chat/ChatModal";
 import { Chat, Comprobante } from "../../icons";
 import AyudaReportar from "../../subcomponentes/AyudaReportar";
@@ -57,7 +57,7 @@ const ContenidoExpandible = ({
   "compradorRating" | "precio" | "textoPedido"
 >) => {
   const { colors, fonts } = useTheme();
-  const { updateEstado, moverAHistorial, agregarMensaje } = useOrders();
+  const { agregarMensaje } = useOrders();
   const [chatVisible, setChatVisible] = useState(false);
 
   const mensajesModal = toMensajesModal(mensajes);
@@ -71,24 +71,6 @@ const ContenidoExpandible = ({
       timestamp: new Date().toISOString(),
     };
     agregarMensaje(pedidoId, nuevo);
-  };
-
-  const handleArchivar = () => {
-    Alert.alert(
-      "Archivar pedido",
-      "El pedido pasará al historial como cancelado. Podrás consultarlo si hay algún reclamo posterior.",
-      [
-        { text: "No, volver", style: "cancel" },
-        {
-          text: "Sí, archivar",
-          style: "destructive",
-          onPress: () => {
-            updateEstado(pedidoId, "cancelado");
-            moverAHistorial(pedidoId);
-          },
-        },
-      ],
-    );
   };
 
   return (
@@ -230,18 +212,7 @@ const ContenidoExpandible = ({
 
       <LineaDivisoria />
 
-      {/* ── Archivar ── */}
-      {/* <Button
-        section="seller"
-        variant="primary"
-        width="full"
-        icon={Historial}
-        onPress={handleArchivar}
-      >
-        <Text>Archivar pedido</Text>
-      </Button> */}
-
-      <AyudaReportar // ← agregado
+      <AyudaReportar
         role="seller"
         label="Reportar problema"
         onPress={() => onAbrirIssue?.()}

@@ -29,7 +29,7 @@ export default function CardRespVendedorBase({
   pedidoId,
   respuestaId,
   vendedorNombre,
-  rating,
+  rating = 0,
   ratingCount,
   precio,
   nota,

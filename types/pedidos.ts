@@ -12,6 +12,7 @@ export type EstadoSistema =
   | "en_camino"
   | "entregado_pendiente_calif"
   | "no_concretado"
+  | "reclamo_enviado"
   | "completado"
   | "cancelado";
 
@@ -25,6 +26,7 @@ export type EstadoComprador =
   | "En preparación"
   | "En camino"
   | "Pedido recibido"
+  | "Reclamo enviado"
   | "Completado"
   | "Cancelado";
 
@@ -41,6 +43,7 @@ export const estadoSistemaAComprador: Record<EstadoSistema, EstadoComprador> = {
   en_camino: "En camino",
   entregado_pendiente_calif: "Pedido recibido",
   no_concretado: "Cancelado",
+  reclamo_enviado: "Reclamo enviado",
   completado: "Completado",
   cancelado: "Cancelado",
 };
@@ -58,6 +61,7 @@ export type EstadoVendedor =
   | "En camino"
   | "Entregado"
   | "No concretado"
+  | "Reclamo enviado"
   | "Cancelado"
   | "Completado";
 
@@ -75,6 +79,7 @@ export const estadoSistemaAVendedor: Record<EstadoSistema, EstadoVendedor> = {
   en_camino: "En camino",
   entregado_pendiente_calif: "Entregado",
   no_concretado: "No concretado",
+  reclamo_enviado: "Reclamo enviado",
   completado: "Completado",
   cancelado: "Cancelado", // se verá en historial con etiqueta propia
 };
@@ -99,6 +104,7 @@ export const estadoSistemaATabVendedor: Record<EstadoSistema, TabVendedor> = {
   cancelado: "historial",
   expirado: "historial",
   no_concretado: "historial",
+  reclamo_enviado: "historial", //este es del comprador TS pide tiparlo aquí también
 };
 
 // ─── Respuesta / Presupuesto del vendedor ─────────────────────────────────────

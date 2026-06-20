@@ -11,7 +11,7 @@ interface CardRespVendPedRecibidoProps {
   vendedorNombre: string;
   rating: number;
   ratingCount: number;
-  telefono: number;
+  telefono: number | undefined;
   onEnviarCalificacion: (data: {
     estrellas: number;
     comentario: string;

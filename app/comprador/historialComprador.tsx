@@ -57,6 +57,7 @@ export default function HistorialComprador() {
                   textoPedido={item.textoPedido}
                   notaVendedor={r.nota}
                   calificacionDada={item.calificacionVendedor}
+                  motivoNoConcretado={item.motivoNoConcretado}
                   onEliminar={(id) => handleEliminar(id, r.vendedorNombre)}
                 />
               );

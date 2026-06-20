@@ -48,6 +48,9 @@ const EstadoPedido = () => {
   const { toast, mostrar, cancelar, cerrar } = useUndoToast();
   const [pendienteId, setPendienteId] = useState<string | number | null>(null);
   const [ayudaVisible, setAyudaVisible] = useState(false);
+  const [ayudaVinculadaId, setAyudaVinculadaId] = useState<
+    string | number | null
+  >(null);
   const { showToast } = useToast();
 
   useFocusEffect(
@@ -142,10 +145,20 @@ const EstadoPedido = () => {
     updatePedido(pedidoId, { expandido: valor });
   };
 
+  const handleAbrirIssue = (id: string | number) => {
+    setAyudaVinculadaId(id);
+    setAyudaVisible(true);
+  };
+
   const handleAyudaEnviada = (opcion: string, mensaje?: string) => {
-    console.log("Ayuda enviada:", opcion, mensaje);
+    if (!ayudaVinculadaId) return;
+
     setAyudaVisible(false);
-    showToast("Tu reclamo fue enviado.");
+    showToast("Tu reclamo fue enviado. El pedido pasó al historial.");
+
+    updateEstado(ayudaVinculadaId, "reclamo_enviado");
+    moverAHistorialComprador(ayudaVinculadaId, { opcion, detalle: mensaje });
+    setAyudaVinculadaId(null);
   };
 
   return (
@@ -214,7 +227,7 @@ const EstadoPedido = () => {
                       timestampRespuesta={0}
                       tieneProblema={false}
                       estado={"Pago y dirección"}
-                      onAbrirIssue={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => handleAbrirIssue(pedido.id)}
                     />
                   );
                 }
@@ -270,7 +283,7 @@ const EstadoPedido = () => {
                       telefono={r.telefono ?? 0}
                       direccion={pedido.direccionComprador}
                       onVerPedido={handleVerPedido}
-                      onAbrirIssue={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => handleAbrirIssue(pedido.id)}
                     />
                   );
                 }
@@ -324,7 +337,7 @@ const EstadoPedido = () => {
                       telefono={r.telefono}
                       direccion={pedido.direccionComprador}
                       onVerPedido={handleVerPedido}
-                      onAbrirIssue={() => setAyudaVisible(true)}
+                      onAbrirIssue={() => handleAbrirIssue(pedido.id)}
                     />
                   );
                 }

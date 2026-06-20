@@ -1,5 +1,6 @@
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import type { Pedido } from "@/types/pedidos";
 import React, { useState } from "react";
 import { Alert, Pressable, Text, View } from "react-native";
 import CalificacionDada from "../subcomponentes/CalificacionDada";
@@ -19,6 +20,7 @@ interface CardHistorialCompradorProps {
   notaVendedor?: string;
   onEliminar: (pedidoId: string | number) => void;
   calificacionDada?: { estrellas: number; comentario: string };
+  motivoNoConcretado?: Pedido["motivoNoConcretado"];
 }
 
 export default function CardHistorialComprador({
@@ -32,6 +34,7 @@ export default function CardHistorialComprador({
   notaVendedor,
   onEliminar,
   calificacionDada,
+  motivoNoConcretado,
 }: CardHistorialCompradorProps) {
   const { colors, fonts } = useTheme();
   const [expandido, setExpandido] = useState(false);
@@ -54,8 +57,12 @@ export default function CardHistorialComprador({
         backgroundColor: colors.cardBg,
         borderRadius: BorderRadius.lg,
         padding: Spacing.lg,
-        gap: Spacing.sm,
+        gap: Spacing.md,
         elevation: 3,
+        shadowColor: colors.textDefault,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
       }}
     >
       {/* Header: nombre + precio */}
@@ -76,13 +83,6 @@ export default function CardHistorialComprador({
           >
             {vendedorNombre}
           </Text>
-          {/* {rating !== undefined && (
-            <EstrellaUnica
-              rating={rating}
-              ratingCount={ratingCount}
-              size={13}
-            />
-          )} */}
         </View>
         <Text
           style={{
@@ -112,24 +112,53 @@ export default function CardHistorialComprador({
           <TextoPedido texto={textoPedido} />
 
           {notaVendedor && (
-            <>
-              {/* <LineaDivisoria /> */}
-              <NotaDelVendedor
-                nota={notaVendedor}
-                onVerNota={(nota) => Alert.alert("Nota del vendedor", nota)}
-              />
-            </>
+            <NotaDelVendedor
+              nota={notaVendedor}
+              onVerNota={(nota) => Alert.alert("Nota del vendedor", nota)}
+            />
           )}
 
-          <View style={{ marginTop: Spacing.lg }}>
-            {calificacionDada && (
+          {calificacionDada && (
+            <View style={{ marginTop: Spacing.lg }}>
               <CalificacionDada
                 estrellas={calificacionDada.estrellas}
                 comentario={calificacionDada.comentario}
                 label="Califiqué al vendedor con:"
               />
-            )}
-          </View>
+            </View>
+          )}
+
+          {motivoNoConcretado && (
+            <View style={{ gap: Spacing.sm }}>
+              <LineaDivisoria />
+              <Text
+                style={{
+                  fontFamily: fonts.robotoMedium,
+                  color: colors.textMuted,
+                }}
+              >
+                ¿Qué sucedió?
+              </Text>
+              <Text
+                style={{
+                  fontFamily: fonts.robotoRegular,
+                  color: colors.textDefault,
+                }}
+              >
+                {motivoNoConcretado.opcion}
+              </Text>
+              {motivoNoConcretado.detalle && (
+                <Text
+                  style={{
+                    fontFamily: fonts.robotoRegular,
+                    color: colors.textMuted,
+                  }}
+                >
+                  {motivoNoConcretado.detalle}
+                </Text>
+              )}
+            </View>
+          )}
 
           <LineaDivisoria />
         </View>
@@ -155,7 +184,6 @@ export default function CardHistorialComprador({
             {expandido ? "Ver menos" : "Ver más"}
           </Text>
 
-          {/* Remover card */}
           <DeleteButton onPress={handleEliminar} />
         </View>
       </Pressable>

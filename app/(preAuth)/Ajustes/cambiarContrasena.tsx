@@ -145,7 +145,7 @@ export default function CambiarContraseñaScreen() {
                   variant="secondary"
                   section="common"
                   width="full"
-                  onPress={() => router.replace("/(preAuth)/elegirRol")}
+                  onPress={() => router.replace("/comprador/nuevoPedido")}
                 >
                   Cancelar
                 </Button>

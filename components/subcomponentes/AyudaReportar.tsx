@@ -18,7 +18,7 @@ interface AyudaReportarProps {
 
 const AyudaReportar: React.FC<AyudaReportarProps> = ({
   role = "buyer",
-  label = "Ayuda",
+  label = "Reportar problema",
   onPress,
   style,
 }) => {

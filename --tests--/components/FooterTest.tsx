@@ -1,9 +1,14 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import type { Role } from "../IconLabel/IconLabel";
-import { IconLabel } from "../IconLabel/IconLabel";
-import { Ajustes, Historial, Home, Monedas, Pendientes } from "../icons";
+import { IconLabel, Role } from "../../components/UI/IconLabel";
+import {
+  Ajustes,
+  Historial,
+  Home,
+  Monedas,
+  Pendientes,
+} from "../../components/icons";
 
 interface FooterItem {
   icon: React.ComponentType<any>;

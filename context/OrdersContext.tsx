@@ -298,7 +298,10 @@ interface OrdersContextValue {
   agregarMensaje: (id: string | number, mensaje: Mensaje) => void;
   historialComprador: Pedido[];
   historialVendedor: Pedido[];
-  moverAHistorialComprador: (id: string | number) => void;
+  moverAHistorialComprador: (
+    id: string | number,
+    motivo?: { opcion: string; detalle?: string },
+  ) => void;
   moverAHistorialVendedor: (
     id: string | number,
     motivo?: { opcion: string; detalle?: string },
@@ -343,13 +346,21 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     [pedidos],
   );
 
-  const moverAHistorialComprador = useCallback((id: string | number) => {
-    setPedidos((prev) => {
-      const pedido = prev.find((p) => p.id === id);
-      if (pedido) setHistorialComprador((h) => [pedido, ...h]);
-      return prev.filter((p) => p.id !== id);
-    });
-  }, []);
+  const moverAHistorialComprador = useCallback(
+    (id: string | number, motivo?: { opcion: string; detalle?: string }) => {
+      setPedidos((prev) => {
+        const pedido = prev.find((p) => p.id === id);
+        if (pedido) {
+          const pedidoConMotivo = motivo
+            ? { ...pedido, motivoNoConcretado: motivo }
+            : pedido;
+          setHistorialComprador((h) => [pedidoConMotivo, ...h]);
+        }
+        return prev.filter((p) => p.id !== id);
+      });
+    },
+    [],
+  );
 
   const moverAHistorialVendedor = useCallback(
     (id: string | number, motivo?: { opcion: string; detalle?: string }) => {
