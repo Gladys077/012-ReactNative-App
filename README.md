@@ -86,12 +86,6 @@ types/
 
 ```
 
-### ❗ Importante
-
-1. No edites manualmente components/icons/index.ts, se genera automáticamente.
-2. La carpeta assets/icons usala solo para SVGs convertidos en componentes que permitiran cambios dinámicos.
-3. No se usan require() para importar imágenes en este proyecto.
-
 ---
 
 ---
@@ -143,7 +137,7 @@ Al completarse la transacción:
 
 ## ❗ Importante
 
-1. No edites manualmente `components/icons/index.ts`, se genera automáticamente.
+1. No edites manualmente `components/icons/index.ts`, se genera automáticamente corriendo: `npm run generate:icons`.
 2. La carpeta `assets/icons` puede permanecer vacía: usala solo para nuevos SVGs.
 3. No se usan `require()` para importar imágenes en este proyecto.
 4. Las animaciones de la mascota y el gif de delivery son de LottieFiles (free).

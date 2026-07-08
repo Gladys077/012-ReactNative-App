@@ -13,15 +13,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { BorderRadius, FontSizes, Spacing } from "@/constants/Tokens";
 import { useTheme } from "@/context/ThemeContext";
+import { router } from "expo-router";
 import { Chevron, Monedas } from "../../components/icons";
 import Button from "../../components/UI/Button/Button";
+import { useAuthContext } from "../../context/AuthContext";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
 type CreditOption = {
   id: string;
   label: string;
-  amount: number | null; // null = personalizado
+  creditAmount: number | null; // null = personalizado
 };
 
 type FaqItem = {
@@ -32,10 +34,10 @@ type FaqItem = {
 // ─── Datos ────────────────────────────────────────────────────────────────────
 
 const CREDIT_OPTIONS: CreditOption[] = [
-  { id: "opt1", label: "5.000 créditos", amount: 5000 },
-  { id: "opt2", label: "10.000 créditos", amount: 10000 },
-  { id: "opt3", label: "20.000 créditos", amount: 20000 },
-  { id: "custom", label: "Personalizado", amount: null },
+  { id: "opt1", label: "5.000 créditos", creditAmount: 5000 },
+  { id: "opt2", label: "10.000 créditos", creditAmount: 10000 },
+  { id: "opt3", label: "20.000 créditos", creditAmount: 20000 },
+  { id: "custom", label: "Personalizado", creditAmount: null },
 ];
 
 const FAQ_ITEMS: FaqItem[] = [
@@ -83,7 +85,7 @@ function CreditCard({
 }) {
   const { colors, fonts } = useTheme();
 
-  const isCustom = option.amount === null;
+  const isCustom = option.creditAmount === null;
 
   return (
     <Pressable
@@ -148,7 +150,7 @@ function CreditCard({
             marginRight: Spacing.md,
           }}
         >
-          $ {option.amount!.toLocaleString("es-AR")}
+          $ {option.creditAmount!.toLocaleString("es-AR")}
         </Text>
       )}
 
@@ -311,6 +313,7 @@ function SaldoBanner({ credits }: { credits: number }) {
             fontFamily: fonts.robotoRegular,
             fontSize: FontSizes.sm,
             color: colors.textDefault,
+            flex: 1,
           }}
         >
           Se descuentan automáticamente con cada venta (5%)
@@ -344,7 +347,8 @@ export default function CreditosVendedorScreen() {
   const { colors } = useTheme();
 
   // Créditos del usuario (vendrá del contexto/backend)
-  const userCredits = 5000;
+  const { user } = useAuthContext();
+  const userCredits = user?.credits ?? 0;
 
   const [selectedId, setSelectedId] = useState<string>("opt2");
   const [customAmount, setCustomAmount] = useState("");
@@ -363,7 +367,9 @@ export default function CreditosVendedorScreen() {
     const selected = CREDIT_OPTIONS.find((o) => o.id === selectedId);
     if (!selected) return;
 
-    if (selected.amount === null) {
+    let creditAmount: number;
+
+    if (selected.creditAmount === null) {
       const parsed = parseInt(customAmount.replace(/\D/g, ""), 10);
       if (!parsed || parsed <= 0) {
         Alert.alert(
@@ -372,15 +378,15 @@ export default function CreditosVendedorScreen() {
         );
         return;
       }
-      // TODO: navegar a pantalla de pago con amount=parsed
-      Alert.alert(
-        "Compra",
-        `Vas a comprar ${parsed.toLocaleString("es-AR")} créditos.`,
-      );
+      creditAmount = parsed;
     } else {
-      // TODO: navegar a pantalla de pago con amount=selected.amount
-      Alert.alert("Compra", `Vas a comprar ${selected.label}.`);
+      creditAmount = selected.creditAmount;
     }
+
+    router.push({
+      pathname: "/vendedor/PaymentMethodScreen",
+      params: { creditAmount },
+    });
   };
 
   return (

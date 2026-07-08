@@ -9,6 +9,12 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { TiendaIcon } from "../../../components/icons";
+import {
+  RubroConfig,
+  rubrosVendedor,
+} from "../../../components/SelectRubros/rubrosConfig";
+import { rubrosServicios } from "../../../components/SelectRubros/rubrosServiciosConfig";
 import SelectRubros from "../../../components/SelectRubros/SelectRubros";
 import Button from "../../../components/UI/Button/Button";
 import { InputField } from "../../../components/UI/InputField";
@@ -16,6 +22,16 @@ import LineaDivisoria from "../../../components/UI/LineaDivisoria";
 import Toast from "../../../components/UI/Toast";
 import { Spacing } from "../../../constants/Tokens";
 import { useTheme } from "../../../context/ThemeContext";
+
+// ── Tipos ──
+type TipoRubro = "producto" | "servicio";
+
+interface RubroSeleccionado {
+  value: string;
+  tipo: TipoRubro;
+  aprobado: boolean;
+  esCustom?: boolean;
+}
 
 export default function PerfilScreen() {
   const { colors, fonts } = useTheme();
@@ -25,7 +41,9 @@ export default function PerfilScreen() {
   const [email] = useState("");
   const [address, setAddress] = useState("");
   const [cellular, setCellular] = useState("");
-  const [rubros, setRubros] = useState<string[]>([]);
+  const [rubrosSeleccionados, setRubrosSeleccionados] = useState<
+    RubroSeleccionado[]
+  >([]);
   const [isSeller, setIsSeller] = useState(false);
   const [alias, setAlias] = useState("");
   const [banco, setBanco] = useState("");
@@ -44,7 +62,82 @@ export default function PerfilScreen() {
     alias: "",
     banco: "",
     titular: "",
+    rubros: "",
   });
+
+  // TODO: VER CON LIO — al montar, traer del backend los rubros que el
+  // usuario ya tiene guardados (aprobados y pendientes) y precargar acá:
+  // useEffect(() => {
+  //   fetch("https://api/user/profile")
+  //     .then((res) => res.json())
+  //     .then((data) => setRubrosSeleccionados(data.rubros));
+  // }, []);
+
+  // ── Handlers de rubros ──
+
+  const handleRubrosChange = (values: string[], tipo: TipoRubro) => {
+    setRubrosSeleccionados((prev) => {
+      // mantiene intactos los del otro tipo, reemplaza los de este tipo
+      const otros = prev.filter((r) => r.tipo !== tipo);
+      const nuevos = values.map((v) => {
+        const existente = prev.find((r) => r.value === v && r.tipo === tipo);
+        return existente ?? { value: v, tipo, aprobado: true };
+      });
+      return [...otros, ...nuevos];
+    });
+    if (errors.rubros) {
+      setErrors((prev) => ({ ...prev, rubros: "" }));
+    }
+  };
+
+  // Se llama cuando SelectRubros crea un rubro nuevo (botón "Nuevo Rubro").
+  // No agrega el rubro a la selección (eso ya lo hace SelectRubros vía
+  // onChange internamente), solo lo anota como "pendiente" para mostrar
+  // el badge y, más adelante, mandarlo al backend con aprobado: false.
+  const marcarComoPendiente = (nombre: string, tipo: TipoRubro) => {
+    setRubrosSeleccionados((prev) => {
+      const yaExiste = prev.some(
+        (r) =>
+          r.value.toLowerCase() === nombre.toLowerCase() && r.tipo === tipo,
+      );
+      if (yaExiste) return prev;
+      return [
+        ...prev,
+        { value: nombre, tipo, aprobado: false, esCustom: true },
+      ];
+    });
+  };
+
+  const quitarRubro = (value: string, tipo: TipoRubro) => {
+    setRubrosSeleccionados((prev) =>
+      prev.filter((r) => !(r.value === value && r.tipo === tipo)),
+    );
+    // también hay que sacarlo de la selección activa del SelectRubros correspondiente
+    if (tipo === "producto") {
+      handleRubrosChange(
+        productosSeleccionados.filter((v) => v !== value),
+        "producto",
+      );
+    } else {
+      handleRubrosChange(
+        serviciosSeleccionados.filter((v) => v !== value),
+        "servicio",
+      );
+    }
+  };
+
+  // Convierte un rubro pendiente al shape que espera SelectRubros
+  // (rubrosCustom), para que siga apareciendo en la lista con su
+  // ícono genérico mientras no esté aprobado.
+  const customRubroToConfig = (r: RubroSeleccionado): RubroConfig => ({
+    label: r.value,
+    value: r.value.toLowerCase().replace(/\s+/g, "-"),
+    IconComponent: TiendaIcon,
+    color: "#CFD8DC",
+    iconColor: "#607D8B",
+  });
+
+  // ── Guardado ──
 
   const handleSave = () => {
     let hasError = false;
@@ -56,6 +149,7 @@ export default function PerfilScreen() {
       alias: "",
       banco: "",
       titular: "",
+      rubros: "",
     };
 
     if (!name.trim()) {
@@ -70,7 +164,12 @@ export default function PerfilScreen() {
       newErrors.cellular = "Por favor ingresa tu número de celular";
       hasError = true;
     }
-    if (rubros.length > 0) {
+    if (isSeller) {
+      if (rubrosSeleccionados.length === 0) {
+        newErrors.rubros =
+          "Selecciona al menos un producto o servicio que ofrezcas";
+        hasError = true;
+      }
       if (!alias.trim()) {
         newErrors.alias = "Ingresa tu alias bancario";
         hasError = true;
@@ -89,6 +188,8 @@ export default function PerfilScreen() {
     if (hasError) return;
 
     // TODO: VER CON LIO — conectar al backend cuando esté listo
+    // payload de rubros esperado, por ejemplo:
+    // rubrosSeleccionados.map(({ value, tipo, aprobado }) => ({ value, tipo, aprobado }))
     // fetch("https://api/user/update", { method: "PUT", ... })
 
     setToastVisible(true);
@@ -110,6 +211,26 @@ export default function PerfilScreen() {
       }, 250);
     }
   }, [isSellerSetup]);
+
+  const productosSeleccionados = rubrosSeleccionados
+    .filter((r) => r.tipo === "producto")
+    .map((r) => r.value);
+
+  const serviciosSeleccionados = rubrosSeleccionados
+    .filter((r) => r.tipo === "servicio")
+    .map((r) => r.value);
+
+  const pendientesDeAprobacion = rubrosSeleccionados.filter(
+    (r) => r.esCustom && !r.aprobado,
+  );
+
+  const productosCustomConfig = pendientesDeAprobacion
+    .filter((r) => r.tipo === "producto")
+    .map(customRubroToConfig);
+
+  const serviciosCustomConfig = pendientesDeAprobacion
+    .filter((r) => r.tipo === "servicio")
+    .map(customRubroToConfig);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -246,14 +367,114 @@ export default function PerfilScreen() {
 
               {isSeller && (
                 <View
-                  style={{ marginBottom: Spacing.xxl, marginTop: Spacing.md }}
+                  style={{ marginBottom: Spacing.xl, marginTop: Spacing.xl }}
                 >
-                  <SelectRubros
-                    label="Selecciona tu/s rubro/s"
-                    section="seller"
-                    selected={rubros}
-                    onChange={setRubros}
-                  />
+                  {/* ── Bloque productos ── */}
+                  <View style={{ marginBottom: Spacing.xl }}>
+                    <SelectRubros
+                      label="Productos que vendo"
+                      section="seller"
+                      selected={productosSeleccionados}
+                      onChange={(values) =>
+                        handleRubrosChange(values, "producto")
+                      }
+                      rubros={rubrosVendedor}
+                      rubrosCustom={productosCustomConfig}
+                      onNuevoRubro={(nombre) =>
+                        marcarComoPendiente(nombre, "producto")
+                      }
+                    />
+                  </View>
+
+                  {/* ── Bloque servicios ── */}
+                  <View style={{ marginTop: Spacing.md }}>
+                    <SelectRubros
+                      label="Servicios que ofrezco"
+                      placeholder="Selecciona el servicio que ofreces"
+                      section="seller"
+                      selected={serviciosSeleccionados}
+                      onChange={(values) =>
+                        handleRubrosChange(values, "servicio")
+                      }
+                      rubros={rubrosServicios}
+                      rubrosCustom={serviciosCustomConfig}
+                      onNuevoRubro={(nombre) =>
+                        marcarComoPendiente(nombre, "servicio")
+                      }
+                    />
+                  </View>
+
+                  {errors.rubros && (
+                    <Text
+                      style={{
+                        color: colors.textError,
+                        fontSize: 12,
+                        marginTop: Spacing.sm,
+                      }}
+                    >
+                      {errors.rubros}
+                    </Text>
+                  )}
+
+                  {/* ── Pendientes de aprobación ── */}
+                  {pendientesDeAprobacion.length > 0 && (
+                    <View style={{ marginTop: Spacing.lg }}>
+                      <Text
+                        style={{
+                          color: colors.textMuted,
+                          fontSize: 12,
+                          marginBottom: Spacing.xs,
+                        }}
+                      >
+                        Estos rubros ya están activos para recibir consultas,
+                        mientras esperan aprobación del equipo:
+                      </Text>
+                      {pendientesDeAprobacion.map((r) => (
+                        <View
+                          key={`${r.tipo}-${r.value}`}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            backgroundColor: colors.cardBg,
+                            borderRadius: 12,
+                            paddingVertical: 8,
+                            paddingHorizontal: 12,
+                            marginBottom: 6,
+                          }}
+                        >
+                          <Text style={{ color: colors.textDefault, flex: 1 }}>
+                            {r.value}
+                          </Text>
+                          <View
+                            style={{
+                              backgroundColor: "#FFF3CD",
+                              borderRadius: 8,
+                              paddingHorizontal: 8,
+                              paddingVertical: 2,
+                              marginRight: 8,
+                            }}
+                          >
+                            <Text style={{ fontSize: 11, color: "#856404" }}>
+                              Pendiente de aprobación
+                            </Text>
+                          </View>
+                          <Pressable
+                            onPress={() => quitarRubro(r.value, r.tipo)}
+                            hitSlop={8}
+                          >
+                            <Text
+                              style={{
+                                color: colors.textError,
+                                fontSize: 12,
+                              }}
+                            >
+                              Quitar
+                            </Text>
+                          </Pressable>
+                        </View>
+                      ))}
+                    </View>
+                  )}
                 </View>
               )}
 

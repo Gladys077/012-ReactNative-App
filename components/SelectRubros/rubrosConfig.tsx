@@ -65,11 +65,4 @@ export const rubrosVendedor: RubroConfig[] = [
     color: "#FFF9C4",
     iconColor: "#F9A825",
   },
-  {
-    label: "Plomería",
-    value: "plomeria",
-    IconComponent: Carne,
-    color: "#FFCDD2",
-    iconColor: "#D32F2F",
-  },
 ];

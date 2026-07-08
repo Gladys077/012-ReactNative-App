@@ -40,8 +40,9 @@ export const Colors = {
     // Superficies
     headerFooterBg: "rgba(255,255,255,0.8)",
     cardBg: "#f4f4f4",
+
     background: "#ededed", // gray-100
-    border: "#E5E7EB",
+    border: "#c6c7c9",
     bgPressed: "#f3f4f6", // color al presionar (gris-100)
     backgroundTips: "#b8c6ce11",
 
@@ -61,7 +62,7 @@ export const Colors = {
     bottomSheetBgSeller: "#f7d3c8",
 
     // Inputs (InputField)
-    inputBorder: "#E0E0E0",
+    inputBorder: "#c3c2c2",
 
     // EtiquetasEstadoDelPedido
     statusRedBg: "#FEE2E2",
